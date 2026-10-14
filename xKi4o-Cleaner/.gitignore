@@ -1,0 +1,15 @@
+# Build output
+*.exe
+dist/
+
+# Go
+*.test
+*.out
+
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+desktop.ini
+.DS_Store
