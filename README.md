@@ -10,7 +10,7 @@ Made by **xKi4o**.
 ![Windows 10 / 11](https://img.shields.io/badge/Windows-10%20%7C%2011-2f6bff)
 ![Go 1.24+](https://img.shields.io/badge/Go-1.24%2B-00add8)
 ![License: MIT](https://img.shields.io/badge/License-MIT-36d399)
-![Portable](https://img.shields.io/badge/single%20exe-~5%20MB-8c97b2)
+![Portable](https://img.shields.io/badge/single%20exe-~9%20MB-8c97b2)
 
 <img src="docs/screenshots/cleanup.png" width="860" alt="Cleanup page">
 
