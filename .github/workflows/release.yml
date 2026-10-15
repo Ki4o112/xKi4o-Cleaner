@@ -1,14 +1,22 @@
 name: Build and release
 
-# Every push to main is built and tested. A tag "vX.Y.Z" also publishes a
-# GitHub release with xKi4oCleaner.exe and the notes of that version from
-# CHANGELOG.md — the app finds it and offers the update.
+# Every push to main is built and tested. A release with xKi4oCleaner.exe and
+# that version's notes from CHANGELOG.md is published when
+#   - a tag "vX.Y.Z" is pushed, or
+#   - the workflow is run by hand (Actions → Build and release → Run workflow)
+#     with "publish" ticked: it releases the version written in version.go.
+# Every copy of the app then finds the release and offers the update.
 on:
   push:
     branches: [main]
     tags: ["v*"]
   pull_request:
   workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish a release for the version in version.go"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -37,11 +45,26 @@ jobs:
           name: xKi4oCleaner
           path: xKi4oCleaner.exe
 
-      - name: Release notes from CHANGELOG.md
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Version
+        id: ver
+        env:
+          PUBLISH: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
         run: |
-          VER="${GITHUB_REF_NAME#v}"
-          grep -q "appVersion = \"$VER\"" version.go || { echo "::error::the tag $GITHUB_REF_NAME does not match appVersion in version.go"; exit 1; }
+          VER=$(sed -n 's/^const appVersion = "\(.*\)"$/\1/p' version.go)
+          [ -n "$VER" ] || { echo "::error::no appVersion in version.go"; exit 1; }
+          echo "ver=$VER" >> "$GITHUB_OUTPUT"
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            [ "${GITHUB_REF_NAME#v}" = "$VER" ] || { echo "::error::the tag $GITHUB_REF_NAME does not match appVersion $VER in version.go"; exit 1; }
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          elif [ "$PUBLISH" = "true" ]; then
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Release notes from CHANGELOG.md
+        if: steps.ver.outputs.publish == 'true'
+        env:
+          VER: ${{ steps.ver.outputs.ver }}
+        run: |
           awk -v v="$VER" '/^## /{ if (on) exit; if ($2 == v) { on = 1; next } } on' CHANGELOG.md > notes.md
           grep -q . notes.md || { echo "::error::CHANGELOG.md has no section for $VER"; exit 1; }
           {
@@ -54,7 +77,8 @@ jobs:
           cat notes.md
 
       - name: Publish the release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: steps.ver.outputs.publish == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" xKi4oCleaner.exe --title "xKi4o Cleaner ${GITHUB_REF_NAME#v}" --notes-file notes.md --latest
+          VER: ${{ steps.ver.outputs.ver }}
+        run: gh release create "v$VER" xKi4oCleaner.exe --target "$GITHUB_SHA" --title "xKi4o Cleaner $VER" --notes-file notes.md --latest

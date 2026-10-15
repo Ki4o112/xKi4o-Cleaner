@@ -309,12 +309,9 @@ Chromium through Playwright and checks the main flows of every section.
    (then rebuild the resource file, see below).
 2. Add a `## X.Y.Z — date` section at the top of `CHANGELOG.md` with an
    `### English` and a `### Български` list (a test checks both are there).
-3. Commit, then tag and push:
-
-   ```sh
-   git tag vX.Y.Z
-   git push origin main vX.Y.Z
-   ```
+3. Commit and push to `main`, then either push a tag (`git tag vX.Y.Z`,
+   `git push origin vX.Y.Z`) or open **Actions → Build and release → Run
+   workflow** and tick **publish**.
 
 The workflow in `.github/workflows/release.yml` tests and builds the exe and
 publishes the release `vX.Y.Z` with `xKi4oCleaner.exe` and that version's
