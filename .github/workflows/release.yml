@@ -1,0 +1,60 @@
+name: Build and release
+
+# Every push to main is built and tested. A tag "vX.Y.Z" also publishes a
+# GitHub release with xKi4oCleaner.exe and the notes of that version from
+# CHANGELOG.md — the app finds it and offers the update.
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Test
+        run: go test -count=1 .
+
+      - name: Vet (Windows)
+        run: GOOS=windows GOARCH=amd64 go vet .
+
+      - name: Build
+        run: CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -trimpath -ldflags "-s -w -H windowsgui" -o xKi4oCleaner.exe .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xKi4oCleaner
+          path: xKi4oCleaner.exe
+
+      - name: Release notes from CHANGELOG.md
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          VER="${GITHUB_REF_NAME#v}"
+          grep -q "appVersion = \"$VER\"" version.go || { echo "::error::the tag $GITHUB_REF_NAME does not match appVersion in version.go"; exit 1; }
+          awk -v v="$VER" '/^## /{ if (on) exit; if ($2 == v) { on = 1; next } } on' CHANGELOG.md > notes.md
+          grep -q . notes.md || { echo "::error::CHANGELOG.md has no section for $VER"; exit 1; }
+          {
+            echo
+            echo "## Download"
+            echo "**xKi4oCleaner.exe** — Windows 10 / 11 (64-bit), one portable file, no installer."
+            echo
+            echo "SHA-256: \`$(sha256sum xKi4oCleaner.exe | cut -d' ' -f1)\`"
+          } >> notes.md
+          cat notes.md
+
+      - name: Publish the release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" xKi4oCleaner.exe --title "xKi4o Cleaner ${GITHUB_REF_NAME#v}" --notes-file notes.md --latest
