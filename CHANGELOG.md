@@ -3,6 +3,24 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 2.7.0 — 2026-10-16
+
+### English
+- **PC health** is the new start page: a score with what lowers it (junk, memory, free space, disk health, restore points, errors in the log, program updates) and **"Do all recommended"** — the chosen steps go through the job queue. Program updates are never pre-ticked.
+- **Programs — an uninstaller like Revo.** Every installed program with its size, install date and when it was last used. Uninstalling runs the program's own uninstaller and waits for it (and for whatever it starts), then looks for leftovers in three depths (safe, moderate, advanced): its folders in Program Files, ProgramData and AppData, shortcuts, registry keys. You review the list: certain ones are ticked, your settings and data are never pre-ticked. Files go to the Recycle Bin; registry keys are saved to a .reg file first and can be put back from the Restore Center. Windows keys, services and startup entries are never touched. Store apps can be removed too, and programs whose uninstaller is gone can be removed by force.
+- **Program updates through winget:** the programs that have a newer version, updated one by one or all together, each with its own result.
+- **Disk health (S.M.A.R.T.)** in Optimize: temperature, SSD wear, power-on time and errors, with a plain verdict. A disk in trouble is warned about a few seconds after the app starts.
+- **Game mode:** one click closes the programs you chose and frees RAM; turning it off starts them again (without administrator rights). It never changes the power plan, services or Windows settings.
+- **Empty folders and broken shortcuts:** finds empty folders (a folder holding only empty folders counts too) in your folders, and shortcuts on the desktop, in the Start menu and Quick Launch that point to nothing. Removed ones go to the Recycle Bin.
+
+### Български
+- **Здраве на компютъра** е новият начален екран: оценка и какво я сваля (боклуци, памет, свободно място, здраве на дисковете, точки за възстановяване, грешки в дневника, обновления на програми) и бутон **„Направи препоръчаното“** — избраните стъпки минават през опашката със задачи. Обновленията на програми никога не са отметнати предварително.
+- **Програми — деинсталатор като Revo.** Всички инсталирани програми с размер, дата на инсталиране и кога са ползвани за последно. Деинсталирането пуска собствения деинсталатор на програмата и го изчаква (заедно с всичко, което той пусне), после търси остатъци на три нива (безопасно, умерено, разширено): папките ѝ в Program Files, ProgramData и AppData, преки пътища, ключове в регистъра. Ти преглеждаш списъка: сигурните са отметнати, твоите настройки и данни никога не са отметнати предварително. Файловете отиват в кошчето, а ключовете първо се записват в .reg файл и се връщат от Центъра за възстановяване. Ключове на Windows, услуги и стартиращи записи никога не се пипат. Премахват се и Store приложения, а програми без деинсталатор — принудително.
+- **Обновяване на програмите през winget:** кои програми имат нова версия, обновяване една по една или всички наведнъж, всяка със свой резултат.
+- **Здраве на дисковете (S.M.A.R.T.)** в „Оптимизация“: температура, износване на SSD, работни часове и грешки, с ясна оценка. За диск с проблем програмата предупреждава няколко секунди след стартиране.
+- **Режим „Игри“:** с едно кликване затваря избраните от теб програми и освобождава RAM; при изключване ги пуска отново (без администраторски права). Никога не променя плана за захранване, услугите или настройките на Windows.
+- **Празни папки и счупени преки пътища:** намира празни папки (и папки, в които има само празни папки) в твоите папки, и преки пътища на работния плот, в менюто „Старт“ и Quick Launch, които сочат към нищо. Премахнатите отиват в кошчето.
+
 ## 2.6.1 — 2026-10-15
 
 ### English

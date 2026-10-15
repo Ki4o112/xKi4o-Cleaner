@@ -4,7 +4,7 @@
 
 # xKi4o Cleaner
 
-**A fast, careful Windows cleaner and toolbox — cleanup, duplicates, large files, processes, tweaks, and a way back for every change.**
+**A fast, careful Windows cleaner and toolbox — PC health, cleanup, a full uninstaller, program updates, disk health, duplicates, tweaks, and a way back for every change.**
 Made by **xKi4o**.
 
 ![Windows 10 / 11](https://img.shields.io/badge/Windows-10%20%7C%2011-2f6bff)
@@ -12,13 +12,16 @@ Made by **xKi4o**.
 ![License: MIT](https://img.shields.io/badge/License-MIT-36d399)
 ![Portable](https://img.shields.io/badge/single%20exe-~9%20MB-8c97b2)
 
-<img src="docs/screenshots/cleanup.png" width="860" alt="Cleanup page">
+<img src="docs/screenshots/home.png" width="860" alt="PC health page">
 
 </div>
 
-xKi4o Cleaner scans your PC first and shows exactly how much space every
-category takes, then cleans only what you pick — or everything at once with
-one button. The Tweaker turns about 50 Windows tweaks on and off and can put
+xKi4o Cleaner opens on **PC health**: one score and what lowers it, with a
+button that does everything recommended. It scans your PC and shows exactly
+how much space every cleanup category takes, then cleans only what you pick —
+or everything at once with one button. **Programs** uninstalls like Revo
+(the program's own uninstaller, then a scan for what it left), removes Store
+apps and updates programs through winget. The Tweaker turns about 50 Windows tweaks on and off and can put
 back the exact earlier state of every one; the Startup Manager, the Disk
 Analyzer, the Large Files and Duplicate finders and the Process Manager show
 what starts with Windows, what fills the disk and what runs right now. The
@@ -27,6 +30,69 @@ logged step by step with a report you can copy in one click. It ships as one
 portable `.exe` with no installer, in English and Bulgarian.
 
 ## Features
+
+**PC health** (the start page) — a score from 0 to 100 and the cards behind
+it: junk that can be cleaned safely, memory in use, free space on every drive,
+disk health, the age of the newest restore point, errors in the app's log in
+the last 7 days and programs with a newer version. **Do all recommended**
+offers the steps that would help (restore point, cleaning the safe categories,
+freeing RAM, and — never pre-ticked — updating programs) and puts the chosen
+ones into the job queue.
+
+**Programs — uninstaller** — every installed program (64- and 32-bit, for all
+users and just you) with its icon, publisher, version, size, install date and
+**when it was last used** (from Windows' Prefetch and UserAssist records).
+Uninstalling works like Revo Uninstaller:
+
+1. optionally a restore point first;
+2. the program's **own uninstaller** runs (Windows Installer packages with
+   `msiexec /x`); the app waits for it and for every process it starts (many
+   uninstallers copy themselves to Temp), with an *It has finished* button
+   for the rare one that does not end;
+3. if the program is still installed (the uninstaller was cancelled), nothing
+   else is touched;
+4. otherwise the **leftovers** are searched in three depths — *Safe*,
+   *Moderate* (recommended), *Advanced*: its folder, folders with its name
+   (or inside its publisher's folder) in Program Files, ProgramData and
+   AppData, Start menu and desktop shortcuts that point to it, registry keys
+   under `Software` (also the 32-bit view), App Paths, file associations and
+   the names Windows remembered;
+5. you review the list: only certain leftovers are ticked; your settings and
+   data in AppData are shown but never pre-ticked; files go to the
+   **Recycle Bin**, registry keys are **saved to a .reg file** first and can
+   be put back from *Restore Center → Registry*.
+
+Windows' own keys (Run, Uninstall, Classes, Policies…), services, startup
+entries, other installed programs' folders and the user folders are never
+proposed. **Store apps** can be removed, and a program whose uninstaller is
+gone can be removed by force (leftovers only).
+
+**Program updates (winget)** — lists the programs that have a newer version
+through the Windows Package Manager and updates the chosen ones, one by one,
+silently, each with its own result and winget's message. Pinned packages are
+never pre-selected. Without winget the app points to App Installer.
+
+**Disk health** (in Optimize) — what every drive reports about itself
+(S.M.A.R.T. through Windows' storage counters): temperature, SSD wear,
+power-on time, uncorrected errors and Windows' own verdict, with a plain
+*Good / Caution / Bad* and the reasons. Read-only. A disk in trouble is warned
+about a few seconds after the app starts.
+
+**Game mode** — one click closes the programs you chose (politely; programs
+without a window, and with your consent the ones that refuse, by force) and
+frees RAM; turning it off starts them again with their command lines, as you
+(without administrator rights). It survives a restart of the app. It never
+changes the power plan, services, hibernation or Windows settings, and parts
+of Windows and security software are never offered.
+
+**Empty folders & broken shortcuts** — finds the topmost empty folders (a
+folder holding only empty folders counts too) in Desktop, Documents,
+Downloads, Pictures, Music, Videos and folders you add (AppData only if you
+choose it, never pre-ticked), and shortcuts on the desktop, in the Start menu
+and Quick Launch whose target is gone. Network targets, drives that are not
+connected, Store-app and Windows Installer shortcuts are never called broken;
+Windows and program folders and dot folders such as `.git` are never
+searched. Each item is checked again right before it goes to the Recycle Bin.
 
 **Cleanup**
 
@@ -187,7 +253,8 @@ category or open app by typing a few letters.
 safe defaults: live load gauge and 2-minute chart, one-click RAM freeing, and
 automatic cleaning above a load threshold or on an interval.
 
-**Optimize** — TRIM for SSDs (HDDs are left to Windows' own schedule).
+**Optimize** — disk health (above) and TRIM for SSDs (HDDs are left to
+Windows' own schedule).
 
 **Repair** — DISM + SFC, SFC only, or a read-only disk check, with live output.
 
@@ -201,6 +268,13 @@ on the page, `Ctrl+1…9` switch section, `Esc` close a dialog or clear the
 search.
 
 <p>
+<img src="docs/screenshots/programs.png" width="420" alt="Programs: the uninstaller">
+<img src="docs/screenshots/leftovers.png" width="420" alt="Leftovers after an uninstall, for review">
+<img src="docs/screenshots/winget.png" width="420" alt="Program updates through winget">
+<img src="docs/screenshots/diskhealth.png" width="420" alt="Disk health">
+<img src="docs/screenshots/game.png" width="420" alt="Game mode">
+<img src="docs/screenshots/tidy.png" width="420" alt="Empty folders and broken shortcuts">
+<img src="docs/screenshots/cleanup.png" width="420" alt="Cleanup page">
 <img src="docs/screenshots/duplicates.png" width="420" alt="Duplicates page">
 <img src="docs/screenshots/processes.png" width="420" alt="Processes page">
 <img src="docs/screenshots/restore.png" width="420" alt="Restore Center">
@@ -246,7 +320,11 @@ kept (no code copied).
   program files, system files and other users' files are never deleted.
 - **Nothing is ever turned off by itself**: Windows Update, Defender and other
   protection, hibernation, power plans and startup apps change only when you
-  switch them yourself.
+  switch them yourself. Game mode does not touch them at all.
+- **Uninstall leftovers are only proposed.** Nothing is deleted without your
+  choice; registry keys are backed up to a .reg file first, and keys Windows
+  and all programs share (Run, Uninstall, Classes, Policies, `Software\Microsoft`
+  as a whole…) are refused even if asked.
 - **A crash cannot take the app down mid-work**: an unexpected error in a
   background task is logged and the app goes on.
 
@@ -295,10 +373,13 @@ GOOS=windows GOARCH=amd64 go test -c -o wtests.exe . && wine wtests.exe -test.v
 ```
 
 On a real PC the Windows tests only read the system and work in their own
-temporary folders: the tests that write to the registry or close other
-programs skip themselves unless they run under Wine (or `XKI4O_WRITE_TESTS=1`
-is set on purpose). No test changes hibernation, power plans, boot settings,
-services or startup apps.
+temporary folders: the tests that write to the registry, uninstall, use the
+Recycle Bin or close other programs skip themselves unless they run under Wine
+(or `XKI4O_WRITE_TESTS=1` is set on purpose). The one exception is the
+registry backup test, which creates, backs up, deletes and puts back a key of
+its own (`HKCU\Software\xKi4o-test-…`) and removes it at the end. No test
+changes hibernation, power plans, boot settings, services or startup apps, and
+game mode is never turned on by a test.
 
 `tests/ui_flows.py` drives the interface (with its built-in demo backend) in
 Chromium through Playwright and checks the main flows of every section.
@@ -341,10 +422,11 @@ windres --preprocessor=cpp -i app.rc -O coff -o ../rsrc_windows_amd64.syso
 The app is written in Go. The window is a native Win32 window hosting
 Microsoft Edge WebView2, so the interface is a single HTML page
 (`ui/index.html`, embedded into the exe) that calls Go functions directly.
-There is no web server. The only network access is the update check (one
+There is no web server. The app's own network access is the update check (one
 request to the GitHub API for the latest release of this repository, which can
 be turned off) and, after you click *Update now*, the download of the new exe
-from this repository's releases.
+from this repository's releases. Program updates are done by winget, which
+uses its own sources.
 
 | Path | What it is |
 | --- | --- |
@@ -366,6 +448,11 @@ from this repository's releases.
 | `procs_windows.go` | Process Manager and the live CPU/RAM readout |
 | `recyclebin.go`, `restore_windows.go`, `restorepoints.go` | Restore Center, putting files back from the Recycle Bin, deleting restore points |
 | `icons_windows.go` | Real icons of programs, files and folders for the page |
+| `uninstall.go`, `uninstall_windows.go`, `lnk.go` | Programs: the list, uninstalling, the leftover scan, registry backups; reading shortcuts |
+| `winget.go`, `winget_windows.go` | Program updates through winget |
+| `diskhealth.go`, `diskhealth_windows.go` | Disk health (S.M.A.R.T.) and its verdict |
+| `gamemode.go`, `gamemode_windows.go` | Game mode |
+| `tidy.go`, `tidy_windows.go` | Empty folders and broken shortcuts |
 | `update.go`, `update_windows.go`, `version.go`, `CHANGELOG.md` | Update check and install from GitHub releases, the version and its list of changes |
 | `oplog.go`, `oplog_windows.go` | Operation log, error reports, clipboard |
 | `ui/app.html` | The interface (English and Bulgarian texts included) |
@@ -406,6 +493,25 @@ warranty — see the license.
 
 **xKi4o Cleaner** е бърз и внимателен почистващ инструмент за Windows. Направен
 е от **xKi4o**.
+
+Отваря се на **Здраве на компютъра** — оценка от 0 до 100 и какво я сваля
+(боклуци, памет, свободно място, здраве на дисковете, точки за възстановяване,
+грешки в дневника, обновления на програми), с бутон **„Направи
+препоръчаното“**, който нарежда избраните стъпки на опашката.
+
+**Програми** — деинсталатор като Revo Uninstaller: всички програми с размер,
+дата на инсталиране и кога са ползвани за последно. Пуска се собственият
+деинсталатор на програмата и се изчаква; после се търсят остатъци на три нива
+(безопасно, умерено, разширено) — папки, преки пътища, ключове в регистъра.
+Ти избираш какво да се изтрие: файловете отиват в кошчето, ключовете първо се
+записват в .reg файл и се връщат от Центъра за възстановяване. Премахват се и
+Store приложения. **Обновления през winget** — кои програми имат нова версия и
+обновяване една по една или всички. **Здраве на дисковете** (в
+„Оптимизация“) — температура, износване на SSD, работни часове и грешки, с
+ранно предупреждение. **Режим „Игри“** — затваря избраните програми,
+освобождава RAM и след играта ги пуска отново; не пипа захранването, услугите
+и настройките на Windows. **Празни папки и счупени преки пътища** — намира ги
+и ги мести в кошчето след проверка.
 
 Първо сканира и показва колко място и колко файла има във всяка категория.
 **„Преглед“** показва какво би се изтрило, без да трие нищо, а иконата с окото

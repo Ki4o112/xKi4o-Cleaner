@@ -831,7 +831,7 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .pal-foot kbd { min-width: 0; padding: 0 5px; font-size: 10.5px; margin-right: 4px; }
 
 /* toast with an action */
-.toast .ta { margin-left: 4px; pointer-events: auto; height: 30px; padding: 0 12px; font-size: 12px; border-radius: 10px; }
+.toast .ta { margin-left: 4px; pointer-events: auto; flex: none; height: 30px; padding: 0 12px; font-size: 12px; border-radius: 10px; }
 
 /* ================= shared parts of the 2.5 pages ================= */
 .places { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
@@ -1173,6 +1173,162 @@ body.dock-on .toasts { bottom: 84px; }
 .upd-notes code { font: 11.5px var(--mono); background: #182141; padding: 1px 5px; border-radius: 5px; }
 .upd-prog { margin: 12px 0 2px; }
 .upd-prog .lbl { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+
+/* ================= 2.7: home, programs, game mode, tidy, disk health ================= */
+@media (max-height: 900px) {
+  .nav button, .nav-ind { height: 29px; }
+  .nav { gap: 1px; }
+  .nav .ico { width: 24px; height: 24px; }
+  .nav .ico svg { width: 14px; height: 14px; }
+  .nav-g { padding: 5px 12px 1px; font-size: 10.5px; }
+  .pulse canvas { height: 16px; }
+  .brand { padding-bottom: 6px; }
+}
+@media (max-height: 760px) {
+  .nav button, .nav-ind { height: 26px; }
+  .nav .ico { width: 22px; height: 22px; }
+  .nav-g { font-size: 0; padding: 0; height: 1px; margin: 4px 12px; background: var(--line-soft); }
+  .pulse { display: none; }
+}
+@media (max-height: 680px) {
+  .nav button, .nav-ind { height: 25px; }
+  .cmd-btn { height: 30px; margin-bottom: 4px; }
+}
+.nav .badge.on { background: var(--mint-soft); color: var(--mint); }
+.hm-hero { display: flex; gap: 22px; align-items: center; margin-top: 16px; padding: 20px 22px; background: linear-gradient(135deg, var(--card-2), var(--card) 60%); }
+.hm-ring { position: relative; width: 112px; height: 112px; flex: none; }
+.hm-ring b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 34px; font-weight: 800; letter-spacing: -.03em; }
+.hm-v { min-width: 0; flex: 1; }
+.hm-vt { font-size: 20px; font-weight: 800; letter-spacing: -.01em; }
+.hm-vd { color: var(--muted); font-size: 13px; margin-top: 3px; }
+.hm-acts { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.hm-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+.hm-card { background: var(--card); border: 1px solid rgba(255,255,255,.035); border-radius: var(--r-l); padding: 14px 16px 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0; position: relative; }
+.hm-card.warn { border-color: rgba(255,181,71,.28); }
+.hm-card.bad { border-color: rgba(255,107,122,.38); background: linear-gradient(160deg, rgba(255,107,122,.07), var(--card) 55%); }
+.hm-top { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12.5px; font-weight: 700; }
+.hm-ic { width: 28px; height: 28px; border-radius: 50%; background: var(--card-2); color: var(--blue-2); display: grid; place-items: center; flex: none; }
+.hm-ic svg { width: 15px; height: 15px; }
+.hm-t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hm-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--mint); flex: none; box-shadow: 0 0 0 3px var(--mint-soft); }
+.hm-dot.warn { background: var(--amber); box-shadow: 0 0 0 3px var(--amber-soft); }
+.hm-dot.bad { background: var(--red); box-shadow: 0 0 0 3px var(--red-soft); }
+.hm-val { font-size: 22px; font-weight: 800; letter-spacing: -.02em; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hm-d { color: var(--muted); font-size: 12px; min-height: 34px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+.hm-card .btn { align-self: flex-start; margin-top: 6px; }
+@media (max-width: 1080px) { .hm-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .hm-cards { grid-template-columns: 1fr; } .hm-hero { flex-direction: column; align-items: flex-start; } }
+
+.pr-top { display: flex; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+.pr-sum { color: var(--muted); font-size: 12.5px; margin-left: auto; }
+.pr-list { margin-top: 2px; }
+.pr-head, .pr-row { display: grid; grid-template-columns: 34px minmax(0, 1fr) 82px 92px 104px 186px; gap: 12px; align-items: center; padding: 10px 14px; }
+.pr-head { color: var(--faint); font-size: 11.5px; font-weight: 700; padding-top: 9px; padding-bottom: 7px; border-bottom: 1px solid var(--line-soft); }
+.pr-row { border-top: 1px solid var(--line-soft); transition: background .2s; }
+.pr-head + .pr-row { border-top: 0; }
+.pr-row:hover { background: rgba(255,255,255,.015); }
+.pr-row .r-ico, .wg-row .r-ico, .gm-row .r-ico { width: 34px; height: 34px; }
+.pr-head .r, .pr-row .r { text-align: right; }
+.pr-sz { font-weight: 700; font-size: 12.5px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.pr-inst, .pr-used { color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pr-used.old { color: #ffcf8a; }
+.pr-row .su-ctl .btn { gap: 6px; }
+.pr-row .su-ctl .btn svg { width: 15px; height: 15px; }
+@media (max-width: 1180px) { .pr-head, .pr-row { grid-template-columns: 34px minmax(0, 1fr) 76px 96px 186px; } .pr-inst { display: none; } }
+@media (max-width: 900px) { .pr-head, .pr-row { grid-template-columns: 34px minmax(0, 1fr) 70px 186px; } .pr-used { display: none; } }
+.pr-row .su-ctl { justify-content: flex-end; }
+.wg-row { display: grid; grid-template-columns: 20px 34px minmax(0, 1fr) auto auto; gap: 12px; align-items: center; padding: 10px 14px; border-top: 1px solid var(--line-soft); }
+.wg-row:first-child { border-top: 0; }
+.wg-v { display: flex; align-items: center; gap: 4px; font-size: 12.5px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.wg-v .from { color: var(--muted); }
+.wg-v b { color: var(--mint); }
+.wg-v svg { width: 13px; height: 13px; color: var(--faint); }
+.wg-s { color: var(--muted); font-size: 12px; margin: 0 8px 0 4px; }
+.wg-note { color: var(--faint); font-size: 12px; margin-left: auto; }
+
+.un-app { display: flex; gap: 14px; align-items: center; padding: 6px 0 4px; }
+.un-app .r-ico { width: 44px; height: 44px; font-size: 18px; flex: none; }
+.un-app .r-ico.real img { width: 30px; height: 30px; }
+.un-n { font-weight: 700; font-size: 15px; }
+.un-m { color: var(--muted); font-size: 12.5px; }
+.un-p { color: var(--faint); font: 11px var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: rtl; text-align: left; }
+.un-steps { margin: 12px 0 4px; padding-left: 20px; color: var(--muted); font-size: 12.5px; line-height: 1.6; }
+.un-sec { font-size: 12.5px; font-weight: 700; color: var(--muted); margin: 14px 0 6px; }
+.un-lvs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.un-lv { display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; border-radius: 14px; border: 1px solid var(--line-soft); background: #0d1428; cursor: pointer; transition: border-color .2s, background .2s; }
+.un-lv input { display: none; }
+.un-lv b { font-size: 13px; }
+.un-lv span { color: var(--muted); font-size: 11.5px; line-height: 1.4; }
+.un-lv.on { border-color: rgba(var(--blue-rgb), .65); background: var(--blue-soft); }
+.un-busy, .un-clean { display: flex; gap: 16px; align-items: center; padding: 26px 6px; }
+.un-busy .spin.big { width: 34px; height: 34px; border-width: 3px; flex: none; }
+.un-clean > svg { width: 34px; height: 34px; color: var(--mint); flex: none; }
+.un-clean.warn > svg { color: var(--amber); }
+.un-bt { font-weight: 700; font-size: 15px; }
+.un-bd { color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+.un-tools { display: flex; gap: 14px; margin: 0 0 4px; }
+.un-list { background: #0d1428; border: 1px solid var(--line-soft); border-radius: 14px; overflow: hidden; }
+.un-row { display: grid; grid-template-columns: 20px 20px minmax(0, 1fr) auto 30px; gap: 10px; align-items: center; padding: 8px 10px; border-top: 1px solid var(--line-soft); cursor: pointer; }
+.un-row:first-child { border-top: 0; }
+.un-row:hover { background: rgba(255,255,255,.02); }
+.un-ic { display: grid; place-items: center; color: var(--blue-2); }
+.un-ic svg { width: 16px; height: 16px; }
+.un-rp { font: 11.5px/1.45 var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: rtl; text-align: left; }
+.un-rw { color: var(--faint); font-size: 11.5px; }
+.un-rw.warn { color: #ffcf8a; }
+.un-rs { text-align: right; font-weight: 700; font-size: 12px; white-space: nowrap; }
+.un-rs small { display: block; color: var(--faint); font-weight: 600; font-size: 10.5px; }
+@media (max-width: 760px) { .un-lvs { grid-template-columns: 1fr; } }
+
+.gm-hero { display: flex; gap: 18px; align-items: center; margin-top: 16px; padding: 18px 20px; }
+.gm-hero.on { background: linear-gradient(135deg, rgba(54,211,153,.14), var(--card) 60%); border-color: rgba(54,211,153,.3); }
+.gm-ic { width: 54px; height: 54px; border-radius: 18px; background: var(--card-2); color: var(--blue-2); display: grid; place-items: center; flex: none; }
+.gm-ic svg { width: 26px; height: 26px; }
+.gm-hero.on .gm-ic { background: var(--mint); color: #062b1c; }
+.gm-hero > div:nth-child(2) { flex: 1; }
+.gm-st { font-size: 18px; font-weight: 800; }
+.gm-sd { color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+.gm-row { display: grid; grid-template-columns: 20px 34px minmax(0, 1fr) 80px; gap: 12px; align-items: center; padding: 10px 14px; border-top: 1px solid var(--line-soft); cursor: pointer; }
+.gm-row:first-child { border-top: 0; }
+.gm-row.off { opacity: .6; }
+@media (max-width: 760px) { .gm-hero { flex-wrap: wrap; } }
+
+.td-row { display: grid; grid-template-columns: 20px 20px minmax(0, 1fr) auto 30px; gap: 12px; align-items: center; padding: 10px 14px; border-top: 1px solid var(--line-soft); cursor: pointer; }
+.td-row:first-child { border-top: 0; }
+.td-row .t { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.td-row .d { color: var(--faint); font: 11px/1.45 var(--mono); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.td-row .d.path { direction: rtl; text-align: left; }
+.td-row .fic { color: var(--blue-2); }
+#tdBar .chk span { color: var(--text); font-weight: 600; }
+
+.dh-head { display: flex; align-items: center; gap: 10px; margin: 0 0 4px; }
+.dh-head h3 { margin: 0; font-size: 15px; font-weight: 700; }
+.dh-head .ibtn, .dh-head .btn { margin-left: auto; }
+.dh-sub { color: var(--muted); font-size: 12px; margin-bottom: 10px; }
+.dh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin-bottom: 18px; }
+.dh-card { background: var(--card); border: 1px solid rgba(255,255,255,.035); border-radius: var(--r-l); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.dh-card.warn { border-color: rgba(255,181,71,.3); }
+.dh-card.bad { border-color: rgba(255,107,122,.45); background: linear-gradient(160deg, rgba(255,107,122,.08), var(--card) 55%); }
+.dh-top { display: flex; gap: 12px; align-items: center; min-width: 0; }
+.dh-ic { width: 36px; height: 36px; border-radius: 12px; background: var(--card-2); color: var(--blue-2); display: grid; place-items: center; flex: none; }
+.dh-n { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dh-k { color: var(--muted); font-size: 11.5px; }
+.dh-v { margin-left: auto; flex: none; font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 99px; background: var(--mint-soft); color: var(--mint); }
+.dh-v.warn { background: var(--amber-soft); color: #ffcf8a; }
+.dh-v.bad { background: var(--red-soft); color: #ffb3bc; }
+.dh-v.unknown { background: #222b47; color: var(--muted); }
+.dh-sts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.dh-st { background: #0d1428; border-radius: 10px; padding: 7px 8px; min-width: 0; }
+.dh-st span { display: block; color: var(--faint); font-size: 10.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dh-st b { font-size: 13.5px; white-space: nowrap; }
+.dh-st.warn b { color: #ffcf8a; }
+.dh-st.bad b { color: #ffb3bc; }
+.dh-r { margin: 0; padding-left: 18px; color: #ffcf8a; font-size: 12px; }
+.dh-card.bad .dh-r { color: #ffb3bc; }
+.dh-note { color: var(--faint); font-size: 12px; }
+.dh-note.ok { color: var(--muted); }
+.rc-cards.five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 1180px) { .rc-cards.five { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 </style>
 </head>
 <body>
@@ -1204,14 +1360,18 @@ body.dock-on .toasts { bottom: 84px; }
     <button class="cmd-btn" id="cmdBtn" data-i-title="pal.btnT"><span data-icon="search"></span><span class="lbl" data-i="pal.btn"></span><kbd>Ctrl K</kbd></button>
     <nav class="nav" id="nav" aria-label="Sections">
       <div class="nav-ind" id="navInd"></div>
-      <div class="nav-g first" data-i="nav.g.clean"></div>
-      <button data-page="clean" aria-current="page"><span class="ico" data-icon="clean"></span><span class="label" data-i="nav.clean"></span><span class="badge" id="navBadge" hidden></span></button>
+      <button data-page="home" aria-current="page"><span class="ico" data-icon="heart"></span><span class="label" data-i="nav.home"></span><span class="badge" id="homeBadge" hidden></span></button>
+      <div class="nav-g" data-i="nav.g.clean"></div>
+      <button data-page="clean"><span class="ico" data-icon="clean"></span><span class="label" data-i="nav.clean"></span><span class="badge" id="navBadge" hidden></span></button>
       <button data-page="memory"><span class="ico" data-icon="memory"></span><span class="label" data-i="nav.memory"></span><span class="live" id="navLive" hidden></span></button>
+      <button data-page="game"><span class="ico" data-icon="gamepad"></span><span class="label" data-i="nav.game"></span><span class="badge on" id="gmBadge" hidden></span></button>
       <div class="nav-g" data-i="nav.g.files"></div>
       <button data-page="disk"><span class="ico" data-icon="pie"></span><span class="label" data-i="nav.disk"></span></button>
       <button data-page="large"><span class="ico" data-icon="weight"></span><span class="label" data-i="nav.large"></span></button>
       <button data-page="dupes"><span class="ico" data-icon="copy"></span><span class="label" data-i="nav.dupes"></span><span class="badge" id="dupBadge" hidden></span></button>
+      <button data-page="tidy"><span class="ico" data-icon="broken"></span><span class="label" data-i="nav.tidy"></span></button>
       <div class="nav-g" data-i="nav.g.system"></div>
+      <button data-page="programs"><span class="ico" data-icon="package"></span><span class="label" data-i="nav.programs"></span><span class="badge" id="prBadge" hidden></span></button>
       <button data-page="procs"><span class="ico" data-icon="cpu"></span><span class="label" data-i="nav.procs"></span></button>
       <button data-page="startup"><span class="ico" data-icon="rocket"></span><span class="label" data-i="nav.startup"></span></button>
       <button data-page="tweaks"><span class="ico" data-icon="tweaks"></span><span class="label" data-i="nav.tweaks"></span><span class="badge" id="twBadge" hidden></span></button>
@@ -1236,8 +1396,21 @@ body.dock-on .toasts { bottom: 84px; }
   </aside>
 
   <main class="main">
+    <!-- =============== HOME: PC HEALTH =============== -->
+    <section class="page on" id="page-home">
+      <div class="head">
+        <div class="head-ico" data-icon="heart"></div>
+        <div><h1 data-i="hm.title"></h1><div class="sub" data-i="hm.sub"></div></div>
+      </div>
+      <div class="tw-body" id="hmBody">
+        <div class="hm-hero panel" id="hmScore"></div>
+        <div class="hm-cards" id="hmCards"></div>
+        <div class="note-line" data-i="hm.note"></div>
+      </div>
+    </section>
+
     <!-- =============== CLEAN =============== -->
-    <section class="page on" id="page-clean">
+    <section class="page" id="page-clean">
       <div class="head">
         <div class="head-ico" data-icon="clean"></div>
         <div><h1 data-i="clean.title"></h1><div class="sub" data-i="clean.sub"></div></div>
@@ -1452,6 +1625,10 @@ body.dock-on .toasts { bottom: 84px; }
         <div class="head-r"><button class="btn primary" id="btnTrim" disabled data-i="opt.btn"></button></div>
       </div>
       <div class="scroll pad">
+        <div class="dh-head"><h3 data-i="dh.title"></h3><button class="btn icon-btn small" id="dhRefresh" data-i-title="dh.refresh"><span data-icon="refresh"></span></button></div>
+        <div class="dh-sub" data-i="dh.sub"></div>
+        <div class="dh-grid" id="dhGrid"></div>
+        <div class="dh-head"><h3 data-i="opt.trimT"></h3></div>
         <div class="status" id="trimStatus" style="margin:0 0 10px"></div>
         <div class="list" id="driveList"></div>
       </div>
@@ -1611,6 +1788,74 @@ body.dock-on .toasts { bottom: 84px; }
           <div class="lg-list"><div class="lg-ops" id="lgOps"></div></div>
           <div class="lg-det" id="lgDet"></div>
         </div>
+      </div>
+    </section>
+    <!-- =============== PROGRAMS =============== -->
+    <section class="page" id="page-programs">
+      <div class="head">
+        <div class="head-ico" data-icon="package"></div>
+        <div><h1 data-i="pr.title"></h1><div class="sub" data-i="pr.sub"></div></div>
+        <div class="head-r"><button class="btn icon-btn" id="prRefresh" data-i-title="pr.refresh"><span data-icon="refresh"></span></button></div>
+      </div>
+      <div class="tw-body" id="prBody">
+        <div class="pr-top"><div class="seg" id="prTab"></div><span class="pr-sum" id="prSum"></span></div>
+        <div class="notice info" id="prUnNote" hidden><p id="prUnText"></p><button class="btn small" id="prUnShow" data-i="un.show"></button></div>
+        <div class="tw-tools" id="prTools">
+          <label class="search"><span data-icon="search"></span><input id="prQ" type="search" spellcheck="false" autocomplete="off" data-i-ph="pr.search"></label>
+          <select class="sel" id="prSort" aria-label="Sort"></select>
+        </div>
+        <div class="tw-tools" id="prUpdBar" hidden>
+          <button class="btn small primary" id="wgSel" disabled><span data-icon="download"></span><span id="wgSelTxt"></span></button>
+          <button class="btn small danger" id="wgStop" hidden data-i="wg.stop"></button>
+          <button class="btn small" id="wgCheck"><span data-icon="refresh"></span><span data-i="wg.check"></span></button>
+          <span class="wg-note" id="wgNote"></span>
+        </div>
+        <div class="list pr-list" id="prList"></div>
+        <div class="note-line" id="prNote" data-i="pr.note"></div>
+      </div>
+    </section>
+
+    <!-- =============== GAME MODE =============== -->
+    <section class="page" id="page-game">
+      <div class="head">
+        <div class="head-ico" data-icon="gamepad"></div>
+        <div><h1 data-i="gm.title"></h1><div class="sub" data-i="gm.sub"></div></div>
+        <div class="head-r"><button class="btn icon-btn" id="gmRefresh" data-i-title="gm.refresh"><span data-icon="refresh"></span></button></div>
+      </div>
+      <div class="tw-body" id="gmBody">
+        <div class="gm-hero panel" id="gmHero">
+          <div class="gm-ic" data-icon="gamepad"></div>
+          <div style="min-width:0"><div class="gm-st" id="gmState"></div><div class="gm-sd" id="gmStateD"></div></div>
+          <button class="btn primary big" id="gmGo"></button>
+        </div>
+        <div class="list" style="margin-top:14px">
+          <div class="item"><div class="i-ico" data-icon="bolt"></div><div><div class="t" data-i="gm.ram"></div><div class="d" data-i="gm.ramD"></div></div><input type="checkbox" class="switch" id="gmRam" checked></div>
+          <div class="item"><div class="i-ico" data-icon="stop"></div><div><div class="t" data-i="gm.force"></div><div class="d" data-i="gm.forceD"></div></div><input type="checkbox" class="switch" id="gmForce"></div>
+        </div>
+        <div id="gmClosed"></div>
+        <div class="section-t" data-i="gm.listT"></div>
+        <div class="list" id="gmList"></div>
+        <div class="note-line" data-i="gm.note"></div>
+      </div>
+    </section>
+
+    <!-- =============== EMPTY FOLDERS & BROKEN SHORTCUTS =============== -->
+    <section class="page" id="page-tidy">
+      <div class="head">
+        <div class="head-ico" data-icon="broken"></div>
+        <div><h1 data-i="td.title"></h1><div class="sub" data-i="td.sub"></div></div>
+        <div class="head-r"><button class="btn primary" id="tdGo"><span data-icon="search"></span><span id="tdGoTxt"></span></button></div>
+      </div>
+      <div class="tw-body" id="tdBody">
+        <div class="pr-top"><div class="seg" id="tdTab"></div></div>
+        <div class="places" id="tdPlaces"></div>
+        <div class="f-note" id="tdNote" hidden data-i="td.appdataNote"></div>
+        <div class="tw-tools" id="tdBar" hidden>
+          <label class="chk"><input type="checkbox" class="cb" id="tdAll"><span id="tdSum"></span></label>
+          <button class="btn small danger" id="tdDel" style="margin-left:auto" disabled><span data-icon="trash"></span><span id="tdDelTxt"></span></button>
+        </div>
+        <div id="tdRes"></div>
+        <div class="note-line" data-i="td.note"></div>
       </div>
     </section>
     <div class="jobdock" id="jobDock" hidden aria-live="polite"><div class="jd-panel" id="jdPanel" hidden></div><div class="jd-bar" id="jdBar" role="button" tabindex="0"></div></div>
@@ -2043,6 +2288,104 @@ bg: {
   "upd.busyJobs": "Първо изчакай задачите отдолу да свършат, после обнови.", "upd.working": "Обновявам…", "upd.downloading": "Изтеглям и проверявам…",
   "upd.restarting": "Готово — рестартирам с новата версия…", "upd.noNotes": "Няма описание за тази версия.", "upd.newsTitleU": "Обновено до {0} — какво е новото",
   "upd.newsTitle": "Какво е новото във {0}", "upd.newsSub": "Програмата беше обновена успешно.", "upd.ok": "Добре", "lg.k.update": "Ъпдейти",
+  "nav.home": "Здраве на PC", "nav.programs": "Програми", "nav.game": "Режим „Игри“", "nav.tidy": "Празни и счупени", "opt.trimT": "TRIM на SSD дисковете",
+  "lg.k.uninstall": "Деинсталиране", "lg.k.winget": "Обновления (winget)", "lg.k.game": "Режим „Игри“", "lg.k.tidy": "Празни папки и преки пътища", "hm.title": "Здраве на компютъра",
+  "hm.sub": "Всичко накратко — и какво да се направи", "hm.checking": "Проверява се…", "hm.checkingD": "Събират се данните за диска, паметта и програмите.",
+  "hm.good": "Компютърът е в добро състояние", "hm.fair": "Има неща за оправяне", "hm.poor": "Нужна е намеса", "hm.issues": "Неща, които свалят оценката: {0}. Виж картите отдолу.",
+  "hm.noIssues": "Няма нищо за оправяне в момента.", "hm.doAll": "Направи препоръчаното ({0})", "hm.nothing": "Няма какво да се прави",
+  "hm.nothingT": "Няма какво да се прави — компютърът е в добро състояние.", "hm.refresh": "Провери отново", "hm.junk": "Боклуци", "hm.junk0": "Чисто",
+  "hm.junkD": "Може да се почисти безопасно (кеш и временни файлове)", "hm.scanning": "Сканира се…", "hm.cleanBtn": "Почисти", "hm.ram": "Памет (RAM)", "hm.ramD": "{0} заети от {1}",
+  "hm.ramBtn": "Освободи", "hm.space": "Свободно място", "hm.spaceV": "{0}: {1} свободни", "hm.spaceD": "Свободно: {0}", "hm.spaceBtn": "Анализ на диска",
+  "hm.health": "Здраве на дисковете", "hm.healthD": "Дискове: {0} — без проблеми", "hm.healthBtn": "Подробно", "hm.rp": "Точка за възстановяване", "hm.rpNone": "Няма",
+  "hm.rpD": "Точки в Windows: {0}", "hm.rpBtn": "Създай", "hm.probs": "Грешки в дневника (7 дни)", "hm.probsD0": "Няма грешки през последната седмица", "hm.probsBtn": "Дневник",
+  "hm.upd": "Обновления на програми", "hm.updD": "{0} и др.", "hm.updD0": "Всичко е обновено", "hm.updChecking": "Проверява се през winget…", "hm.updBtn": "Покажи",
+  "hm.doAllT": "Направи препоръчаното", "hm.doAllD": "Избраните стъпки се нареждат на опашка и вървят една след друга (виж лентата долу). Нищо лично не се трие.",
+  "hm.doAllOk": "Започни", "hm.r.rp": "Точка за възстановяване (последната е от преди повече от 2 седмици)",
+  "hm.r.clean": "Почистване на боклуците · {0} (само безопасните категории, отворените програми се пропускат)", "hm.r.ram": "Освобождаване на паметта",
+  "hm.r.upd": "Обнови {0} програми през winget", "hm.r.updW": "Инсталира нови версии — по избор, затова не е отметнато.", "hm.queued": "На опашка: {0} стъпки",
+  "hm.note": "Оценката се смята от: боклуците, паметта, свободното място, здравето на дисковете, точките за възстановяване, грешките в дневника и чакащите обновления.",
+  "dh.title": "Здраве на дисковете", "dh.sub": "Какво отчитат самите дискове (S.M.A.R.T.): температура, износване на SSD, работни часове и грешки. Само се чете — нищо не се променя.",
+  "dh.refresh": "Прочети отново", "dh.disk": "Диск {0}", "dh.none": "Не са намерени дискове.", "dh.temp": "Температура", "dh.wear": "Износване", "dh.on": "Работил",
+  "dh.errs": "Грешки", "dh.hours": "{0} ч.", "dh.days": "{0} дни", "dh.years": "{0} г.", "dh.v.good": "Добро", "dh.v.warn": "Внимание", "dh.v.bad": "Лошо",
+  "dh.v.unknown": "Няма данни", "dh.noData": "Дискът не дава данни за състоянието си (често при USB кутии и флашки).", "dh.okNote": "Без забележки.",
+  "dh.r.unhealthy": "Windows отчита диска като неизправен — направи резервно копие веднага.", "dh.r.warning": "Windows отчита предупреждение за диска.",
+  "dh.r.predictive": "Дискът предсказва скорошна повреда (S.M.A.R.T.) — направи резервно копие веднага.", "dh.r.status": "Дискът отчита проблем с връзката или данните.",
+  "dh.r.wearBad": "SSD дискът е почти износен (над 90% от ресурса) — планирай смяна и пази копие на данните.",
+  "dh.r.wear": "SSD дискът е износен над 70% — следи го и пази копие на важното.", "dh.r.hot": "Дискът е твърде горещ — провери охлаждането.",
+  "dh.r.warm": "Дискът е топъл — провери охлаждането и праха.", "dh.r.errors": "Има непоправени грешки при четене или запис.", "dh.toastBad": "Внимание: {0} — {1}",
+  "dh.toastWarn": "Диск: {0} — {1}", "dh.details": "Подробно", "pr.title": "Програми", "pr.sub": "Пълно деинсталиране (с остатъците), Store приложения и обновления",
+  "pr.refresh": "Обнови списъка", "pr.tab.apps": "Програми", "pr.tab.store": "Store приложения", "pr.tab.upd": "Обновления", "pr.tab.updN": "Обновления · {0}",
+  "pr.search": "Търси по име или издател", "pr.sort.name": "По име", "pr.sort.size": "По размер", "pr.sort.installed": "По дата на инсталиране",
+  "pr.sort.used": "По последно ползване", "pr.sort.publisher": "По издател", "pr.col.name": "Програма", "pr.col.size": "Размер", "pr.col.installed": "Инсталирана",
+  "pr.col.used": "Ползвана", "pr.sum": "{0} програми · {1}", "pr.loading": "Чете се списъкът с програми…", "pr.loadingStore": "Четат се Store приложенията (до 10–20 секунди)…",
+  "pr.empty": "Няма намерени програми.", "pr.emptyFilter": "Нищо не отговаря на търсенето.", "pr.b.user": "само за теб", "pr.b.broken": "без деинсталатор",
+  "pr.b.brokenT": "Деинсталаторът ѝ липсва — може само принудително премахване на остатъците.", "pr.b.noRemove": "не се деинсталира", "pr.uninstall": "Деинсталирай",
+  "pr.forced": "Премахни", "pr.remove": "Премахни", "pr.today": "днес", "pr.yesterday": "вчера", "pr.daysAgo": "преди {0} дни", "pr.monthsAgo": "преди {0} мес.",
+  "pr.yearsAgo": "преди {0} г.", "pr.usedUnknown": "Няма данни кога е пускана",
+  "pr.note": "„Ползвана“ идва от данните на Windows (Prefetch и UserAssist) — за някои програми липсва. Деинсталирането пуска собствения деинсталатор на програмата; остатъците се показват за преглед и се трият само ако ги избереш.",
+  "un.title": "Деинсталиране: {0}", "un.titleStore": "Премахване: {0}", "un.titleForced": "Принудително премахване: {0}",
+  "un.step1": "Пуска се собственият деинсталатор на програмата — следвай прозореца му.", "un.step1Store": "Приложението се премахва през Windows.",
+  "un.step1Forced": "Деинсталаторът липсва, затова се търсят направо остатъците.", "un.step2": "След това се търси какво е останало: папки, преки пътища, ключове в регистъра.",
+  "un.step3": "Ти избираш кое да се изтрие. Файловете отиват в кошчето, а за ключовете се прави резервно копие.",
+  "un.forcedNote": "Деинсталаторът на програмата липсва или е повреден. Ако програмата е още там, част от файловете ѝ може да са в употреба.",
+  "un.mode": "Колко дълбоко да се търсят остатъците", "un.lv1": "Безопасно", "un.lv1D": "Само сигурните: същото име, папката на програмата, записите ѝ.", "un.lv2": "Умерено",
+  "un.lv2D": "Препоръчано. Плюс близки имена и празни папки на издателя.", "un.lv3": "Разширено", "un.lv3D": "Плюс частични съвпадения. Преглеждай внимателно.",
+  "un.rp": "Създай точка за възстановяване преди това", "un.rpD": "Препоръчително — отнема около минута.",
+  "un.safeNote": "Нищо не се трие без твоя избор. Ключове на Windows, услуги и стартиращи програми не се пипат.", "un.go": "Деинсталирай", "un.goStore": "Премахни",
+  "un.goForced": "Търси остатъци", "un.run": "Деинсталаторът на програмата работи…", "un.runStore": "Приложението се премахва…",
+  "un.runD": "Следвай неговия прозорец (може да е зад този). Щом приключи, търсенето на остатъци започва само.", "un.cont": "Деинсталаторът приключи",
+  "un.contD": "Прозорецът на деинсталатора е затворен, а това още чака?", "un.scan": "Търсят се остатъци…", "un.scanD": "Режим: {0}", "un.hide": "Скрий (продължава във фонов режим)",
+  "un.none": "Няма остатъци — програмата е премахната чисто.", "un.noneD": "Не е намерено нищо от нея в папките и регистъра.",
+  "un.foundD": "Намерени остатъци: {0}. Отметнатите са сигурно от програмата. Неотметнатите прегледай сам.", "un.onlySure": "Само сигурните", "un.files": "Файлове и папки ({0})",
+  "un.regs": "Регистър ({0})", "un.regNote": "Преди изтриване ключовете се записват в .reg файл — връщат се от „Център за възстановяване“ → „Регистър“.",
+  "un.sel": "Избрани: {0} · {1}", "un.keep": "Остави всичко", "un.del": "Изтрий избраното", "un.udT": "Изтриване на данни на програмата",
+  "un.udD": "Избрани са {0} папки с настройки или данни на програмата (в AppData). Отиват в кошчето — от там може да се върнат.", "un.removed": "Премахнати: {0} от {1}",
+  "un.freed": "Освободени {0}", "un.failed": "Не се изтриха ({0})", "un.backupNote": "Резервно копие на регистъра: {0}", "un.toRc": "Към резервните копия", "un.done": "Готово",
+  "un.stillT": "Програмата още е инсталирана", "un.stillD": "Деинсталаторът е бил отказан или не е успял. Нищо друго не е пипано.", "un.errT": "Деинсталирането не тръгна",
+  "un.errBusy": "Друго деинсталиране още работи.", "un.bg": "Деинсталира се {0}…", "un.show": "Покажи", "un.showRes": "Покажи",
+  "un.oneAtATime": "Сега се деинсталира {0} — едно по едно.", "un.jobFound": "Остатъци: {0} · {1}", "un.removedT": "Премахнати остатъци: {0} ({1})",
+  "lf.why.location": "Папката на програмата", "lf.why.storeData": "Данни на Store приложението", "lf.why.name": "Същото име като програмата", "lf.why.word": "Близко име",
+  "lf.why.contains": "Името ѝ се съдържа в името", "lf.why.pubName": "В папката на издателя, с името на програмата", "lf.why.deep": "Същото име, по-навътре",
+  "lf.why.pubEmpty": "Папка на издателя, в която е било само това", "lf.why.userData": "Твои настройки или данни за програмата — прегледай",
+  "lf.why.shortcut": "Пряк път към премахнатата програма", "lf.why.appPath": "Път към програмата (App Paths)", "lf.why.assoc": "Връзка с типове файлове",
+  "lf.why.mui": "Името ѝ, запомнено от Windows", "lf.why.entry": "Записът ѝ в списъка с програми", "wg.check": "Провери отново", "wg.stop": "Спри след текущата",
+  "wg.sel": "Обнови избраните", "wg.selN": "Обнови избраните ({0})", "wg.updating": "Обновява се…", "wg.checking": "Проверява се през winget…",
+  "wg.checkingD": "Първия път може да отнеме до минута.", "wg.checked": "Проверено {0}", "wg.missing": "winget не е инсталиран",
+  "wg.missingD": "winget идва с „App Installer“ от Microsoft Store.", "wg.get": "Отвори App Installer в Store", "wg.none": "Всички програми са обновени.", "wg.one": "Обнови",
+  "wg.ok": "Обновено", "wg.fail": "Грешка", "wg.queued": "На опашка", "wg.running": "Работи…", "wg.skipped": "Пропуснато", "wg.explicit": "по избор",
+  "wg.explicitT": "winget не я обновява при „всички“ (закачена версия или неизвестна текуща версия)",
+  "wg.cut": "winget съкрати името на пакета и пълното не се намери — обнови я от самата програма.", "wg.cant": "winget не можа да започне.", "wg.done": "Обновени: {0} от {1}",
+  "wg.stopping": "Ще спре след текущата програма.", "wg.jobText": "{0}/{1}: {2}", "gm.title": "Режим „Игри“",
+  "gm.sub": "Затваря избраните програми и освобождава памет. След играта ги пуска отново.", "gm.refresh": "Обнови списъка", "gm.off": "Изключен", "gm.on": "Включен",
+  "gm.badge": "ВКЛ", "gm.offD": "Ще затвори {0} програми (сега ползват {1}).", "gm.offD0": "Избери кои програми да се затварят — отдолу.",
+  "gm.onD": "Включен {0}. Затворени програми: {1}.", "gm.freedD": "Освободени {0} RAM.", "gm.start": "Включи режим „Игри“", "gm.stop": "Изключи и пусни отново ({0})",
+  "gm.starting": "Затварят се…", "gm.stopping": "Пускат се отново…", "gm.onT": "Режимът „Игри“ е включен — затворени: {0}.",
+  "gm.offT": "Режимът е изключен — програмите се пускат отново.", "gm.ram": "Освободи паметта при включване",
+  "gm.ramD": "Изчиства кеша и неизползваната памет на програмите (като бутона в „Памет“).", "gm.force": "Затвори насила тези, които не се затворят до 8 секунди",
+  "gm.forceD": "Незаписаната работа в тях ще се загуби. Програмите без прозорец (в трея) винаги се затварят така.", "gm.closedT": "Затворени — ще се пуснат отново",
+  "gm.willReopen": "ще се пусне", "gm.noneClosed": "Нищо не е затворено.", "gm.left": "Останаха отворени (отказаха да се затворят): {0}", "gm.listT": "Кои програми да се затварят",
+  "gm.window": "прозорец", "gm.bg": "фонова", "gm.bgT": "Работи без прозорец — затваря се насила", "gm.notRunning": "не работи сега",
+  "gm.noApps": "Няма отворени програми, които могат да се затворят.",
+  "gm.note": "Режимът не пипа плана за захранване, услугите, хибернацията или настройките на Windows. Части на Windows и антивирусът никога не се затварят.",
+  "td.title": "Празни папки и преки пътища", "td.sub": "Намира празни папки и преки пътища, които сочат към нищо", "td.tab.empty": "Празни папки",
+  "td.tab.broken": "Счупени преки пътища", "td.searchEmpty": "Търси празни папки", "td.searchBroken": "Търси счупени", "td.p.desktop": "Работен плот", "td.p.documents": "Документи",
+  "td.p.downloads": "Изтегляния", "td.p.pictures": "Снимки", "td.p.music": "Музика", "td.p.videos": "Видео", "td.p.roaming": "AppData\\Roaming", "td.p.local": "AppData\\Local",
+  "td.appdata": "програми", "td.add": "Добави папка", "td.appdataNote": "В AppData програмите понякога държат празни папки нарочно. Намерените там не се отмятат сами — прегледай ги.",
+  "td.introEmpty": "Избери къде да се търси и натисни „Търси празни папки“. Папка, в която има само празни папки, също е празна.",
+  "td.introBroken": "Проверява работния плот, менюто „Старт“ и Quick Launch за преки пътища към програми и файлове, които вече ги няма. Мрежови и изключени дискове не се броят.",
+  "td.searching": "Търси се…", "td.noneEmpty": "Няма празни папки.", "td.noneBroken": "Няма счупени преки пътища.",
+  "td.partial": "Търсенето спря на лимита за време или брой — намереното е показано.", "td.sumEmpty": "Намерени: {0}", "td.sumBroken": "Намерени: {0}", "td.del": "В кошчето",
+  "td.delN": "В кошчето ({0})", "td.deleting": "Премества се…", "td.subs": "+{0} празни вътре", "td.emptyB": "празна", "td.target": "Сочи към: {0}", "td.w.desktop": "Работен плот",
+  "td.w.startmenu": "Меню „Старт“", "td.w.quicklaunch": "Quick Launch", "td.delTEmpty": "Празни папки в кошчето: {0}", "td.delTBroken": "Счупени преки пътища в кошчето: {0}",
+  "td.delD": "Всяка се проверява отново точно преди това. Връщат се от кошчето или от „Център за възстановяване“.", "td.delOk": "Премести в кошчето", "td.done": "В кошчето: {0}",
+  "td.bad": "Пропуснати: {0}.", "td.foundEmpty": "Празни папки: {0}", "td.foundBroken": "Счупени преки пътища: {0}",
+  "td.note": "Папки на Windows и на програмите (Program Files, Windows, ProgramData) не се претърсват. Скритите папки с точка (.git и др.) не се пипат.", "rc.c.regs": "Регистър",
+  "rc.c.regsD": "Копия преди деинсталиране", "rc.regs": "Резервни копия на регистъра", "rc.regFolder": "Отвори папката", "rc.regKeys": "ключове: {0}", "rc.regRestore": "Върни",
+  "rc.noRegs": "Няма резервни копия. Правят се, когато изтриваш ключове-остатъци при деинсталиране.", "rc.regRestoreT": "Връщане на ключовете на {0}",
+  "rc.regRestoreD": "Ключовете от копието се записват обратно в регистъра (reg import). Програмата не се инсталира отново.", "rc.regRestored": "Ключовете на {0} са върнати",
+  "rc.regsNote": "Файловете са в %LOCALAPPDATA%\\xKi4oCleaner\\backups — може да се върнат и с двоен клик.",
+  "gm.stillOn": "Режимът „Игри“ още е включен — изключи го, за да се пуснат затворените програми.", "gm.open": "Отвори", "job.uninst": "Деинсталиране: {0}",
+  "job.wgOne": "Обновяване: {0}", "job.wgN": "Обновяване на {0} програми", "job.tdEmpty": "Търсене на празни папки", "job.tdBroken": "Търсене на счупени преки пътища",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -2426,6 +2769,103 @@ en: {
   "upd.busyJobs": "Let the jobs at the bottom finish first, then update.", "upd.working": "Updating…", "upd.downloading": "Downloading and checking…",
   "upd.restarting": "Done — restarting with the new version…", "upd.noNotes": "There is no description for this version.", "upd.newsTitleU": "Updated to {0} — what's new",
   "upd.newsTitle": "What's new in {0}", "upd.newsSub": "The app was updated successfully.", "upd.ok": "OK", "lg.k.update": "Updates",
+  "nav.home": "PC health", "nav.programs": "Programs", "nav.game": "Game mode", "nav.tidy": "Empty & broken", "opt.trimT": "TRIM for SSDs", "lg.k.uninstall": "Uninstall",
+  "lg.k.winget": "Updates (winget)", "lg.k.game": "Game mode", "lg.k.tidy": "Empty folders & shortcuts", "hm.title": "PC health",
+  "hm.sub": "Everything at a glance — and what to do about it", "hm.checking": "Checking…", "hm.checkingD": "Reading the disks, memory and programs.",
+  "hm.good": "Your PC is in good shape", "hm.fair": "A few things need attention", "hm.poor": "Your PC needs attention",
+  "hm.issues": "Things lowering the score: {0}. See the cards below.", "hm.noIssues": "Nothing needs fixing right now.", "hm.doAll": "Do all recommended ({0})",
+  "hm.nothing": "Nothing to do", "hm.nothingT": "Nothing to do — the PC is in good shape.", "hm.refresh": "Check again", "hm.junk": "Junk", "hm.junk0": "Clean",
+  "hm.junkD": "Can be cleaned safely (caches and temporary files)", "hm.scanning": "Scanning…", "hm.cleanBtn": "Clean", "hm.ram": "Memory (RAM)", "hm.ramD": "{0} used of {1}",
+  "hm.ramBtn": "Free up", "hm.space": "Free space", "hm.spaceV": "{0}: {1} free", "hm.spaceD": "Free: {0}", "hm.spaceBtn": "Disk Analyzer", "hm.health": "Disk health",
+  "hm.healthD": "Disks: {0} — no issues", "hm.healthBtn": "Details", "hm.rp": "Restore point", "hm.rpNone": "None", "hm.rpD": "Points in Windows: {0}", "hm.rpBtn": "Create",
+  "hm.probs": "Errors in the log (7 days)", "hm.probsD0": "No errors in the last week", "hm.probsBtn": "Open log", "hm.upd": "Program updates", "hm.updD": "{0} and more",
+  "hm.updD0": "Everything is up to date", "hm.updChecking": "Checking with winget…", "hm.updBtn": "Show", "hm.doAllT": "Do all recommended",
+  "hm.doAllD": "The chosen steps go into the queue and run one after another (see the bar at the bottom). Nothing personal is deleted.", "hm.doAllOk": "Start",
+  "hm.r.rp": "A restore point (the last one is more than 2 weeks old)", "hm.r.clean": "Clean the junk · {0} (safe categories only; open apps are skipped)",
+  "hm.r.ram": "Free up memory", "hm.r.upd": "Update {0} programs with winget", "hm.r.updW": "Installs new versions — optional, so it is not ticked.", "hm.queued": "Queued: {0} steps",
+  "hm.note": "The score comes from: junk, memory, free space, disk health, restore points, errors in the log and pending updates.", "dh.title": "Disk health",
+  "dh.sub": "What the drives report about themselves (S.M.A.R.T.): temperature, SSD wear, power-on time and errors. Read-only — nothing is changed.", "dh.refresh": "Read again",
+  "dh.disk": "Disk {0}", "dh.none": "No disks found.", "dh.temp": "Temperature", "dh.wear": "Wear", "dh.on": "Powered on", "dh.errs": "Errors", "dh.hours": "{0} h",
+  "dh.days": "{0} days", "dh.years": "{0} yrs", "dh.v.good": "Good", "dh.v.warn": "Caution", "dh.v.bad": "Bad", "dh.v.unknown": "No data",
+  "dh.noData": "The drive does not report its health (common for USB enclosures and sticks).", "dh.okNote": "No issues.",
+  "dh.r.unhealthy": "Windows reports the disk as unhealthy — back up now.", "dh.r.warning": "Windows reports a warning for the disk.",
+  "dh.r.predictive": "The disk predicts a failure soon (S.M.A.R.T.) — back up now.", "dh.r.status": "The disk reports a connection or data problem.",
+  "dh.r.wearBad": "The SSD is almost worn out (over 90% of its rated life) — plan a replacement and keep a backup.",
+  "dh.r.wear": "The SSD is over 70% worn — keep an eye on it and back up what matters.", "dh.r.hot": "The disk is too hot — check the cooling.",
+  "dh.r.warm": "The disk runs warm — check the cooling and dust.", "dh.r.errors": "There are uncorrected read or write errors.", "dh.toastBad": "Warning: {0} — {1}",
+  "dh.toastWarn": "Disk: {0} — {1}", "dh.details": "Details", "pr.title": "Programs", "pr.sub": "Uninstall completely (with leftovers), Store apps and updates",
+  "pr.refresh": "Refresh the list", "pr.tab.apps": "Programs", "pr.tab.store": "Store apps", "pr.tab.upd": "Updates", "pr.tab.updN": "Updates · {0}",
+  "pr.search": "Search by name or publisher", "pr.sort.name": "By name", "pr.sort.size": "By size", "pr.sort.installed": "By install date", "pr.sort.used": "By last use",
+  "pr.sort.publisher": "By publisher", "pr.col.name": "Program", "pr.col.size": "Size", "pr.col.installed": "Installed", "pr.col.used": "Last used", "pr.sum": "{0} programs · {1}",
+  "pr.loading": "Reading the installed programs…", "pr.loadingStore": "Reading the Store apps (up to 10–20 seconds)…", "pr.empty": "No programs found.",
+  "pr.emptyFilter": "Nothing matches the search.", "pr.b.user": "just you", "pr.b.broken": "no uninstaller",
+  "pr.b.brokenT": "Its uninstaller is missing — only a forced removal of its leftovers is possible.", "pr.b.noRemove": "cannot be uninstalled", "pr.uninstall": "Uninstall",
+  "pr.forced": "Remove", "pr.remove": "Remove", "pr.today": "today", "pr.yesterday": "yesterday", "pr.daysAgo": "{0} days ago", "pr.monthsAgo": "{0} months ago",
+  "pr.yearsAgo": "{0} years ago", "pr.usedUnknown": "No record of when it last ran",
+  "pr.note": "“Last used” comes from Windows' own records (Prefetch and UserAssist) — some programs have none. Uninstalling runs the program's own uninstaller; leftovers are shown for review and deleted only if you choose them.",
+  "un.title": "Uninstall: {0}", "un.titleStore": "Remove: {0}", "un.titleForced": "Forced removal: {0}", "un.step1": "The program's own uninstaller runs — follow its window.",
+  "un.step1Store": "Windows removes the app.", "un.step1Forced": "The uninstaller is missing, so the leftovers are searched right away.",
+  "un.step2": "Then what it left is searched: folders, shortcuts, registry keys.", "un.step3": "You choose what goes. Files go to the Recycle Bin; registry keys are backed up first.",
+  "un.forcedNote": "The program's uninstaller is missing or broken. If the program is still there, some of its files may be in use.", "un.mode": "How deep to look for leftovers",
+  "un.lv1": "Safe", "un.lv1D": "Only certain ones: the same name, the program's folder, its entries.", "un.lv2": "Moderate",
+  "un.lv2D": "Recommended. Plus close names and the publisher's empty folders.", "un.lv3": "Advanced", "un.lv3D": "Plus partial matches. Review carefully.",
+  "un.rp": "Create a restore point first", "un.rpD": "Recommended — takes about a minute.",
+  "un.safeNote": "Nothing is deleted without your choice. Windows keys, services and startup programs are never touched.", "un.go": "Uninstall", "un.goStore": "Remove",
+  "un.goForced": "Find leftovers", "un.run": "The program's uninstaller is running…", "un.runStore": "The app is being removed…",
+  "un.runD": "Follow its window (it may be behind this one). When it finishes, the leftover scan starts by itself.", "un.cont": "The uninstaller has finished",
+  "un.contD": "The uninstaller's window is closed but this still waits?", "un.scan": "Looking for leftovers…", "un.scanD": "Mode: {0}",
+  "un.hide": "Hide (keeps going in the background)", "un.none": "No leftovers — the program was removed cleanly.",
+  "un.noneD": "Nothing of it was found in the folders or the registry.", "un.foundD": "Leftovers found: {0}. The ticked ones are certainly the program's. Review the others yourself.",
+  "un.onlySure": "Only certain ones", "un.files": "Files and folders ({0})", "un.regs": "Registry ({0})",
+  "un.regNote": "Keys are saved to a .reg file before they are deleted — put them back from Restore Center → Registry.", "un.sel": "Selected: {0} · {1}", "un.keep": "Keep everything",
+  "un.del": "Delete selected", "un.udT": "Deleting the program's data",
+  "un.udD": "{0} folders with the program's settings or data (in AppData) are selected. They go to the Recycle Bin and can be put back from there.",
+  "un.removed": "Removed: {0} of {1}", "un.freed": "{0} freed", "un.failed": "Not deleted ({0})", "un.backupNote": "Registry backup: {0}", "un.toRc": "Go to the backups",
+  "un.done": "Done", "un.stillT": "The program is still installed", "un.stillD": "Its uninstaller was cancelled or failed. Nothing else was touched.",
+  "un.errT": "The uninstall did not start", "un.errBusy": "Another uninstall is still running.", "un.bg": "Uninstalling {0}…", "un.show": "Show", "un.showRes": "Show",
+  "un.oneAtATime": "{0} is being uninstalled now — one at a time.", "un.jobFound": "Leftovers: {0} · {1}", "un.removedT": "Leftovers removed: {0} ({1})",
+  "lf.why.location": "The program's folder", "lf.why.storeData": "The Store app's data", "lf.why.name": "Same name as the program", "lf.why.word": "Close name",
+  "lf.why.contains": "Its name is part of the name", "lf.why.pubName": "In the publisher's folder, with the program's name", "lf.why.deep": "Same name, deeper down",
+  "lf.why.pubEmpty": "A publisher folder that held only this", "lf.why.userData": "Your settings or data for the program — review",
+  "lf.why.shortcut": "Shortcut to the removed program", "lf.why.appPath": "Path to the program (App Paths)", "lf.why.assoc": "File type association",
+  "lf.why.mui": "Its name, remembered by Windows", "lf.why.entry": "Its entry in the list of programs", "wg.check": "Check again", "wg.stop": "Stop after this one",
+  "wg.sel": "Update selected", "wg.selN": "Update selected ({0})", "wg.updating": "Updating…", "wg.checking": "Checking with winget…",
+  "wg.checkingD": "The first time can take up to a minute.", "wg.checked": "Checked {0}", "wg.missing": "winget is not installed",
+  "wg.missingD": "winget comes with “App Installer” from the Microsoft Store.", "wg.get": "Open App Installer in the Store", "wg.none": "All programs are up to date.",
+  "wg.one": "Update", "wg.ok": "Updated", "wg.fail": "Failed", "wg.queued": "Queued", "wg.running": "Running…", "wg.skipped": "Skipped", "wg.explicit": "optional",
+  "wg.explicitT": "winget leaves it out of “all” (a pinned version or an unknown current version)",
+  "wg.cut": "winget shortened the package name and the full one was not found — update it from the program itself.", "wg.cant": "winget could not start.",
+  "wg.done": "Updated: {0} of {1}", "wg.stopping": "Stops after the current program.", "wg.jobText": "{0}/{1}: {2}", "gm.title": "Game mode",
+  "gm.sub": "Closes the programs you choose and frees memory. After the game, starts them again.", "gm.refresh": "Refresh the list", "gm.off": "Off", "gm.on": "On", "gm.badge": "ON",
+  "gm.offD": "Will close {0} programs (using {1} now).", "gm.offD0": "Choose which programs to close — below.", "gm.onD": "On since {0}. Programs closed: {1}.",
+  "gm.freedD": "{0} of RAM freed.", "gm.start": "Turn on game mode", "gm.stop": "Turn off and reopen ({0})", "gm.starting": "Closing…", "gm.stopping": "Reopening…",
+  "gm.onT": "Game mode is on — closed: {0}.", "gm.offT": "Game mode is off — the programs are starting again.", "gm.ram": "Free memory when turning on",
+  "gm.ramD": "Clears the cache and the memory programs don't use (like the button on the Memory page).", "gm.force": "Close by force the ones that don't close within 8 seconds",
+  "gm.forceD": "Unsaved work in them is lost. Programs with no window (in the tray) are always closed this way.", "gm.closedT": "Closed — will start again",
+  "gm.willReopen": "will reopen", "gm.noneClosed": "Nothing was closed.", "gm.left": "Left open (refused to close): {0}", "gm.listT": "Programs to close", "gm.window": "window",
+  "gm.bg": "background", "gm.bgT": "Runs without a window — closed by force", "gm.notRunning": "not running now", "gm.noApps": "No open programs that can be closed.",
+  "gm.note": "Game mode never touches the power plan, services, hibernation or Windows settings. Parts of Windows and security software are never closed.",
+  "td.title": "Empty folders & broken shortcuts", "td.sub": "Finds empty folders and shortcuts that point to nothing", "td.tab.empty": "Empty folders",
+  "td.tab.broken": "Broken shortcuts", "td.searchEmpty": "Find empty folders", "td.searchBroken": "Find broken ones", "td.p.desktop": "Desktop", "td.p.documents": "Documents",
+  "td.p.downloads": "Downloads", "td.p.pictures": "Pictures", "td.p.music": "Music", "td.p.videos": "Videos", "td.p.roaming": "AppData\\Roaming", "td.p.local": "AppData\\Local",
+  "td.appdata": "programs", "td.add": "Add folder",
+  "td.appdataNote": "Programs sometimes keep empty folders in AppData on purpose. The ones found there are not ticked by themselves — review them.",
+  "td.introEmpty": "Choose where to look and press “Find empty folders”. A folder holding only empty folders counts as empty too.",
+  "td.introBroken": "Checks the desktop, the Start menu and Quick Launch for shortcuts to programs and files that are gone. Network and disconnected drives are never counted.",
+  "td.searching": "Searching…", "td.noneEmpty": "No empty folders.", "td.noneBroken": "No broken shortcuts.",
+  "td.partial": "The search stopped at its time or count limit — what was found is shown.", "td.sumEmpty": "Found: {0}", "td.sumBroken": "Found: {0}", "td.del": "To the Recycle Bin",
+  "td.delN": "To the Recycle Bin ({0})", "td.deleting": "Moving…", "td.subs": "+{0} empty inside", "td.emptyB": "empty", "td.target": "Points to: {0}", "td.w.desktop": "Desktop",
+  "td.w.startmenu": "Start menu", "td.w.quicklaunch": "Quick Launch", "td.delTEmpty": "Empty folders to the Recycle Bin: {0}",
+  "td.delTBroken": "Broken shortcuts to the Recycle Bin: {0}", "td.delD": "Each one is checked again right before. They can be put back from the Recycle Bin or the Restore Center.",
+  "td.delOk": "Move to the Recycle Bin", "td.done": "To the Recycle Bin: {0}", "td.bad": "Skipped: {0}.", "td.foundEmpty": "Empty folders: {0}",
+  "td.foundBroken": "Broken shortcuts: {0}",
+  "td.note": "Windows' and programs' folders (Program Files, Windows, ProgramData) are never searched. Hidden dot folders (.git and the like) are never touched.",
+  "rc.c.regs": "Registry", "rc.c.regsD": "Backups from uninstalls", "rc.regs": "Registry backups", "rc.regFolder": "Open the folder", "rc.regKeys": "keys: {0}",
+  "rc.regRestore": "Put back", "rc.noRegs": "No backups yet. They are made when you delete leftover keys after an uninstall.", "rc.regRestoreT": "Putting back the keys of {0}",
+  "rc.regRestoreD": "The keys in the backup are written back to the registry (reg import). The program is not installed again.", "rc.regRestored": "The keys of {0} are back",
+  "rc.regsNote": "The files are in %LOCALAPPDATA%\\xKi4oCleaner\\backups — a double click also puts one back.",
+  "gm.stillOn": "Game mode is still on — turn it off to start the closed programs again.", "gm.open": "Open", "job.uninst": "Uninstalling: {0}", "job.wgOne": "Updating: {0}",
+  "job.wgN": "Updating {0} programs", "job.tdEmpty": "Finding empty folders", "job.tdBroken": "Finding broken shortcuts",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -2858,6 +3298,11 @@ function applyLang() {
   if (S.page === "restore") renderRestore();
   if (S.page === "logs" && LG.v) { renderLogs(); renderLogDetail(); }
   paintDupBadge();
+  setupPrTabs(); setupTidyTabs(); paintDiskHealth(); paintGameNav();
+  if (S.page === "home") renderHome();
+  if (S.page === "programs") renderPrograms();
+  if (S.page === "game") renderGame();
+  if (S.page === "tidy") renderTidy();
   moveNav();
 }
 
@@ -2884,7 +3329,11 @@ function go(page, opt) {
   if (page === "large" || page === "dupes") loadFinder(page);
   if (page === "restore") { if (opt && opt.rcTab) RC.tab = opt.rcTab; loadRestore(true); }
   if (page === "logs") { loadLogs(); requestAnimationFrame(() => $("#lgFilter")._place && $("#lgFilter")._place()); }
-  if (page === "optimize") loadDrives();
+  if (page === "optimize") { loadDrives(); loadDiskHealth(false); }
+  if (page === "home") homeLoad(false);
+  if (page === "programs") { if (opt && opt.prTab) { PR.tab = opt.prTab; setupPrTabs(); } loadPrograms(); requestAnimationFrame(() => $("#prTab")._place && $("#prTab")._place()); }
+  if (page === "game") loadGame();
+  if (page === "tidy") { loadTidy(); requestAnimationFrame(() => $("#tdTab")._place && $("#tdTab")._place()); }
   if (page === "memory") { requestAnimationFrame(() => { $("#segThr")._place(); $("#segInt")._place(); }); }
   if (page === "settings") requestAnimationFrame(() => $("#segLang")._place());
   if (page === "clean") requestAnimationFrame(() => $("#segSort")._place && $("#segSort")._place());
@@ -3194,6 +3643,7 @@ function analyzeDone(d) {
   S.quietScan = false;
   maybeHideSplash();
   jobFinish("scan", "ok", S.total ? t("job.scanRes", fmt(S.total)) : t("hero.none"));
+  if (S.page === "home") renderHome();
 }
 on("analyze-done", analyzeDone);
 $("#btnScan").addEventListener("click", analyze);
@@ -3764,7 +4214,7 @@ function pollMem() {
   clearTimeout(memTimer);
   api.getMemory().then(showMem).catch(() => {}).finally(() => { memTimer = setTimeout(pollMem, 1000); });
 }
-$("#btnMem").addEventListener("click", () => {
+function freeMemory() {
   const q = jobOf("memory");
   if (q && q.state === "queued") { jobDrop(q.id); return; }
   if (memBusy || !S.settings.mem.regions.length) return;
@@ -3786,7 +4236,8 @@ $("#btnMem").addEventListener("click", () => {
         return "ok";
       }).catch(() => "error").finally(() => { memBusy = false; b.disabled = false; $("#btnMemTxt").textContent = t("mem.btn"); });
     } });
-});
+}
+$("#btnMem").addEventListener("click", freeMemory);
 on("mem-auto", d => { if (d.result) { showMem(d.result.stats); if (d.result.freed > 0) toast(t("mem.toastAuto", fmt(d.result.freed)), "bolt"); } });
 
 /* =====================================================================
@@ -4858,7 +5309,7 @@ function setupSwatches() {
 }
 
 /* Keyboard shortcuts */
-const PAGES = ["clean", "memory", "disk", "large", "dupes", "procs", "startup", "tweaks", "optimize", "repair", "restore", "logs", "settings", "credits"];
+const PAGES = ["home", "clean", "memory", "game", "disk", "large", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "optimize", "repair", "restore", "logs", "settings", "credits"];
 document.addEventListener("keydown", e => {
   if ($("#veil").classList.contains("on") || $("#sveil").classList.contains("on")) return;
   if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K" || e.key === "p" || e.key === "P")) { e.preventDefault(); if ($("#palVeil").classList.contains("on")) palClose(); else palOpen(); return; }
@@ -5436,6 +5887,7 @@ async function loadRestore(force) {
   RC.loading = false; $("#rcRefresh").classList.remove("spin");
   renderRestore();
   if (RC.tab === "points" && (!RC.rp || force)) loadRP();
+  if (!RC.regs || force || RC.tab === "regs") loadRegs();
   if (RC.tab === "tweaks" && !TW.loaded && !TW.loading) loadTweaks().then(() => { if (S.page === "restore") renderRestore(); });
 }
 async function loadRP() {
@@ -5452,9 +5904,11 @@ function renderRestore() {
     ["tweaks", t("rc.c.tweaks"), nfi((ov.tweaks || []).length), t("rc.c.tweaksD")],
     ["startup", t("rc.c.startup"), nfi((ov.startup || []).length), t("rc.c.startupD")],
     ["files", t("rc.c.files"), nfi(inBin.length), t("rc.c.filesD")],
+    ["regs", t("rc.c.regs"), RC.regs ? nfi(RC.regs.length) : "—", t("rc.c.regsD")],
   ];
+  $("#rcCards").classList.add("five");
   $("#rcCards").innerHTML = cards.map(c => `<button class="su-stat" data-rct="${c[0]}" aria-pressed="${RC.tab === c[0]}"><div class="k">${esc(c[1])}</div><div class="v">${esc(c[2])}</div><div class="d">${esc(c[3])}</div></button>`).join("");
-  $$("#rcCards [data-rct]").forEach(b => b.addEventListener("click", () => { RC.tab = b.dataset.rct; RC.sel.clear(); renderRestore(); if (RC.tab === "points" && !RC.rp) loadRP(); if (RC.tab === "tweaks" && !TW.loaded && !TW.loading) loadTweaks().then(renderRestore); }));
+  $$("#rcCards [data-rct]").forEach(b => b.addEventListener("click", () => { RC.tab = b.dataset.rct; RC.sel.clear(); renderRestore(); if (RC.tab === "points" && !RC.rp) loadRP(); if (RC.tab === "tweaks" && !TW.loaded && !TW.loading) loadTweaks().then(renderRestore); if (RC.tab === "regs") loadRegs(); }));
   const sec = $("#rcSec");
   if (RC.tab === "points") {
     const rp = RC.rp, pts = (rp && rp.points) || [];
@@ -5500,6 +5954,8 @@ function renderRestore() {
         TW.loaded = false; await loadTweaks(true); refreshTwTools(); loadRestore(true);
       });
     });
+  } else if (RC.tab === "regs") {
+    renderRegsTab(sec);
   } else if (RC.tab === "startup") {
     const su = ov.startup || [];
     sec.innerHTML = `<div class="rc-head"><h3>${esc(t("rc.startup"))}</h3><div class="grow"><button class="btn small" id="rcSuLog">${ICONS.history}<span>${esc(t("su.log"))}</span></button></div></div>
@@ -5565,7 +6021,7 @@ function rpDeleteAll(keepNewest) {
    LOGS & ERROR REPORTS
 ===================================================================== */
 const LG = { v: null, sel: 0, ents: [], q: "", filter: "all", kind: "", unseen: 0 };
-const LG_KINDS = ["clean", "tweak", "startup", "disk", "files", "dupes", "process", "restore", "memory", "repair", "optimize", "update", "app", "ui"];
+const LG_KINDS = ["clean", "tweak", "startup", "disk", "files", "dupes", "process", "restore", "memory", "repair", "optimize", "update", "uninstall", "winget", "game", "tidy", "app", "ui"];
 function subjName(kind, s) {
   if (!s) return "";
   if ((kind === "clean" || kind === "memory") && (ITEM_GROUP[s] || s === "ram" || s === "trim")) return itemName(s);
@@ -5730,8 +6186,8 @@ async function countUnseenErrors() {
    Command palette (Ctrl+K): every section, action, tweak and category
 ===================================================================== */
 const PAL = { items: [], idx: 0 };
-const PAGE_ICON = { clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", tweaks: "tweaks", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
-const PAGE_SUB = { clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", tweaks: "tw.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
+const PAGE_ICON = { home: "heart", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", tweaks: "tweaks", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
+const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", tweaks: "tw.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
 function palSources() {
   const items = [];
   PAGES.forEach((p, i) => items.push({ g: "pal.g.pages", icon: PAGE_ICON[p], title: t("nav." + p), sub: t(PAGE_SUB[p]), hint: i < 9 ? "Ctrl " + (i + 1) : "", kw: p, run: () => go(p) }));
@@ -5739,7 +6195,8 @@ function palSources() {
   act("sparkle", "pal.a.cleanAll", () => { go("clean"); if (!$("#btnCleanAll").disabled) $("#btnCleanAll").click(); else toast(t("status.busy"), "alert", "warn"); }, "clean everything");
   act("eye", "pal.a.preview", () => { go("clean"); if (!$("#btnPreview").disabled) $("#btnPreview").click(); }, "preview dry run");
   act("refresh", "pal.a.rescan", () => { go("clean"); if (!S.busy) analyze(); }, "scan");
-  act("bolt", "pal.a.ram", () => { go("memory"); setTimeout(() => $("#btnMem").click(), 60); }, "ram memory free");
+  act("bolt", "pal.a.ram", () => { go("memory"); setTimeout(freeMemory, 60); }, "ram memory free");
+  if (PR.apps) PR.apps.forEach(a => items.push({ g: "pal.g.procs", icon: "package", title: a.name, sub: t("pr.uninstall"), kw: "uninstall " + a.name.toLowerCase(), run: () => { go("programs"); unOpen(a, !!a.broken); } }));
   act("weight", "pal.a.large", () => { go("large"); setTimeout(() => startFind("large"), 60); }, "large files");
   act("copy", "pal.a.dupes", () => { go("dupes"); setTimeout(() => startFind("dupes"), 60); }, "duplicates");
   act("shield", "pal.a.rp", () => { go("restore"); RC.tab = "points"; renderRestore(); setTimeout(() => { const b = $("#rcRp"); if (b && !b.disabled) b.click(); }, 120); }, "restore point");
@@ -5956,6 +6413,718 @@ $("#updToggle").addEventListener("change", e => { S.settings.updates = e.target.
 /* =====================================================================
    Start
 ===================================================================== */
+/* =====================================================================
+   2.7 — icons
+===================================================================== */
+Object.assign(ICONS, {
+  heart: P('<path d="M12 20s-7.5-4.6-9.3-9.3A5 5 0 0 1 12 5.8a5 5 0 0 1 9.3 4.9"/><path d="M3.5 13h4l2-3 3 6 2-3h6"/>'),
+  uninstall: P('<rect x="4" y="4" width="16" height="16" rx="3.2"/><path d="M9.5 9.5l5 5M14.5 9.5l-5 5"/>'),
+  broken: P('<path d="M10.5 13.5a3.8 3.8 0 0 0 5.4.2l2.7-2.7a3.8 3.8 0 0 0-5.4-5.4l-.8.8"/><path d="M13.5 10.5a3.8 3.8 0 0 0-5.4-.2l-2.7 2.7a3.8 3.8 0 0 0 5.4 5.4l.8-.8"/><path d="M4 4l2.5 2.5M20 20l-2.5-2.5"/>'),
+  thermo: P('<path d="M14 14.6V5a2 2 0 0 0-4 0v9.6a4 4 0 1 0 4 0z"/><path d="M12 9.5V16"/>'),
+  emptydir: P('<path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2h7.5A2.5 2.5 0 0 1 21 9.5v7a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 16.5z" stroke-dasharray="3.2 2.6"/>'),
+  key: P('<circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l2.5 2.5M14 9l2 2"/>'),
+});
+const GB27 = 1024 ** 3, MB27 = 1024 ** 2;
+// "3 days ago", "5 months ago" from unix seconds
+function relDay(sec) {
+  if (!sec) return "";
+  const d = Math.floor((Date.now() / 1000 - sec) / 86400);
+  if (d < 1) return t("pr.today");
+  if (d < 2) return t("pr.yesterday");
+  if (d < 45) return t("pr.daysAgo", d);
+  if (d < 365) return t("pr.monthsAgo", Math.round(d / 30));
+  return t("pr.yearsAgo", nf(1).format(d / 365));
+}
+function letterIcon(name, cls = "r-ico av") {
+  const c = avColor(name || "?");
+  return `<span class="${cls}" style="--av:${c}">${esc(((name || "?").trim()[0] || "?").toUpperCase())}</span>`;
+}
+const isPath = p => /^[a-z]:\\/i.test(p || "");
+// HKLM32\SOFTWARE\X (the 32-bit view) as the registry shows it
+const regShow = p => String(p || "").replace(/^HKLM32\\SOFTWARE(?=\\|$)/i, "HKLM\\SOFTWARE\\WOW6432Node");
+
+/* =====================================================================
+   HOME — PC health: a score, what pulls it down, and one button for
+   everything recommended (through the job queue)
+===================================================================== */
+const HM = { drives: null, dh: null, rp: null, probs: null, upd: null, loading: {}, at: {} };
+function homeLoad(force) {
+  const want = (k, ttl, f) => {
+    if (HM.loading[k] || (!force && HM[k] && Date.now() - (HM.at[k] || 0) < ttl)) return;
+    HM.loading[k] = true;
+    Promise.resolve().then(f).then(v => { HM[k] = v || {}; }).catch(e => { HM[k] = { error: String(e && e.message || e) }; })
+      .finally(() => { HM.loading[k] = false; HM.at[k] = Date.now(); if (k === "dh") paintDiskHealth(); if (k === "upd") { if (!PR.upd) PR.upd = HM[k]; paintPrBadge(); setupPrTabs(); } renderHome(); });
+  };
+  want("drives", 120e3, () => api.getDrives());
+  want("dh", 600e3, () => api.diskHealth(!!force));
+  want("rp", 300e3, () => (S.info && !S.info.admin) ? { points: [], noAdmin: true } : api.restorePointList());
+  want("probs", 30e3, () => api.logProblems(120));
+  want("upd", 1800e3, () => api.wingetUpdates(!!force));
+  renderHome();
+}
+// what pulls the score down: [{ id, sev: "warn" | "bad", pts }]
+function homeIssues() {
+  const out = [], add = (id, sev, pts) => out.push({ id, sev, pts });
+  if (S.analyzed) { const j = S.total || 0; if (j >= 5 * GB27) add("junk", "warn", 15); else if (j >= GB27) add("junk", "warn", 8); }
+  if (S.mem && S.mem.total) { if (S.mem.load >= 90) add("ram", "bad", 12); else if (S.mem.load >= 80) add("ram", "warn", 6); }
+  const dr = Array.isArray(HM.drives) ? HM.drives : [];
+  let worst = 0;
+  dr.forEach(d => { if (!d.total) return; const f = d.free / d.total; worst = Math.max(worst, f < .05 ? 2 : f < .1 ? 1 : 0); });
+  if (worst === 2) add("space", "bad", 20); else if (worst === 1) add("space", "warn", 10);
+  const ds = (HM.dh && HM.dh.disks) || [];
+  if (ds.some(d => d.verdict === "bad")) add("health", "bad", 30); else if (ds.some(d => d.verdict === "warn")) add("health", "warn", 12);
+  const rp = HM.rp;
+  if (rp && !rp.noAdmin && !rp.error) {
+    const newest = (rp.points || []).reduce((m, p) => Math.max(m, new Date(p.time).getTime() || 0), 0);
+    if (!newest || Date.now() - newest > 14 * 86400e3) add("rp", "warn", 8);
+  }
+  const errs = homeErrors().length;
+  if (errs) add("probs", errs >= 5 ? "bad" : "warn", Math.min(15, errs * 3));
+  const n = homeUpdates().length;
+  if (n) add("upd", "warn", Math.min(10, n * 2));
+  return out;
+}
+function homeErrors() { return (Array.isArray(HM.probs) ? HM.probs : []).filter(e => e.level === "error" && Date.now() - (e.t || 0) < 7 * 86400e3); }
+function homeUpdates() { return ((HM.upd && HM.upd.updates) || []).filter(u => !u.explicit && !u.cut); }
+function homeScore() { return Math.max(0, 100 - homeIssues().reduce((s, x) => s + x.pts, 0)); }
+function homeReady() { return S.analyzed && !!S.mem && !HM.loading.drives && !HM.loading.dh; }
+function renderHome() {
+  const body = $("#hmBody"); if (!body) return;
+  const issues = homeIssues(), sev = id => (issues.find(x => x.id === id) || {}).sev || "ok", score = homeScore(), ready = homeReady();
+  const ring = 289.03, col = score >= 85 ? "var(--mint)" : score >= 60 ? "var(--amber)" : "var(--red)";
+  const verdict = !ready ? t("hm.checking") : score >= 85 ? t("hm.good") : score >= 60 ? t("hm.fair") : t("hm.poor");
+  const recs = homeRecs();
+  $("#hmScore").innerHTML = `<div class="hm-ring"><svg width="112" height="112" viewBox="0 0 112 112"><circle cx="56" cy="56" r="46" fill="none" stroke="#0c1226" stroke-width="12"/><circle cx="56" cy="56" r="46" fill="none" stroke="${col}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${ring}" stroke-dashoffset="${ready ? ring * (1 - score / 100) : ring}" transform="rotate(-90 56 56)" style="transition:stroke-dashoffset .9s var(--ease)"/></svg><b>${ready ? score : "…"}</b></div>
+    <div class="hm-v"><div class="hm-vt">${esc(verdict)}</div><div class="hm-vd">${esc(ready ? (issues.length ? t("hm.issues", issues.length) : t("hm.noIssues")) : t("hm.checkingD"))}</div>
+    <div class="hm-acts"><button class="btn primary" id="hmDoAll" ${recs.length && ready ? "" : "disabled"}>${ICONS.sparkle}<span>${esc(recs.length ? t("hm.doAll", recs.length) : t("hm.nothing"))}</span></button><button class="btn icon-btn" id="hmRefresh" title="${esc(t("hm.refresh"))}" aria-label="${esc(t("hm.refresh"))}">${ICONS.refresh}</button></div></div>`;
+  $("#hmDoAll").addEventListener("click", homeDoAll);
+  $("#hmRefresh").addEventListener("click", () => { homeLoad(true); if (!S.busy && !jobOf("scan")) softRescan(); });
+  const dot = id => `<span class="hm-dot ${sev(id)}"></span>`;
+  const load = k => HM.loading[k] && !HM[k];
+  const cards = [];
+  // junk
+  cards.push(["junk", "clean", t("hm.junk"), S.analyzed ? (S.total ? fmt(S.total) : t("hm.junk0")) : "…", S.analyzed ? t("hm.junkD") : t("hm.scanning"), [t("hm.cleanBtn"), () => go("clean")]]);
+  // memory
+  const m = S.mem;
+  cards.push(["ram", "memory", t("hm.ram"), m && m.total ? m.load + "%" : "…", m && m.total ? t("hm.ramD", fmt(m.used), fmt(m.total)) : "", [t("hm.ramBtn"), () => freeMemory()]]);
+  // free space
+  const dr = Array.isArray(HM.drives) ? HM.drives.filter(d => d.total) : [];
+  const low = dr.slice().sort((a, b) => a.free / a.total - b.free / b.total)[0];
+  cards.push(["space", "disk", t("hm.space"), low ? t("hm.spaceV", low.letter, fmt(low.free)) : load("drives") ? "…" : "—", dr.map(d => `${d.letter}: ${Math.round(d.free / d.total * 100)}%`).join(" · ") ? t("hm.spaceD", dr.map(d => `${d.letter}: ${Math.round(d.free / d.total * 100)}%`).join(" · ")) : "", [t("hm.spaceBtn"), () => go("disk")]]);
+  // disk health
+  const ds = (HM.dh && HM.dh.disks) || [];
+  const hv = ds.some(d => d.verdict === "bad") ? t("dh.v.bad") : ds.some(d => d.verdict === "warn") ? t("dh.v.warn") : ds.length ? t("dh.v.good") : load("dh") ? "…" : "—";
+  const hd = ds.filter(d => d.verdict === "bad" || d.verdict === "warn").map(d => `${d.name}: ${t(d.reasons && d.reasons[0] ? d.reasons[0] : "dh.v." + d.verdict)}`).join(" · ") || (ds.length ? t("hm.healthD", ds.length) : (HM.dh && HM.dh.error) || "");
+  cards.push(["health", "thermo", t("hm.health"), hv, hd, [t("hm.healthBtn"), () => go("optimize")]]);
+  // restore points
+  const rp = HM.rp, pts = (rp && rp.points) || [];
+  const newest = pts.reduce((mx, p) => Math.max(mx, new Date(p.time).getTime() || 0), 0);
+  cards.push(["rp", "shield", t("hm.rp"), rp ? rp.noAdmin ? "—" : rp.error ? "?" : newest ? ago(newest) : t("hm.rpNone") : "…",
+    rp ? rp.noAdmin ? t("rc.needAdmin") : rp.error ? rp.error : t("hm.rpD", pts.length) : "", [t("hm.rpBtn"), () => makeRestorePoint(), rp && rp.noAdmin]]);
+  // problems
+  const errs = homeErrors();
+  cards.push(["probs", "logs", t("hm.probs"), Array.isArray(HM.probs) ? nfi(errs.length) : "…", errs.length ? (errs[0].subj ? errs[0].subj + " — " : "") + errs[0].msg : t("hm.probsD0"), [t("hm.probsBtn"), () => go("logs")]]);
+  // program updates
+  const u = HM.upd, ups = homeUpdates();
+  cards.push(["upd", "download", t("hm.upd"), u ? u.available === false ? "—" : nfi(ups.length) : "…", u ? u.available === false ? t("wg.missing") : u.error ? u.error : ups.length ? t("hm.updD", ups.slice(0, 3).map(x => x.name).join(", ")) : t("hm.updD0") : t("hm.updChecking"), [t("hm.updBtn"), () => go("programs", { prTab: "updates" })]]);
+  $("#hmCards").innerHTML = cards.map((c, i) => `<div class="hm-card ${sev(c[0])}" data-hm="${c[0]}"><div class="hm-top"><span class="hm-ic">${ICONS[c[1]]}</span><span class="hm-t">${esc(c[2])}</span>${dot(c[0])}</div>
+    <div class="hm-val">${esc(c[3])}</div><div class="hm-d" title="${esc(c[4])}">${esc(c[4])}</div><button class="btn small" data-hmact="${i}" ${c[5][2] ? "disabled" : ""}>${esc(c[5][0])}</button></div>`).join("");
+  $$("#hmCards [data-hmact]").forEach(b => b.addEventListener("click", () => cards[+b.dataset.hmact][5][1]()));
+  const badge = $("#homeBadge");
+  if (badge) { badge.hidden = !ready || !issues.length; badge.textContent = ready ? String(score) : ""; badge.classList.toggle("err", ready && score < 60); }
+}
+// the actions behind "Do all recommended", in the order they run
+function homeRecs() {
+  const issues = homeIssues(), has = id => issues.some(x => x.id === id), out = [];
+  const adminOK = !S.info || S.info.admin;
+  if (has("rp") && adminOK && !jobOf("rp")) out.push({ id: "rp", label: t("hm.r.rp"), def: true });
+  if (S.analyzed && !S.cleaning && !jobOf("clean") && (S.total || 0) >= 100 * MB27) out.push({ id: "clean", label: t("hm.r.clean", fmt(S.total)), def: true });
+  if (S.mem && S.mem.load >= 70 && !jobOf("memory")) out.push({ id: "ram", label: t("hm.r.ram"), def: true });
+  const ups = homeUpdates();
+  if (ups.length && !jobOf("winget")) out.push({ id: "upd", label: t("hm.r.upd", ups.length), def: false, warn: t("hm.r.updW") });
+  return out;
+}
+function homeDoAll() {
+  const recs = homeRecs();
+  if (!recs.length) { toast(t("hm.nothingT"), "check"); return; }
+  confirmBox({ title: t("hm.doAllT"), text: t("hm.doAllD"), scrolly: true,
+    extras: recs.map(r => `<label class="extra"><input type="checkbox" class="cb" data-rec="${r.id}" ${r.def ? "checked" : ""}><span>${esc(r.label)}${r.warn ? `<span class="warn">${esc(r.warn)}</span>` : ""}</span></label>`).join(""),
+    okText: t("hm.doAllOk"),
+    ok: () => {
+      const pick = new Set($$("#mExtras [data-rec]").filter(x => x.checked).map(x => x.dataset.rec));
+      if (!pick.size) return;
+      if (pick.has("rp")) makeRestorePoint();
+      if (pick.has("clean")) { const ids = selectedIds(); if (ids.length) cleanNow(ids, { openApps: "skip" }); }
+      if (pick.has("ram")) freeMemory();
+      if (pick.has("upd")) wgUpgrade(homeUpdates().map(u => u.id));
+      toast(t("hm.queued", pick.size), "clock", "info", { label: t("job.showQ"), run: () => { JOBS.open = true; paintDock(); } });
+    } });
+}
+setInterval(() => { if (S.page === "home") renderHome(); }, 4000);
+
+/* =====================================================================
+   DISK HEALTH (Optimize page) — what the drives report about themselves
+===================================================================== */
+function dhHours(h) { if (h == null) return "—"; return h < 48 ? t("dh.hours", nfi(h)) : h < 24 * 730 ? t("dh.days", nfi(h / 24)) : t("dh.years", nf(1).format(h / 24 / 365)); }
+function paintDiskHealth() {
+  const el = $("#dhGrid"); if (!el) return;
+  const v = HM.dh;
+  $("#dhRefresh").classList.toggle("spin", !!HM.loading.dh);
+  if (!v) { el.innerHTML = `<div class="dh-card"><span class="skel" style="width:60%"></span><span class="skel" style="width:40%;margin-top:10px"></span></div>`.repeat(2); return; }
+  const ds = v.disks || [];
+  if (!ds.length) { el.innerHTML = `<div class="tw-empty">${esc(v.error || t("dh.none"))}</div>`; return; }
+  el.innerHTML = ds.map(d => {
+    const kind = [d.media && d.media !== "Unspecified" ? d.media : "", d.bus].filter(Boolean).join(" · ");
+    const errs = (d.readUnc || 0) + (d.writeUnc || 0);
+    const st = (k, val, cls) => `<div class="dh-st ${cls || ""}"><span>${esc(t(k))}</span><b>${esc(val)}</b></div>`;
+    const tempCls = d.reasons && d.reasons.some(r => r === "dh.r.hot") ? "bad" : d.reasons && d.reasons.some(r => r === "dh.r.warm") ? "warn" : "";
+    const wearCls = d.reasons && d.reasons.includes("dh.r.wearBad") ? "bad" : d.reasons && d.reasons.includes("dh.r.wear") ? "warn" : "";
+    return `<div class="dh-card ${d.verdict}"><div class="dh-top"><span class="dh-ic">${ICONS.disk}</span><div style="min-width:0"><div class="dh-n" title="${esc(d.name)}">${esc(d.name || t("dh.disk", d.id))}</div>
+      <div class="dh-k">${esc([kind, d.size ? fmt(d.size) : "", (d.letters || []).length ? d.letters.map(l => l + ":").join(" ") : ""].filter(Boolean).join(" · "))}</div></div>
+      <span class="dh-v ${d.verdict}">${esc(t("dh.v." + d.verdict))}</span></div>
+      <div class="dh-sts">${st("dh.temp", d.temp != null && d.temp > 0 ? d.temp + " °C" : "—", tempCls)}${st("dh.wear", d.wear != null ? d.wear + "%" : "—", wearCls)}${st("dh.on", dhHours(d.hours))}${st("dh.errs", d.readUnc == null && d.writeUnc == null ? "—" : nfi(errs), errs ? "warn" : "")}</div>
+      ${(d.reasons || []).length ? `<ul class="dh-r">${d.reasons.map(r => `<li>${esc(t(r))}</li>`).join("")}</ul>` : d.noData ? `<div class="dh-note">${esc(t("dh.noData"))}</div>` : `<div class="dh-note ok">${esc(t("dh.okNote"))}</div>`}
+      </div>`;
+  }).join("");
+}
+function loadDiskHealth(force) {
+  if (HM.loading.dh) return;
+  if (!force && HM.dh && Date.now() - (HM.at.dh || 0) < 600e3) { paintDiskHealth(); return; }
+  HM.loading.dh = true; paintDiskHealth();
+  api.diskHealth(!!force).then(v => { HM.dh = v || {}; }).catch(e => { HM.dh = { disks: [], error: String(e && e.message || e) }; })
+    .finally(() => { HM.loading.dh = false; HM.at.dh = Date.now(); paintDiskHealth(); if (S.page === "home") renderHome(); });
+}
+$("#dhRefresh").addEventListener("click", () => loadDiskHealth(true));
+// a few seconds after the start: warn early about a disk that reports trouble
+function diskHealthWarn() {
+  api.diskHealth(false).then(v => {
+    HM.dh = v || {}; HM.at.dh = Date.now(); paintDiskHealth(); if (S.page === "home") renderHome();
+    const bad = ((v && v.disks) || []).filter(d => d.verdict === "bad" || d.verdict === "warn");
+    if (!bad.length) return;
+    const worst = bad.some(d => d.verdict === "bad");
+    toast(t(worst ? "dh.toastBad" : "dh.toastWarn", bad.map(d => d.name).join(", "), t(bad[0].reasons[0] || "dh.v.warn")), "alert", "warn", { label: t("dh.details"), run: () => go("optimize") });
+  }).catch(() => {});
+}
+
+/* =====================================================================
+   PROGRAMS — uninstaller (like Revo: the program's own uninstaller, then
+   a scan for what it left), Store apps, and updates through winget
+===================================================================== */
+const PR = { tab: "apps", apps: null, store: null, loading: false, storeLoading: false, q: "", sort: "name", dir: 1, admin: true, upd: null, updLoading: false, wg: {}, wgSel: null, wgRun: false, measuring: false };
+async function loadPrograms(force) {
+  if (PR.tab === "store") return loadStore(force);
+  if (PR.tab === "updates") return loadUpdates(force);
+  if (PR.loading || (PR.apps && !force)) { renderPrograms(); return; }
+  PR.loading = true; renderPrograms();
+  try { const v = (await api.appsList()) || {}; PR.apps = v.apps || []; PR.admin = v.admin !== false; } catch (e) { PR.apps = []; }
+  PR.loading = false; renderPrograms();
+  measureApps();
+}
+async function measureApps() {
+  const ids = (PR.apps || []).filter(a => !a.size && a.location).map(a => a.id);
+  if (!ids.length || PR.measuring) return;
+  PR.measuring = true;
+  let m = {}; try { m = (await api.appsMeasure(ids)) || {}; } catch (e) {}
+  PR.measuring = false;
+  (PR.apps || []).forEach(a => { if (m[a.id] > 0) { a.size = m[a.id]; a.sizeFrom = "measured"; } });
+  if (S.page === "programs") renderPrograms();
+}
+async function loadStore(force) {
+  if (PR.storeLoading || (PR.store && !force)) { renderPrograms(); return; }
+  PR.storeLoading = true; renderPrograms();
+  try { const v = (await api.storeApps()) || {}; PR.store = v.apps || []; } catch (e) { PR.store = []; }
+  PR.storeLoading = false; renderPrograms();
+}
+async function loadUpdates(force) {
+  if (PR.updLoading || (PR.upd && !force)) {
+    if (!PR.wgSel && PR.upd) PR.wgSel = new Set((PR.upd.updates || []).filter(u => !u.explicit && !u.cut).map(u => u.id));
+    renderPrograms(); return;
+  }
+  PR.updLoading = true; renderPrograms();
+  try { PR.upd = (await api.wingetUpdates(!!force)) || {}; } catch (e) { PR.upd = { available: true, updates: [], error: String(e && e.message || e) }; }
+  PR.updLoading = false; HM.upd = PR.upd; HM.at.upd = Date.now();
+  if (!PR.wgSel || force) PR.wgSel = new Set((PR.upd.updates || []).filter(u => !u.explicit && !u.cut).map(u => u.id));
+  renderPrograms(); paintPrBadge();
+}
+function paintPrBadge() {
+  const b = $("#prBadge"); if (!b) return;
+  const n = homeUpdates().length;
+  b.hidden = !n; b.textContent = n ? String(n) : "";
+}
+function setupPrTabs() {
+  const n = (PR.upd && (PR.upd.updates || []).length) || 0;
+  makeSeg($("#prTab"), [{ v: "apps", label: t("pr.tab.apps") }, { v: "store", label: t("pr.tab.store") }, { v: "updates", label: n ? t("pr.tab.updN", n) : t("pr.tab.upd") }], PR.tab, v => { PR.tab = v; loadPrograms(); });
+  const so = $("#prSort");
+  so.innerHTML = ["name", "size", "installed", "used", "publisher"].map(k => `<option value="${k}">${esc(t("pr.sort." + k))}</option>`).join("");
+  so.value = PR.sort;
+}
+$("#prSort").addEventListener("change", e => { PR.sort = e.target.value; PR.dir = PR.sort === "name" || PR.sort === "publisher" ? 1 : -1; renderPrograms(); });
+let prQT = 0;
+$("#prQ").addEventListener("input", e => { clearTimeout(prQT); prQT = setTimeout(() => { PR.q = e.target.value.trim().toLowerCase(); renderPrograms(); }, 90); });
+$("#prQ").addEventListener("keydown", e => { if (e.key === "Escape" && e.target.value) { e.stopPropagation(); e.target.value = ""; PR.q = ""; renderPrograms(); } });
+$("#prRefresh").addEventListener("click", () => { if (PR.tab === "apps") PR.apps = null; loadPrograms(true); });
+function appIcon(a) { return a.icon && isPath(a.icon) ? ico("exe:" + a.icon, "r-ico av", esc(((a.name || "?").trim()[0] || "?").toUpperCase()), "--av:" + avColor(a.name)) : letterIcon(a.name); }
+function prSorted(list) {
+  const by = {
+    name: (a, b) => a.name.localeCompare(b.name, locale()),
+    publisher: (a, b) => (a.publisher || "~").localeCompare(b.publisher || "~", locale()) || a.name.localeCompare(b.name, locale()),
+    size: (a, b) => (a.size || 0) - (b.size || 0),
+    installed: (a, b) => (a.installed || 0) - (b.installed || 0),
+    used: (a, b) => (a.lastUsed || 0) - (b.lastUsed || 0),
+  }[PR.sort] || ((a, b) => a.name.localeCompare(b.name, locale()));
+  return list.slice().sort((a, b) => by(a, b) * PR.dir);
+}
+function renderPrograms() {
+  const box = $("#prList"); if (!box) return;
+  const tab = PR.tab;
+  $("#prTools").hidden = tab === "updates";
+  $("#prUpdBar").hidden = tab !== "updates";
+  $("#prNote").hidden = tab === "updates";
+  const un = UN.app && ["queued", "rp", "run", "scan"].includes(UN.phase) && !unShown();
+  $("#prUnNote").hidden = !un;
+  if (un) { $("#prUnText").textContent = t("un.bg", UN.app.name); }
+  if (tab === "updates") { renderUpdates(); return; }
+  const loading = tab === "apps" ? PR.loading && !PR.apps : PR.storeLoading && !PR.store;
+  const all = (tab === "apps" ? PR.apps : PR.store) || [];
+  if (loading) {
+    box.innerHTML = `<div class="tw-empty"><span class="spin"></span> ${esc(t(tab === "store" ? "pr.loadingStore" : "pr.loading"))}</div>`;
+    $("#prSum").textContent = ""; return;
+  }
+  const q = PR.q;
+  const list = prSorted(all.filter(a => !q || (a.name + " " + (a.publisher || "") + " " + (a.version || "")).toLowerCase().includes(q)));
+  const total = all.reduce((s, a) => s + (a.size || 0), 0);
+  $("#prSum").textContent = all.length ? t("pr.sum", nfi(all.length), fmt(total)) : "";
+  if (!list.length) { box.innerHTML = `<div class="tw-empty">${esc(t(all.length ? "pr.emptyFilter" : "pr.empty"))}</div>`; return; }
+  const old = Date.now() / 1000 - 180 * 86400;
+  box.innerHTML = `<div class="pr-head"><span></span><span>${esc(t("pr.col.name"))}</span><span class="r">${esc(t("pr.col.size"))}</span><span class="pr-inst">${esc(t("pr.col.installed"))}</span><span>${esc(t("pr.col.used"))}</span><span></span></div>` +
+    list.slice(0, 600).map(a => {
+      const badges = [];
+      if (a.version) badges.push(`<span class="tw-b">${esc(a.version)}</span>`);
+      if (a.kind === "win32" && a.scope === "user") badges.push(`<span class="tw-b">${esc(t("pr.b.user"))}</span>`);
+      if (a.arch === "32") badges.push(`<span class="tw-b">32-bit</span>`);
+      if (a.broken) badges.push(`<span class="tw-b risky" title="${esc(t("pr.b.brokenT"))}">${esc(t("pr.b.broken"))}</span>`);
+      if (a.noRemove) badges.push(`<span class="tw-b caution">${esc(t("pr.b.noRemove"))}</span>`);
+      const used = a.lastUsed ? relDay(a.lastUsed) : "—";
+      const busy = UN.app && UN.app.id === a.id && ["queued", "rp", "run", "scan"].includes(UN.phase);
+      return `<div class="pr-row" data-pr="${esc(a.id)}">${appIcon(a)}
+        <div style="min-width:0"><div class="su-n"><span title="${esc(a.name)}">${esc(a.name)}</span>${badges.join("")}</div><div class="su-m"><span class="pub">${esc(a.publisher || t("su.noPub"))}</span>${a.location ? `<span class="exe"><bdi>${esc(a.location)}</bdi></span>` : ""}</div></div>
+        <div class="r pr-sz">${a.size ? esc(fmt(a.size)) : PR.measuring && a.location ? '<span class="skel" style="width:40px"></span>' : "—"}</div>
+        <div class="pr-inst">${esc(a.installed ? dateS(a.installed) : "—")}</div>
+        <div class="pr-used ${a.lastUsed && a.lastUsed < old ? "old" : ""}" title="${esc(a.lastUsed ? new Date(a.lastUsed * 1000).toLocaleString(locale()) : t("pr.usedUnknown"))}">${esc(used)}</div>
+        <div class="su-ctl">${a.location ? `<button class="ibtn" data-prloc title="${esc(t("pv.open"))}" aria-label="${esc(t("pv.open"))}">${ICONS.open}</button>` : ""}
+          ${busy ? '<span class="spin" style="margin:0 12px"></span>' : `<button class="btn small danger" data-prun ${a.noRemove && !a.broken ? "disabled" : ""}>${ICONS.uninstall}<span>${esc(t(tab === "store" ? "pr.remove" : a.broken ? "pr.forced" : "pr.uninstall"))}</span></button>`}</div></div>`;
+    }).join("");
+  box.querySelectorAll("[data-pr]").forEach(row => {
+    const a = all.find(x => x.id === row.dataset.pr); if (!a) return;
+    const l = row.querySelector("[data-prloc]"); if (l) l.addEventListener("click", () => api.uninstOpenLocation(a.id));
+    const u = row.querySelector("[data-prun]"); if (u) u.addEventListener("click", () => unOpen(a, !!a.broken));
+  });
+}
+
+/* ---- the uninstall wizard ---- */
+const UN = { app: null, phase: "", secs: 0, items: [], sel: new Set(), res: null, level: 2, rp: true, forced: false, t0: 0, contShown: false };
+const unShown = () => !!document.querySelector("#shBody [data-un]") && $("#sveil").classList.contains("on");
+function unOpen(a, forced) {
+  if (UN.app && ["queued", "rp", "run", "scan"].includes(UN.phase)) { if (UN.app.id === a.id) unShow(); else toast(t("un.oneAtATime", UN.app.name), "clock"); return; }
+  if (UN.app && UN.phase === "found") { unShow(); return; }
+  Object.assign(UN, { app: a, phase: "opts", secs: 0, items: [], sel: new Set(), res: null, forced: !!forced, rp: !!(S.info && S.info.admin) && S.settings.restorePoint !== false && a.kind !== "store", contShown: false });
+  unShow();
+}
+function unShow() {
+  const a = UN.app; if (!a) return;
+  openSheet({ wide: UN.phase === "found" || UN.phase === "done", title: t(UN.forced ? "un.titleForced" : a.kind === "store" ? "un.titleStore" : "un.title", a.name),
+    sub: [a.publisher, a.version, a.size ? fmt(a.size) : ""].filter(Boolean).join(" · "), body: `<div data-un></div>`, foot: "",
+    onClose: () => {
+      if (UN.phase === "opts") UN.app = null;
+      else if (UN.phase === "found") unKeep();
+      else if (["done", "still", "error"].includes(UN.phase)) unFinish();
+      renderPrograms();
+    } });
+  unPaint();
+}
+function unPaint() {
+  if (!unShown()) { if (S.page === "programs") renderPrograms(); return; }
+  const a = UN.app, body = $("#shBody"), foot = $("#shFoot");
+  $("#sheet").classList.toggle("wide", UN.phase === "found" || UN.phase === "done");
+  const box = html => { body.innerHTML = `<div data-un>${html}</div>`; };
+  if (UN.phase === "opts") {
+    const lv = [1, 2, 3].map(n => `<label class="un-lv ${UN.level === n ? "on" : ""}"><input type="radio" name="unlv" value="${n}" ${UN.level === n ? "checked" : ""}><b>${esc(t("un.lv" + n))}</b><span>${esc(t("un.lv" + n + "D"))}</span></label>`).join("");
+    box(`<div class="un-app">${appIcon(a)}<div style="min-width:0"><div class="un-n">${esc(a.name)}</div><div class="un-m">${esc([a.publisher, a.version].filter(Boolean).join(" · "))}</div>${a.location ? `<div class="un-p"><bdi>${esc(a.location)}</bdi></div>` : ""}</div></div>
+      ${UN.forced ? `<div class="sh-note warn">${esc(t("un.forcedNote"))}</div>` : ""}
+      <ol class="un-steps"><li>${esc(t(a.kind === "store" ? "un.step1Store" : UN.forced ? "un.step1Forced" : "un.step1"))}</li><li>${esc(t("un.step2"))}</li><li>${esc(t("un.step3"))}</li></ol>
+      <div class="un-sec">${esc(t("un.mode"))}</div><div class="un-lvs">${lv}</div>
+      ${S.info && S.info.admin && a.kind !== "store" ? `<label class="extra"><input type="checkbox" class="cb" id="unRp" ${UN.rp ? "checked" : ""}><span>${esc(t("un.rp"))}<span class="warn" style="color:var(--faint)">${esc(t("un.rpD"))}</span></span></label>` : ""}
+      <div class="sh-note">${esc(t("un.safeNote"))}</div>`);
+    body.querySelectorAll("[name=unlv]").forEach(r => r.addEventListener("change", () => { UN.level = +r.value; unPaint(); }));
+    const rp = $("#unRp"); if (rp) rp.addEventListener("change", () => { UN.rp = rp.checked; });
+    foot.innerHTML = `<button class="btn" id="unCancel">${esc(t("modal.cancel"))}</button><button class="btn danger" id="unGo">${ICONS.uninstall}<span>${esc(t(UN.forced ? "un.goForced" : a.kind === "store" ? "un.goStore" : "un.go"))}</span></button>`;
+    $("#unCancel").addEventListener("click", () => closeSheet(true));
+    $("#unGo").addEventListener("click", unStart);
+    return;
+  }
+  if (["queued", "rp", "run", "scan"].includes(UN.phase)) {
+    const txt = UN.phase === "queued" ? t("job.waitFor", JOBS.cur ? JOBS.cur.title : "") : UN.phase === "rp" ? t("status.rp") : UN.phase === "run" ? t(a.kind === "store" ? "un.runStore" : "un.run") : t("un.scan");
+    const el = UN.phase === "rp" || UN.phase === "run" ? Math.round((Date.now() - UN.t0) / 1000) : 0;
+    box(`<div class="un-busy"><span class="spin big"></span><div><div class="un-bt">${esc(txt)}</div><div class="un-bd">${esc(UN.phase === "run" && a.kind !== "store" ? t("un.runD") : UN.phase === "scan" ? t("un.scanD", t("un.lv" + UN.level)) : "")}</div>${el ? `<div class="un-bd">${esc(t("status.secs", secsClock(el)))}</div>` : ""}</div></div>`);
+    const cont = UN.phase === "run" && a.kind !== "store" && Date.now() - UN.t0 > 6000;
+    foot.innerHTML = `${cont ? `<span class="grow">${esc(t("un.contD"))}</span><button class="btn" id="unCont">${esc(t("un.cont"))}</button>` : ""}<button class="btn" id="unHide">${esc(t("un.hide"))}</button>`;
+    if (cont) $("#unCont").addEventListener("click", () => { api.uninstContinue(); $("#unCont").disabled = true; });
+    $("#unHide").addEventListener("click", () => closeSheet(false));
+    return;
+  }
+  if (UN.phase === "found") {
+    const files = UN.items.filter(x => x.kind !== "key" && x.kind !== "value"), regs = UN.items.filter(x => x.kind === "key" || x.kind === "value");
+    if (!UN.items.length) {
+      box(`<div class="un-clean">${ICONS.check}<div><div class="un-bt">${esc(t("un.none"))}</div><div class="un-bd">${esc(t("un.noneD"))}</div></div></div>`);
+      foot.innerHTML = `<button class="btn primary" id="unDone">${esc(t("un.done"))}</button>`;
+      $("#unDone").addEventListener("click", () => { unFinish(); closeSheet(false); });
+      return;
+    }
+    const why = x => t(x.why) + (x.level > 1 ? " · " + t("un.lv" + x.level) : "");
+    const row = x => `<label class="un-row ${x.sure ? "sure" : ""}"><input type="checkbox" class="cb" data-unx="${esc(x.id)}" ${UN.sel.has(x.id) ? "checked" : ""}>
+      <span class="un-ic">${x.kind === "key" || x.kind === "value" ? ICONS.key : x.kind === "lnk" ? ico("file:" + x.path, "fic", ICONS.link) : ICONS.folder}</span>
+      <div style="min-width:0"><div class="un-rp"><bdi>${esc(regShow(x.path))}${x.value ? " → " + esc(x.value) : ""}</bdi></div><div class="un-rw ${x.why === "lf.why.userData" ? "warn" : ""}">${esc(why(x))}</div></div>
+      <span class="un-rs">${x.size ? esc(fmt(x.size)) : ""}${x.files ? `<small>${esc(t("row.files", nfi(x.files)))}</small>` : ""}</span>
+      ${x.kind === "key" || x.kind === "value" ? "<span></span>" : `<button class="ibtn" data-unopen="${esc(x.id)}" title="${esc(t("pv.open"))}">${ICONS.open}</button>`}</label>`;
+    box(`<div class="sh-note">${esc(t("un.foundD", UN.items.length))}</div>
+      <div class="un-tools"><button class="linkbtn" id="unAll">${esc(t("pv.all"))}</button><button class="linkbtn" id="unSure">${esc(t("un.onlySure"))}</button><button class="linkbtn" id="unNone">${esc(t("pv.none"))}</button></div>
+      ${files.length ? `<div class="un-sec">${esc(t("un.files", files.length))}</div><div class="un-list">${files.map(row).join("")}</div>` : ""}
+      ${regs.length ? `<div class="un-sec">${esc(t("un.regs", regs.length))}</div><div class="un-list">${regs.map(row).join("")}</div><div class="sh-note">${esc(t("un.regNote"))}</div>` : ""}`);
+    const paint = () => {
+      const pick = UN.items.filter(x => UN.sel.has(x.id)), sz = pick.reduce((s, x) => s + (x.size || 0), 0);
+      $("#unSum").textContent = t("un.sel", pick.length, fmt(sz));
+      $("#unDel").disabled = !pick.length;
+    };
+    foot.innerHTML = `<span class="grow" id="unSum"></span><button class="btn" id="unKeep">${esc(t("un.keep"))}</button><button class="btn danger" id="unDel">${ICONS.trash}<span>${esc(t("un.del"))}</span></button>`;
+    body.querySelectorAll("[data-unx]").forEach(cb => cb.addEventListener("change", () => { if (cb.checked) UN.sel.add(cb.dataset.unx); else UN.sel.delete(cb.dataset.unx); paint(); }));
+    body.querySelectorAll("[data-unopen]").forEach(b => b.addEventListener("click", e => { e.preventDefault(); const x = UN.items.find(y => y.id === b.dataset.unopen); if (x) api.showInFolder(x.path); }));
+    $("#unAll").addEventListener("click", () => { UN.items.forEach(x => UN.sel.add(x.id)); unPaint(); });
+    $("#unSure").addEventListener("click", () => { UN.sel = new Set(UN.items.filter(x => x.sure).map(x => x.id)); unPaint(); });
+    $("#unNone").addEventListener("click", () => { UN.sel.clear(); unPaint(); });
+    $("#unKeep").addEventListener("click", () => { unKeep(); closeSheet(false); });
+    $("#unDel").addEventListener("click", unDelete);
+    paint();
+    return;
+  }
+  if (UN.phase === "done") {
+    const r = UN.res || { items: [] }, ok = (r.items || []).filter(x => x.ok), bad = (r.items || []).filter(x => !x.ok);
+    box(`<div class="un-clean">${ICONS.check}<div><div class="un-bt">${esc(t("un.removed", ok.length, (r.items || []).length))}</div><div class="un-bd">${esc(r.freed ? t("un.freed", fmt(r.freed)) : "")}</div></div></div>
+      ${r.backup ? `<div class="sh-note">${esc(t("un.backupNote", r.backup))}</div>` : ""}
+      ${bad.length ? `<div class="un-sec">${esc(t("un.failed", bad.length))}</div><div class="un-list">${bad.map(x => { const it = UN.items.find(y => y.id === x.id) || {}; return `<div class="un-row"><span></span><span class="un-ic">${ICONS.alert}</span><div style="min-width:0"><div class="un-rp"><bdi>${esc(it.path || x.id)}</bdi></div><div class="un-rw warn">${esc(x.error || "")}</div></div><span></span><span></span></div>`; }).join("")}</div>` : ""}`);
+    foot.innerHTML = `${r.backup ? `<button class="btn" id="unRc">${esc(t("un.toRc"))}</button>` : ""}<button class="btn primary" id="unDone">${esc(t("un.done"))}</button>`;
+    if (r.backup) $("#unRc").addEventListener("click", () => { unFinish(); closeSheet(false); go("restore", { rcTab: "regs" }); });
+    $("#unDone").addEventListener("click", () => { unFinish(); closeSheet(false); });
+    return;
+  }
+  // still installed, or an error
+  box(`<div class="un-clean warn">${ICONS.alert}<div><div class="un-bt">${esc(UN.phase === "still" ? t("un.stillT") : t("un.errT"))}</div><div class="un-bd">${esc(UN.phase === "still" ? t("un.stillD") : UN.err || "")}</div></div></div>`);
+  foot.innerHTML = `<button class="btn primary" id="unDone">${esc(t("modal.closeBtn"))}</button>`;
+  $("#unDone").addEventListener("click", () => { unFinish(); closeSheet(false); });
+}
+function unStart() {
+  const a = UN.app; if (!a) return;
+  UN.phase = "queued"; UN.t0 = Date.now(); unPaint();
+  const job = jobAdd({ kind: "uninst", page: "programs", title: t("job.uninst", a.name),
+    onDrop: () => { UN.phase = ""; UN.app = null; closeSheet(false); renderPrograms(); },
+    run: job => new Promise(res => {
+      job.done = res;
+      UN.phase = UN.rp ? "rp" : "run"; UN.t0 = Date.now(); unPaint(); renderPrograms();
+      api.uninstStart(a.id, { restorePoint: !!UN.rp, level: UN.level, forced: !!UN.forced }).then(ok => {
+        if (ok === false) { UN.phase = "error"; UN.err = t("un.errBusy"); unPaint(); jobFinish("uninst", "error", UN.err); }
+      }).catch(e => { UN.phase = "error"; UN.err = String(e && e.message || e); unPaint(); jobFinish("uninst", "error", UN.err); });
+    }) });
+  if (!job) { UN.phase = "opts"; unPaint(); }
+}
+on("uninst", d => {
+  if (!UN.app || (d.id && d.id !== UN.app.id)) return;
+  const was = UN.phase;
+  if (d.phase === "run" && was !== "run") UN.t0 = Date.now();
+  UN.phase = d.phase;
+  if (d.phase === "found") {
+    UN.items = d.items || []; UN.sel = new Set(UN.items.filter(x => x.sure).map(x => x.id));
+    const sz = UN.items.reduce((s, x) => s + (x.size || 0), 0);
+    jobFinish("uninst", "ok", UN.items.length ? t("un.jobFound", UN.items.length, fmt(sz)) : t("un.none"));
+    PR.apps = null; PR.store = null;
+    if (S.page === "programs") loadPrograms();
+    unSurface(UN.items.length ? t("un.jobFound", UN.items.length, fmt(sz)) : t("un.none"));
+  } else if (d.phase === "still") { jobFinish("uninst", "warn", t("un.stillT")); unSurface(t("un.stillT")); }
+  else if (d.phase === "error") { UN.err = d.error || ""; jobFinish("uninst", "error", UN.err); unSurface(UN.err); }
+  else jobText("uninst", d.phase === "rp" ? t("status.rp") : d.phase === "run" ? t("un.run") : t("un.scan"), null);
+  if (was !== UN.phase || UN.phase === "run") unPaint();
+});
+setInterval(() => { if (UN.app && (UN.phase === "run" || UN.phase === "rp") && unShown()) unPaint(); }, 1000);
+// the result shows itself on the Programs page; elsewhere a toast offers it
+function unSurface(text) {
+  if (unShown()) return;
+  if (S.page === "programs") { unShow(); return; }
+  const name = UN.app ? UN.app.name : "";
+  toast(name + " — " + text, "uninstall", "info", { label: t("un.showRes"), run: () => { go("programs"); unShow(); } });
+}
+function unKeep() { if (UN.phase === "found") { api.uninstFinish(); UN.phase = "done"; UN.res = null; } UN.app = null; UN.phase = ""; renderPrograms(); }
+function unFinish() { api.uninstFinish(); UN.app = null; UN.phase = ""; PR.apps = null; PR.store = null; if (S.page === "programs") loadPrograms(); }
+function unDelete() {
+  const pick = UN.items.filter(x => UN.sel.has(x.id));
+  if (!pick.length) return;
+  const run = async () => {
+    $("#unDel").disabled = $("#unKeep").disabled = true; $("#unDel").innerHTML = '<span class="spin"></span>';
+    let r = null; try { r = await api.uninstRemove(pick.map(x => x.id)); } catch (e) { r = { items: pick.map(x => ({ id: x.id, ok: false, error: String(e) })) }; }
+    UN.res = r || { items: [] }; UN.phase = "done";
+    const ok = (UN.res.items || []).filter(x => x.ok).length;
+    toast(t("un.removedT", ok, UN.app ? UN.app.name : ""), "trash");
+    RC.ov = null;
+    if (unShown()) unPaint(); else unShow();
+  };
+  const userData = pick.filter(x => x.why === "lf.why.userData");
+  if (userData.length) confirmBox({ title: t("un.udT"), text: t("un.udD", userData.length), list: userData.slice(0, 6).map(x => x.path), okText: t("un.del"), danger: true, ok: run });
+  else run();
+}
+$("#prUnShow").addEventListener("click", unShow);
+
+/* ---- updates through winget ---- */
+function renderUpdates() {
+  const box = $("#prList"), u = PR.upd;
+  $("#prSum").textContent = "";
+  if (PR.updLoading && !u) { box.innerHTML = `<div class="tw-empty"><span class="spin"></span> ${esc(t("wg.checking"))}<div class="note-line">${esc(t("wg.checkingD"))}</div></div>`; paintWgBar(); return; }
+  if (!u) { box.innerHTML = ""; paintWgBar(); return; }
+  if (u.available === false) {
+    box.innerHTML = `<div class="tw-empty">${esc(t("wg.missing"))}<div class="note-line">${esc(t("wg.missingD"))}</div><button class="btn small primary" id="wgGet" style="margin-top:12px">${esc(t("wg.get"))}</button></div>`;
+    $("#wgGet").addEventListener("click", () => api.openAppInstaller()); paintWgBar(); return;
+  }
+  const ups = u.updates || [];
+  if (!ups.length) { box.innerHTML = `<div class="tw-empty">${u.error ? esc(u.error) : `${ICONS.check} ${esc(t("wg.none"))}`}</div>`; paintWgBar(); return; }
+  box.innerHTML = ups.map(x => {
+    const st = PR.wg[x.id] || {};
+    const status = st.state === "run" ? `<span class="spin"></span><span class="wg-s">${esc(st.secs ? secsClock(st.secs) : t("wg.running"))}</span>` : st.state === "ok" ? `<span class="tw-st on">${esc(t("wg.ok"))}</span>`
+      : st.state === "fail" ? `<span class="tw-st err" title="${esc(st.msg || "")}">${esc(t("wg.fail"))}</span>` : st.state === "queued" ? `<span class="tw-st off">${esc(t("wg.queued"))}</span>` : st.state === "skip" ? `<span class="tw-st off">${esc(t("wg.skipped"))}</span>` : "";
+    const can = !x.cut && !PR.wgRun;
+    return `<div class="wg-row" data-wg="${esc(x.id)}"><input type="checkbox" class="cb" data-wgcb ${PR.wgSel && PR.wgSel.has(x.id) ? "checked" : ""} ${x.cut || PR.wgRun ? "disabled" : ""}>${letterIcon(x.name)}
+      <div style="min-width:0"><div class="su-n"><span title="${esc(x.name)}">${esc(x.name)}</span>${x.explicit ? `<span class="tw-b caution" title="${esc(t("wg.explicitT"))}">${esc(t("wg.explicit"))}</span>` : ""}${x.source && x.source !== "winget" ? `<span class="tw-b">${esc(x.source)}</span>` : ""}</div>
+        <div class="su-m"><span class="exe" style="direction:ltr">${esc(x.id)}</span></div>${st.state === "fail" && st.msg ? `<div class="su-e">${esc(st.msg)}</div>` : ""}${x.cut ? `<div class="su-w">${esc(t("wg.cut"))}</div>` : ""}</div>
+      <div class="wg-v"><span class="from">${esc(x.version)}</span>${ICONS.caret}<b>${esc(x.available)}</b></div>
+      <div class="su-ctl">${status}${st.state === "ok" ? "" : `<button class="btn small" data-wgone ${can ? "" : "disabled"}>${esc(t("wg.one"))}</button>`}</div></div>`;
+  }).join("");
+  box.querySelectorAll("[data-wg]").forEach(row => {
+    const id = row.dataset.wg;
+    const cb = row.querySelector("[data-wgcb]"); cb.addEventListener("change", () => { if (cb.checked) PR.wgSel.add(id); else PR.wgSel.delete(id); paintWgBar(); });
+    const b = row.querySelector("[data-wgone]"); if (b) b.addEventListener("click", () => wgUpgrade([id]));
+  });
+  paintWgBar();
+}
+function paintWgBar() {
+  const u = PR.upd, n = PR.wgSel ? PR.wgSel.size : 0;
+  $("#wgSel").disabled = !n || PR.wgRun || !u || u.available === false;
+  $("#wgSelTxt").textContent = PR.wgRun ? t("wg.updating") : n ? t("wg.selN", n) : t("wg.sel");
+  $("#wgStop").hidden = !PR.wgRun;
+  $("#wgCheck").disabled = PR.updLoading || PR.wgRun;
+  $("#wgNote").textContent = u && u.checked ? t("wg.checked", ago(u.checked)) : "";
+}
+$("#wgSel").addEventListener("click", () => { if (PR.wgSel && PR.wgSel.size) wgUpgrade(Array.from(PR.wgSel)); });
+$("#wgCheck").addEventListener("click", () => loadUpdates(true));
+$("#wgStop").addEventListener("click", () => { api.wingetStop(); $("#wgStop").disabled = true; toast(t("wg.stopping"), "clock"); });
+function wgUpgrade(ids) {
+  ids = ids.filter(Boolean);
+  if (!ids.length || PR.wgRun || jobOf("winget")) return;
+  const names = ids.map(id => { const x = ((PR.upd || HM.upd || {}).updates || []).find(u => u.id === id); return x ? x.name : id; });
+  ids.forEach(id => { PR.wg[id] = { state: "queued" }; });
+  jobAdd({ kind: "winget", page: "programs", title: ids.length === 1 ? t("job.wgOne", names[0]) : t("job.wgN", ids.length),
+    stop: () => api.wingetStop(),
+    onDrop: () => { ids.forEach(id => delete PR.wg[id]); renderPrograms(); },
+    run: job => new Promise(res => {
+      job.done = res; PR.wgRun = true; PR.wgIds = ids; if (S.page === "programs") renderPrograms();
+      api.wingetUpgrade(ids).then(ok => { if (ok === false) { PR.wgRun = false; ids.forEach(id => delete PR.wg[id]); renderPrograms(); jobFinish("winget", "error", t("wg.cant")); } })
+        .catch(() => { PR.wgRun = false; jobFinish("winget", "error", t("wg.cant")); });
+    }) });
+  if (S.page === "programs") renderPrograms();
+}
+on("winget", d => {
+  if (d.state === "end") {
+    PR.wgRun = false; $("#wgStop").disabled = false;
+    const bad = (PR.wgIds || []).filter(id => (PR.wg[id] || {}).state === "fail").length;
+    jobFinish("winget", bad ? "warn" : "ok", t("wg.done", d.ok, d.of));
+    toast(t("wg.done", d.ok, d.of), bad ? "alert" : "check", bad ? "warn" : "");
+    // the list again (what is still out of date); the results stay on the rows meanwhile
+    const keep = PR.wg; HM.upd = null;
+    api.wingetUpdates(true).then(v => { PR.upd = v || PR.upd; HM.upd = PR.upd; HM.at.upd = Date.now(); PR.wgSel = new Set(((PR.upd || {}).updates || []).filter(u => !u.explicit && !u.cut && (keep[u.id] || {}).state !== "fail").map(u => u.id)); renderPrograms(); paintPrBadge(); setupPrTabs(); }).catch(() => {});
+    renderPrograms(); return;
+  }
+  if (!d.id) return;
+  PR.wg[d.id] = { state: d.state, msg: d.msg || "", secs: d.secs || 0 };
+  if (d.state === "run") jobText("winget", t("wg.jobText", d.n || 1, d.of || 1, d.id) + (d.secs ? " · " + secsClock(d.secs) : ""), d.of ? ((d.n - 1) / d.of) * 100 : null);
+  if (S.page === "programs" && PR.tab === "updates") renderUpdates();
+});
+
+/* =====================================================================
+   GAME MODE — close the programs you chose, free RAM, start them again
+   afterwards. No power plan, services or Windows settings are touched.
+===================================================================== */
+const GM = { apps: null, st: null, loading: false, busy: false };
+function gmCfg() { const g = S.settings.game || (S.settings.game = {}); if (!Array.isArray(g.apps)) g.apps = []; if (typeof g.ram !== "boolean") g.ram = true; if (typeof g.force !== "boolean") g.force = false; return g; }
+async function loadGame(force) {
+  if (GM.loading) return;
+  GM.loading = true; $("#gmRefresh").classList.add("spin"); if (!GM.apps) renderGame();
+  try { const [a, s] = await Promise.all([api.gameApps(), api.gameState()]); GM.apps = a || []; GM.st = s || {}; } catch (e) { GM.apps = GM.apps || []; }
+  GM.loading = false; $("#gmRefresh").classList.remove("spin");
+  renderGame(); paintGameNav();
+}
+function paintGameNav() { const b = $("#gmBadge"); if (b) { const on = !!(GM.st && GM.st.active); b.hidden = !on; b.textContent = on ? t("gm.badge") : ""; } }
+function renderGame() {
+  const cfg = gmCfg(), st = GM.st || {}, on = !!st.active;
+  const chosen = new Set(cfg.apps.map(x => x.toLowerCase()));
+  const apps = GM.apps || [];
+  const pick = apps.filter(a => chosen.has(a.exe)), mem = pick.reduce((s, a) => s + (a.mem || 0), 0);
+  $("#gmHero").classList.toggle("on", on);
+  $("#gmState").textContent = on ? t("gm.on") : t("gm.off");
+  $("#gmStateD").textContent = on ? t("gm.onD", ago(st.since), (st.closed || []).length) + (st.freed > 0 ? " " + t("gm.freedD", fmt(st.freed)) : "") : pick.length ? t("gm.offD", pick.length, fmt(mem)) : t("gm.offD0");
+  const btn = $("#gmGo");
+  btn.disabled = GM.busy || (!on && !pick.length && !cfg.ram);
+  btn.className = "btn big " + (on ? "" : "primary");
+  btn.innerHTML = GM.busy ? `<span class="spin"></span><span>${esc(t(on ? "gm.stopping" : "gm.starting"))}</span>` : on ? `${ICONS.undo}<span>${esc(t("gm.stop", (st.closed || []).length))}</span>` : `${ICONS.gamepad}<span>${esc(t("gm.start"))}</span>`;
+  $("#gmRam").checked = cfg.ram; $("#gmForce").checked = cfg.force;
+  $("#gmRam").disabled = $("#gmForce").disabled = on;
+  const left = st.left || [];
+  $("#gmClosed").innerHTML = on ? `<div class="section-t">${esc(t("gm.closedT"))}</div><div class="list">${(st.closed || []).map(c => `<div class="rc-row"><span>${isPath(c.path) ? ico("exe:" + c.path, "fic", ICONS.apps) : ICONS.apps}</span><div style="min-width:0"><div class="t">${esc(c.name || c.exe)}</div><div class="d path"><bdi>${esc(c.path)}</bdi></div></div><span class="tw-st reboot">${esc(t("gm.willReopen"))}</span></div>`).join("") || `<div class="tw-empty">${esc(t("gm.noneClosed"))}</div>`}</div>${left.length ? `<div class="rc-note">${esc(t("gm.left", left.join(", ")))}</div>` : ""}` : "";
+  const list = $("#gmList");
+  if (!GM.apps) { list.innerHTML = `<div class="tw-empty"><span class="spin"></span></div>`; return; }
+  const missing = cfg.apps.filter(x => !apps.some(a => a.exe === x.toLowerCase()));
+  const rows = apps.map(a => `<label class="gm-row"><input type="checkbox" class="cb" data-gm="${esc(a.exe)}" ${chosen.has(a.exe) ? "checked" : ""} ${on ? "disabled" : ""}>
+      ${isPath(a.path) ? ico("exe:" + a.path, "r-ico av", esc(((a.name || "?")[0] || "?").toUpperCase()), "--av:" + avColor(a.name)) : letterIcon(a.name)}
+      <div style="min-width:0"><div class="su-n"><span>${esc(a.name)}</span>${a.window ? `<span class="tw-b">${esc(t("gm.window"))}</span>` : `<span class="tw-b caution" title="${esc(t("gm.bgT"))}">${esc(t("gm.bg"))}</span>`}${a.count > 1 ? `<span class="tw-b">×${a.count}</span>` : ""}</div><div class="su-m"><span class="exe" style="direction:ltr">${esc(a.exe)}</span></div></div>
+      <div class="r pr-sz">${esc(fmt(a.mem || 0))}</div></label>`)
+    .concat(missing.map(x => `<label class="gm-row off"><input type="checkbox" class="cb" data-gm="${esc(x.toLowerCase())}" checked ${on ? "disabled" : ""}>${letterIcon(x)}<div style="min-width:0"><div class="su-n"><span>${esc(x)}</span><span class="tw-b">${esc(t("gm.notRunning"))}</span></div></div><div></div></label>`));
+  list.innerHTML = rows.length ? rows.join("") : `<div class="tw-empty">${esc(t("gm.noApps"))}</div>`;
+  list.querySelectorAll("[data-gm]").forEach(cb => cb.addEventListener("change", () => {
+    const set = new Set(gmCfg().apps.map(x => x.toLowerCase()));
+    if (cb.checked) set.add(cb.dataset.gm); else set.delete(cb.dataset.gm);
+    gmCfg().apps = Array.from(set); storeSettings(); renderGame();
+  }));
+}
+$("#gmRam").addEventListener("change", e => { gmCfg().ram = e.target.checked; storeSettings(); renderGame(); });
+$("#gmForce").addEventListener("change", e => { gmCfg().force = e.target.checked; storeSettings(); });
+$("#gmRefresh").addEventListener("click", () => loadGame(true));
+$("#gmGo").addEventListener("click", async () => {
+  if (GM.busy) return;
+  const cfg = gmCfg(), on = GM.st && GM.st.active;
+  GM.busy = true; renderGame();
+  let r = null;
+  try { r = on ? await api.gameStop() : await api.gameStart({ apps: cfg.apps, force: cfg.force, ram: cfg.ram }); } catch (e) { r = { error: String(e && e.message || e) }; }
+  GM.busy = false;
+  if (r && r.state) GM.st = r.state;
+  if (r && r.error) toast(r.error, "alert", "warn");
+  else if (on) toast(t("gm.offT"), "undo");
+  else { const s = GM.st || {}; toast(t("gm.onT", (s.closed || []).length) + (s.freed > 0 ? " " + t("gm.freedD", fmt(s.freed)) : ""), "gamepad"); if (s.freed > 0) burst($("#gmGo")); }
+  await loadGame(true);
+});
+
+/* =====================================================================
+   EMPTY FOLDERS & BROKEN SHORTCUTS
+===================================================================== */
+const TD = { tab: "empty", places: null, roots: null, extra: [], empty: null, broken: null, sel: new Set(), busy: false, partial: false };
+async function loadTidy() {
+  if (!TD.places) {
+    try { TD.places = (await api.tidyPlaces()) || []; } catch (e) { TD.places = []; }
+    if (!TD.roots) TD.roots = new Set(TD.places.filter(p => p.def).map(p => p.path));
+  }
+  renderTidy();
+}
+function setupTidyTabs() {
+  makeSeg($("#tdTab"), [{ v: "empty", label: t("td.tab.empty") }, { v: "broken", label: t("td.tab.broken") }], TD.tab, v => { TD.tab = v; TD.sel.clear(); tdPreselect(); renderTidy(); });
+}
+function tdPreselect() {
+  TD.sel.clear();
+  if (TD.tab === "empty" && TD.empty) { const warn = new Set((TD.places || []).filter(p => p.warn).map(p => p.path.toLowerCase())); TD.empty.forEach(d => { if (!warn.has((d.root || "").toLowerCase())) TD.sel.add(d.path); }); }
+  if (TD.tab === "broken" && TD.broken) TD.broken.forEach(b => TD.sel.add(b.path));
+}
+function renderTidy() {
+  const empty = TD.tab === "empty";
+  $("#tdPlaces").hidden = !empty;
+  $("#tdGoTxt").textContent = t(empty ? "td.searchEmpty" : "td.searchBroken");
+  $("#tdGo").disabled = TD.busy || (empty && !(TD.roots && TD.roots.size));
+  if (empty) {
+    const pl = (TD.places || []).concat(TD.extra.map(p => ({ id: "extra", path: p })));
+    $("#tdPlaces").innerHTML = pl.map(p => `<button class="place" data-tdp="${esc(p.path)}" aria-pressed="${TD.roots && TD.roots.has(p.path)}" title="${esc(p.path)}">${ICONS[FP_ICON[p.id] || "folder"] || ICONS.folder}<span>${esc(p.id === "extra" ? baseName(p.path) : t("td.p." + p.id))}</span>${p.warn ? `<span class="tw-b caution">${esc(t("td.appdata"))}</span>` : ""}</button>`).join("") +
+      `<button class="place" id="tdAdd">${ICONS.plus}<span>${esc(t("td.add"))}</span></button>`;
+    $$("#tdPlaces [data-tdp]").forEach(b => b.addEventListener("click", () => { const p = b.dataset.tdp; if (TD.roots.has(p)) TD.roots.delete(p); else TD.roots.add(p); renderTidy(); }));
+    $("#tdAdd").addEventListener("click", async () => { let p = ""; try { p = await api.findPickFolder(); } catch (e) {} if (p && !TD.extra.includes(p)) { TD.extra.push(p); TD.roots.add(p); renderTidy(); } });
+  }
+  const box = $("#tdRes"), list = empty ? TD.empty : TD.broken;
+  $("#tdNote").hidden = !empty || !TD.roots || !Array.from(TD.roots).some(r => (TD.places || []).some(p => p.warn && p.path === r));
+  if (TD.busy && !list) { box.innerHTML = `<div class="tw-empty"><span class="spin"></span> ${esc(t("td.searching"))}</div>`; $("#tdBar").hidden = true; return; }
+  if (!list) { box.innerHTML = `<div class="tw-empty">${esc(t(empty ? "td.introEmpty" : "td.introBroken"))}</div>`; $("#tdBar").hidden = true; return; }
+  if (!list.length) { box.innerHTML = `<div class="tw-empty">${ICONS.check} ${esc(t(empty ? "td.noneEmpty" : "td.noneBroken"))}</div>`; $("#tdBar").hidden = true; return; }
+  $("#tdBar").hidden = false;
+  box.innerHTML = (empty && TD.partial ? `<div class="f-note">${esc(t("td.partial"))}</div>` : "") + `<div class="list">` + list.map(x => empty
+    ? `<label class="td-row"><input type="checkbox" class="cb" data-td="${esc(x.path)}" ${TD.sel.has(x.path) ? "checked" : ""}><span class="fic">${ICONS.emptydir}</span><div style="min-width:0"><div class="t" title="${esc(x.path)}">${esc(baseName(x.path))}</div><div class="d path"><bdi>${esc(x.path)}</bdi></div></div><span class="tw-b">${esc(x.subs ? t("td.subs", x.subs) : t("td.emptyB"))}</span><button class="ibtn" data-tdo="${esc(x.path)}" title="${esc(t("pv.open"))}">${ICONS.open}</button></label>`
+    : `<label class="td-row"><input type="checkbox" class="cb" data-td="${esc(x.path)}" ${TD.sel.has(x.path) ? "checked" : ""}>${ico("file:" + x.path, "fic", ICONS.broken)}<div style="min-width:0"><div class="t">${esc(baseName(x.path).replace(/\.lnk$/i, ""))}</div><div class="d path" title="${esc(x.target)}"><bdi>${esc(t("td.target", x.target))}</bdi></div></div><span class="tw-b">${esc(t("td.w." + x.where))}</span><button class="ibtn" data-tdo="${esc(x.path)}" title="${esc(t("pv.open"))}">${ICONS.open}</button></label>`).join("") + `</div>`;
+  box.querySelectorAll("[data-td]").forEach(cb => cb.addEventListener("change", () => { if (cb.checked) TD.sel.add(cb.dataset.td); else TD.sel.delete(cb.dataset.td); paintTidyBar(); }));
+  box.querySelectorAll("[data-tdo]").forEach(b => b.addEventListener("click", e => { e.preventDefault(); api.showInFolder(b.dataset.tdo); }));
+  paintTidyBar();
+}
+function paintTidyBar() {
+  const list = (TD.tab === "empty" ? TD.empty : TD.broken) || [];
+  const n = list.filter(x => TD.sel.has(x.path)).length;
+  $("#tdSum").textContent = t(TD.tab === "empty" ? "td.sumEmpty" : "td.sumBroken", list.length);
+  $("#tdDel").disabled = !n || TD.busy;
+  $("#tdDelTxt").textContent = n ? t("td.delN", n) : t("td.del");
+  $("#tdAll").checked = n > 0 && n === list.length; $("#tdAll").indeterminate = n > 0 && n < list.length;
+}
+$("#tdAll").addEventListener("change", e => { const list = (TD.tab === "empty" ? TD.empty : TD.broken) || []; TD.sel.clear(); if (e.target.checked) list.forEach(x => TD.sel.add(x.path)); renderTidy(); });
+$("#tdGo").addEventListener("click", () => {
+  if (TD.busy || jobOf("tidy")) return;
+  const tab = TD.tab, roots = Array.from(TD.roots || []);
+  jobAdd({ kind: "tidy", page: "tidy", title: t(tab === "empty" ? "job.tdEmpty" : "job.tdBroken"),
+    run: async job => {
+      TD.busy = true; if (tab === "empty") TD.empty = null; else TD.broken = null; renderTidy();
+      jobText("tidy", t("td.searching"), null);
+      let res = "ok";
+      try {
+        if (tab === "empty") { const r = (await api.emptyScan(roots)) || {}; TD.empty = r.dirs || []; TD.partial = !!r.partial; job.result = t("td.foundEmpty", TD.empty.length); }
+        else { TD.broken = (await api.brokenScan()) || []; job.result = t("td.foundBroken", TD.broken.length); }
+      } catch (e) { res = "error"; job.result = String(e && e.message || e); if (tab === "empty") TD.empty = []; else TD.broken = []; }
+      TD.busy = false;
+      if (TD.tab === tab) { tdPreselect(); renderTidy(); }
+      return res;
+    } });
+});
+$("#tdDel").addEventListener("click", () => {
+  const tab = TD.tab, list = (tab === "empty" ? TD.empty : TD.broken) || [], pick = list.filter(x => TD.sel.has(x.path));
+  if (!pick.length) return;
+  confirmBox({ title: t(tab === "empty" ? "td.delTEmpty" : "td.delTBroken", pick.length), text: t("td.delD"), okText: t("td.delOk"),
+    ok: async () => {
+      TD.busy = true; paintTidyBar(); $("#tdDelTxt").textContent = t("td.deleting");
+      let res = []; try { res = (await api.tidyDelete(tab === "empty" ? "dir" : "lnk", pick.map(x => x.path))) || []; } catch (e) {}
+      TD.busy = false;
+      const ok = new Set(res.filter(r => r.ok).map(r => r.path)), bad = res.filter(r => !r.ok);
+      if (tab === "empty") TD.empty = TD.empty.filter(x => !ok.has(x.path)); else TD.broken = TD.broken.filter(x => !ok.has(x.path));
+      ok.forEach(p => TD.sel.delete(p));
+      if (ok.size) toast(t("td.done", ok.size), "trash");
+      if (bad.length) toast(t("td.bad", bad.length) + " " + (bad[0].error || ""), "alert", "warn");
+      RC.ov = null; renderTidy();
+    } });
+});
+
+/* =====================================================================
+   RESTORE CENTER — registry backups made before leftovers were deleted
+===================================================================== */
+RC.regs = null;
+async function loadRegs() { try { RC.regs = (await api.regBackups()) || []; } catch (e) { RC.regs = []; } if (S.page === "restore") renderRestore(); }
+function renderRegsTab(sec) {
+  const list = RC.regs;
+  sec.innerHTML = `<div class="rc-head"><h3>${esc(t("rc.regs"))}</h3><div class="grow"><button class="btn small" id="rcRegFolder">${ICONS.folder}<span>${esc(t("rc.regFolder"))}</span></button></div></div>
+    <div class="list">${!list ? `<div class="tw-empty"><span class="spin"></span></div>` : list.length ? list.map(b => `<div class="rc-row"><span class="ico2">${ICONS.key}</span><div style="min-width:0"><div class="t">${esc(b.name)}</div><div class="d">${esc(dateTimeS(b.at))} · ${esc(t("rc.regKeys", b.keys))} · ${esc(fmt(b.size))}</div></div>
+      <div class="acts"><button class="btn small" data-rreg="${esc(b.file)}">${esc(t("rc.regRestore"))}</button></div></div>`).join("") : `<div class="tw-empty">${esc(t("rc.noRegs"))}</div>`}</div>
+    <div class="rc-note">${esc(t("rc.regsNote"))}</div>`;
+  $("#rcRegFolder").addEventListener("click", () => api.openBackupFolder());
+  sec.querySelectorAll("[data-rreg]").forEach(b => b.addEventListener("click", () => {
+    const f = b.dataset.rreg, item = (RC.regs || []).find(x => x.file === f) || {};
+    confirmBox({ title: t("rc.regRestoreT", item.name || f), text: t("rc.regRestoreD"), okText: t("rc.regRestore"), ok: async () => {
+      b.disabled = true; b.innerHTML = '<span class="spin"></span>';
+      let msg = ""; try { msg = await api.regRestore(f); } catch (e) { msg = String(e); }
+      if (msg) toast(msg, "alert", "warn"); else toast(t("rc.regRestored", item.name || f), "undo");
+      loadRegs();
+    } });
+  }));
+}
+
 async function init() {
   paintIcons();
   splashStep("", 6);
@@ -5978,6 +7147,7 @@ async function init() {
     if (typeof st.forceClose === "boolean") s.forceClose = st.forceClose;
     if (typeof st.updates === "boolean") s.updates = st.updates;
     if (typeof st.lastVersion === "string") s.lastVersion = st.lastVersion;
+    if (st.game && typeof st.game === "object") s.game = st.game;
     if (!Array.isArray(s.mem.regions)) s.mem.regions = MEM_REGIONS.filter(r => r.def).map(r => r.id);
   } catch (e) {}
   L = S.settings.lang;
@@ -5997,7 +7167,9 @@ async function init() {
   setupLangSeg();
   applyLang();
   splashStep(t("sp.scan0"), 22);
+  if (!S.page) S.page = "home";
   analyze();
+  homeLoad(false);
   pollMem();
   pulseTick();
   setTimeout(countUnseenErrors, 1500);
@@ -6006,6 +7178,12 @@ async function init() {
   setTimeout(async () => { await maybeShowNews(); if (S.settings.updates !== false) updCheck(false); }, 3800);
   requestAnimationFrame(moveNav);
   setTimeout(() => maybeHideSplash(true), 3200); // never longer: the scan goes on in the window
+  setTimeout(diskHealthWarn, 9000); // warn early about a disk in trouble
+  setTimeout(async () => {
+    try { GM.st = await api.gameState(); } catch (e) {}
+    paintGameNav();
+    if (GM.st && GM.st.active) toast(t("gm.stillOn"), "gamepad", "info", { label: t("gm.open"), run: () => go("game") });
+  }, 4500);
 }
 const BOOT = performance.now();
 function hideSplash() {
@@ -6170,7 +7348,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "2.6.1", author: "xKi4o", admin: scen !== "noadmin", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "2.7.0", author: "xKi4o", admin: scen !== "noadmin", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -6384,7 +7562,7 @@ const Mock = (() => {
       const iv = setInterval(() => {
         n++; const ph = kind === "dupes" ? (n < 5 ? "walk" : n < 7 ? "compare" : "hash") : "walk";
         window.__ev("find-progress", { kind, p: { phase: ph, files: n * 21734, dirs: n * 1830, bytes: n * 3.1 * GB, matched: kind === "dupes" ? n * 412 : n * 6, toHash: 9.4 * GB, hashed: Math.max(0, n - 6) * 2.4 * GB, current: (o.roots[0] || "C:\\") + "Users\\demo\\Pictures\\2025\\IMG_" + (4000 + n * 37) + ".jpg" } });
-        if (findStop || n >= 10) {
+        if (findStop || n >= 16) {
           clearInterval(iv); const stopped = findStop; findStop = false; findRun = "";
           if (!stopped) { findRes[kind] = { kind, at: Date.now(), took: Date.now() - t0, opts: o, scanned: { files: 217340, dirs: 18300, denied: 3 } }; if (kind === "large") { findRes.large.large = mockLarge.slice(); findRes.large.total = mockLarge.reduce((s, x) => s + x.size, 0); } else { findRes.dupes.dupes = JSON.parse(JSON.stringify(mockDupes)); findRes.dupes.wasted = mockDupes.reduce((s, g) => s + g.wasted, 0); } }
           window.__ev("find-done", { kind, ok: true, stopped, count: kind === "large" ? mockLarge.length : mockDupes.length, took: Date.now() - t0, p: {} });
@@ -6426,13 +7604,169 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "2.6.1", latest: nw ? "2.7.0" : "2.6.1", newer: nw, name: "xKi4o Cleaner 2.7.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v2.7.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "2.7.0", latest: nw ? "2.8.0" : "2.7.0", newer: nw, name: "xKi4o Cleaner 2.8.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v2.8.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
+// ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders
+Object.assign(Mock, (() => {
+  const GB = 1024 ** 3, MB = 1024 ** 2, now = Date.now() / 1000, day = 86400;
+  const scen = new URLSearchParams(location.search).get("s") || "";
+  const ev = (n, d) => setTimeout(() => window.__ev(n, d), 0);
+  const A = (id, name, pub, ver, size, inst, used, loc, o) => Object.assign({ id: "reg:HKLM:" + id, kind: "win32", name, publisher: pub, version: ver, size, installed: Math.round(now - inst * day), lastUsed: used == null ? 0 : Math.round(now - used * day), location: loc, scope: "machine", arch: "64", key: "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\" + id }, o || {});
+  let apps = [
+    A("{AC76BA86}", "Adobe Acrobat Reader", "Adobe", "24.003.20112", 812 * MB, 320, 12, "C:\\Program Files\\Adobe\\Acrobat DC"),
+    A("7-Zip", "7-Zip 24.08 (x64)", "Igor Pavlov", "24.08", 5.6 * MB, 600, 3, "C:\\Program Files\\7-Zip"),
+    A("Discord", "Discord", "Discord Inc.", "1.0.9187", 0, 400, 0.2, "C:\\Users\\demo\\AppData\\Local\\Discord", { id: "reg:HKCU:Discord", scope: "user", key: "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Discord" }),
+    A("Steam", "Steam", "Valve Corporation", "2.10.91.91", 0, 900, 1, "C:\\Program Files (x86)\\Steam", { arch: "32" }),
+    A("{OBS}", "OBS Studio", "OBS Project", "31.0.2", 410 * MB, 200, 30, "C:\\Program Files\\obs-studio"),
+    A("Shooter", "Shooter", "Studio Games", "1.4.2", 74.2 * GB, 90, 2, "D:\\Games\\Shooter"),
+    A("OldTool", "Old Photo Tool 3", "Acme Software", "3.1", 120 * MB, 1400, 900, "C:\\Program Files (x86)\\Acme\\Old Photo Tool", { arch: "32" }),
+    A("{VLC}", "VLC media player", "VideoLAN", "3.0.21", 160 * MB, 700, 60, "C:\\Program Files\\VideoLAN\\VLC"),
+    A("Spotify", "Spotify", "Spotify AB", "1.2.50", 0, 300, 4, "C:\\Users\\demo\\AppData\\Roaming\\Spotify", { id: "reg:HKCU:Spotify", scope: "user" }),
+    A("{GONE}", "Broken Game Launcher", "Nobody Ltd", "0.9", 0, 800, 500, "", { broken: true }),
+    A("{NVAPP}", "NVIDIA App", "NVIDIA Corporation", "11.0.1", 600 * MB, 100, 1, "C:\\Program Files\\NVIDIA Corporation\\NVIDIA App"),
+    A("{VSC}", "Microsoft Visual Studio Code", "Microsoft Corporation", "1.95.3", 380 * MB, 250, 0.5, "C:\\Program Files\\Microsoft VS Code"),
+  ];
+  const store = [
+    { id: "appx:Microsoft.WindowsCalculator_11.2409.0.0_x64__8wekyb3d8bbwe", kind: "store", name: "Calculator", publisher: "Microsoft Corporation", version: "11.2409.0.0", installed: Math.round(now - 300 * day), lastUsed: Math.round(now - 20 * day), family: "Microsoft.WindowsCalculator_8wekyb3d8bbwe", location: "C:\\Program Files\\WindowsApps\\Microsoft.WindowsCalculator_11.2409.0.0_x64__8wekyb3d8bbwe" },
+    { id: "appx:SpotifyAB.SpotifyMusic_1.250.0.0_x64__zpdnekdrzrea0", kind: "store", name: "Spotify Music", publisher: "Spotify AB", version: "1.250.0.0", installed: Math.round(now - 50 * day), family: "SpotifyAB.SpotifyMusic_zpdnekdrzrea0" },
+    { id: "appx:Clipchamp.Clipchamp_3.1.0.0_neutral__yxz26nhyzhsrt", kind: "store", name: "Microsoft Clipchamp", publisher: "Microsoft Corp.", version: "3.1.0.0", installed: Math.round(now - 400 * day), family: "Clipchamp.Clipchamp_yxz26nhyzhsrt" },
+  ];
+  const upd = [
+    { name: "Mozilla Firefox (x64 en-US)", id: "Mozilla.Firefox", version: "131.0.2", available: "132.0", source: "winget" },
+    { name: "7-Zip 24.08 (x64)", id: "7zip.7zip", version: "24.08", available: "24.09", source: "winget" },
+    { name: "OBS Studio", id: "OBSProject.OBSStudio", version: "31.0.2", available: "31.0.3", source: "winget" },
+    { name: "Microsoft Visual Studio Code (User)", id: "Microsoft.VisualStudioCode", version: "1.95.3", available: "1.96.0", source: "winget" },
+    { name: "Discord", id: "Discord.Discord", version: "1.0.9187", available: "1.0.9190", source: "winget", explicit: true },
+  ];
+  let updChecked = 0;
+  let un = null, unCont = false;
+  const regBackups = [{ file: "2026-10-01 120530 Old Video Editor.reg", name: "Old Video Editor", at: Date.now() - 12 * 86400e3, keys: 6, size: 18432 }];
+  let game = { active: false, since: 0, closed: [], freed: 0 };
+  const lf = (kind, path, why, sure, level, size, files, value) => ({ kind, path, why, sure, level, size: size || 0, files: files || 0, value });
+  const leftovers = a => {
+    const base = (a.location || "C:\\Program Files\\" + a.name), n = a.name.replace(/[^A-Za-z0-9 ]/g, "").trim() || "App", pub = (a.publisher || "Vendor").split(" ")[0];
+    const out = [
+      lf("dir", base, "lf.why.location", true, 1, 34 * MB, 41),
+      lf("dir", "C:\\ProgramData\\" + pub + "\\" + n, "lf.why.pubName", true, 1, 2.1 * MB, 6),
+      lf("dir", "C:\\Users\\demo\\AppData\\Roaming\\" + n, "lf.why.userData", false, 1, 860 * 1024, 12),
+      lf("lnk", "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\" + n + ".lnk", "lf.why.shortcut", true, 1, 2048),
+      lf("key", "HKCU\\Software\\" + pub + "\\" + n, "lf.why.pubName", true, 1),
+      lf("key", "HKLM32\\SOFTWARE\\" + n, "lf.why.name", true, 1),
+      lf("key", "HKCU\\Software\\Classes\\Applications\\" + n.toLowerCase().replace(/ /g, "") + ".exe", "lf.why.assoc", false, 2),
+      lf("dir", "C:\\Users\\demo\\AppData\\Local\\" + pub, "lf.why.pubEmpty", false, 2, 4096, 1),
+      lf("value", "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache", "lf.why.mui", false, 3, 0, 0, base + "\\app.exe.FriendlyAppName"),
+    ];
+    return out.map((x, i) => Object.assign(x, { id: String(i + 1) }));
+  };
+  const health = () => scen === "diskbad"
+    ? [{ id: "0", name: "Samsung SSD 970 EVO Plus 1TB", media: "SSD", bus: "NVMe", size: 1000 * 1e9, letters: ["C"], health: "Warning", status: ["OK"], temp: 82, tempMax: 86, wear: 93, hours: 31000, readErr: 0, readUnc: 0, writeErr: 0, writeUnc: 0, verdict: "bad", reasons: ["dh.r.wearBad", "dh.r.hot", "dh.r.warning"] }]
+    : [{ id: "0", name: "Samsung SSD 970 EVO Plus 1TB", media: "SSD", bus: "NVMe", size: 1000 * 1e9, letters: ["C"], health: "Healthy", status: ["OK"], temp: 43, tempMax: 71, wear: 4, hours: 8120, readErr: 0, readUnc: 0, writeErr: 0, writeUnc: 0, verdict: "good", reasons: [] },
+      { id: "1", name: "ST2000DM008-2FR102", media: "HDD", bus: "SATA", size: 2000 * 1e9, letters: ["D"], health: "Healthy", status: ["OK"], temp: 57, tempMax: 61, wear: null, hours: 26400, readErr: 12, readUnc: 0, writeErr: 0, writeUnc: 0, starts: 3100, verdict: "warn", reasons: ["dh.r.warm"] },
+      { id: "2", name: "SanDisk Ultra USB 3.0", media: "Unspecified", bus: "USB", size: 64 * 1e9, letters: ["E"], health: "Healthy", status: ["OK"], temp: null, wear: null, hours: null, readErr: null, readUnc: null, writeErr: null, writeUnc: null, verdict: "good", reasons: [], noData: true }];
+  const empties = [
+    { path: "C:\\Users\\demo\\Documents\\New folder", subs: 0, root: "C:\\Users\\demo\\Documents" },
+    { path: "C:\\Users\\demo\\Documents\\Old project\\build", subs: 4, root: "C:\\Users\\demo\\Documents" },
+    { path: "C:\\Users\\demo\\Downloads\\extracted", subs: 2, root: "C:\\Users\\demo\\Downloads" },
+    { path: "C:\\Users\\demo\\Pictures\\Screenshots 2023", subs: 0, root: "C:\\Users\\demo\\Pictures" },
+    { path: "C:\\Users\\demo\\AppData\\Roaming\\OldApp\\cache", subs: 1, root: "C:\\Users\\demo\\AppData\\Roaming" },
+  ];
+  const broken = [
+    { path: "C:\\Users\\demo\\Desktop\\Old Photo Tool.lnk", target: "C:\\Program Files (x86)\\Acme\\Old Photo Tool\\photo.exe", where: "desktop" },
+    { path: "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Removed Game\\Removed Game.lnk", target: "D:\\Games\\Removed\\game.exe", where: "startmenu" },
+    { path: "C:\\Users\\demo\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\Notes.lnk", target: "C:\\Tools\\notes\\notes.exe", where: "quicklaunch" },
+  ];
+  return {
+    appsList: async () => ({ apps: apps.slice(), admin: scen !== "noadmin" }),
+    storeApps: async () => { await new Promise(r => setTimeout(r, 300)); return { apps: store.slice(), admin: true }; },
+    appsMeasure: async ids => { await new Promise(r => setTimeout(r, 250)); const m = {}; ids.forEach((id, i) => { m[id] = (180 + i * 97) * MB; }); return m; },
+    uninstStart: async (id, o) => {
+      const a = apps.concat(store).find(x => x.id === id); if (!a || un) return false;
+      un = { a, o }; unCont = false;
+      const steps = [];
+      if (o.restorePoint) steps.push(["rp", {}, 500]);
+      if (!o.forced) { steps.push(["run", { secs: 1 }, 400]); steps.push(["run", { secs: 2 }, 400]); }
+      if (scen === "unstill") { steps.push(["still", {}, 300]); }
+      else { steps.push(["scan", {}, 500]); steps.push(["found", { items: leftovers(a).filter(x => x.level <= (o.level || 2)) }, 0]); }
+      let wait = 0;
+      steps.forEach(s => { wait += s[2] || 200; setTimeout(() => window.__ev("uninst", Object.assign({ phase: s[0], id }, s[1])), wait); });
+      if (scen === "unstill") setTimeout(() => { un = null; }, wait + 10);
+      return true;
+    },
+    uninstContinue: async () => { unCont = true; return true; },
+    uninstRemove: async ids => {
+      if (!un) return { items: [] };
+      const items = ids.map(id => ({ id, ok: !(id === "3" && scen === "unfail"), error: id === "3" && scen === "unfail" ? "Still there (in use or no access)" : undefined }));
+      const all = leftovers(un.a), freed = all.filter(x => ids.includes(x.id) && x.kind !== "key").reduce((s, x) => s + x.size, 0);
+      const keys = all.filter(x => ids.includes(x.id) && (x.kind === "key" || x.kind === "value")).length;
+      const backup = keys ? new Date().toISOString().slice(0, 10) + " 101500 " + un.a.name + ".reg" : "";
+      if (backup) regBackups.unshift({ file: backup, name: un.a.name, at: Date.now(), keys, size: 2048 * keys });
+      apps = apps.filter(x => x.id !== un.a.id);
+      return { items, backup, freed };
+    },
+    uninstFinish: async () => { if (un) apps = apps.filter(x => x.id !== un.a.id); un = null; return true; },
+    uninstOpenLocation: async () => true,
+    regBackups: async () => regBackups.slice(),
+    regRestore: async f => regBackups.some(b => b.file === f) ? "" : "There is no such backup",
+    openBackupFolder: async () => true,
+    wingetUpdates: async fresh => {
+      if (scen === "nowinget") return { available: false, updates: [], checked: Date.now() };
+      if (fresh || !updChecked) { await new Promise(r => setTimeout(r, 700)); updChecked = Date.now(); }
+      return { available: true, updates: upd.slice(), checked: updChecked };
+    },
+    wingetUpgrade: async ids => {
+      let i = 0, ok = 0;
+      const next = () => {
+        if (i >= ids.length) { ev("winget", { state: "end", ok, of: ids.length }); return; }
+        const id = ids[i++], n = i;
+        ev("winget", { id, state: "run", n, of: ids.length });
+        setTimeout(() => ev("winget", { id, state: "run", n, of: ids.length, secs: 1 }), 250);
+        setTimeout(() => {
+          const fail = id === "OBSProject.OBSStudio";
+          if (!fail) { ok++; const k = upd.findIndex(u => u.id === id); if (k >= 0) upd.splice(k, 1); }
+          ev("winget", { id, state: fail ? "fail" : "ok", msg: fail ? "Installer failed with exit code: 1603" : "Successfully installed" });
+          next();
+        }, 500);
+      };
+      setTimeout(next, 50);
+      return true;
+    },
+    wingetStop: async () => true,
+    openAppInstaller: async () => true,
+    diskHealth: async () => { await new Promise(r => setTimeout(r, 300)); return { disks: health(), checked: Date.now() }; },
+    gameApps: async () => [
+      { exe: "chrome.exe", name: "Google Chrome", path: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", mem: 1.6 * GB, count: 8, window: true, running: true },
+      { exe: "discord.exe", name: "Discord", path: "C:\\Users\\demo\\AppData\\Local\\Discord\\app-1.0.9187\\Discord.exe", mem: 520 * MB, count: 4, window: true, running: true },
+      { exe: "spotify.exe", name: "Spotify", path: "C:\\Users\\demo\\AppData\\Roaming\\Spotify\\Spotify.exe", mem: 330 * MB, count: 3, window: true, running: true },
+      { exe: "onedrive.exe", name: "Microsoft OneDrive", path: "C:\\Program Files\\Microsoft OneDrive\\OneDrive.exe", mem: 88 * MB, count: 1, window: false, running: true },
+      { exe: "googledrivefs.exe", name: "Google Drive", path: "C:\\Program Files\\Google\\Drive File Stream\\GoogleDriveFS.exe", mem: 210 * MB, count: 4, window: false, running: true },
+    ].filter(a => !game.active || !game.closed.some(c => c.exe === a.exe)),
+    gameState: async () => JSON.parse(JSON.stringify(game)),
+    gameStart: async o => {
+      await new Promise(r => setTimeout(r, 400));
+      const names = { "chrome.exe": "Google Chrome", "discord.exe": "Discord", "spotify.exe": "Spotify", "onedrive.exe": "Microsoft OneDrive", "googledrivefs.exe": "Google Drive" };
+      game = { active: true, since: Date.now(), closed: (o.apps || []).filter(x => names[x]).map(x => ({ exe: x, name: names[x], path: "C:\\Apps\\" + x })), freed: o.ram ? 2.4 * GB : 0, left: [] };
+      return { state: JSON.parse(JSON.stringify(game)) };
+    },
+    gameStop: async () => { await new Promise(r => setTimeout(r, 300)); game = { active: false, since: 0, closed: [], freed: 0 }; return { state: game }; },
+    tidyPlaces: async () => [
+      { id: "desktop", path: "C:\\Users\\demo\\Desktop", def: true }, { id: "documents", path: "C:\\Users\\demo\\Documents", def: true },
+      { id: "downloads", path: "C:\\Users\\demo\\Downloads", def: true }, { id: "pictures", path: "C:\\Users\\demo\\Pictures", def: true },
+      { id: "music", path: "C:\\Users\\demo\\Music", def: true }, { id: "videos", path: "C:\\Users\\demo\\Videos", def: true },
+      { id: "roaming", path: "C:\\Users\\demo\\AppData\\Roaming", def: false, warn: true }, { id: "local", path: "C:\\Users\\demo\\AppData\\Local", def: false, warn: true }],
+    emptyScan: async roots => { await new Promise(r => setTimeout(r, 500)); const rs = new Set(roots.map(x => x.toLowerCase())); return { dirs: empties.filter(d => rs.has(d.root.toLowerCase())), partial: false }; },
+    brokenScan: async () => { await new Promise(r => setTimeout(r, 400)); return broken.slice(); },
+    tidyDelete: async (kind, paths) => paths.map(p => {
+      const ok = !p.includes("Screenshots");
+      if (ok) { const i = empties.findIndex(d => d.path === p); if (i >= 0) empties.splice(i, 1); const j = broken.findIndex(d => d.path === p); if (j >= 0) broken.splice(j, 1); }
+      return { path: p, ok, error: ok ? undefined : "No longer empty — skipped" };
+    }),
+  };
+})());
 window.__mock = Mock; // used by the browser tests that imitate the Go bindings
 
 init();

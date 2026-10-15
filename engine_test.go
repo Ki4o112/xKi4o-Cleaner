@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"strings"
 	"testing"
 	"time"
@@ -245,5 +246,35 @@ func TestTexts(t *testing.T) {
 	}
 	if T("missing.key") != "missing.key" {
 		t.Fatal("missing key")
+	}
+}
+
+// every text the backend asks for exists
+func TestTextKeysExist(t *testing.T) {
+	files, _ := filepath.Glob("*.go")
+	if len(files) == 0 {
+		t.Skip("the source files are not here")
+	}
+	re := regexp.MustCompile(`T\("([^"]+)"|true: "((?:log|un|gm|wg|tidy|dh)\.[^"]+)", false: "([^"]+)"`)
+	n := 0
+	for _, f := range files {
+		if strings.HasSuffix(f, "_test.go") {
+			continue
+		}
+		b, _ := os.ReadFile(f)
+		for _, m := range re.FindAllStringSubmatch(string(b), -1) {
+			for _, k := range m[1:] {
+				if k == "" || strings.HasSuffix(k, ".") { // a key built at run time
+					continue
+				}
+				n++
+				if _, ok := texts[k]; !ok {
+					t.Errorf("%s: no text for %q", f, k)
+				}
+			}
+		}
+	}
+	if n < 50 {
+		t.Errorf("only %d keys found: the scan is broken", n)
 	}
 }

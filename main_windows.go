@@ -189,6 +189,35 @@ func main() {
 		"changelog":       changelog,
 		// real icons of apps, files and folders
 		"iconsFor": iconsFor,
+		// Programs: uninstaller with leftover scan, Store apps, registry backups
+		"appsList":           appsList,
+		"storeApps":          storeApps,
+		"appsMeasure":        appsMeasure,
+		"uninstStart":        uninstStart,
+		"uninstContinue":     uninstContinue,
+		"uninstRemove":       uninstRemove,
+		"uninstFinish":       uninstFinish,
+		"uninstOpenLocation": uninstOpenLocation,
+		"regBackups":         regBackups,
+		"regRestore":         regRestore,
+		"openBackupFolder":   func() bool { _ = os.MkdirAll(regBackupDir(), 0o755); shellOpen(regBackupDir()); return true },
+		// program updates through winget
+		"wingetUpdates":    wingetUpdates,
+		"wingetUpgrade":    wingetUpgrade,
+		"wingetStop":       wingetStop,
+		"openAppInstaller": openAppInstaller,
+		// disk health (S.M.A.R.T.)
+		"diskHealth": diskHealthList,
+		// game mode
+		"gameApps":  gameApps,
+		"gameState": gameState,
+		"gameStart": gameStart,
+		"gameStop":  gameStop,
+		// empty folders and broken shortcuts
+		"tidyPlaces": tidyPlaces,
+		"emptyScan":  emptyScan,
+		"brokenScan": brokenScan,
+		"tidyDelete": tidyDelete,
 	}
 	for name, f := range binds {
 		must(w.Bind(name, f))
