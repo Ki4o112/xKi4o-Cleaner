@@ -69,10 +69,23 @@ func TestDiskHealthRead(t *testing.T) {
 			}
 			return strconv.Itoa(*p)
 		}
-		t.Logf("disk %s %q %s/%s %d GB letters=%v health=%s status=%v temp=%s wear=%s hours=%s verdict=%s %v",
-			d.ID, d.Name, d.Media, d.Bus, d.Size>>30, d.Letters, d.Health, d.Status, show(d.Temp), show(d.Wear), show(d.Hours), d.Verdict, d.Reasons)
+		show64 := func(p *int64) string {
+			if p == nil {
+				return "-"
+			}
+			return strconv.FormatInt(*p, 10)
+		}
+		t.Logf("disk %s %q %s/%s %d GB letters=%v health=%s status=%v temp=%s wear=%s hours=%s starts=%s errors read=%s/%s write=%s/%s (all/uncorrected) verdict=%s %v",
+			d.ID, d.Name, d.Media, d.Bus, d.Size>>30, d.Letters, d.Health, d.Status, show(d.Temp), show(d.Wear), show(d.Hours), show(d.Starts),
+			show64(d.ReadErr), show64(d.ReadUnc), show64(d.WriteErr), show64(d.WriteUnc), d.Verdict, d.Reasons)
 		if d.Verdict == "" {
 			t.Errorf("no verdict: %+v", d)
+		}
+		if strings.EqualFold(d.Bus, "NVMe") {
+			b, err := nvmeHealthLog(d.ID)
+			l, ok := parseNVMeLog(b)
+			t.Logf("  NVMe log: err=%v ok=%v critical=%#x temp=%dK used=%d%% spare=%d%% hours=%d cycles=%d unsafe=%d mediaErr=%d written=%.1f TB",
+				err, ok, l.Critical, l.TempK, l.Used, l.Spare, l.Hours, l.Cycles, l.Unsafe, l.MediaErr, float64(l.Written)*512000/1e12)
 		}
 	}
 }
@@ -90,10 +103,21 @@ func TestGameAppsList(t *testing.T) {
 			t.Errorf("a program of Windows offered: %+v", a)
 		}
 	}
+	listed := map[string]bool{}
+	for _, a := range apps {
+		listed[a.Exe] = true
+	}
+	for _, a := range apps {
+		for _, h := range a.Helpers {
+			if listed[h] {
+				t.Errorf("%s is listed on its own and as a helper of %s", h, a.Exe)
+			}
+		}
+	}
 	t.Logf("%d programs could be closed in game mode", len(apps))
 	for i, a := range apps {
 		if i < 10 {
-			t.Logf("  %s (%s) %d MB window=%v x%d", a.Name, a.Exe, a.Mem>>20, a.Window, a.Count)
+			t.Logf("  %s (%s) %d MB window=%v x%d helpers=%v", a.Name, a.Exe, a.Mem>>20, a.Window, a.Count, a.Helpers)
 		}
 	}
 	if st := gameState(); st.Active {
@@ -190,8 +214,18 @@ func TestEmptyFoldersFound(t *testing.T) {
 	b := brokenScan()
 	t.Logf("%d broken shortcuts", len(b))
 	for i, x := range b {
-		if i < 10 {
-			t.Logf("  [%s] %s -> %s", x.Where, x.Path, x.Target)
+		if i < 12 {
+			li, _ := readLnkFile(x.Path)
+			t.Logf("  [%s] %s -> %s (also tried %q)", x.Where, x.Path, x.Target, li.Alts)
+		}
+		li, err := readLnkFile(x.Path)
+		if err != nil {
+			continue
+		}
+		for _, c := range append([]string{li.Target}, li.Alts...) {
+			if _, err := os.Stat(c); err == nil {
+				t.Errorf("%s is called broken, but %s is there", x.Path, c)
+			}
 		}
 	}
 }
@@ -223,6 +257,41 @@ func TestEmptyFoldersRemoved(t *testing.T) {
 	tidyLast.mu.Unlock()
 	out = tidyDelete("lnk", []string{filepath.Join(lnkDir, "gone.lnk"), filepath.Join(lnkDir, "ok.lnk")})
 	if !out[0].OK || out[1].OK || !exists(filepath.Join(lnkDir, "ok.lnk")) {
+		t.Fatalf("%+v", out)
+	}
+}
+
+// A shortcut that names C:\Program Files\X while X is in Program Files (x86)
+// works in Windows: it is not called broken (and is not removed). One whose
+// program is gone everywhere is. Writes two shortcuts on the desktop.
+func TestBrokenScanTwinFolders(t *testing.T) {
+	changesThisPC(t)
+	initPaths()
+	pf, pf86 := os.Getenv("ProgramFiles"), os.Getenv("ProgramFiles(x86)")
+	if pf == "" || pf86 == "" || strings.EqualFold(pf, pf86) {
+		t.Skip("no 32-bit Program Files here")
+	}
+	real := filepath.Join(pf86, "xki4o-test-twin", "app.exe")
+	mk(t, real, 10, 0)
+	defer os.RemoveAll(filepath.Dir(real))
+	desktop := knownFolder(windows.FOLDERID_Desktop, filepath.Join(P.profile, "Desktop"))
+	twin, gone := filepath.Join(desktop, "xki4o-test-twin.lnk"), filepath.Join(desktop, "xki4o-test-gone.lnk")
+	makeLnk(t, twin, filepath.Join(pf, "xki4o-test-twin", "app.exe"))
+	makeLnk(t, gone, filepath.Join(pf, "xki4o-test-gone", "app.exe"))
+	defer os.Remove(twin)
+	defer os.Remove(gone)
+	if li, err := readLnkFile(twin); err != nil || !strings.EqualFold(li.Target, real) {
+		t.Errorf("twin: %+v %v", li, err)
+	}
+	found := map[string]bool{}
+	for _, b := range brokenScan() {
+		found[strings.ToLower(b.Path)] = true
+	}
+	if found[strings.ToLower(twin)] || !found[strings.ToLower(gone)] {
+		t.Fatalf("twin broken=%v, gone broken=%v", found[strings.ToLower(twin)], found[strings.ToLower(gone)])
+	}
+	out := tidyDelete("lnk", []string{twin, gone})
+	if out[0].OK || !out[1].OK || !exists(twin) {
 		t.Fatalf("%+v", out)
 	}
 }

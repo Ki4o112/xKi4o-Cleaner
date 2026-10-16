@@ -3,11 +3,15 @@
 package main
 
 import (
+	"encoding/binary"
 	"encoding/json"
+	"errors"
 	"sort"
 	"strings"
 	"sync"
 	"time"
+
+	"golang.org/x/sys/windows"
 )
 
 // Read-only: Get-PhysicalDisk and Get-StorageReliabilityCounter only read
@@ -54,6 +58,13 @@ func diskHealthList(fresh bool) dhView {
 			d.Letters = []string{}
 		}
 		sort.Strings(d.Letters)
+		if strings.EqualFold(d.Bus, "NVMe") {
+			if b, err := nvmeHealthLog(d.ID); err == nil {
+				if l, ok := parseNVMeLog(b); ok {
+					d.useNVMe(l)
+				}
+			}
+		}
 		assessDisk(d)
 	}
 	sort.SliceStable(ds, func(i, j int) bool { return ds[i].ID < ds[j].ID })
@@ -62,4 +73,63 @@ func diskHealthList(fresh bool) dhView {
 	}
 	dhCache.v = v
 	return v
+}
+
+// nvmeHealthLog asks an NVMe drive for its health log (log page 2) through
+// Windows' storage driver. Read-only: the drive is opened with no read or
+// write access at all, which is all this question needs.
+func nvmeHealthLog(disk string) ([]byte, error) {
+	if disk == "" || strings.Trim(disk, "0123456789") != "" {
+		return nil, errors.New("not a disk number")
+	}
+	name, err := windows.UTF16PtrFromString(`\\.\PhysicalDrive` + disk)
+	if err != nil {
+		return nil, err
+	}
+	h, err := windows.CreateFile(name, 0, windows.FILE_SHARE_READ|windows.FILE_SHARE_WRITE, nil, windows.OPEN_EXISTING, 0, 0)
+	if err != nil {
+		return nil, err
+	}
+	defer windows.CloseHandle(h)
+	const (
+		ioctlStorageQueryProperty              = 0x2D1400
+		storageAdapterProtocolSpecificProperty = 49
+		storageDeviceProtocolSpecificProperty  = 50
+		protocolTypeNvme                       = 3
+		nvmeDataTypeLogPage                    = 2
+		nvmeLogHealth                          = 2
+		specificSize                           = 40 // STORAGE_PROTOCOL_SPECIFIC_DATA
+		logSize                                = 512
+	)
+	le := binary.LittleEndian
+	// STORAGE_PROPERTY_QUERY (property, query type) with the protocol data in
+	// its AdditionalParameters, and room for the log. Asked of the drive
+	// first, then of its controller (some drivers answer only that).
+	buf := make([]byte, 8+specificSize+logSize)
+	for _, prop := range []uint32{storageDeviceProtocolSpecificProperty, storageAdapterProtocolSpecificProperty} {
+		clear(buf)
+		le.PutUint32(buf[0:], prop)
+		sp := buf[8:]
+		le.PutUint32(sp[0:], protocolTypeNvme)
+		le.PutUint32(sp[4:], nvmeDataTypeLogPage)
+		le.PutUint32(sp[8:], nvmeLogHealth)
+		le.PutUint32(sp[16:], specificSize)
+		le.PutUint32(sp[20:], logSize)
+		var n uint32
+		if err = windows.DeviceIoControl(h, ioctlStorageQueryProperty, &buf[0], uint32(len(buf)), &buf[0], uint32(len(buf)), &n, nil); err == nil {
+			break
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	// the answer: STORAGE_PROTOCOL_DATA_DESCRIPTOR (version, size, the protocol data)
+	if le.Uint32(buf[0:]) != 8+specificSize || le.Uint32(buf[4:]) != 8+specificSize {
+		return nil, errors.New("unexpected answer")
+	}
+	off, ln := int(le.Uint32(buf[8+16:])), int(le.Uint32(buf[8+20:]))
+	if off < specificSize || ln < 192 || 8+off+ln > len(buf) {
+		return nil, errors.New("unexpected answer")
+	}
+	return buf[8+off : 8+off+ln], nil
 }

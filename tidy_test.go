@@ -60,7 +60,7 @@ func TestFindEmptyDirs(t *testing.T) {
 }
 
 func TestShortcutBroken(t *testing.T) {
-	exists := func(p string) bool { return p == `C:\Apps\here.exe` }
+	exists := func(p string) bool { return p == `C:\Apps\here.exe` || p == `C:\Program Files (x86)\Epic\l.exe` }
 	drive := func(d string) bool { return d == `C:\` }
 	cases := []struct {
 		li   lnkInfo
@@ -75,6 +75,13 @@ func TestShortcutBroken(t *testing.T) {
 		{lnkInfo{Target: `%ProgramFiles%\x.exe`}, false},                // not expanded: unknown
 		{lnkInfo{Target: `shell:AppsFolder\x`}, false},
 		{lnkInfo{Target: ``}, false},
+		// the place it names is gone, its 32-bit twin is there (a 32-bit setup made it)
+		{lnkInfo{Target: `C:\Program Files\Epic\l.exe`, Alts: []string{`C:\Program Files (x86)\Epic\l.exe`}}, false},
+		{lnkInfo{Target: `C:\Program Files\Epic\l.exe`, Alts: []string{`C:\Program Files (x86)\Epic\l.exe`, `C:\Apps\here.exe`}}, false},
+		{lnkInfo{Target: `C:\Program Files\Gone\l.exe`, Alts: []string{`C:\Program Files (x86)\Gone\l.exe`}}, true},
+		{lnkInfo{Target: `C:\Apps\gone.exe`, Alts: []string{`\\server\share\x.exe`}}, false},
+		{lnkInfo{Target: `C:\Apps\gone.exe`, Alts: []string{`E:\x.exe`}}, false},
+		{lnkInfo{Target: `C:\Apps\gone.exe`, Alts: []string{``}}, true},
 	}
 	for _, c := range cases {
 		if got := shortcutBroken(c.li, exists, drive); got != c.want {

@@ -3,6 +3,18 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 2.8.1 — 2026-10-16
+
+### English
+- Fixed working shortcuts being listed as broken: every path a shortcut stores is checked, and the 32/64-bit Program Files twin
+- Fixed game mode listing a program's helpers on their own (e.g. Steam Client WebHelper): they are counted with their program
+- Added reading the NVMe health log for power-on hours and wear when Windows does not give them
+
+### Български
+- Поправено: работещи преки пътища се показваха като счупени — проверяват се всички пътища в прекия път и двойникът в 32/64-битовия Program Files
+- Поправено: режим „Игри“ показваше помощните процеси на програма отделно (напр. Steam Client WebHelper) — вече се броят с програмата
+- Добавено четене на дневника за здраве на NVMe дисковете за часовете работа и износването, когато Windows не ги дава
+
 ## 2.8.0 — 2026-10-16
 
 ### English

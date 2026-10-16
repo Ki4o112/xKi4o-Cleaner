@@ -2399,6 +2399,7 @@ bg: {
   "tw.net-throttle-off.d": "Windows не ограничава мрежовия трафик, докато пускаш видео или звук — по-стабилен пинг в игрите.", "tw.edge-bg-off.n": "Edge — не във фона",
   "tw.edge-bg-off.d": "Edge не се пуска предварително при стартиране (Startup boost) и не остава да работи, след като го затвориш.",
   "tw.edge-bg-off.w": "Edge ще пише „Браузърът се управлява от организацията ви“.",
+  "gm.helpersT": "Помощните ѝ програми се броят с нея и се затварят заедно с нея.",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -2908,6 +2909,7 @@ en: {
   "tw.net-throttle-off.d": "Windows stops limiting network traffic while video or sound plays — steadier ping in games.", "tw.edge-bg-off.n": "No Edge in the background",
   "tw.edge-bg-off.d": "Edge is not preloaded at startup (Startup boost) and does not keep running after you close it.",
   "tw.edge-bg-off.w": "Edge will say “Your browser is managed by your organization”.",
+  "gm.helpersT": "Its helper programs are counted with it and close together with it.",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -7060,7 +7062,7 @@ function renderGame() {
   const missing = cfg.apps.filter(x => !apps.some(a => a.exe === x.toLowerCase()));
   const rows = apps.map(a => `<label class="gm-row"><input type="checkbox" class="cb" data-gm="${esc(a.exe)}" ${chosen.has(a.exe) ? "checked" : ""} ${on ? "disabled" : ""}>
       ${isPath(a.path) ? ico("exe:" + a.path, "r-ico av", esc(((a.name || "?")[0] || "?").toUpperCase()), "--av:" + avColor(a.name)) : letterIcon(a.name)}
-      <div style="min-width:0"><div class="su-n"><span>${esc(a.name)}</span>${a.window ? `<span class="tw-b">${esc(t("gm.window"))}</span>` : `<span class="tw-b caution" title="${esc(t("gm.bgT"))}">${esc(t("gm.bg"))}</span>`}${a.count > 1 ? `<span class="tw-b">×${a.count}</span>` : ""}</div><div class="su-m"><span class="exe" style="direction:ltr">${esc(a.exe)}</span></div></div>
+      <div style="min-width:0"><div class="su-n"><span>${esc(a.name)}</span>${a.window ? `<span class="tw-b">${esc(t("gm.window"))}</span>` : `<span class="tw-b caution" title="${esc(t("gm.bgT"))}">${esc(t("gm.bg"))}</span>`}${a.count > 1 ? `<span class="tw-b">×${a.count}</span>` : ""}</div><div class="su-m"><span class="exe" style="direction:ltr"${a.helpers && a.helpers.length ? ` title="${esc(t("gm.helpersT"))}"` : ""}>${esc([a.exe].concat(a.helpers || []).join(" + "))}</span></div></div>
       <div class="r pr-sz">${esc(fmt(a.mem || 0))}</div></label>`)
     .concat(missing.map(x => `<label class="gm-row off"><input type="checkbox" class="cb" data-gm="${esc(x.toLowerCase())}" checked ${on ? "disabled" : ""}>${letterIcon(x)}<div style="min-width:0"><div class="su-n"><span>${esc(x)}</span><span class="tw-b">${esc(t("gm.notRunning"))}</span></div></div><div></div></label>`));
   list.innerHTML = rows.length ? rows.join("") : `<div class="tw-empty">${esc(t("gm.noApps"))}</div>`;
@@ -7424,7 +7426,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "2.8.0", author: "xKi4o", admin: scen !== "noadmin", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "2.8.1", author: "xKi4o", admin: scen !== "noadmin", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -7680,11 +7682,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "2.8.0", latest: nw ? "2.9.0" : "2.8.0", newer: nw, name: "xKi4o Cleaner 2.9.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v2.9.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "2.8.1", latest: nw ? "2.9.0" : "2.8.1", newer: nw, name: "xKi4o Cleaner 2.9.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v2.9.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders
@@ -7828,11 +7830,12 @@ Object.assign(Mock, (() => {
       { exe: "spotify.exe", name: "Spotify", path: "C:\\Users\\demo\\AppData\\Roaming\\Spotify\\Spotify.exe", mem: 330 * MB, count: 3, window: true, running: true },
       { exe: "onedrive.exe", name: "Microsoft OneDrive", path: "C:\\Program Files\\Microsoft OneDrive\\OneDrive.exe", mem: 88 * MB, count: 1, window: false, running: true },
       { exe: "googledrivefs.exe", name: "Google Drive", path: "C:\\Program Files\\Google\\Drive File Stream\\GoogleDriveFS.exe", mem: 210 * MB, count: 4, window: false, running: true },
+      { exe: "steam.exe", name: "Steam", path: "C:\\Program Files (x86)\\Steam\\steam.exe", mem: 720 * MB, count: 9, window: true, running: true, helpers: ["steamwebhelper.exe"] },
     ].filter(a => !game.active || !game.closed.some(c => c.exe === a.exe)),
     gameState: async () => JSON.parse(JSON.stringify(game)),
     gameStart: async o => {
       await new Promise(r => setTimeout(r, 400));
-      const names = { "chrome.exe": "Google Chrome", "discord.exe": "Discord", "spotify.exe": "Spotify", "onedrive.exe": "Microsoft OneDrive", "googledrivefs.exe": "Google Drive" };
+      const names = { "chrome.exe": "Google Chrome", "discord.exe": "Discord", "spotify.exe": "Spotify", "onedrive.exe": "Microsoft OneDrive", "googledrivefs.exe": "Google Drive", "steam.exe": "Steam" };
       game = { active: true, since: Date.now(), closed: (o.apps || []).filter(x => names[x]).map(x => ({ exe: x, name: names[x], path: "C:\\Apps\\" + x })), freed: o.ram ? 2.4 * GB : 0, left: [] };
       return { state: JSON.parse(JSON.stringify(game)) };
     },

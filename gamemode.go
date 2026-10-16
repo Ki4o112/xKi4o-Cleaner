@@ -91,3 +91,70 @@ func gmCommand(c gmClosed) string {
 	}
 	return q
 }
+
+// gmRow: a running process that game mode could close.
+type gmRow struct {
+	PID, PPID uint32
+	Start     int64 // start time: a parent started before its child (PIDs are reused)
+	Exe, Path string
+}
+
+// gmHelpers finds programs that are only helpers of another listed program:
+// every process of theirs was started by that program and lives in its
+// folder (Steam's steamwebhelper.exe, a launcher's own tools). They are not
+// offered on their own; they close with their program. A program that also
+// runs on its own, or was started by one that merely opened it (a browser
+// opened from a chat app), stays on its own. generic says when a folder is
+// too general to count as a program's own (Program Files, the drive...).
+// The result maps the helper's exe to its program's exe.
+func gmHelpers(rows []gmRow, generic func(dir string) bool) map[string]string {
+	by := make(map[uint32]gmRow, len(rows))
+	for _, r := range rows {
+		by[r.PID] = r
+	}
+	top := func(r gmRow) string {
+		for i := 0; i < 16; i++ {
+			p, ok := by[r.PPID]
+			if !ok || p.PID == r.PID || p.Start > r.Start {
+				break
+			}
+			if p.Exe != r.Exe {
+				dir := parentDir(p.Path)
+				if p.Path == "" || r.Path == "" || generic(dir) || !under(r.Path, dir) {
+					break
+				}
+			}
+			r = p
+		}
+		return r.Exe
+	}
+	target := map[string]string{}
+	alone := map[string]bool{}
+	for _, r := range rows {
+		t := top(r)
+		if t == r.Exe {
+			alone[r.Exe] = true
+			continue
+		}
+		if prev, ok := target[r.Exe]; ok && prev != t {
+			alone[r.Exe] = true
+		}
+		target[r.Exe] = t
+	}
+	for e := range alone {
+		delete(target, e) // (a program at the top is always "alone": it is never a helper itself)
+	}
+	return target
+}
+
+// parentDir: the folder of a Windows path (either slash).
+func parentDir(p string) string {
+	i := strings.LastIndexAny(p, `\/`)
+	switch {
+	case i < 0:
+		return ""
+	case i == 2 && p[1] == ':':
+		return p[:3]
+	}
+	return p[:i]
+}

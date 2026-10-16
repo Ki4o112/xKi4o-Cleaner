@@ -311,7 +311,7 @@ async def main():
         await pg.evaluate("(() => { const o = LG.v.ops.find(x => x.state === 'error'); document.querySelector(`#lgOps [data-op=\"${o.id}\"]`).click(); })()")
         await wait_for(pg, "document.querySelector('#lgDet .st-pill.error')")
         await pg.click("#lgCopy")
-        ok = await wait_for(pg, "(window.__copied || '').includes('Ultimate Performance') && window.__copied.includes('Version 2.8.0')", 3000)
+        ok = await wait_for(pg, "(window.__copied || '').includes('Ultimate Performance') && window.__copied.includes('Version 2.8.1')", 3000)
         check("logs: 'Copy report' puts a full report on the clipboard", ok, await pg.evaluate("(window.__copied || '').slice(0, 200)"))
         await pg.select_option("#lgKind", "dupes")
         n = await wait_for(pg, "LG.v.ops.length > 0 && LG.v.ops.every(o => o.kind === 'dupes')")
@@ -427,7 +427,7 @@ async def main():
         await pg.click("#updToggle")
         check("updates: the check can be turned off (and it is saved)", await wait_for(pg, "S.settings.updates === false"))
         await pg.click("#updNews")
-        check("updates: 'What's new' shows this version's changes", await wait_for(pg, "(document.querySelector('#shBody .upd-notes') || {}).textContent && document.querySelector('#shBody .upd-notes').textContent.includes('winget')"))
+        check("updates: 'What's new' shows this version's changes", await wait_for(pg, "(document.querySelector('#shBody .upd-notes') || {}).textContent && document.querySelector('#shBody .upd-notes').textContent.includes('преки пътища')"))
         check("no page errors (updates)", not pg.errs, pg.errs)
         # 22. PC health: a score, the cards, and "Do all recommended" through the queue
         await pg.close()
@@ -515,8 +515,10 @@ async def main():
         # 26. game mode
         await pg.close()
         pg = await page(b, "?lang=en", start="game")
-        ok = await wait_for(pg, "document.querySelectorAll('#gmList [data-gm]').length === 5", 5000)
+        ok = await wait_for(pg, "document.querySelectorAll('#gmList [data-gm]').length === 6", 5000)
         check("game mode: the running programs are listed", ok)
+        check("game mode: a program's helpers are shown with it, not on their own",
+              await pg.evaluate("document.querySelector(\"#gmList [data-gm='steam.exe']\").closest('.gm-row').textContent.includes('steam.exe + steamwebhelper.exe') && !document.querySelector(\"#gmList [data-gm='steamwebhelper.exe']\")"))
         check("game mode: nothing is chosen at first", await pg.evaluate("document.querySelectorAll('#gmList [data-gm]:checked').length") == 0)
         await pg.click("#gmList [data-gm='chrome.exe']")
         await pg.click("#gmList [data-gm='discord.exe']")

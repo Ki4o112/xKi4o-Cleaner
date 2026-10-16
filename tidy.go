@@ -138,15 +138,30 @@ type brokenLink struct {
 // not connected right now, removable drives and shortcuts with no plain
 // path (Store apps, Windows Installer) are never called broken.
 func shortcutBroken(li lnkInfo, exists func(string) bool, driveOK func(string) bool) bool {
-	t := strings.TrimSpace(li.Target)
-	if li.Special || li.Network || t == "" || strings.ContainsAny(t, "%?*") {
+	if li.Special || li.Network {
 		return false
 	}
-	if len(t) < 3 || t[1] != ':' || (t[2] != '\\' && t[2] != '/') {
-		return false
+	checked := false
+	for _, c := range append([]string{li.Target}, li.Alts...) {
+		t := strings.TrimSpace(c)
+		if t == "" {
+			continue
+		}
+		// a network path, a variable that is not set, a drive that is not
+		// connected: not judged, the shortcut may work
+		if strings.HasPrefix(t, `\\`) || strings.ContainsAny(t, "%?*") {
+			return false
+		}
+		if len(t) < 3 || t[1] != ':' || (t[2] != '\\' && t[2] != '/') {
+			return false
+		}
+		if !driveOK(strings.ToUpper(t[:1]) + `:\`) {
+			return false
+		}
+		if exists(t) {
+			return false
+		}
+		checked = true
 	}
-	if !driveOK(strings.ToUpper(t[:1]) + `:\`) {
-		return false
-	}
-	return !exists(t)
+	return checked
 }

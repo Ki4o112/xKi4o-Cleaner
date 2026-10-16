@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
@@ -157,20 +158,22 @@ func gmSkip(exe, path string) bool {
 // ---------------------------------------------------------------- the programs that can be closed
 
 type gmApp struct {
-	Exe     string `json:"exe"`
-	Name    string `json:"name"`
-	Path    string `json:"path,omitempty"`
-	Mem     uint64 `json:"mem"`
-	Count   int    `json:"count"`
-	Window  bool   `json:"window"`
-	Running bool   `json:"running"`
+	Exe     string   `json:"exe"`
+	Name    string   `json:"name"`
+	Path    string   `json:"path,omitempty"`
+	Mem     uint64   `json:"mem"`
+	Count   int      `json:"count"`
+	Window  bool     `json:"window"`
+	Running bool     `json:"running"`
+	Helpers []string `json:"helpers,omitempty"` // its helper programs, counted with it (they close with it)
 }
 
 // gameApps lists the user's running programs that game mode may close
 // (never Windows, security software, services or other users' programs).
 func gameApps() []gmApp {
 	v := procList()
-	by := map[string]*gmApp{}
+	var rows []procRow
+	var gr []gmRow
 	for _, r := range v.Rows {
 		if !r.Closable || (r.Kind != "app" && r.Kind != "background") {
 			continue
@@ -179,14 +182,30 @@ func gameApps() []gmApp {
 		if windowsComponent(r.Path, exe) || securityProcs[exe] || gmSkip(exe, r.Path) {
 			continue
 		}
+		rows = append(rows, r)
+		gr = append(gr, gmRow{PID: r.PID, PPID: r.PPID, Start: r.Start, Exe: exe, Path: r.Path})
+	}
+	helpers := gmHelpers(gr, gmGenericDir)
+	by := map[string]*gmApp{}
+	for _, r := range rows {
+		exe := strings.ToLower(r.Name)
+		if root, ok := helpers[exe]; ok {
+			exe = root // counted with the program it belongs to
+		}
 		a := by[exe]
 		if a == nil {
-			a = &gmApp{Exe: exe, Path: r.Path, Running: true}
+			a = &gmApp{Exe: exe, Running: true}
+			by[exe] = a
+		}
+		if a.Name == "" && strings.EqualFold(r.Name, exe) { // the name and path of the program itself, not of a helper
+			a.Path = r.Path
 			a.Name = r.Desc
 			if a.Name == "" {
 				a.Name = strings.TrimSuffix(r.Name, filepath.Ext(r.Name))
 			}
-			by[exe] = a
+		}
+		if !strings.EqualFold(r.Name, exe) && !slices.Contains(a.Helpers, strings.ToLower(r.Name)) {
+			a.Helpers = append(a.Helpers, strings.ToLower(r.Name))
 		}
 		a.Mem += r.Mem
 		a.Count++
@@ -198,6 +217,21 @@ func gameApps() []gmApp {
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Mem > out[j].Mem })
 	return out
+}
+
+// gmGenericDir: a folder that holds many programs, not one program's own.
+func gmGenericDir(dir string) bool {
+	d := strings.TrimSuffix(lowerClean(dir), `\`)
+	if len(d) <= 2 || protectedRoots[normPath(dir)] || underWindowsDir(dir+`\`) {
+		return true
+	}
+	for _, g := range []string{os.Getenv("ProgramFiles"), os.Getenv("ProgramFiles(x86)"), P.local, P.roaming, P.programData, P.profile,
+		filepath.Join(P.local, "Programs"), P.temp, filepath.Join(P.profile, "Desktop"), filepath.Join(P.profile, "Downloads")} {
+		if g != "" && strings.EqualFold(strings.TrimSuffix(lowerClean(g), `\`), d) {
+			return true
+		}
+	}
+	return false
 }
 
 // ---------------------------------------------------------------- state (kept on disk: a restart of this app does not lose it)

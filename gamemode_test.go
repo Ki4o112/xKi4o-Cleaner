@@ -2,6 +2,7 @@ package main
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -51,5 +52,53 @@ func TestGmCommand(t *testing.T) {
 	st := gmState{Closed: []gmClosed{{Exe: "a.exe", Path: `C:\a.exe`}, {Exe: "B.exe", Path: `C:\b.exe`}, {Exe: "c.exe"}}}
 	if got := gmToStart(st, map[string]bool{"b.exe": true}); len(got) != 1 || got[0].Exe != "a.exe" {
 		t.Errorf("to start: %+v", got)
+	}
+}
+
+func TestGmHelpers(t *testing.T) {
+	steam := `C:\Program Files (x86)\Steam\steam.exe`
+	web := `C:\Program Files (x86)\Steam\bin\cef\cef.win64\steamwebhelper.exe`
+	discord := `C:\Users\x\AppData\Local\Discord\app-1.0.9\Discord.exe`
+	brave := `C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe`
+	gg := `C:\Program Files\SteelSeries\GG\SteelSeriesGG.exe`
+	engine := `C:\Program Files\SteelSeries\GG\apps\engine\SteelSeriesEngine.exe`
+	tool := `C:\Program Files\tool.exe`
+	other := `C:\Program Files\other.exe`
+	rows := []gmRow{
+		{1, 0, 10, "steam.exe", steam},
+		{2, 1, 20, "steamwebhelper.exe", web},
+		{3, 2, 30, "steamwebhelper.exe", web}, // a helper of the helper
+		{4, 2, 31, "steamwebhelper.exe", web},
+		{10, 0, 10, "discord.exe", discord},
+		{11, 10, 12, "discord.exe", discord},
+		{12, 10, 40, "brave.exe", brave}, // a link opened from Discord: Brave stays on its own
+		{13, 12, 41, "brave.exe", brave},
+		{20, 0, 5, "steelseriesgg.exe", gg},
+		{21, 20, 6, "steelseriesengine.exe", engine},
+		{30, 0, 5, "other.exe", other},
+		{31, 30, 6, "tool.exe", tool}, // both right in Program Files: not one program's folder
+		{40, 99, 50, "late.exe", `C:\Apps\late\late.exe`},
+		{41, 40, 1, "child.exe", `C:\Apps\late\child.exe`}, // "started" before its parent: the PID was reused
+	}
+	generic := func(d string) bool {
+		return strings.EqualFold(d, `C:\Program Files`) || strings.EqualFold(d, `C:\Program Files (x86)`)
+	}
+	got := gmHelpers(rows, generic)
+	want := map[string]string{"steamwebhelper.exe": "steam.exe", "steelseriesengine.exe": "steelseriesgg.exe"}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %v, want %v", got, want)
+	}
+	// a helper that also runs on its own is offered on its own
+	rows = append(rows, gmRow{50, 0, 60, "steamwebhelper.exe", web})
+	if got := gmHelpers(rows, generic); got["steamwebhelper.exe"] != "" {
+		t.Errorf("alone: %v", got)
+	}
+}
+
+func TestParentDir(t *testing.T) {
+	for in, want := range map[string]string{`C:\A\b.exe`: `C:\A`, `C:\b.exe`: `C:\`, `b.exe`: "", `C:/x/y`: `C:/x`, ``: ""} {
+		if got := parentDir(in); got != want {
+			t.Errorf("%q: %q, want %q", in, got, want)
+		}
 	}
 }
