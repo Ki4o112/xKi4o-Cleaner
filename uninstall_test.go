@@ -110,7 +110,12 @@ func makeLnk(t *testing.T, path, target string) {
 	copy(hdr[4:], []byte{0x01, 0x14, 0x02, 0, 0, 0, 0, 0, 0xC0, 0, 0, 0, 0, 0, 0, 0x46})
 	binary.LittleEndian.PutUint32(hdr[20:], lnkHasLinkInfo|lnkUnicode)
 	b.Write(hdr)
+	// the ANSI path: the target itself when it is plain ASCII (Windows and
+	// Wine may read it), else something wrong that the parser must not use
 	ansi := append([]byte("C:\\ansi-ignored"), 0)
+	if !strings.ContainsFunc(target, func(r rune) bool { return r > 0x7E || r < 0x20 }) {
+		ansi = append([]byte(target), 0)
+	}
 	u := utf16.Encode([]rune(target))
 	uni := make([]byte, 2*len(u)+2)
 	for i, c := range u {

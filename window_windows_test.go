@@ -148,7 +148,7 @@ func TestOwnTitleBarMaximized(t *testing.T) {
 	changesThisPC(t)
 	h := testWindow(t)
 	applyFrame(h, true)
-	_, _, _ = procShowWindow.Call(h, 3) // SW_MAXIMIZE
+	_, _, _ = procShowWindow.Call(h, 3)  // SW_MAXIMIZE
 	defer procShowWindow.Call(h, swHide) //nolint:errcheck // hidden again
 	if !zoomed(h) {
 		t.Skip("this desktop does not maximize windows")

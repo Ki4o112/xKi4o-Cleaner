@@ -3,6 +3,14 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 2.9.1 — 2026-10-16
+
+### English
+- Fixed shortcuts that Windows still opens (the program was moved) being listed as broken: Windows itself is asked now
+
+### Български
+- Поправено: преки пътища, които Windows още отваря (програмата е преместена), се показваха като счупени — вече се пита самият Windows
+
 ## 2.9.0 — 2026-10-16
 
 ### English

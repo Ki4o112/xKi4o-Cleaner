@@ -213,6 +213,11 @@ func TestEmptyFoldersFound(t *testing.T) {
 	// broken shortcuts of this PC: only read
 	b := brokenScan()
 	t.Logf("%d broken shortcuts", len(b))
+	tidyLast.mu.Lock()
+	for p, to := range tidyLast.found {
+		t.Logf("  path gone, but Windows opens it: %s -> %s", p, to)
+	}
+	tidyLast.mu.Unlock()
 	for i, x := range b {
 		if i < 12 {
 			li, _ := readLnkFile(x.Path)
@@ -293,5 +298,28 @@ func TestBrokenScanTwinFolders(t *testing.T) {
 	out := tidyDelete("lnk", []string{twin, gone})
 	if out[0].OK || !out[1].OK || !exists(twin) {
 		t.Fatalf("%+v", out)
+	}
+}
+
+// Windows' own answer for a shortcut: one that works resolves to its
+// target, one whose target is gone does not. Temporary files only.
+func TestShellResolve(t *testing.T) {
+	dir := t.TempDir()
+	target := filepath.Join(dir, "app.exe")
+	mk(t, target, 10, 0)
+	ok := filepath.Join(dir, "ok.lnk")
+	makeLnk(t, ok, target)
+	if got, works := shellResolve(ok, 1500*time.Millisecond); !works || !strings.EqualFold(got, target) {
+		t.Errorf("a working shortcut: %q %v", got, works)
+	}
+	gone := filepath.Join(dir, "gone.lnk")
+	makeLnk(t, gone, filepath.Join(dir, "sub", "missing-xki4o-test.exe"))
+	start := time.Now()
+	if got, works := shellResolve(gone, 1500*time.Millisecond); works {
+		t.Errorf("a broken shortcut resolved to %q", got)
+	}
+	t.Logf("broken shortcut checked in %v", time.Since(start).Round(time.Millisecond))
+	if _, works := shellResolve(filepath.Join(dir, "no-such.lnk"), time.Second); works {
+		t.Error("a missing shortcut file")
 	}
 }

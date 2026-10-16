@@ -91,7 +91,12 @@ var tidyLast struct {
 	mu     sync.Mutex
 	empty  map[string]bool
 	broken map[string]bool
+	found  map[string]string // shortcuts whose path is gone but which Windows still opens: where
 }
+
+// lnkWorks: Windows still finds the target of a shortcut whose recorded
+// path is gone (the program moved, or the target can be found again).
+func lnkWorks(p string) (string, bool) { return shellResolve(p, 1500*time.Millisecond) }
 
 type emptyResult struct {
 	Dirs    []emptyDir `json:"dirs"`
@@ -157,6 +162,7 @@ func brokenScan() []brokenLink {
 	}
 	exists := func(p string) bool { _, err := os.Stat(p); return err == nil }
 	seen := map[string]bool{}
+	found := map[string]string{}
 	check := func(p, where string) {
 		if seen[strings.ToLower(p)] {
 			return
@@ -167,6 +173,10 @@ func brokenScan() []brokenLink {
 			return
 		}
 		if shortcutBroken(li, exists, driveOK) {
+			if t, ok := lnkWorks(p); ok {
+				found[strings.ToLower(p)] = t // opens: not broken
+				return
+			}
 			out = append(out, brokenLink{Path: p, Target: li.Target, Where: where})
 		}
 	}
@@ -207,6 +217,7 @@ func brokenScan() []brokenLink {
 		return strings.ToLower(out[i].Path) < strings.ToLower(out[j].Path)
 	})
 	tidyLast.mu.Lock()
+	tidyLast.found = found
 	tidyLast.broken = map[string]bool{}
 	for _, b := range out {
 		tidyLast.broken[strings.ToLower(b.Path)] = true
@@ -260,6 +271,8 @@ func tidyDelete(kind string, paths []string) []delResult {
 			li, err := readLnkFile(p)
 			if err != nil || !shortcutBroken(li, func(t string) bool { _, e := os.Stat(t); return e == nil }, driveFixed) {
 				r.Error = T("tidy.err.works")
+			} else if _, ok := lnkWorks(p); ok {
+				r.Error = T("tidy.err.works") // Windows finds its target after all
 			}
 		}
 		if r.Error == "" {
