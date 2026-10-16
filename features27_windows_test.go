@@ -31,12 +31,22 @@ func TestWingetList(t *testing.T) {
 	if !v.Available {
 		t.Error("winget is there but was not used")
 	}
+	var ids []string
+	for _, u := range v.Updates {
+		ids = append(ids, u.ID)
+		if s := selfUpdater(u.ID); s != "" {
+			t.Logf("  %s is updated by its own updater (%s)", u.ID, s)
+		}
+	}
+	for _, o := range wingetOpen(ids) { // only reads the process list
+		t.Logf("  open now: %s (%s, %d processes)", o.Name, o.ID, o.Count)
+	}
 	// the cached answer comes back at once
 	t0 := time.Now()
 	if c := wingetUpdates(false); c.Checked != v.Checked || time.Since(t0) > time.Second {
 		t.Error("not cached")
 	}
-	if wingetUpgrade([]string{"--all"}) || wingetUpgrade([]string{"a b"}) || wingetUpgrade(nil) {
+	if wingetUpgrade([]string{"--all"}, wgOpts{}) || wingetUpgrade([]string{"a b"}, wgOpts{}) || wingetUpgrade(nil, wgOpts{}) {
 		t.Error("bad ids must be refused before winget runs")
 	}
 }
@@ -51,6 +61,7 @@ func TestDiskHealthRead(t *testing.T) {
 	if v.Error != "" || len(v.Disks) == 0 {
 		t.Fatalf("%+v", v)
 	}
+	t.Logf("as administrator: %v (the drives' counters need it)", windows.GetCurrentProcessToken().IsElevated())
 	for _, d := range v.Disks {
 		show := func(p *int) string {
 			if p == nil {
@@ -72,7 +83,7 @@ func TestGameAppsList(t *testing.T) {
 	apps := gameApps()
 	self := strings.ToLower(filepath.Base(os.Args[0]))
 	for _, a := range apps {
-		if windowsProcs[a.Exe] || securityProcs[a.Exe] || a.Exe == self || a.Exe == "explorer.exe" {
+		if windowsProcs[a.Exe] || securityProcs[a.Exe] || a.Exe == self || a.Exe == "explorer.exe" || strings.Contains(a.Exe, "xki4ocleaner") || !strings.HasSuffix(a.Exe, ".exe") {
 			t.Errorf("offered: %+v", a)
 		}
 		if a.Path != "" && underWindowsDir(a.Path) {

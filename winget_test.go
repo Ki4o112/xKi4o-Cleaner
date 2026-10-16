@@ -100,3 +100,51 @@ func TestWingetMessageAndIDs(t *testing.T) {
 		}
 	}
 }
+
+func TestWingetHints(t *testing.T) {
+	// the codes from a real report: Intel XTU (403), Edge (installed its own way), OBS (open)
+	cases := map[uint32]string{0x80190193: "wg.h.403", 2316632206: "wg.h.tech", 2316632337: "wg.h.inUse", 0x80190194: "wg.h.404", 0x801901F4: "wg.h.http", 0x8A150109: "wg.h.reboot", 1: ""}
+	for code, want := range cases {
+		if got := wingetHint(code); got != want {
+			t.Errorf("%#x: %q, want %q", code, got, want)
+		}
+	}
+	if !wingetSiteHint("wg.h.403") || wingetSiteHint("wg.h.inUse") {
+		t.Error("site hints")
+	}
+	if selfUpdater("Microsoft.Edge") != "edge" || selfUpdater("Brave.Brave") != "brave" || selfUpdater("OBSProject.OBSStudio") != "" {
+		t.Error("self updaters")
+	}
+}
+
+func TestWingetShowURL(t *testing.T) {
+	out := "Found Intel® Extreme Tuning Utility [Intel.IntelExtremeTuningUtility]\r\nVersion: 7.14.2.69\r\nPublisher: Intel Corporation\r\n" +
+		"Publisher Url: https://www.intel.com/\r\nHomepage: https://www.intel.com/content/www/us/en/download/17881/xtu.html\r\nLicense: Proprietary\r\n" +
+		"Installer:\r\n  Installer Type: exe\r\n  Installer Url: https://downloadmirror.intel.com/1/XTUSetup.exe\r\n"
+	if u := wingetShowURL(out); u != "https://www.intel.com/" && u != "https://www.intel.com/content/www/us/en/download/17881/xtu.html" {
+		t.Errorf("url %q", u)
+	}
+	// translated labels: the first link that is not the installer
+	bg := "Издател: Intel\r\nНачална страница: https://example.com/xtu\r\n  Url адрес на инсталатора: https://dl.example.com/x.exe\r\n"
+	if u := wingetShowURL(bg); u != "https://example.com/xtu" {
+		t.Errorf("translated: %q", u)
+	}
+	if u := wingetShowURL("nothing here"); u != "" {
+		t.Errorf("none: %q", u)
+	}
+}
+
+func TestSameProgram(t *testing.T) {
+	yes := [][2]string{{"OBS Studio", "OBS Studio"}, {"7-Zip 24.08 (x64)", "7-Zip 24.09 (x64)"}, {"Microsoft Visual Studio Code (User)", "Microsoft Visual Studio Code"}}
+	no := [][2]string{{"Git", "GitHub Desktop"}, {"Discord", "Discord PTB Helper Tool Extra"}, {"", "x"}}
+	for _, p := range yes {
+		if !sameProgram(p[0], p[1]) {
+			t.Errorf("%q %q should match", p[0], p[1])
+		}
+	}
+	for _, p := range no {
+		if sameProgram(p[0], p[1]) {
+			t.Errorf("%q %q must not match", p[0], p[1])
+		}
+	}
+}

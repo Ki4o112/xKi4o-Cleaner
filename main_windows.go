@@ -204,6 +204,8 @@ func main() {
 		// program updates through winget
 		"wingetUpdates":    wingetUpdates,
 		"wingetUpgrade":    wingetUpgrade,
+		"wingetOpen":       wingetOpen,
+		"wingetSite":       wingetSite,
 		"wingetStop":       wingetStop,
 		"openAppInstaller": openAppInstaller,
 		// disk health (S.M.A.R.T.)

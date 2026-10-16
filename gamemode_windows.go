@@ -57,6 +57,9 @@ func startAsUser(exe, cmdline string) error {
 
 // startAsUserProc is startAsUser that returns the process (the caller closes it).
 func startAsUserProc(exe, cmdline string, flags uint32) (windows.Handle, error) {
+	if !windows.GetCurrentProcessToken().IsElevated() {
+		return startPlain(exe, cmdline, flags) // already the user's own rights
+	}
 	hwnd, _, _ := procGetShellWindow.Call()
 	if hwnd == 0 {
 		return 0, errors.New("no desktop shell")
@@ -103,6 +106,54 @@ func startAsUserProc(exe, cmdline string, flags uint32) (windows.Handle, error) 
 	return pi.Process, nil
 }
 
+// startAgain starts a closed program again as the user. When that is not
+// possible, Explorer starts it (as the user, but without its arguments).
+func startAgain(c gmClosed) (plain bool, err error) {
+	if err = startAsUser(c.Path, gmCommand(c)); err == nil {
+		return false, nil
+	}
+	if e2 := exec.CommandContext(context.Background(), filepath.Join(windowsDir(), "explorer.exe"), c.Path).Start(); e2 != nil { //nolint:gosec // a program the user chose, at the path it ran from
+		return false, err
+	}
+	return true, nil
+}
+
+// startPlain starts a program with this process's own rights.
+func startPlain(exe, cmdline string, flags uint32) (windows.Handle, error) {
+	app, err := windows.UTF16PtrFromString(exe)
+	if err != nil {
+		return 0, err
+	}
+	cl, err := windows.UTF16FromString(cmdline)
+	if err != nil {
+		return 0, err
+	}
+	dir, _ := windows.UTF16PtrFromString(filepath.Dir(exe))
+	si := windows.StartupInfo{Cb: uint32(unsafe.Sizeof(windows.StartupInfo{}))}
+	var pi windows.ProcessInformation
+	if err := windows.CreateProcess(app, &cl[0], nil, nil, false, flags, nil, dir, &si, &pi); err != nil {
+		return 0, err
+	}
+	windows.CloseHandle(pi.Thread)
+	return pi.Process, nil
+}
+
+// gmSkip: never offered for closing in game mode: this app (any copy of
+// it), setups running from Temp and other non-programs (.tmp).
+func gmSkip(exe, path string) bool {
+	if strings.Contains(exe, "xki4ocleaner") || !strings.HasSuffix(exe, ".exe") {
+		return true
+	}
+	if path != "" {
+		for _, t := range []string{P.temp, os.Getenv("TEMP"), filepath.Join(P.local, "Temp")} {
+			if t != "" && under(path, t) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 // ---------------------------------------------------------------- the programs that can be closed
 
 type gmApp struct {
@@ -125,7 +176,7 @@ func gameApps() []gmApp {
 			continue
 		}
 		exe := strings.ToLower(r.Name)
-		if windowsComponent(r.Path, exe) || securityProcs[exe] {
+		if windowsComponent(r.Path, exe) || securityProcs[exe] || gmSkip(exe, r.Path) {
 			continue
 		}
 		a := by[exe]
@@ -342,14 +393,12 @@ func gameStop() gmResult {
 			op.warnf(c.Name, T("log.gmMissing"), map[string]any{"path": c.Path})
 			continue
 		}
-		if err := startAsUser(c.Path, gmCommand(c)); err != nil {
-			// without the shell's token: Explorer starts it (as the user, without its arguments)
-			if e2 := exec.CommandContext(context.Background(), filepath.Join(windowsDir(), "explorer.exe"), c.Path).Start(); e2 != nil { //nolint:gosec // a program the user chose, at the path it ran from
-				failed = append(failed, c.Name)
-				op.fail(c.Name, err.Error(), nil)
-				continue
-			}
-			op.info(c.Name, T("log.gmStartedPlain"), map[string]any{"error": err.Error()})
+		if plain, err := startAgain(c); err != nil {
+			failed = append(failed, c.Name)
+			op.fail(c.Name, err.Error(), nil)
+			continue
+		} else if plain {
+			op.info(c.Name, T("log.gmStartedPlain"), nil)
 			continue
 		}
 		op.info(c.Name, T("log.gmStarted"), nil)

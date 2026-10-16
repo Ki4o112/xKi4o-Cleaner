@@ -3,6 +3,28 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 2.8.0 — 2026-10-16
+
+### English
+- Removed Large files (the Disk Analyzer lists the largest files)
+- Added a scan of drive C: when the app starts, so the Disk Analyzer is ready (can be turned off in Settings)
+- Fixed Microsoft Edge, Chrome and Brave not updating through winget: their own updater is used
+- Fixed updates failing for programs that are open (e.g. OBS): they are closed first and started again after
+- Added the reason, "Try again" and "Website" for updates winget cannot do (403, installed another way)
+- Added 13 tweaks: no startup delay, fewer animations, game priority, no network throttling, no Start recommendations, no Settings suggestions, no transparency, no recent files, no "- Shortcut", compact view, faster folders, no automatic restart after updates, Edge not in the background
+- Fixed game mode offering xKi4o Cleaner itself and setups running from Temp
+- Fixed starting programs again after game mode when the app runs without administrator rights
+
+### Български
+- Премахнати „Големи файлове“ (Анализът на диска показва най-големите файлове)
+- Добавено сканиране на диск C: при стартиране, за да е готов Анализът на диска (изключва се от Настройки)
+- Поправено: Microsoft Edge, Chrome и Brave не се обновяваха през winget — ползва се техният собствен обновител
+- Поправено: обновяването на отворени програми (напр. OBS) се проваляше — затварят се преди това и се пускат отново след него
+- Добавени причина, „Опитай пак“ и „Сайт“ за обновления, които winget не може да направи (403, инсталирана по друг начин)
+- Добавени 13 туийка: без забавяне при стартиране, по-малко анимации, приоритет за игрите, без ограничаване на мрежата, без препоръки в „Старт“, без предложения в Настройки, без прозрачност, без скорошни файлове, без „ - Пряк път“, компактен изглед, по-бързи папки, без автоматичен рестарт след ъпдейти, Edge не във фона
+- Поправено: режим „Игри“ предлагаше самия xKi4o Cleaner и инсталатори, пуснати от Temp
+- Поправено: пускането на програмите след режим „Игри“, когато програмата работи без администраторски права
+
 ## 2.7.0 — 2026-10-16
 
 ### English

@@ -1367,7 +1367,6 @@ body.dock-on .toasts { bottom: 84px; }
       <button data-page="game"><span class="ico" data-icon="gamepad"></span><span class="label" data-i="nav.game"></span><span class="badge on" id="gmBadge" hidden></span></button>
       <div class="nav-g" data-i="nav.g.files"></div>
       <button data-page="disk"><span class="ico" data-icon="pie"></span><span class="label" data-i="nav.disk"></span></button>
-      <button data-page="large"><span class="ico" data-icon="weight"></span><span class="label" data-i="nav.large"></span></button>
       <button data-page="dupes"><span class="ico" data-icon="copy"></span><span class="label" data-i="nav.dupes"></span><span class="badge" id="dupBadge" hidden></span></button>
       <button data-page="tidy"><span class="ico" data-icon="broken"></span><span class="label" data-i="nav.tidy"></span></button>
       <div class="nav-g" data-i="nav.g.system"></div>
@@ -1666,6 +1665,7 @@ body.dock-on .toasts { bottom: 84px; }
           <div class="item"><div class="i-ico" data-icon="palette"></div><div><div class="t" data-i="set.accent"></div><div class="d" data-i="set.accentD"></div></div><div class="swatches" id="swatches"></div></div>
           <div class="item"><div class="i-ico" data-icon="sparkle"></div><div><div class="t" data-i="set.motion"></div><div class="d" data-i="set.motionD"></div></div><input type="checkbox" class="switch" id="motionToggle" checked></div>
           <div class="item"><div class="i-ico" data-icon="cpu"></div><div><div class="t" data-i="set.pulse"></div><div class="d" data-i="set.pulseD"></div></div><input type="checkbox" class="switch" id="pulseToggle" checked></div>
+          <div class="item"><div class="i-ico" data-icon="pie"></div><div><div class="t" data-i="set.autoDisk"></div><div class="d" data-i="set.autoDiskD"></div></div><input type="checkbox" class="switch" id="autoDiskToggle" checked></div>
         </div>
         <div class="section-t" data-i="set.safety"></div>
         <div class="list">
@@ -1703,23 +1703,6 @@ body.dock-on .toasts { bottom: 84px; }
     </section>
 
     <!-- =============== LARGE FILES =============== -->
-    <section class="page" id="page-large">
-      <div class="head">
-        <div class="head-ico" data-icon="weight"></div>
-        <div><h1 data-i="lf.title"></h1><div class="sub" data-i="lf.sub"></div></div>
-        <div class="head-r"><button class="btn primary" id="lfStart"><span data-icon="search"></span><span id="lfStartTxt" data-i="lf.start"></span></button></div>
-      </div>
-      <div class="tw-body" id="lfBody">
-        <div class="places" id="lfPlaces"></div>
-        <div class="f-row" id="lfFilters"></div>
-        <div class="f-note" id="lfNote" hidden></div>
-        <div class="f-note q" id="lfQueued" hidden></div>
-        <div class="da-prog" id="lfProg" hidden></div>
-        <div class="tw-empty" id="lfEmpty" data-i="lf.empty"></div>
-        <div id="lfRes" hidden></div>
-      </div>
-    </section>
-
     <!-- =============== DUPLICATES =============== -->
     <section class="page" id="page-dupes">
       <div class="head">
@@ -2386,6 +2369,36 @@ bg: {
   "rc.regsNote": "Файловете са в %LOCALAPPDATA%\\xKi4oCleaner\\backups — може да се върнат и с двоен клик.",
   "gm.stillOn": "Режимът „Игри“ още е включен — изключи го, за да се пуснат затворените програми.", "gm.open": "Отвори", "job.uninst": "Деинсталиране: {0}",
   "job.wgOne": "Обновяване: {0}", "job.wgN": "Обновяване на {0} програми", "job.tdEmpty": "Търсене на празни папки", "job.tdBroken": "Търсене на счупени преки пътища",
+  "set.autoDisk": "Сканирай диск C: при стартиране", "set.autoDiskD": "Анализът на диска е готов, когато го отвориш. Спира сам, когато пуснеш друга задача, и продължава след нея.",
+  "da.yielded": "Спря, за да мине друга задача — ще продължи след нея", "job.givingWay": "Спира, за да мине друга задача…",
+  "wg.closing": "Затваря програмата…", "wg.retry": "Опитай пак", "wg.site": "Сайт", "wg.siteOpening": "Отваря се сайтът на програмата…", "wg.openT": "Отворени програми: {0}",
+  "wg.openD": "Тези програми са отворени — обновяването им ще се провали, докато работят.", "wg.openOk": "Обнови",
+  "wg.openClose": "Затвори ги сега и ги пусни отново след обновяването", "wg.openW": "Незаписаната работа в тях ще се загуби.",
+  "wg.h.403": "Сайтът на производителя отказва изтеглянето през winget (403). Обнови я от самата програма или от сайта.",
+  "wg.h.404": "Файлът на новата версия липсва при производителя (404). Опитай по-късно или от сайта.",
+  "wg.h.http": "Изтеглянето не успя (грешка от сървъра). Опитай по-късно или от сайта.",
+  "wg.h.tech": "Програмата е инсталирана по друг начин, а не с пакета на winget. Обнови я от самата програма или от сайта.",
+  "wg.h.inUse": "Програмата е отворена. Затвори я и натисни „Опитай пак“.", "wg.h.reboot": "Нужен е рестарт, за да завърши инсталирането.", "wg.h.net": "Няма връзка с интернет.",
+  "wg.h.disk": "Няма достатъчно място на диска.", "wg.h.policy": "Забранено от политика на компютъра.",
+  "wg.h.hash": "Изтегленият файл не съвпада с проверката на winget — изтеглянето е спряно. Опитай по-късно или от сайта.",
+  "tw.startup-delay-off.n": "Без забавяне на стартиращите програми", "tw.startup-delay-off.d": "Windows пуска програмите при влизане веднага, без да чака няколко секунди.",
+  "tw.animations-off.n": "По-малко анимации", "tw.animations-off.d": "Без анимации при смаляване и уголемяване на прозорците и в лентата на задачите — всичко се отваря по-бързо.",
+  "tw.games-priority.n": "Приоритет за игрите",
+  "tw.games-priority.d": "Планировчикът за мултимедия (MMCSS) дава на игрите по-висок приоритет за процесора и диска и пази по-малко време за фоновите задачи.",
+  "tw.start-recs-off.n": "Без препоръки в „Старт“", "tw.start-recs-off.d": "Махат се препоръчаните приложения и известията за акаунта от менюто „Старт“.",
+  "tw.settings-ads-off.n": "Без предложения в Настройки",
+  "tw.settings-ads-off.d": "Без „предложено съдържание“, съвети и екрана „Нека довършим настройването“ в Настройки на Windows.", "tw.transparency-off.n": "Без прозрачност",
+  "tw.transparency-off.d": "Менютата и лентата на задачите стават плътни — малко по-леко за видеокартата.", "tw.recent-files-off.n": "Без скорошни файлове в Explorer",
+  "tw.recent-files-off.d": "„Начало“/Бърз достъп не показва скорошните файлове и често ползваните папки.", "tw.shortcut-suffix-off.n": "Без „ - Пряк път“ в името",
+  "tw.shortcut-suffix-off.d": "Новите преки пътища се казват като програмата, без добавката „ - Пряк път“.", "tw.compact-view.n": "Компактен изглед в Explorer",
+  "tw.compact-view.d": "По-малко разстояние между файловете — събират се повече на екрана.", "tw.folder-discovery-off.n": "По-бързи папки с много файлове",
+  "tw.folder-discovery-off.d": "Explorer спира да познава вида на всяка папка (снимки, музика…), затова големите папки се отварят по-бързо.",
+  "tw.folder-discovery-off.w": "Всички папки ползват общия изглед „Подробности“ по подразбиране.", "tw.auto-reboot-off.n": "Без автоматичен рестарт след ъпдейти",
+  "tw.auto-reboot-off.d": "Windows Update продължава да инсталира ъпдейтите, но не рестартира сам, докато си влязъл — рестартираш ти, когато искаш.",
+  "tw.auto-reboot-off.w": "Windows Update ще пише, че някои настройки се управляват от организацията.", "tw.net-throttle-off.n": "Без ограничаване на мрежата",
+  "tw.net-throttle-off.d": "Windows не ограничава мрежовия трафик, докато пускаш видео или звук — по-стабилен пинг в игрите.", "tw.edge-bg-off.n": "Edge — не във фона",
+  "tw.edge-bg-off.d": "Edge не се пуска предварително при стартиране (Startup boost) и не остава да работи, след като го затвориш.",
+  "tw.edge-bg-off.w": "Edge ще пише „Браузърът се управлява от организацията ви“.",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -2866,6 +2879,35 @@ en: {
   "rc.regsNote": "The files are in %LOCALAPPDATA%\\xKi4oCleaner\\backups — a double click also puts one back.",
   "gm.stillOn": "Game mode is still on — turn it off to start the closed programs again.", "gm.open": "Open", "job.uninst": "Uninstalling: {0}", "job.wgOne": "Updating: {0}",
   "job.wgN": "Updating {0} programs", "job.tdEmpty": "Finding empty folders", "job.tdBroken": "Finding broken shortcuts",
+  "set.autoDisk": "Scan drive C: when the app starts",
+  "set.autoDiskD": "The Disk Analyzer is ready when you open it. It steps aside when you start another job and runs again after it.",
+  "da.yielded": "Stopped for another job — runs again after it", "job.givingWay": "Stopping for another job…",
+  "wg.closing": "Closing the program…", "wg.retry": "Try again", "wg.site": "Website", "wg.siteOpening": "Opening the program's website…", "wg.openT": "Open programs: {0}",
+  "wg.openD": "These programs are open — updating them fails while they run.", "wg.openOk": "Update", "wg.openClose": "Close them now and start them again after the update",
+  "wg.openW": "Unsaved work in them is lost.", "wg.h.403": "The vendor's server refuses winget's download (403). Update it from the program itself or its website.",
+  "wg.h.404": "The new version's file is gone at the vendor (404). Try later or use the website.", "wg.h.http": "The download failed (a server error). Try later or use the website.",
+  "wg.h.tech": "The program was installed another way than winget's package. Update it from the program itself or its website.",
+  "wg.h.inUse": "The program is open. Close it and press “Try again”.", "wg.h.reboot": "A restart is needed to finish the installation.", "wg.h.net": "No internet connection.",
+  "wg.h.disk": "Not enough disk space.", "wg.h.policy": "Blocked by a policy on this PC.",
+  "wg.h.hash": "The download does not match winget's checksum — it was stopped. Try later or use the website.",
+  "tw.startup-delay-off.n": "No delay for startup apps", "tw.startup-delay-off.d": "Windows starts the programs at sign-in right away instead of waiting a few seconds.",
+  "tw.animations-off.n": "Fewer animations", "tw.animations-off.d": "No animations when windows are minimized and maximized and in the taskbar — everything opens faster.",
+  "tw.games-priority.n": "Priority for games",
+  "tw.games-priority.d": "The multimedia scheduler (MMCSS) gives games a higher CPU and disk priority and keeps less time for background tasks.",
+  "tw.start-recs-off.n": "No recommendations in Start", "tw.start-recs-off.d": "Removes the recommended apps and the account notifications from the Start menu.",
+  "tw.settings-ads-off.n": "No suggestions in Settings",
+  "tw.settings-ads-off.d": "No “suggested content”, tips or the “Let's finish setting up your device” screen in Windows Settings.", "tw.transparency-off.n": "No transparency",
+  "tw.transparency-off.d": "Menus and the taskbar become solid — a little lighter on the graphics card.", "tw.recent-files-off.n": "No recent files in Explorer",
+  "tw.recent-files-off.d": "Home / Quick access does not show recent files and frequent folders.", "tw.shortcut-suffix-off.n": "No “ - Shortcut” in names",
+  "tw.shortcut-suffix-off.d": "New shortcuts get the program's name without the “ - Shortcut” suffix.", "tw.compact-view.n": "Compact view in Explorer",
+  "tw.compact-view.d": "Less space between files — more of them fit on the screen.", "tw.folder-discovery-off.n": "Faster folders with many files",
+  "tw.folder-discovery-off.d": "Explorer stops guessing each folder's kind (pictures, music…), so big folders open faster.",
+  "tw.folder-discovery-off.w": "Every folder uses the common “Details” view by default.", "tw.auto-reboot-off.n": "No automatic restart after updates",
+  "tw.auto-reboot-off.d": "Windows Update still installs updates but does not restart by itself while you are signed in — you restart when you want.",
+  "tw.auto-reboot-off.w": "Windows Update will say some settings are managed by your organization.", "tw.net-throttle-off.n": "No network throttling",
+  "tw.net-throttle-off.d": "Windows stops limiting network traffic while video or sound plays — steadier ping in games.", "tw.edge-bg-off.n": "No Edge in the background",
+  "tw.edge-bg-off.d": "Edge is not preloaded at startup (Startup boost) and does not keep running after you close it.",
+  "tw.edge-bg-off.w": "Edge will say “Your browser is managed by your organization”.",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -3095,7 +3137,9 @@ function jobAdd(spec) {
   if (same) { toast(t(same.state === "queued" ? "job.alreadyQ" : "job.already", same.title), "clock"); return null; }
   const job = Object.assign({ id: ++JOBS.seq, state: "queued", text: "", pct: null, added: Date.now(), seen: Date.now() }, spec);
   JOBS.list.push(job);
-  if (JOBS.cur) {
+  const giving = JOBS.cur && JOBS.cur.auto && !spec.auto && JOBS.cur.stop && !JOBS.cur.requeue;
+  if (giving) { JOBS.cur.requeue = true; JOBS.cur.text = t("job.givingWay"); try { JOBS.cur.stop(); } catch (e) {} }
+  if (JOBS.cur && !spec.auto && !JOBS.cur.requeue) {
     const n = jobWaiting().length;
     toast(t(n > 1 ? "job.queuedN" : "job.queuedT", job.title, JOBS.cur.title, n), "clock", "info", { label: t("job.showQ"), run: () => { JOBS.open = true; paintDock(); } });
     try { if (job.onWait) job.onWait(job); } catch (e) { reportUIError(e && e.message || e, e && e.stack); }
@@ -3106,7 +3150,8 @@ function jobAdd(spec) {
 }
 function jobPump() {
   if (JOBS.cur) return;
-  const job = JOBS.list.find(j => j.state === "queued"); if (!job) return;
+  // a job you started goes before an automatic one
+  const job = JOBS.list.find(j => j.state === "queued" && !j.auto) || JOBS.list.find(j => j.state === "queued"); if (!job) return;
   JOBS.cur = job; job.state = "running"; job.started = job.seen = Date.now();
   paintDock();
   let p;
@@ -3118,7 +3163,8 @@ function jobEnded(job, res) {
   job.state = typeof res === "string" && res ? res : "ok"; job.ended = Date.now(); job.done = null;
   JOBS.list = JOBS.list.filter(j => j !== job);
   if (JOBS.cur === job) JOBS.cur = null;
-  JOBS.recent.unshift(job); if (JOBS.recent.length > 6) JOBS.recent.length = 6;
+  if (job.requeue && job.respawn) { setTimeout(() => { try { job.respawn(); } catch (e) {} }, 120); job.quiet = true; }
+  else { JOBS.recent.unshift(job); if (JOBS.recent.length > 6) JOBS.recent.length = 6; }
   if (S.page !== job.page && !job.quiet) { JOBS.flash = job; clearTimeout(JOBS.flashT); JOBS.flashT = setTimeout(() => { JOBS.flash = null; paintDock(); }, 6000); }
   paintDock();
   setTimeout(jobPump, 50);
@@ -3326,7 +3372,7 @@ function go(page, opt) {
   moveNav();
   const cur = $(".nav button[aria-current='page']"); if (cur && cur.scrollIntoViewIfNeeded) cur.scrollIntoViewIfNeeded(false);
   if (page === "procs") { if (was !== "procs") PM.first = true; startProcs(); requestAnimationFrame(() => $("#pmFilter")._place && $("#pmFilter")._place()); }
-  if (page === "large" || page === "dupes") loadFinder(page);
+  if (page === "dupes") loadFinder(page);
   if (page === "restore") { if (opt && opt.rcTab) RC.tab = opt.rcTab; loadRestore(true); }
   if (page === "logs") { loadLogs(); requestAnimationFrame(() => $("#lgFilter")._place && $("#lgFilter")._place()); }
   if (page === "optimize") { loadDrives(); loadDiskHealth(false); }
@@ -3644,6 +3690,7 @@ function analyzeDone(d) {
   maybeHideSplash();
   jobFinish("scan", "ok", S.total ? t("job.scanRes", fmt(S.total)) : t("hero.none"));
   if (S.page === "home") renderHome();
+  if (!S.autoDiskTried) { S.autoDiskTried = true; setTimeout(daAutoStart, 900); }
 }
 on("analyze-done", analyzeDone);
 $("#btnScan").addEventListener("click", analyze);
@@ -4745,17 +4792,19 @@ async function pickDiskFolder() {
 }
 $("#daFolder").addEventListener("click", pickDiskFolder);
 // a whole scan, or one folder again (refresh); through the job queue
-function daStartScan(target, refresh) {
+function daStartScan(target, refresh, auto) {
   if (DA.scanning || jobOf("disk")) return;
   const label = /^[a-z]:\\?$/i.test(target) ? target.slice(0, 2) : baseName(target);
-  jobAdd({ kind: "disk", page: "disk", title: t(refresh ? "job.diskRe" : "job.disk", label), stop: () => api.diskCancel(),
+  // the scan at start gives way to anything you start, and runs again after it
+  jobAdd({ kind: "disk", page: "disk", auto: !!auto, quiet: !!auto, respawn: auto ? () => daStartScan(target, false, true) : null,
+    title: t(refresh ? "job.diskRe" : "job.disk", label), stop: () => api.diskCancel(),
     onWait: () => { DA.queued = true; renderDisk(); renderDiskVols(); },
     onDrop: () => { DA.queued = false; renderDisk(); renderDiskVols(); },
     run: job => new Promise(res => {
       job.done = res; DA.queued = false;
       Promise.resolve().then(() => refresh ? api.diskRefresh(target) : api.diskScan(target)).catch(() => false).then(ok => {
         if (!ok) { toast(t("da.cantScan"), "alert", "warn"); renderDisk(); renderDiskVols(); res("error"); return; }
-        DA.scanning = true; DA.refreshing = !!refresh; DA.prog = null;
+        DA.scanning = true; DA.refreshing = !!refresh; DA.prog = null; DA.auto = !!auto;
         if (!refresh) { DA.stopped = false; DA.sel.clear(); }
         renderDisk(); renderDiskVols();
       });
@@ -4772,7 +4821,11 @@ on("disk-progress", p => { DA.prog = p; paintDiskProg(); jobText("disk", t("job.
 on("disk-done", async d => {
   DA.scanning = false; $("#daCancel").disabled = false;
   const refresh = !!d.refresh; DA.refreshing = false;
-  jobFinish("disk", d.ok && !d.stopped ? "ok" : d.stopped ? "cancel" : "error", d.ok ? (refresh ? t("da.refreshed") : t("da.done", nfi(d.progress.files), secs(d.progress.ms / 1000))) : t("da.failed"));
+  const auto = DA.auto; DA.auto = false;
+  const yielded = auto && d.stopped && JOBS.cur && JOBS.cur.kind === "disk" && JOBS.cur.requeue;
+  jobFinish("disk", d.ok && !d.stopped ? "ok" : d.stopped ? "cancel" : "error", yielded ? t("da.yielded") : d.ok ? (refresh ? t("da.refreshed") : t("da.done", nfi(d.progress.files), secs(d.progress.ms / 1000))) : t("da.failed"));
+  if (yielded) { renderDisk(); renderDiskVols(); return; } // it starts again after the other job
+  if (auto && !d.ok) { renderDisk(); renderDiskVols(); return; }
   if (!d.ok) { toast(t(refresh ? "da.refreshFail" : "da.failed"), "alert", "warn"); renderDisk(); renderDiskVols(); return; }
   if (refresh) { await daReload(); try { DA.types = await api.diskTypes(); } catch (e) {} renderDisk(); renderDiskVols(); toast(t("da.refreshed"), "refresh"); return; }
   DA.stopped = !!d.stopped; DA.prog = d.progress; DA.typeCat = ""; DA.f.cat = "";
@@ -4783,8 +4836,18 @@ on("disk-done", async d => {
   if (DA.tab === "top") await loadDiskTop();
   try { DA.vols = (await api.diskVolumes()) || DA.vols; } catch (e) {}
   renderDiskVols(); renderDisk();
-  toast(t("da.done", nfi(d.progress.files), secs(d.progress.ms / 1000)), "check");
+  if (!auto || S.page === "disk") toast(t("da.done", nfi(d.progress.files), secs(d.progress.ms / 1000)), "check");
 });
+// when the app starts: the system drive is scanned in the background, so the
+// Disk Analyzer is ready when it is opened (Settings can turn this off)
+async function daAutoStart() {
+  if (S.settings.autoDisk === false || DA.scanning || DA.view || jobOf("disk")) return;
+  if (!DA.loadedVols) { try { DA.vols = (await api.diskVolumes()) || []; } catch (e) { DA.vols = []; } DA.loadedVols = true; }
+  const sys = DA.vols.find(v => S.drive && v.root[0] === S.drive.letter) || DA.vols.find(v => /^c:/i.test(v.root)) || DA.vols[0];
+  if (!sys) return;
+  if (!DA.target) DA.target = sys.root;
+  daStartScan(sys.root, false, true);
+}
 function paintDiskProg() {
   const p = DA.prog || { files: 0, dirs: 0, bytes: 0, denied: 0, ms: 0, current: "" };
   $("#daNums").innerHTML = [[nfi(p.files), t("da.files")], [nfi(p.dirs), t("da.dirs")], [fmt(p.bytes), t("da.found")], [nfi(p.denied), t("da.denied")], [secs(Math.max(1, p.ms / 1000)), t("da.time")]]
@@ -5262,6 +5325,7 @@ function setupLangSeg() {
   });
 }
 $("#pulseToggle").addEventListener("change", e => { S.settings.pulse = e.target.checked; storeSettings(); pulseTick(); });
+$("#autoDiskToggle").addEventListener("change", e => { S.settings.autoDisk = e.target.checked; storeSettings(); });
 $("#motionToggle").addEventListener("change", e => { S.settings.motion = e.target.checked; document.documentElement.classList.toggle("nomotion", !e.target.checked); storeSettings(); });
 $("#rpToggle").addEventListener("change", e => { S.settings.restorePoint = e.target.checked; storeSettings(); });
 $("#forceToggle").addEventListener("change", e => { S.settings.forceClose = e.target.checked; storeSettings(); });
@@ -5309,7 +5373,7 @@ function setupSwatches() {
 }
 
 /* Keyboard shortcuts */
-const PAGES = ["home", "clean", "memory", "game", "disk", "large", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "optimize", "repair", "restore", "logs", "settings", "credits"];
+const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "optimize", "repair", "restore", "logs", "settings", "credits"];
 document.addEventListener("keydown", e => {
   if ($("#veil").classList.contains("on") || $("#sveil").classList.contains("on")) return;
   if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K" || e.key === "p" || e.key === "P")) { e.preventDefault(); if ($("#palVeil").classList.contains("on")) palClose(); else palOpen(); return; }
@@ -5554,7 +5618,6 @@ async function startFind(kind) {
       });
     }) });
 }
-$("#lfStart").addEventListener("click", () => startFind("large"));
 $("#dupStart").addEventListener("click", () => startFind("dupes"));
 on("find-progress", d => {
   const f = FD[d.kind]; if (!f || !f.running) return; f.prog = d.p; paintFindProg(d.kind);
@@ -6197,7 +6260,6 @@ function palSources() {
   act("refresh", "pal.a.rescan", () => { go("clean"); if (!S.busy) analyze(); }, "scan");
   act("bolt", "pal.a.ram", () => { go("memory"); setTimeout(freeMemory, 60); }, "ram memory free");
   if (PR.apps) PR.apps.forEach(a => items.push({ g: "pal.g.procs", icon: "package", title: a.name, sub: t("pr.uninstall"), kw: "uninstall " + a.name.toLowerCase(), run: () => { go("programs"); unOpen(a, !!a.broken); } }));
-  act("weight", "pal.a.large", () => { go("large"); setTimeout(() => startFind("large"), 60); }, "large files");
   act("copy", "pal.a.dupes", () => { go("dupes"); setTimeout(() => startFind("dupes"), 60); }, "duplicates");
   act("shield", "pal.a.rp", () => { go("restore"); RC.tab = "points"; renderRestore(); setTimeout(() => { const b = $("#rcRp"); if (b && !b.disabled) b.click(); }, 120); }, "restore point");
   act("undo", "pal.a.rstrui", () => api.openSystemRestore(), "system restore rstrui");
@@ -6894,19 +6956,20 @@ function renderUpdates() {
   if (!ups.length) { box.innerHTML = `<div class="tw-empty">${u.error ? esc(u.error) : `${ICONS.check} ${esc(t("wg.none"))}`}</div>`; paintWgBar(); return; }
   box.innerHTML = ups.map(x => {
     const st = PR.wg[x.id] || {};
-    const status = st.state === "run" ? `<span class="spin"></span><span class="wg-s">${esc(st.secs ? secsClock(st.secs) : t("wg.running"))}</span>` : st.state === "ok" ? `<span class="tw-st on">${esc(t("wg.ok"))}</span>`
+    const status = st.state === "run" ? `<span class="spin"></span><span class="wg-s">${esc(st.closing ? t("wg.closing") : st.secs ? secsClock(st.secs) : t("wg.running"))}</span>` : st.state === "ok" ? `<span class="tw-st on">${esc(t("wg.ok"))}</span>`
       : st.state === "fail" ? `<span class="tw-st err" title="${esc(st.msg || "")}">${esc(t("wg.fail"))}</span>` : st.state === "queued" ? `<span class="tw-st off">${esc(t("wg.queued"))}</span>` : st.state === "skip" ? `<span class="tw-st off">${esc(t("wg.skipped"))}</span>` : "";
     const can = !x.cut && !PR.wgRun;
     return `<div class="wg-row" data-wg="${esc(x.id)}"><input type="checkbox" class="cb" data-wgcb ${PR.wgSel && PR.wgSel.has(x.id) ? "checked" : ""} ${x.cut || PR.wgRun ? "disabled" : ""}>${letterIcon(x.name)}
       <div style="min-width:0"><div class="su-n"><span title="${esc(x.name)}">${esc(x.name)}</span>${x.explicit ? `<span class="tw-b caution" title="${esc(t("wg.explicitT"))}">${esc(t("wg.explicit"))}</span>` : ""}${x.source && x.source !== "winget" ? `<span class="tw-b">${esc(x.source)}</span>` : ""}</div>
-        <div class="su-m"><span class="exe" style="direction:ltr">${esc(x.id)}</span></div>${st.state === "fail" && st.msg ? `<div class="su-e">${esc(st.msg)}</div>` : ""}${x.cut ? `<div class="su-w">${esc(t("wg.cut"))}</div>` : ""}</div>
+        <div class="su-m"><span class="exe" style="direction:ltr">${esc(x.id)}</span></div>${st.state === "fail" && st.msg ? `<div class="su-e">${esc(st.msg)}</div>` : ""}${st.state === "fail" && st.hint ? `<div class="su-w">${esc(t(st.hint))}</div>` : ""}${st.state === "ok" && st.self ? `<div class="su-w">${esc(st.msg)}</div>` : ""}${x.cut ? `<div class="su-w">${esc(t("wg.cut"))}</div>` : ""}</div>
       <div class="wg-v"><span class="from">${esc(x.version)}</span>${ICONS.caret}<b>${esc(x.available)}</b></div>
-      <div class="su-ctl">${status}${st.state === "ok" ? "" : `<button class="btn small" data-wgone ${can ? "" : "disabled"}>${esc(t("wg.one"))}</button>`}</div></div>`;
+      <div class="su-ctl">${status}${st.state === "fail" && st.site ? `<button class="btn small" data-wgsite ${PR.wgRun ? "disabled" : ""}>${ICONS.globe}<span>${esc(t("wg.site"))}</span></button>` : ""}${st.state === "ok" ? "" : `<button class="btn small" data-wgone ${can ? "" : "disabled"}>${esc(t(st.state === "fail" ? "wg.retry" : "wg.one"))}</button>`}</div></div>`;
   }).join("");
   box.querySelectorAll("[data-wg]").forEach(row => {
     const id = row.dataset.wg;
     const cb = row.querySelector("[data-wgcb]"); cb.addEventListener("change", () => { if (cb.checked) PR.wgSel.add(id); else PR.wgSel.delete(id); paintWgBar(); });
     const b = row.querySelector("[data-wgone]"); if (b) b.addEventListener("click", () => wgUpgrade([id]));
+    const w = row.querySelector("[data-wgsite]"); if (w) w.addEventListener("click", () => { api.wingetSite(id); toast(t("wg.siteOpening"), "globe"); });
   });
   paintWgBar();
 }
@@ -6921,9 +6984,18 @@ function paintWgBar() {
 $("#wgSel").addEventListener("click", () => { if (PR.wgSel && PR.wgSel.size) wgUpgrade(Array.from(PR.wgSel)); });
 $("#wgCheck").addEventListener("click", () => loadUpdates(true));
 $("#wgStop").addEventListener("click", () => { api.wingetStop(); $("#wgStop").disabled = true; toast(t("wg.stopping"), "clock"); });
-function wgUpgrade(ids) {
+// programs that are open are closed first (after asking) and start again after the update
+async function wgUpgrade(ids) {
   ids = ids.filter(Boolean);
   if (!ids.length || PR.wgRun || jobOf("winget")) return;
+  let open = []; try { open = (await api.wingetOpen(ids)) || []; } catch (e) {}
+  if (!open.length) { wgQueue(ids, false); return; }
+  confirmBox({ title: t("wg.openT", open.length), text: t("wg.openD"), list: open.map(o => o.name), okText: t("wg.openOk"),
+    extras: `<label class="extra"><input type="checkbox" class="cb" id="wgClose" checked><span>${esc(t("wg.openClose"))}<span class="warn">${esc(t("wg.openW"))}</span></span></label>`,
+    ok: () => wgQueue(ids, !!($("#wgClose") && $("#wgClose").checked)) });
+}
+function wgQueue(ids, close) {
+  if (PR.wgRun || jobOf("winget")) return;
   const names = ids.map(id => { const x = ((PR.upd || HM.upd || {}).updates || []).find(u => u.id === id); return x ? x.name : id; });
   ids.forEach(id => { PR.wg[id] = { state: "queued" }; });
   jobAdd({ kind: "winget", page: "programs", title: ids.length === 1 ? t("job.wgOne", names[0]) : t("job.wgN", ids.length),
@@ -6931,7 +7003,7 @@ function wgUpgrade(ids) {
     onDrop: () => { ids.forEach(id => delete PR.wg[id]); renderPrograms(); },
     run: job => new Promise(res => {
       job.done = res; PR.wgRun = true; PR.wgIds = ids; if (S.page === "programs") renderPrograms();
-      api.wingetUpgrade(ids).then(ok => { if (ok === false) { PR.wgRun = false; ids.forEach(id => delete PR.wg[id]); renderPrograms(); jobFinish("winget", "error", t("wg.cant")); } })
+      api.wingetUpgrade(ids, { close: !!close }).then(ok => { if (ok === false) { PR.wgRun = false; ids.forEach(id => delete PR.wg[id]); renderPrograms(); jobFinish("winget", "error", t("wg.cant")); } })
         .catch(() => { PR.wgRun = false; jobFinish("winget", "error", t("wg.cant")); });
     }) });
   if (S.page === "programs") renderPrograms();
@@ -6948,7 +7020,7 @@ on("winget", d => {
     renderPrograms(); return;
   }
   if (!d.id) return;
-  PR.wg[d.id] = { state: d.state, msg: d.msg || "", secs: d.secs || 0 };
+  PR.wg[d.id] = { state: d.state, msg: d.msg || "", secs: d.secs || 0, hint: d.hint || "", site: !!d.site, self: !!d.self, closing: !!d.closing };
   if (d.state === "run") jobText("winget", t("wg.jobText", d.n || 1, d.of || 1, d.id) + (d.secs ? " · " + secsClock(d.secs) : ""), d.of ? ((d.n - 1) / d.of) * 100 : null);
   if (S.page === "programs" && PR.tab === "updates") renderUpdates();
 });
@@ -7142,6 +7214,7 @@ async function init() {
     if (typeof st.hideEmpty === "boolean") s.hideEmpty = st.hideEmpty;
     if (typeof st.accent === "string" && ACCENTS[st.accent]) s.accent = st.accent;
     if (typeof st.pulse === "boolean") s.pulse = st.pulse;
+    if (typeof st.autoDisk === "boolean") s.autoDisk = st.autoDisk;
     if (st.find && typeof st.find === "object") s.find = st.find;
     if (typeof st.logSeen === "number") s.logSeen = st.logSeen;
     if (typeof st.forceClose === "boolean") s.forceClose = st.forceClose;
@@ -7157,6 +7230,7 @@ async function init() {
   $("#updToggle").checked = S.settings.updates !== false;
   $("#motionToggle").checked = S.settings.motion;
   $("#pulseToggle").checked = S.settings.pulse !== false;
+  $("#autoDiskToggle").checked = S.settings.autoDisk !== false;
   document.documentElement.classList.toggle("nomotion", !S.settings.motion);
   const info = await api.appInfo();
   S.info = info; S.drive = info.drive;
@@ -7267,20 +7341,22 @@ const Mock = (() => {
   };
   let mem = { total: 16 * GB, used: 10.4 * GB, standby: 3.1 * GB, modified: 180 * MB, lastAt: 0, lastFreed: 0, cleans: 0 };
   let settings = q.get("lang") ? { lang: q.get("lang") } : {};
+  // the preview scans C: at start only when asked (?autodisk=1): the flow tests time their own jobs
+  settings.autoDisk = q.get("autodisk") === "1";
   if (q.get("accent")) settings.accent = q.get("accent");
   // tweaks: [id, group, flags] — r recommended, c caution, ! risky, b restart, e Explorer, o one-way, s system
   const TWM = [
-    ["svc-manual", "perf", "cs"], ["win32-priority", "perf", "s"], ["menu-delay", "perf", ""], ["bg-apps-off", "perf", ""], ["fast-startup-off", "perf", "s"],
+    ["svc-manual", "perf", "cs"], ["win32-priority", "perf", "s"], ["menu-delay", "perf", ""], ["startup-delay-off", "perf", ""], ["animations-off", "perf", "e"], ["bg-apps-off", "perf", ""], ["fast-startup-off", "perf", "s"],
     ["hibernation-off", "perf", "cs"], ["ultimate-power", "perf", "cs"], ["dynamic-tick", "perf", "cbs"], ["core-isolation-off", "perf", "!bs"], ["defender-rtp-off", "perf", "!s"],
-    ["game-mode", "gaming", "r"], ["gamebar-off", "gaming", "cs"], ["hags", "gaming", "bs"], ["windowed-opt", "gaming", ""], ["mouse-accel-off", "gaming", ""], ["nvidia-opt", "gaming", "s"],
+    ["game-mode", "gaming", "r"], ["gamebar-off", "gaming", "cs"], ["hags", "gaming", "bs"], ["windowed-opt", "gaming", ""], ["games-priority", "gaming", "sb"], ["mouse-accel-off", "gaming", ""], ["nvidia-opt", "gaming", "s"],
     ["telemetry-off", "privacy", "rs"], ["activity-off", "privacy", "rs"], ["consumer-off", "privacy", "rs"], ["location-off", "privacy", "s"], ["copilot-off", "privacy", "s"],
-    ["recall-off", "privacy", "bs"], ["bing-off", "privacy", ""], ["lockscreen-tips-off", "privacy", ""], ["wpbt-off", "privacy", "cbs"], ["rdp-warn-off", "privacy", "!s"],
-    ["dark-mode", "look", ""], ["classic-menu", "look", "e"], ["taskbar-left", "look", ""], ["taskbar-search-off", "look", "e"], ["taskview-widgets-off", "look", "es"],
+    ["recall-off", "privacy", "bs"], ["start-recs-off", "privacy", "e"], ["settings-ads-off", "privacy", ""], ["bing-off", "privacy", ""], ["lockscreen-tips-off", "privacy", ""], ["wpbt-off", "privacy", "cbs"], ["rdp-warn-off", "privacy", "!s"],
+    ["transparency-off", "look", ""], ["dark-mode", "look", ""], ["classic-menu", "look", "e"], ["taskbar-left", "look", ""], ["taskbar-search-off", "look", "e"], ["taskview-widgets-off", "look", "es"],
     ["clock-seconds", "look", "e"], ["clock-24h", "look", ""], ["end-task", "look", "re"],
-    ["file-ext", "explorer", "re"], ["hidden-files", "explorer", "e"], ["home-gallery-off", "explorer", "e"], ["sticky-keys-off", "explorer", "r"], ["numlock-on", "explorer", ""],
-    ["detailed-bsod", "system", "s"], ["verbose-status", "system", "s"], ["long-paths", "system", "s"], ["utc-time", "system", "cbs"], ["ps7-default", "system", ""], ["bitlocker-off", "system", "!os"],
-    ["net-opt", "network", "cbs"], ["do-off", "network", "rs"], ["wifi-sense-off", "network", "s"],
-    ["debloat", "apps", "cos"], ["gaming-apps-off", "apps", "cos"], ["edge-remove", "apps", "cs"], ["onedrive-remove", "apps", "cs"],
+    ["recent-files-off", "explorer", "e"], ["shortcut-suffix-off", "explorer", ""], ["compact-view", "explorer", "e"], ["folder-discovery-off", "explorer", "e"], ["file-ext", "explorer", "re"], ["hidden-files", "explorer", "e"], ["home-gallery-off", "explorer", "e"], ["sticky-keys-off", "explorer", "r"], ["numlock-on", "explorer", ""],
+    ["auto-reboot-off", "system", "s"], ["detailed-bsod", "system", "s"], ["verbose-status", "system", "s"], ["long-paths", "system", "s"], ["utc-time", "system", "cbs"], ["ps7-default", "system", ""], ["bitlocker-off", "system", "!os"],
+    ["net-throttle-off", "network", "sb"], ["net-opt", "network", "cbs"], ["do-off", "network", "rs"], ["wifi-sense-off", "network", "s"],
+    ["edge-bg-off", "apps", "s"], ["debloat", "apps", "cos"], ["gaming-apps-off", "apps", "cos"], ["edge-remove", "apps", "cs"], ["onedrive-remove", "apps", "cs"],
   ];
   const twOn = { "game-mode": true, "clock-24h": true, "dark-mode": true, "file-ext": true, "telemetry-off": true, "hags": true, "end-task": true, "nvidia-opt": true, "net-opt": false };
   const twState = id => {
@@ -7348,7 +7424,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "2.7.0", author: "xKi4o", admin: scen !== "noadmin", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "2.8.0", author: "xKi4o", admin: scen !== "noadmin", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -7510,10 +7586,10 @@ const Mock = (() => {
     diskScan: async p => {
       let f = 0; const t0 = Date.now();
       const iv = setInterval(() => { f += 23817; window.__ev("disk-progress", { files: f, dirs: Math.round(f / 9), bytes: f * 2.1 * MB / 10, denied: Math.round(f / 90000), current: "C:\\Windows\\WinSxS\\amd64_microsoft-windows-" + f, ms: Date.now() - t0 }); }, 250);
-      setTimeout(() => { clearInterval(iv); window.__ev("disk-done", { ok: true, path: p, progress: { files: 412377, dirs: 98712, bytes: 512 * GB, denied: 14, ms: 9400 } }); }, 2600);
-      return true;
+      const to = setTimeout(() => { clearInterval(iv); window.__daRun = null; window.__ev("disk-done", { ok: true, path: p, progress: { files: 412377, dirs: 98712, bytes: 512 * GB, denied: 14, ms: 9400 } }); }, 2600);
+      window.__daRun = { iv, to, p }; return true;
     },
-    diskCancel: async () => true,
+    diskCancel: async () => { const r = window.__daRun; if (r) { clearInterval(r.iv); clearTimeout(r.to); window.__daRun = null; setTimeout(() => window.__ev("disk-done", { ok: true, stopped: true, path: r.p, progress: { files: 120000, dirs: 9000, bytes: 90 * GB, denied: 2, ms: 1200 } }), 60); } return true; },
     diskChildren: async path => mockDisk(path || "C:\\"),
     diskTop: async f => mockTop.filter(x => (!f.cat || x.cat === f.cat) && x.size >= (f.min || 0) && (!f.query || x.name.toLowerCase().includes(f.query.toLowerCase()))),
     diskTypes: async () => ({ cats: [["programs", 98], ["video", 74], ["system", 61], ["other", 44], ["diskimages", 38], ["images", 21], ["archives", 17], ["code", 12], ["documents", 6], ["audio", 4]].map(c => ({ key: c[0], size: c[1] * GB, alloc: c[1] * GB * 1.01, files: Math.round(c[1] * 1300) })),
@@ -7604,11 +7680,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "2.7.0", latest: nw ? "2.8.0" : "2.7.0", newer: nw, name: "xKi4o Cleaner 2.8.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v2.8.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "2.8.0", latest: nw ? "2.9.0" : "2.8.0", newer: nw, name: "xKi4o Cleaner 2.9.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v2.9.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders
@@ -7642,6 +7718,8 @@ Object.assign(Mock, (() => {
     { name: "OBS Studio", id: "OBSProject.OBSStudio", version: "31.0.2", available: "31.0.3", source: "winget" },
     { name: "Microsoft Visual Studio Code (User)", id: "Microsoft.VisualStudioCode", version: "1.95.3", available: "1.96.0", source: "winget" },
     { name: "Discord", id: "Discord.Discord", version: "1.0.9187", available: "1.0.9190", source: "winget", explicit: true },
+    { name: "Microsoft Edge", id: "Microsoft.Edge", version: "155.0.4283.45", available: "155.0.4283.60", source: "winget" },
+    { name: "Intel(R) Extreme Tuning Utility", id: "Intel.IntelExtremeTuningUtility", version: "7.14.1.12", available: "7.14.2.69", source: "winget" },
   ];
   let updChecked = 0;
   let un = null, unCont = false;
@@ -7718,17 +7796,23 @@ Object.assign(Mock, (() => {
       if (fresh || !updChecked) { await new Promise(r => setTimeout(r, 700)); updChecked = Date.now(); }
       return { available: true, updates: upd.slice(), checked: updChecked };
     },
-    wingetUpgrade: async ids => {
+    wingetOpen: async ids => ids.includes("OBSProject.OBSStudio") ? [{ id: "OBSProject.OBSStudio", name: "OBS Studio", count: 1 }] : [],
+    wingetSite: async () => true,
+    wingetUpgrade: async (ids, o) => {
       let i = 0, ok = 0;
       const next = () => {
         if (i >= ids.length) { ev("winget", { state: "end", ok, of: ids.length }); return; }
         const id = ids[i++], n = i;
         ev("winget", { id, state: "run", n, of: ids.length });
         setTimeout(() => ev("winget", { id, state: "run", n, of: ids.length, secs: 1 }), 250);
+        if (id === "OBSProject.OBSStudio" && o && o.close) ev("winget", { id, state: "run", n, of: ids.length, closing: true });
         setTimeout(() => {
-          const fail = id === "OBSProject.OBSStudio";
-          if (!fail) { ok++; const k = upd.findIndex(u => u.id === id); if (k >= 0) upd.splice(k, 1); }
-          ev("winget", { id, state: fail ? "fail" : "ok", msg: fail ? "Installer failed with exit code: 1603" : "Successfully installed" });
+          const r = id === "OBSProject.OBSStudio" && !(o && o.close) ? { state: "fail", msg: "Installer failed with exit code: 6", code: 2316632337, hint: "wg.h.inUse" }
+            : id === "Intel.IntelExtremeTuningUtility" ? { state: "fail", msg: "0x80190193 : Forbidden (403).", code: 2149122451, hint: "wg.h.403", site: true }
+            : id === "Microsoft.Edge" ? { state: "ok", self: true, msg: "The browser's own updater ran — restart the browser to finish." }
+            : { state: "ok", msg: "Successfully installed" };
+          if (r.state === "ok") { ok++; const k = upd.findIndex(u => u.id === id); if (k >= 0) upd.splice(k, 1); }
+          ev("winget", Object.assign({ id }, r));
           next();
         }, 500);
       };

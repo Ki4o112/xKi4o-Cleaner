@@ -190,3 +190,91 @@ func validWingetID(id string) bool {
 	}
 	return true
 }
+
+// wingetHint: a plain explanation (a text key) for the codes winget ends
+// with when an update cannot be done from here.
+func wingetHint(code uint32) string {
+	switch {
+	case code == 0x80190193:
+		return "wg.h.403" // the vendor's server refuses winget's download
+	case code == 0x80190194:
+		return "wg.h.404"
+	case code&0xFFFFF000 == 0x80190000:
+		return "wg.h.http"
+	case code == 0x8A15008E:
+		return "wg.h.tech" // installed another way than winget's package
+	case code == 0x8A150101 || code == 0x8A150103 || code == 0x8A150111:
+		return "wg.h.inUse"
+	case code == 0x8A150109 || code == 0x8A15010A:
+		return "wg.h.reboot"
+	case code == 0x8A150107:
+		return "wg.h.net"
+	case code == 0x8A150105:
+		return "wg.h.disk"
+	case code == 0x8A15010F:
+		return "wg.h.policy"
+	case code == 0x8A150011:
+		return "wg.h.hash"
+	}
+	return ""
+}
+
+// wingetSiteHint: hints after which the program's own site is the way to update.
+func wingetSiteHint(h string) bool {
+	return h == "wg.h.403" || h == "wg.h.404" || h == "wg.h.http" || h == "wg.h.tech" || h == "wg.h.hash"
+}
+
+// selfUpdater: browsers that update themselves (Omaha updaters). winget
+// cannot update them when they were installed by their own setup ("install
+// technology is different"); their updater can, the way their scheduled
+// task does it.
+func selfUpdater(id string) string {
+	switch strings.ToLower(id) {
+	case "microsoft.edge", "microsoft.edge.beta", "microsoft.edge.dev":
+		return "edge"
+	case "google.chrome", "google.chrome.beta", "google.chrome.dev":
+		return "chrome"
+	case "brave.brave", "brave.brave.beta":
+		return "brave"
+	}
+	return ""
+}
+
+// wingetShowURL picks the program's page from "winget show": the homepage
+// or the publisher's page, never the installer's download link.
+func wingetShowURL(out string) string {
+	var pick, any string
+	for _, l := range strings.Split(strings.ReplaceAll(out, "\r\n", "\n"), "\n") {
+		l = strings.TrimSpace(lastScreen(l))
+		i := strings.Index(l, "https://")
+		if i < 0 {
+			continue
+		}
+		u := strings.Fields(l[i:])[0]
+		key := strings.ToLower(l[:i])
+		low := strings.ToLower(u)
+		if strings.Contains(key, "installer") || strings.HasSuffix(low, ".exe") || strings.HasSuffix(low, ".msi") || strings.HasSuffix(low, ".zip") || strings.HasSuffix(low, ".msix") {
+			continue
+		}
+		if pick == "" && (strings.Contains(key, "homepage") || strings.Contains(key, "publisher url") || strings.Contains(key, "package url")) {
+			pick = u
+		}
+		if any == "" {
+			any = u
+		}
+	}
+	if pick != "" {
+		return pick
+	}
+	return any
+}
+
+// sameProgram: a name in winget's list and an installed program's name are
+// the same program ("7-Zip 24.08 (x64)" / "7-Zip 24.09 (x64)").
+func sameProgram(a, b string) bool {
+	x, y := normName(cleanAppName(a)), normName(cleanAppName(b))
+	if x == "" || y == "" {
+		return false
+	}
+	return x == y // the upgrade list shows the installed name, so the cleaned names are equal
+}

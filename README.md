@@ -21,9 +21,9 @@ button that does everything recommended. It scans your PC and shows exactly
 how much space every cleanup category takes, then cleans only what you pick —
 or everything at once with one button. **Programs** uninstalls like Revo
 (the program's own uninstaller, then a scan for what it left), removes Store
-apps and updates programs through winget. The Tweaker turns about 50 Windows tweaks on and off and can put
+apps and updates programs through winget. The Tweaker turns about 65 Windows tweaks on and off and can put
 back the exact earlier state of every one; the Startup Manager, the Disk
-Analyzer, the Large Files and Duplicate finders and the Process Manager show
+Analyzer, the Duplicate finder and the Process Manager show
 what starts with Windows, what fills the disk and what runs right now. The
 Restore Center puts back anything the app changed, and every operation is
 logged step by step with a report you can copy in one click. It ships as one
@@ -70,7 +70,13 @@ gone can be removed by force (leftovers only).
 **Program updates (winget)** — lists the programs that have a newer version
 through the Windows Package Manager and updates the chosen ones, one by one,
 silently, each with its own result and winget's message. Pinned packages are
-never pre-selected. Without winget the app points to App Installer.
+never pre-selected. Microsoft Edge, Chrome and Brave are updated by their own
+updater (winget cannot update them when they were installed by their own
+setup). Programs that are open are named first and, if you agree, closed for
+the update and started again after it. When an update cannot be done from here
+(the vendor's server refuses winget's download, or the program was installed
+another way), the row says why, with *Try again* and the program's *Website*.
+Without winget the app points to App Installer.
 
 **Disk health** (in Optimize) — what every drive reports about itself
 (S.M.A.R.T. through Windows' storage counters): temperature, SSD wear,
@@ -137,7 +143,7 @@ searched. Each item is checked again right before it goes to the Recycle Bin.
   (`C:\Windows\Installer` files that Windows Installer itself confirms belong
   to nothing installed).
 
-**Tweaker** — about 50 tweaks in eight groups (performance, gaming, privacy,
+**Tweaker** — about 65 tweaks in eight groups (performance, gaming, privacy,
 taskbar and look, Explorer and keyboard, system, network, built-in apps),
 following [Sparkle](https://github.com/Parcoil/Sparkle) plus popular ones from
 [WinUtil](https://github.com/ChrisTitusTech/winutil).
@@ -167,8 +173,10 @@ and driver components ask first, and every change is logged with a backup that
 can be restored.
 
 **Disk Analyzer** — a tree like TreeSize. The drives are listed with how full
-they are and how much is free in %. A drive or folder is scanned in the
-background (with progress and Stop), then shown as an expandable tree: size
+they are and how much is free in %. Drive C: is scanned in the background when
+the app starts, so the tree is ready when you open it (this steps aside for any
+job you start, runs again after it, and can be turned off in Settings). A drive
+or folder is scanned in the background (with progress and Stop), then shown as an expandable tree: size
 (on disk or logical), **% of the parent folder** with a bar, files, folders and
 last change, sortable by any column, with real file and folder icons. Folders
 open in place (also with the arrow keys), *Expand the largest* follows where
@@ -181,13 +189,6 @@ again, and move chosen items to the Recycle Bin after a confirmation that shows
 the exact paths and sizes. Links and junctions are never followed, folders
 without access are marked and skipped, and protected Windows items cannot be
 deleted.
-
-**Large files** — finds the biggest files on the chosen drives and folders
-fast (several folders are read at once): minimum size, kind of file and age
-filters, a breakdown by kind, search and sorting, open in Explorer, and move
-the chosen files to the Recycle Bin after a confirmation that lists them.
-Windows, program folders and AppData are left out unless you ask; files there
-are listed but never deleted from the app.
 
 **Duplicates** — finds identical files by their content: same size, then the
 same first and last 64 KB, then the same **SHA-256** of the whole file. Hard
@@ -225,7 +226,7 @@ version, the steps and the latest problems elsewhere, with your user folder
 replaced by `%USERPROFILE%`. Errors of the interface itself are logged too.
 
 **Background jobs** — long jobs (the cleanup scan and cleaning, freeing RAM,
-TRIM, repairs, restore points, the Disk Analyzer, Large files and Duplicates)
+TRIM, repairs, restore points, the Disk Analyzer and Duplicates)
 run one at a time while you keep using the other sections. Starting another
 one puts it in a queue (a notice says after which job it starts), and a small
 bar at the bottom of every other section shows what is running, its progress
@@ -242,7 +243,7 @@ What's new* shows it any time. Every version's changes are in
 [CHANGELOG.md](CHANGELOG.md).
 
 **Real icons** — the cleanup categories of apps, the Processes and Startup
-lists, the apps in the way of a cleaning, the Disk Analyzer, Large files,
+lists, the apps in the way of a cleaning, the Disk Analyzer,
 Duplicates and the Restore Center show the real icons of the programs and
 files, as Explorer draws them.
 
@@ -315,7 +316,7 @@ kept (no code copied).
 - **Old NVIDIA drivers** are removed with Windows' own `pnputil`, never with
   `/force`, and never one a graphics card uses. Disk Cleanup's own driver
   package removal is not used.
-- **Files chosen by you go to the Recycle Bin** (Disk Analyzer, Large files,
+- **Files chosen by you go to the Recycle Bin** (Disk Analyzer,
   Duplicates) and can be restored from the Restore Center. Windows and
   program files, system files and other users' files are never deleted.
 - **Nothing is ever turned off by itself**: Windows Update, Defender and other
@@ -444,7 +445,7 @@ uses its own sources.
 | `tweakhist_windows.go` | Tweak history, undo, profiles |
 | `startup_windows.go`, `startuputil.go` | Startup Manager |
 | `diskscan.go`, `diskscan_windows.go` | Disk Analyzer |
-| `finder.go`, `finderjob.go`, `finder_windows.go` | Large Files and Duplicate finders |
+| `finder.go`, `finderjob.go`, `finder_windows.go` | Duplicate finder |
 | `procs_windows.go` | Process Manager and the live CPU/RAM readout |
 | `recyclebin.go`, `restore_windows.go`, `restorepoints.go` | Restore Center, putting files back from the Recycle Bin, deleting restore points |
 | `icons_windows.go` | Real icons of programs, files and folders for the page |
@@ -511,7 +512,8 @@ Store приложения. **Обновления през winget** — кои 
 ранно предупреждение. **Режим „Игри“** — затваря избраните програми,
 освобождава RAM и след играта ги пуска отново; не пипа захранването, услугите
 и настройките на Windows. **Празни папки и счупени преки пътища** — намира ги
-и ги мести в кошчето след проверка.
+и ги мести в кошчето след проверка. При стартиране диск C: се сканира във
+фонов режим, така че **Анализът на диска** е готов, когато го отвориш.
 
 Първо сканира и показва колко място и колко файла има във всяка категория.
 **„Преглед“** показва какво би се изтрило, без да трие нищо, а иконата с окото
@@ -531,7 +533,7 @@ Store приложения. **Обновления през winget** — кои 
 направено като част от Windows — напр. CrossDeviceResume, ShellHost), услуги,
 антивирусни програми и програми на други потребители не се затварят.
 
-**Tweaker** — около 50 настройки. Преди всяка промяна се запазва точното
+**Tweaker** — около 65 настройки. Преди всяка промяна се запазва точното
 състояние (типове, стойности, липсващи ключове, услуги и др.) и при изключване
 се връща точно то, и след рестарт. След всяка промяна състоянието се проверява.
 Има **история**, **„Отмени последната“**, **„Върни всички“**, **експорт и
@@ -547,8 +549,7 @@ Task Scheduler), с издател, път и статус; изключване
 най-големите файлове и мястото по вид и по разширение; преместване в Кошчето
 след потвърждение с точните пътища.
 
-**Големи файлове** — бързо намира най-големите файлове по размер, вид и
-възраст. **Дубликати** — еднакви файлове по съдържание (размер, първите и
+**Дубликати** — еднакви файлове по съдържание (размер, първите и
 последните 64 KB, после SHA-256 на целия файл); нищо не се избира само, от
 всяка група винаги остава поне едно копие, а преди изтриване всяко копие се
 проверява отново. **Процеси** — CPU, памет и диск на всяка програма; „Затвори“
@@ -561,7 +562,7 @@ Task Scheduler), с издател, път и статус; изключване
 **„Изтрий всички точки“** изтрива точките за възстановяване (след
 потвърждение, по желание без най-новата), за да не се трупат. **Фонови
 задачи** — дългите задачи (сканиране, почистване, RAM, TRIM, поправка, точки
-за възстановяване, анализ на диска, големи файлове, дубликати) вървят една по
+за възстановяване, анализ на диска, дубликати) вървят една по
 една, докато разглеждаш другите раздели; новата отива на опашката, а лента
 отдолу показва какво работи и какво чака. **Истински иконки** на програмите и
 файловете навсякъде, където се сканира или трие. **Ъпдейти** — при

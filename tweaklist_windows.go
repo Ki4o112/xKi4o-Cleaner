@@ -335,6 +335,13 @@ func buildTweaks() {
 		{id: "menu-delay", group: "perf",
 			reg:  []rv{sz(hkcu, `Control Panel\Desktop`, "MenuShowDelay", "0", "400")},
 			live: liveMenuDelay},
+		{id: "startup-delay-off", group: "perf",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize`, "StartupDelayInMSec", 0, nil)}},
+		{id: "animations-off", group: "perf", explorer: true,
+			reg: []rv{
+				sz(hkcu, `Control Panel\Desktop\WindowMetrics`, "MinAnimate", "0", "1"),
+				dw(hkcu, advKey, "TaskbarAnimations", 0, uint32(1)),
+			}},
 		{id: "bg-apps-off", group: "perf",
 			reg: []rv{dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications`, "GlobalUserDisabled", 1, uint32(0))}},
 		{id: "fast-startup-off", group: "perf", sys: true,
@@ -576,6 +583,13 @@ func buildTweaks() {
 				}
 				return setRegStr(hkcu, p, "DirectXUserGlobalSettings", s)
 			}},
+		{id: "games-priority", group: "gaming", sys: true, reboot: true,
+			reg: []rv{
+				dw(hklm, `SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games`, "Priority", 6, uint32(2)),
+				sz(hklm, `SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games`, "Scheduling Category", "High", "Medium"),
+				sz(hklm, `SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games`, "SFIO Priority", "High", "Normal"),
+				dw(hklm, `SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile`, "SystemResponsiveness", 10, uint32(20)),
+			}},
 		{id: "mouse-accel-off", group: "gaming",
 			reg: []rv{
 				sz(hkcu, `Control Panel\Mouse`, "MouseSpeed", "0", "1"),
@@ -740,6 +754,19 @@ func buildTweaks() {
 				}
 				return nil
 			}},
+		{id: "start-recs-off", group: "privacy", explorer: true, avail: needWin11,
+			reg: []rv{
+				dw(hkcu, advKey, "Start_IrisRecommendations", 0, uint32(1)),
+				dw(hkcu, advKey, "Start_AccountNotifications", 0, uint32(1)),
+			}},
+		{id: "settings-ads-off", group: "privacy",
+			reg: []rv{
+				dw(hkcu, cdmKey, "SubscribedContent-338393Enabled", 0, uint32(1)),
+				dw(hkcu, cdmKey, "SubscribedContent-353694Enabled", 0, uint32(1)),
+				dw(hkcu, cdmKey, "SubscribedContent-353696Enabled", 0, uint32(1)),
+				dw(hkcu, cdmKey, "SoftLandingEnabled", 0, uint32(1)),
+				dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement`, "ScoobeSystemSettingEnabled", 0, nil),
+			}},
 		{id: "bing-off", group: "privacy",
 			reg: []rv{
 				dw(hkcu, searchKey, "BingSearchEnabled", 0, nil),
@@ -760,6 +787,8 @@ func buildTweaks() {
 			}},
 
 		// ---------------- Appearance and taskbar
+		{id: "transparency-off", group: "look", setting: "ImmersiveColorSet",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\Themes\Personalize`, "EnableTransparency", 0, uint32(1))}},
 		{id: "dark-mode", group: "look", setting: "ImmersiveColorSet",
 			reg: []rv{
 				dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\Themes\Personalize`, "AppsUseLightTheme", 0, uint32(1)),
@@ -802,6 +831,17 @@ func buildTweaks() {
 			reg: []rv{dw(hkcu, advKey+`\TaskbarDeveloperSettings`, "TaskbarEndTask", 1, nil)}},
 
 		// ---------------- Explorer and input
+		{id: "recent-files-off", group: "explorer", explorer: true,
+			reg: []rv{
+				dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\Explorer`, "ShowRecent", 0, uint32(1)),
+				dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\Explorer`, "ShowFrequent", 0, uint32(1)),
+			}},
+		{id: "shortcut-suffix-off", group: "explorer",
+			reg: []rv{sz(hkcu, `Software\Microsoft\Windows\CurrentVersion\Explorer\NamingTemplates`, "ShortcutNameTemplate", "%s.lnk", nil)}},
+		{id: "compact-view", group: "explorer", explorer: true, avail: needWin11,
+			reg: []rv{dw(hkcu, advKey, "UseCompactMode", 1, uint32(0))}},
+		{id: "folder-discovery-off", group: "explorer", explorer: true,
+			reg: []rv{sz(hkcu, `Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell`, "FolderType", "NotSpecified", nil)}},
 		{id: "file-ext", group: "explorer", rec: true, explorer: true,
 			reg: []rv{dw(hkcu, advKey, "HideFileExt", 0, uint32(1))}},
 		{id: "hidden-files", group: "explorer", explorer: true,
@@ -822,6 +862,8 @@ func buildTweaks() {
 			}},
 
 		// ---------------- System
+		{id: "auto-reboot-off", group: "system", sys: true,
+			reg: []rv{dw(hklm, `SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU`, "NoAutoRebootWithLoggedOnUsers", 1, nil)}},
 		{id: "detailed-bsod", group: "system", sys: true,
 			reg: []rv{
 				dw(hklm, `SYSTEM\CurrentControlSet\Control\CrashControl`, "DisplayParameters", 1, nil),
@@ -896,6 +938,8 @@ func buildTweaks() {
 		// Removed in 2.4: Windows does not let these TCP settings be read back
 		// reliably, so neither the result nor an exact undo can be verified.
 		// Kept only so a change made with 2.3 can still be turned off.
+		{id: "net-throttle-off", group: "network", sys: true, reboot: true,
+			reg: []rv{dw(hklm, `SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile`, "NetworkThrottlingIndex", 0xffffffff, uint32(10))}},
 		{id: "net-opt", group: "network", risk: "caution", reboot: true, sys: true, legacy: true,
 			owns:   []string{"netsh:tcp-global"},
 			detect: func(*probe) string { return map[bool]string{true: "on", false: "off"}[getBackup("net-opt") != nil] },
@@ -924,6 +968,11 @@ func buildTweaks() {
 			}},
 
 		// ---------------- Apps
+		{id: "edge-bg-off", group: "apps", sys: true,
+			reg: []rv{
+				dw(hklm, `SOFTWARE\Policies\Microsoft\Edge`, "StartupBoostEnabled", 0, nil),
+				dw(hklm, `SOFTWARE\Policies\Microsoft\Edge`, "BackgroundModeEnabled", 0, nil),
+			}},
 		{id: "debloat", group: "apps", risk: "caution", oneWay: true, sys: true, slow: true, checks: true, owns: []string{"appx:built-in apps"},
 			detect: func(p *probe) string {
 				for _, a := range bloatApps {

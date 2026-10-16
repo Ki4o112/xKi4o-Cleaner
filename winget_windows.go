@@ -12,6 +12,8 @@ import (
 	"sync/atomic"
 	"time"
 	"unicode/utf8"
+
+	"golang.org/x/sys/windows"
 )
 
 // winget is the Windows Package Manager (part of "App Installer"). Updates
@@ -119,9 +121,155 @@ func wingetUpdates(fresh bool) wgList {
 	return res
 }
 
+type wgOpts struct {
+	Close bool `json:"close"` // close the programs that are open first (and start them again after)
+}
+
+type wgOpenApp struct {
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Count int    `json:"count"`
+}
+
+// wgProgramProcs: the running processes of the installed program a winget
+// row stands for (by its name in the list of installed programs).
+func wgProgramProcs(id string) (string, []rawProc) {
+	wg.mu.Lock()
+	var name string
+	for _, u := range wg.cache.Updates {
+		if u.ID == id {
+			name = u.Name
+		}
+	}
+	wg.mu.Unlock()
+	if name == "" {
+		return "", nil
+	}
+	appsCache.mu.Lock()
+	apps := append([]instApp(nil), appsCache.apps...)
+	appsCache.mu.Unlock()
+	if len(apps) == 0 {
+		apps = appsList().Apps
+	}
+	var a *instApp
+	for i := range apps {
+		if sameProgram(apps[i].Name, name) {
+			a = &apps[i]
+			break
+		}
+	}
+	if a == nil || (a.Location == "" && len(a.Exes) == 0) {
+		return name, nil
+	}
+	loc := a.Location
+	if loc != "" && (len(filepath.Clean(loc)) <= 3 || strings.EqualFold(filepath.Clean(loc), os.Getenv("ProgramFiles")) || strings.EqualFold(filepath.Clean(loc), os.Getenv("ProgramFiles(x86)"))) {
+		loc = "" // a whole drive or Program Files is not the program's folder
+	}
+	exes := map[string]bool{}
+	for _, e := range a.Exes {
+		if b := strings.ToLower(filepath.Base(e)); !genericExe(b) {
+			exes[b] = true
+		}
+	}
+	raw, err := queryProcesses()
+	if err != nil {
+		return name, nil
+	}
+	self := windows.GetCurrentProcessId()
+	var out []rawProc
+	for _, p := range raw {
+		if p.pid == self || p.pid <= 4 || windowsProcs[strings.ToLower(p.name)] {
+			continue
+		}
+		if !exes[strings.ToLower(p.name)] && loc == "" {
+			continue
+		}
+		path := processPath(p.pid)
+		if path == "" || underWindowsDir(path) {
+			continue
+		}
+		if (loc != "" && under(path, loc)) || exes[strings.ToLower(filepath.Base(path))] {
+			out = append(out, p)
+		}
+	}
+	return name, out
+}
+
+// wingetOpen: which of these programs are open right now (their update
+// would fail or ask to close them). Browsers update themselves while open.
+func wingetOpen(ids []string) []wgOpenApp {
+	out := []wgOpenApp{}
+	for _, id := range ids {
+		if !validWingetID(id) || selfUpdater(id) != "" {
+			continue
+		}
+		if name, ps := wgProgramProcs(id); len(ps) > 0 {
+			out = append(out, wgOpenApp{ID: id, Name: name, Count: len(ps)})
+		}
+	}
+	return out
+}
+
+// closeForUpdate closes a program's processes (politely, then by force)
+// and returns how to start it again.
+func closeForUpdate(ps []rawProc) []gmClosed {
+	pids := map[uint32]string{}
+	before := map[uint32]rawProc{}
+	var procs []gmProc
+	want := map[string]bool{}
+	for _, p := range ps {
+		exe := strings.ToLower(p.name)
+		pids[p.pid] = exe
+		before[p.pid] = p
+		want[exe] = true
+		procs = append(procs, gmProc{PID: p.pid, PPID: p.ppid, Created: p.created, Exe: exe, Path: processPath(p.pid), Cmd: processCommandLine(p.pid)})
+	}
+	windowed := windowPIDs()
+	var reopen []gmClosed
+	for _, r := range gmRoots(procs, want) {
+		if r.Path != "" && windowed[r.PID] {
+			reopen = append(reopen, gmClosed{Exe: r.Exe, Path: r.Path, Cmd: r.Cmd})
+		}
+	}
+	left := endPIDs(pids, before, false, 8*time.Second)
+	if len(left) > 0 {
+		rest := map[uint32]string{}
+		for pid := range left {
+			rest[pid] = pids[pid]
+		}
+		endPIDs(rest, before, true, 0)
+	}
+	return reopen
+}
+
+// runSelfUpdater runs a browser's own updater ("/ua /installsource scheduler",
+// what its scheduled task runs). The browser finishes the update when it restarts.
+func runSelfUpdater(kind string) (string, int, error) {
+	pf86, pf, local := os.Getenv("ProgramFiles(x86)"), os.Getenv("ProgramW6432"), os.Getenv("LOCALAPPDATA")
+	if pf == "" {
+		pf = os.Getenv("ProgramFiles")
+	}
+	var cands []string
+	switch kind {
+	case "edge":
+		cands = []string{filepath.Join(pf86, `Microsoft\EdgeUpdate\MicrosoftEdgeUpdate.exe`), filepath.Join(pf, `Microsoft\EdgeUpdate\MicrosoftEdgeUpdate.exe`)}
+	case "chrome":
+		cands = []string{filepath.Join(pf86, `Google\Update\GoogleUpdate.exe`), filepath.Join(pf, `Google\Update\GoogleUpdate.exe`), filepath.Join(local, `Google\Update\GoogleUpdate.exe`)}
+	case "brave":
+		cands = []string{filepath.Join(pf86, `BraveSoftware\Update\BraveUpdate.exe`), filepath.Join(pf, `BraveSoftware\Update\BraveUpdate.exe`), filepath.Join(local, `BraveSoftware\Update\BraveUpdate.exe`)}
+	}
+	for _, c := range cands {
+		if fileExists(c) {
+			return runQuiet(15*time.Minute, c, "/ua", "/installsource", "scheduler")
+		}
+	}
+	return "", -1, os.ErrNotExist
+}
+
 // wingetUpgrade updates the programs one after another. The page gets a
-// "winget" event for each: run, then ok or fail with winget's own message.
-func wingetUpgrade(ids []string) bool {
+// "winget" event for each: run, then ok or fail with winget's own message
+// and, when it can be told, why and what to do.
+func wingetUpgrade(ids []string, o wgOpts) bool {
 	if len(ids) == 0 || wingetExe() == "" || !wg.running.CompareAndSwap(false, true) {
 		return false
 	}
@@ -141,7 +289,7 @@ func wingetUpgrade(ids []string) bool {
 		defer recoverLog("winget")
 		defer wg.running.Store(false)
 		defer app.working.Store(false)
-		op := beginOp("winget", "", T("log.wgStart", len(clean)), map[string]any{"ids": clean})
+		op := beginOp("winget", "", T("log.wgStart", len(clean)), map[string]any{"ids": clean, "close": o.Close})
 		ok := 0
 		for i, id := range clean {
 			if wg.stop.Load() {
@@ -149,6 +297,14 @@ func wingetUpgrade(ids []string) bool {
 				continue
 			}
 			emit("winget", map[string]any{"id": id, "state": "run", "n": i + 1, "of": len(clean)})
+			var reopen []gmClosed
+			if o.Close && selfUpdater(id) == "" {
+				if name, ps := wgProgramProcs(id); len(ps) > 0 {
+					emit("winget", map[string]any{"id": id, "state": "run", "n": i + 1, "of": len(clean), "closing": true})
+					reopen = closeForUpdate(ps)
+					op.info(id, T("log.wgClosed", name), map[string]any{"processes": len(ps)})
+				}
+			}
 			start := time.Now()
 			tick := time.NewTicker(time.Second)
 			done := make(chan struct{})
@@ -162,23 +318,53 @@ func wingetUpgrade(ids []string) bool {
 					}
 				}
 			}()
-			wg.mu.Lock()
-			out, code, err := runWinget(45*time.Minute, "upgrade", "--id", id, "--exact", "--silent",
-				"--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity")
-			wg.mu.Unlock()
+			var out string
+			var code int
+			var err error
+			self := selfUpdater(id)
+			usedSelf := false
+			if self != "" {
+				out, code, err = runSelfUpdater(self)
+				usedSelf = err == nil || code != -1
+			}
+			if !usedSelf {
+				wg.mu.Lock()
+				out, code, err = runWinget(45*time.Minute, "upgrade", "--id", id, "--exact", "--silent",
+					"--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity")
+				wg.mu.Unlock()
+			}
 			tick.Stop()
 			close(done)
+			for _, c := range reopen {
+				if fileExists(c.Path) {
+					if _, err := startAgain(c); err != nil {
+						op.warnf(id, T("log.wgReopenFail", filepath.Base(c.Path)), map[string]any{"error": err.Error()})
+					}
+				}
+			}
 			msg := wingetMessage(out)
 			if err != nil && code == -1 {
 				msg = err.Error()
 			}
-			if code == 0 {
+			switch {
+			case usedSelf && code == 0:
+				ok++
+				op.info(id, T("log.wgSelf"), nil)
+				emit("winget", map[string]any{"id": id, "state": "ok", "msg": T("wg.selfDone"), "self": true})
+			case code == 0:
 				ok++
 				op.info(id, T("log.wgOK"), map[string]any{"message": msg})
 				emit("winget", map[string]any{"id": id, "state": "ok", "msg": msg})
-			} else {
-				op.fail(id, msg, map[string]any{"exit": uint32(code)})
-				emit("winget", map[string]any{"id": id, "state": "fail", "msg": msg, "code": uint32(code)})
+			default:
+				hint := ""
+				if !usedSelf {
+					hint = wingetHint(uint32(code))
+				}
+				if usedSelf && msg == "" {
+					msg = T("wg.selfFail", uint32(code))
+				}
+				op.fail(id, msg, map[string]any{"exit": uint32(code), "hint": hint})
+				emit("winget", map[string]any{"id": id, "state": "fail", "msg": msg, "code": uint32(code), "hint": hint, "site": wingetSiteHint(hint)})
 			}
 		}
 		op.end(T("log.wgDone", ok, len(clean)), nil)
@@ -188,6 +374,21 @@ func wingetUpgrade(ids []string) bool {
 		wg.mu.Unlock()
 		emit("winget", map[string]any{"state": "end", "ok": ok, "of": len(clean)})
 	}()
+	return true
+}
+
+// wingetSite opens the program's page (from "winget show"), for updates that
+// must be done from the vendor's site.
+func wingetSite(id string) bool {
+	if !validWingetID(id) {
+		return false
+	}
+	out, _, _ := runWinget(time.Minute, "show", "--id", id, "--exact", "--accept-source-agreements", "--disable-interactivity")
+	u := wingetShowURL(out)
+	if u == "" {
+		u = "https://winget.run/pkg/" + strings.ReplaceAll(id, ".", "/")
+	}
+	shellOpen(u)
 	return true
 }
 

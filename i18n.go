@@ -214,9 +214,14 @@ var texts = map[string][2]string{ // [bg, en]
 	"un.err.keyProtected": {"Ключ на Windows — не се трие", "A Windows key — never deleted"},
 	"un.err.stayed":       {"Още е там (в употреба или без права)", "Still there (in use or no access)"},
 	// winget
-	"log.wgStart": {"Обновяване на програми през winget: %d", "Updating programs with winget: %d"},
-	"log.wgOK":    {"Обновено", "Updated"},
-	"log.wgDone":  {"Обновени: %d от %d", "Updated: %d of %d"},
+	"log.wgStart":      {"Обновяване на програми през winget: %d", "Updating programs with winget: %d"},
+	"log.wgOK":         {"Обновено", "Updated"},
+	"log.wgDone":       {"Обновени: %d от %d", "Updated: %d of %d"},
+	"log.wgClosed":     {"Затворена за обновяването: %s", "Closed for the update: %s"},
+	"log.wgReopenFail": {"Не се пусна отново: %s", "Did not start again: %s"},
+	"log.wgSelf":       {"Обновено от собствения ѝ обновител", "Updated by its own updater"},
+	"wg.selfDone":      {"Обновителят на браузъра мина — рестартирай браузъра, за да завърши.", "The browser's own updater ran — restart the browser to finish."},
+	"wg.selfFail":      {"Обновителят на браузъра завърши с код %d.", "The browser's updater ended with code %d."},
 	// disk health
 	"dh.err.read": {"Състоянието на дисковете не можа да се прочете", "The disks' health could not be read"},
 	// game mode

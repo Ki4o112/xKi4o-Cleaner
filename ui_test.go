@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"testing"
@@ -56,5 +57,31 @@ func TestUIDoesNotShadowBindings(t *testing.T) {
 	}
 	if !strings.Contains(string(wv), "(window.__go = window.__go || {})[name] = window[name];") {
 		t.Error("go-webview2 does not keep the bindings in window.__go")
+	}
+}
+
+// every tweak of the catalogue has its name and description in both
+// languages, and is in the page's demo list
+func TestTweaksHaveTexts(t *testing.T) {
+	src, err1 := os.ReadFile("tweaklist_windows.go")
+	page, err2 := os.ReadFile(filepath.Join("ui", "app.html"))
+	if err1 != nil || err2 != nil {
+		t.Skip("the source files are not here")
+	}
+	ids := regexp.MustCompile(`\{id: "([a-z0-9-]+)", group:`).FindAllStringSubmatch(string(src), -1)
+	if len(ids) < 60 {
+		t.Fatalf("only %d tweaks found", len(ids))
+	}
+	p := string(page)
+	for _, m := range ids {
+		id := m[1]
+		for _, k := range []string{`"tw.` + id + `.n":`, `"tw.` + id + `.d":`} {
+			if n := strings.Count(p, k); n != 2 {
+				t.Errorf("%s: %d texts (want Bulgarian and English)", k, n)
+			}
+		}
+		if !strings.Contains(p, `["`+id+`", "`) {
+			t.Errorf("%s: not in the page's demo list", id)
+		}
 	}
 }
