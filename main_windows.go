@@ -73,7 +73,11 @@ func main() {
 	logEvent("app", "info", "", T("log.start", appVersion), map[string]any{"os": osName(), "admin": app.admin, "afterUpdate": updated})
 	buildCatalog()
 	buildTweaks()
-	applySettings(getSettings())
+	settings := getSettings()
+	applySettings(settings)
+	ownFrame := settings["classicFrame"] != true // the app's own title bar unless Windows' one was chosen
+	registerWindowMessages()
+	darkMenus()
 
 	scale := dpiScale()
 	width, height := int(1180*scale), int(820*scale)
@@ -92,13 +96,20 @@ func main() {
 		DataPath:   dataDir,
 		Background: bgColor,
 		OnClose:    confirmClose,
+		OnMessage:  winHook,
 		WindowOptions: webview2.WindowOptions{
-			Title:     appName,
-			Width:     uint(width),
-			Height:    uint(height),
-			IconId:    1,
-			Center:    true,
-			OnCreated: func(h uintptr) { app.hwnd = h; styleWindow(h) },
+			Title:  appName,
+			Width:  uint(width),
+			Height: uint(height),
+			IconId: 1,
+			Center: true,
+			OnCreated: func(h uintptr) {
+				app.hwnd = h
+				styleWindow(h)
+				if ownFrame {
+					applyFrame(h, true) // before the first paint: no Windows title bar shows up
+				}
+			},
 		},
 	})
 	if w == nil {
@@ -107,6 +118,8 @@ func main() {
 	}
 	app.w = w
 	defer w.Destroy()
+	applyFrame(app.hwnd, ownFrame) // now the page leaves its top edge for resizing
+	bringToFront(app.hwnd)
 	go memAutoLoop() // started after app.w is set, so its events can reach the page
 	w.SetSize(min(int(980*scale), width), min(int(660*scale), height), webview2.HintMin)
 
@@ -220,6 +233,17 @@ func main() {
 		"emptyScan":  emptyScan,
 		"brokenScan": brokenScan,
 		"tidyDelete": tidyDelete,
+		// the window: own title bar, tray
+		"winDrag":     winDrag,
+		"winMinimize": winMinimize,
+		"winMaximize": winMaximize,
+		"winClose":    winClose,
+		"winTray":     winTray,
+		"winFrame":    winFrame,
+		"winReady": func() map[string]any {
+			w.Dispatch(func() { bringToFront(app.hwnd) }) // the page is there: in front, even if loading took a while
+			return map[string]any{"own": win.own.Load(), "max": win.max.Load(), "active": true}
+		},
 	}
 	for name, f := range binds {
 		must(w.Bind(name, f))
@@ -227,6 +251,9 @@ func main() {
 
 	w.SetHtml(indexHTML)
 	w.Run()
+	if win.inTray.Load() {
+		trayRemove()
+	}
 }
 
 func must(err error) {

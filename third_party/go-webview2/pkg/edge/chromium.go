@@ -16,6 +16,7 @@ import (
 
 type Chromium struct {
 	hwnd                  uintptr
+	topInset              int32 // pixels left above the page (patched in for xKi4o Cleaner)
 	focusOnInit           bool
 	controller            *ICoreWebView2Controller
 	webview               *ICoreWebView2
@@ -350,6 +351,14 @@ func (e *Chromium) NotifyParentWindowPositionChanged() error {
 		return nil
 	}
 	return e.controller.NotifyParentWindowPositionChanged()
+}
+
+// SetTopInset leaves px pixels of the window above the page.
+func (e *Chromium) SetTopInset(px int32) {
+	if px < 0 {
+		px = 0
+	}
+	e.topInset = px
 }
 
 func (e *Chromium) Focus() {

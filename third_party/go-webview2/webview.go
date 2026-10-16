@@ -38,6 +38,7 @@ func setWindowContext(wnd uintptr, data interface{}) {
 type browser interface {
 	Embed(hwnd uintptr) bool
 	Resize()
+	SetTopInset(px int32)
 	Navigate(url string)
 	NavigateToString(htmlContent string)
 	Init(script string)
@@ -55,6 +56,7 @@ type webview struct {
 	minsz      w32.Point
 	background uint32
 	onClose    func() bool
+	onMessage  func(hwnd, msg, wp, lp uintptr) (uintptr, bool)
 	m          sync.Mutex
 	bindings   map[string]interface{}
 	dispatchq  []func()
@@ -94,6 +96,11 @@ type WebViewOptions struct {
 
 	// OnClose is called on WM_CLOSE. Returning false keeps the window open.
 	OnClose func() bool
+
+	// OnMessage sees every window message first (on the UI thread). When it
+	// returns true, its result is the answer and nothing else handles the
+	// message (patched in for xKi4o Cleaner: own title bar, tray icon).
+	OnMessage func(hwnd, msg, wp, lp uintptr) (uintptr, bool)
 }
 
 // New creates a new webview in a new window.
@@ -113,6 +120,7 @@ func NewWithOptions(options WebViewOptions) WebView {
 	w.autofocus = options.AutoFocus
 	w.background = options.Background
 	w.onClose = options.OnClose
+	w.onMessage = options.OnMessage
 
 	chromium := edge.NewChromium()
 	chromium.MessageCallback = w.msgcb
@@ -260,7 +268,18 @@ func (w *webview) callbinding(d rpcMessage) (interface{}, error) {
 
 func wndproc(hwnd, msg, wp, lp uintptr) uintptr {
 	if w, ok := getWindowContext(hwnd).(*webview); ok {
+		if w.onMessage != nil {
+			if r, done := w.onMessage(hwnd, msg, wp, lp); done {
+				return r
+			}
+		}
 		switch msg {
+		case 0x0232: // WM_EXITSIZEMOVE: the page gets the keyboard back after a move
+			if w.autofocus {
+				w.browser.Focus()
+			}
+			r, _, _ := w32.User32DefWindowProcW.Call(hwnd, msg, wp, lp)
+			return r
 		case w32.WMMove, w32.WMMoving:
 			_ = w.browser.NotifyParentWindowPositionChanged()
 		case w32.WMNCLButtonDown:
@@ -312,15 +331,24 @@ func (w *webview) CreateWithOptions(opts WindowOptions) bool {
 	var hinstance windows.Handle
 	_ = windows.GetModuleHandleEx(0, nil, &hinstance)
 
-	var icon uintptr
+	var icon, small uintptr
 	if opts.IconId == 0 {
 		// load default icon
 		icow, _, _ := w32.User32GetSystemMetrics.Call(w32.SystemMetricsCxIcon)
 		icoh, _, _ := w32.User32GetSystemMetrics.Call(w32.SystemMetricsCyIcon)
 		icon, _, _ = w32.User32LoadImageW.Call(uintptr(hinstance), 32512, icow, icoh, 0)
 	} else {
-		// load icon from resource
-		icon, _, _ = w32.User32LoadImageW.Call(uintptr(hinstance), uintptr(opts.IconId), 1, 0, 0, w32.LR_DEFAULTSIZE|w32.LR_SHARED)
+		// load icon from resource: the big and the small one each at its own
+		// size, so Windows picks the matching image instead of scaling one
+		icow, _, _ := w32.User32GetSystemMetrics.Call(w32.SystemMetricsCxIcon)
+		icoh, _, _ := w32.User32GetSystemMetrics.Call(w32.SystemMetricsCyIcon)
+		icon, _, _ = w32.User32LoadImageW.Call(uintptr(hinstance), uintptr(opts.IconId), 1, icow, icoh, w32.LR_SHARED)
+		smw, _, _ := w32.User32GetSystemMetrics.Call(49) // SM_CXSMICON
+		smh, _, _ := w32.User32GetSystemMetrics.Call(50) // SM_CYSMICON
+		small, _, _ = w32.User32LoadImageW.Call(uintptr(hinstance), uintptr(opts.IconId), 1, smw, smh, w32.LR_SHARED)
+	}
+	if small == 0 {
+		small = icon
 	}
 
 	className, _ := windows.UTF16PtrFromString("webview")
@@ -329,7 +357,7 @@ func (w *webview) CreateWithOptions(opts WindowOptions) bool {
 		HInstance:     hinstance,
 		LpszClassName: className,
 		HIcon:         windows.Handle(icon),
-		HIconSm:       windows.Handle(icon),
+		HIconSm:       windows.Handle(small),
 		LpfnWndProc:   windows.NewCallback(wndproc),
 	}
 	if w.background != 0 {
@@ -394,6 +422,13 @@ func (w *webview) CreateWithOptions(opts WindowOptions) bool {
 	}
 	w.browser.Resize()
 	return true
+}
+
+// SetTopInset leaves px pixels above the page (patched in for xKi4o Cleaner:
+// the window's own top edge for resizing). UI thread only.
+func (w *webview) SetTopInset(px int) {
+	w.browser.SetTopInset(int32(px))
+	w.browser.Resize()
 }
 
 func (w *webview) Destroy() {

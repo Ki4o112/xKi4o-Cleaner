@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Builds ui/index.html (embedded into the exe) from ui/app.html.
 
-It inlines the Montserrat font (Latin + Cyrillic) and the license texts of
+It inlines the Montserrat font (Latin + Cyrillic), the logo and the license texts of
 the third-party components shown on the Credits page, so the app needs no
 files next to it and works offline.
 
@@ -30,6 +30,10 @@ def main():
         faces.append('@font-face{font-family:"Montserrat";font-style:normal;font-display:block;'
                      f'font-weight:100 900;src:url(data:font/woff2;base64,{data}) format("woff2");unicode-range:{rng};}}')
     src = src.replace("/*@@FONTS@@*/", "\n".join(faces), 1)
+
+    logo = base64.b64encode((UI / "logo.webp").read_bytes()).decode()
+    assert "url(logo.webp)" in src
+    src = src.replace("url(logo.webp)", f"url(data:image/webp;base64,{logo})")
 
     licenses = {
         "mit": (ROOT / "third_party/go-webview2/LICENSE").read_text(encoding="utf-8"),

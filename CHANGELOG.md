@@ -3,6 +3,28 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 2.9.0 — 2026-10-16
+
+### English
+- Added a new logo
+- Added the app's own title bar with a button that hides the app in the tray, next to the clock
+- Added a setting to use Windows' title bar instead
+- Fixed the app opening behind other windows (e.g. the browser)
+- Fixed starting the app again not bringing the open one to the front (also from the tray)
+- Fixed tweak categories counting tweaks this Windows does not have
+- Changed rows that scroll sideways to fade out where there is more
+- Changed the README to a short one
+
+### Български
+- Добавено ново лого
+- Добавена собствена заглавна лента с бутон, който скрива програмата в трея до часовника
+- Добавена настройка за заглавната лента на Windows
+- Поправено: програмата се отваряше зад други прозорци (напр. браузъра)
+- Поправено: второ пускане не изкарваше отворената програма отпред (и от трея)
+- Поправено: категориите в Туийкъра броиха и туийкове, които този Windows няма
+- Редовете, които се превъртат настрани, избледняват там, където има още
+- README е кратък
+
 ## 2.8.1 — 2026-10-16
 
 ### English

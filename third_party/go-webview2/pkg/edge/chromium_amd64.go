@@ -15,6 +15,9 @@ func (e *Chromium) Resize() {
 	}
 	var bounds w32.Rect
 	_, _, _ = w32.User32GetClientRect.Call(e.hwnd, uintptr(unsafe.Pointer(&bounds)))
+	if e.topInset > 0 && bounds.Bottom > bounds.Top+e.topInset {
+		bounds.Top += e.topInset
+	}
 	_, _, _ = e.controller.vtbl.PutBounds.Call(
 		uintptr(unsafe.Pointer(e.controller)),
 		uintptr(unsafe.Pointer(&bounds)),

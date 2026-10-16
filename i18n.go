@@ -222,6 +222,10 @@ var texts = map[string][2]string{ // [bg, en]
 	"log.wgSelf":       {"Обновено от собствения ѝ обновител", "Updated by its own updater"},
 	"wg.selfDone":      {"Обновителят на браузъра мина — рестартирай браузъра, за да завърши.", "The browser's own updater ran — restart the browser to finish."},
 	"wg.selfFail":      {"Обновителят на браузъра завърши с код %d.", "The browser's updater ended with code %d."},
+	"tray.tip":         {"xKi4o Cleaner — работи във фона", "xKi4o Cleaner — running in the background"},
+	"tray.hint":        {"Програмата продължава да работи тук. Щракни иконата, за да я отвориш.", "The app keeps running here. Click the icon to open it."},
+	"tray.open":        {"Отвори xKi4o Cleaner", "Open xKi4o Cleaner"},
+	"tray.exit":        {"Изход", "Exit"},
 	// disk health
 	"dh.err.read": {"Състоянието на дисковете не можа да се прочете", "The disks' health could not be read"},
 	// game mode

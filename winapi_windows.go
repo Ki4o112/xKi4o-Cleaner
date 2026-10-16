@@ -121,13 +121,7 @@ func acquireSingleInstance() bool {
 		if h != 0 {
 			_ = windows.CloseHandle(h)
 		}
-		title, _ := windows.UTF16PtrFromString(appName)
-		if hwnd, _, _ := procFindWindowW.Call(0, uintptr(unsafe.Pointer(title))); hwnd != 0 {
-			if ic, _, _ := procIsIconic.Call(hwnd); ic != 0 {
-				_, _, _ = procShowWindow.Call(hwnd, 9) // SW_RESTORE
-			}
-			_, _, _ = procSetForegroundWindow.Call(hwnd)
-		}
+		signalRunningCopy()
 		return false
 	}
 	instanceMutex = h

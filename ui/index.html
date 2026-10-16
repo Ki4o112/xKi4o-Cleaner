@@ -348,6 +348,8 @@ h1 { font-size: 23px; font-weight: 700; margin: 0; letter-spacing: -.02em; }
 .res.ok { color: var(--mint); }
 .console { margin: 14px 26px 24px; flex: 1; min-height: 140px; background: #0a0f20; border: 1px solid var(--line-soft); border-radius: var(--r-l); padding: 14px 16px; overflow-y: auto; font: 12px/1.6 var(--mono); color: #b8c3dc; white-space: pre-wrap; user-select: text; }
 .console:empty::before { content: attr(data-empty); color: var(--faint); font-family: var(--font); }
+.console:empty { display: grid; place-content: center; text-align: center; }
+.console:empty::before { padding-top: 44px; font-size: 12.5px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235b6683' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='16' rx='3'/%3E%3Cpath d='M7 9l3 3-3 3M12.5 15H17'/%3E%3C/svg%3E") center top / 32px no-repeat; }
 .console .hd { color: var(--blue-2); font-weight: 600; }
 .section-t { font-size: 13px; font-weight: 700; color: var(--muted); margin: 22px 0 10px; }
 .section-t:first-child { margin-top: 0; }
@@ -1330,11 +1332,68 @@ body.dock-on .toasts { bottom: 84px; }
 .dh-note.ok { color: var(--muted); }
 .rc-cards.five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 @media (max-width: 1180px) { .rc-cards.five { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* ================= 2.9: own title bar, the logo, the brand colours ================= */
+:root {
+  --wb: 38px;
+  --logo: url(data:image/webp;base64,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);
+  --brand-a: #b47cff; --brand-b: #2a9dff; --brand-c: #3ee8b0;
+  --brand: linear-gradient(45deg, var(--brand-a) 0%, var(--brand-b) 52%, var(--brand-c) 100%);
+  --ink: #0b1a4d;
+}
+.logo { display: block; flex: none; width: 40px; height: 40px; border-radius: 28%; background: var(--logo) center / cover no-repeat; }
+.winbar { position: relative; z-index: 30; height: var(--wb); display: flex; align-items: stretch; padding-left: 14px; }
+.wb-left { flex: 1; min-width: 0; display: flex; align-items: center; }
+.winbar .brand { padding: 0 8px; gap: 9px; align-items: center; min-width: 0; }
+.winbar .logo { width: 20px; height: 20px; border-radius: 6px; }
+.winbar .brand-txt { display: flex !important; align-items: baseline; gap: 9px; min-width: 0; }
+.winbar .brand-name { font-size: 12.5px; font-weight: 700; letter-spacing: 0; white-space: nowrap; }
+.winbar .brand-ver { margin: 0; flex-wrap: nowrap; white-space: nowrap; }
+.wb-btns { display: flex; flex: none; }
+.wb-b { width: 46px; height: var(--wb); border: 0; padding: 0; background: transparent; color: var(--muted); display: grid; place-items: center; cursor: default; transition: background-color .12s, color .12s; }
+.wb-b svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+.wb-b:hover { background: rgba(255,255,255,.075); color: var(--text); }
+.wb-b:active { background: rgba(255,255,255,.045); }
+.wb-b.close:hover { background: #c42b1c; color: #fff; }
+.wb-b.close:active { background: #a8261a; color: rgba(255,255,255,.85); }
+.wb-b:focus-visible { outline-offset: -3px; }
+#wbTray .wb-tray-line { stroke-opacity: .55; }
+#wbTray:hover .wb-tray-line { stroke: var(--brand-c); stroke-opacity: 1; }
+.i-res { display: none; }
+.win-max .i-res { display: block; }
+.win-max .i-max { display: none; }
+.win-off .winbar .brand, .win-off .wb-b:not(:hover) { opacity: .55; }
+.win-off .winbar .logo { filter: saturate(.4); }
+.shell { height: calc(100vh - var(--wb)); padding-top: 0; }
+#sideTray { display: none; }
+/* Windows' own title bar (Settings): the brand goes back to the sidebar */
+.classic-frame .winbar { display: none; }
+.classic-frame .shell { height: 100vh; padding-top: 12px; }
+.classic-frame #sideTray { display: grid; }
+.side > .brand .logo { width: 36px; height: 36px; border-radius: 11px; }
+/* the splash and the credits wear the logo */
+.splash-logo { background: none; box-shadow: 0 26px 70px -22px rgba(42, 157, 255, .65); border-radius: 28%; }
+.splash-logo .logo { width: 96px; height: 96px; }
+.splash { background: radial-gradient(560px 380px at 50% 40%, rgba(42, 157, 255, .2), transparent 70%), var(--bg); }
+.splash-bar i { background: var(--brand); }
+.credit-hero { background: var(--brand); box-shadow: 0 24px 60px -26px rgba(42, 157, 255, .7); }
+.credit-hero::before, .credit-hero::after { border-color: rgba(11, 26, 77, .14); }
+.credit-hero::before { box-shadow: 0 0 0 40px rgba(11, 26, 77, .035), 0 0 0 90px rgba(11, 26, 77, .02); }
+.credit-hero .made, .credit-hero .made-role { color: rgba(11, 26, 77, .78); }
+.credit-hero .made-name { color: var(--ink); text-shadow: none; }
+.credit-hero .made-meta span { background: rgba(11, 26, 77, .12); color: var(--ink); }
+.cr-logo { position: absolute; right: 34px; top: 50%; width: 124px; height: 124px; transform: translateY(-50%) rotate(-6deg); box-shadow: 0 26px 50px -18px rgba(11, 26, 77, .55), 0 0 0 1px rgba(255,255,255,.35); }
+@media (max-width: 1080px) { .cr-logo { width: 92px; height: 92px; right: 22px; } }
+/* the active section: a thin bar in the brand colours */
+.nav-ind::before { content: ""; position: absolute; left: 3px; top: 50%; width: 3px; height: 14px; margin-top: -7px; border-radius: 3px; background: linear-gradient(180deg, var(--brand-c), var(--brand-b) 55%, var(--brand-a)); }
+/* rows that scroll sideways show that there is more */
+.tw-cats { -webkit-mask-image: none; mask-image: none; padding-right: 0; }
+.fade-x { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--fl, 0px), #000 calc(100% - var(--fr, 0px)), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 var(--fl, 0px), #000 calc(100% - var(--fr, 0px)), transparent 100%); }
 </style>
 </head>
 <body>
 <div class="splash" id="splash" aria-hidden="true">
-  <div class="splash-logo"><div class="splash-pill"><i></i><b></b></div></div>
+  <div class="splash-logo"><i class="logo"></i></div>
   <div class="splash-name">xKi4o Cleaner</div>
   <div class="splash-by">by xKi4o</div>
   <div class="splash-bar" id="splashBar"><i></i></div>
@@ -1342,22 +1401,27 @@ body.dock-on .toasts { bottom: 84px; }
 </div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <linearGradient id="gGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7aa2ff"/><stop offset="1" stop-color="#2f6bff"/></linearGradient>
+    <linearGradient id="gGrad" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#b47cff"/><stop offset=".5" stop-color="#2a9dff"/><stop offset="1" stop-color="#3ee8b0"/></linearGradient>
     <linearGradient id="cGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f6bff" stop-opacity=".45"/><stop offset="1" stop-color="#2f6bff" stop-opacity="0"/></linearGradient>
   </defs>
 </svg>
 
-<div class="shell">
-  <aside class="side">
-    <div class="brand">
-      <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
-        <rect x="1" y="1" width="38" height="38" rx="12" style="fill:var(--blue)"/>
-        <rect x="8" y="15" width="24" height="10" rx="5" fill="rgba(255,255,255,.28)"/>
-        <rect x="8" y="15" width="13" height="10" rx="5" fill="#fff"/>
-        <circle cx="27" cy="20" r="2" fill="#fff"/>
-      </svg>
+<header class="winbar" id="winbar">
+  <div class="wb-left" id="wbLeft">
+    <div class="brand" id="brand">
+      <i class="logo" aria-hidden="true"></i>
       <div class="brand-txt"><div class="brand-name">xKi4o Cleaner</div><div class="brand-ver"><span id="brandVer"></span><button class="upd-pill" id="updPill" hidden></button></div></div>
     </div>
+  </div>
+  <div class="wb-btns">
+    <button class="wb-b" id="wbTray" data-i-title="win.tray"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.6 2.6 8 8M8.6 4.2v4.4H4.2"/><path d="M1.2 11.1h9.6" class="wb-tray-line"/></svg></button>
+    <button class="wb-b" id="wbMin" data-i-title="win.min"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1.6 6h8.8"/></svg></button>
+    <button class="wb-b" id="wbMax" data-i-title="win.max"><svg class="i-max" viewBox="0 0 12 12" aria-hidden="true"><rect x="1.6" y="1.6" width="8.8" height="8.8" rx="1.6"/></svg><svg class="i-res" viewBox="0 0 12 12" aria-hidden="true"><rect x="1.4" y="3.6" width="7" height="7" rx="1.4"/><path d="M3.6 3.6V3c0-.8.6-1.4 1.4-1.4h4.2c.8 0 1.4.6 1.4 1.4v4.2c0 .8-.6 1.4-1.4 1.4h-.6"/></svg></button>
+    <button class="wb-b close" id="wbClose" data-i-title="win.close"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2l8 8M10 2 2 10"/></svg></button>
+  </div>
+</header>
+<div class="shell">
+  <aside class="side">
     <button class="cmd-btn" id="cmdBtn" data-i-title="pal.btnT"><span data-icon="search"></span><span class="lbl" data-i="pal.btn"></span><kbd>Ctrl K</kbd></button>
     <nav class="nav" id="nav" aria-label="Sections">
       <div class="nav-ind" id="navInd"></div>
@@ -1388,6 +1452,7 @@ body.dock-on .toasts { bottom: 84px; }
       </button>
       <div class="foot-row">
         <div class="who"><span class="dot" id="adminDot"></span><span id="adminText"></span></div>
+        <button class="fbtn" id="sideTray" data-i-title="win.tray"><svg viewBox="0 0 12 12" aria-hidden="true" style="width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round"><path d="M2.6 2.6 8 8M8.6 4.2v4.4H4.2"/><path d="M1.2 11.1h9.6"/></svg></button>
         <button class="fbtn" data-page="settings" data-i-title="nav.settings"><span data-icon="settings"></span></button>
         <button class="fbtn" data-page="credits" data-i-title="nav.credits"><span data-icon="credits"></span></button>
       </div>
@@ -1450,7 +1515,7 @@ body.dock-on .toasts { bottom: 84px; }
       <div class="notice" id="openNotice" hidden><p id="openText"></p><button class="btn small primary" id="btnCloseApps"></button><button class="btn small" id="btnRecheck" data-i="notice.recheck"></button></div>
       <div class="notice info" id="pendingNotice" hidden><p id="pendingText"></p></div>
       <div class="notice info" id="adminNotice" hidden><p data-i="notice.noadmin"></p></div>
-      <div class="cards" id="cards"></div>
+      <div class="cards" id="cards" data-fade="80"></div>
       <div class="table">
         <div class="tbar">
           <input type="checkbox" class="cb" id="cbAll" aria-label="All">
@@ -1667,6 +1732,7 @@ body.dock-on .toasts { bottom: 84px; }
           <div class="item"><div class="i-ico" data-icon="sparkle"></div><div><div class="t" data-i="set.motion"></div><div class="d" data-i="set.motionD"></div></div><input type="checkbox" class="switch" id="motionToggle" checked></div>
           <div class="item"><div class="i-ico" data-icon="cpu"></div><div><div class="t" data-i="set.pulse"></div><div class="d" data-i="set.pulseD"></div></div><input type="checkbox" class="switch" id="pulseToggle" checked></div>
           <div class="item"><div class="i-ico" data-icon="pie"></div><div><div class="t" data-i="set.autoDisk"></div><div class="d" data-i="set.autoDiskD"></div></div><input type="checkbox" class="switch" id="autoDiskToggle" checked></div>
+          <div class="item"><div class="i-ico" data-icon="window"></div><div><div class="t" data-i="set.frame"></div><div class="d" data-i="set.frameD"></div></div><input type="checkbox" class="switch" id="frameToggle"></div>
         </div>
         <div class="section-t" data-i="set.safety"></div>
         <div class="list">
@@ -1691,6 +1757,7 @@ body.dock-on .toasts { bottom: 84px; }
     <section class="page" id="page-credits">
       <div class="scroll pad" style="padding-top:22px">
         <div class="credit-hero" id="creditHero">
+          <i class="logo cr-logo" aria-hidden="true"></i>
           <div class="made" data-i="cr.made"></div>
           <div class="made-name">xKi4o</div>
           <div class="made-role" data-i="cr.role"></div>
@@ -2401,6 +2468,8 @@ bg: {
   "tw.edge-bg-off.d": "Edge не се пуска предварително при стартиране (Startup boost) и не остава да работи, след като го затвориш.",
   "tw.edge-bg-off.w": "Edge ще пише „Браузърът се управлява от организацията ви“.",
   "gm.helpersT": "Помощните ѝ програми се броят с нея и се затварят заедно с нея.",
+  "win.tray": "Скрий в трея — програмата продължава да работи до часовника", "win.min": "Минимизирай", "win.max": "Увеличи", "win.restore": "Възстанови", "win.close": "Затвори",
+  "set.frame": "Заглавна лента на Windows", "set.frameD": "Стандартната лента на Windows вместо тази на програмата. Бутонът за трея отива долу в страничната лента.",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -2911,6 +2980,8 @@ en: {
   "tw.edge-bg-off.d": "Edge is not preloaded at startup (Startup boost) and does not keep running after you close it.",
   "tw.edge-bg-off.w": "Edge will say “Your browser is managed by your organization”.",
   "gm.helpersT": "Its helper programs are counted with it and close together with it.",
+  "win.tray": "Hide to the tray — the app keeps running next to the clock", "win.min": "Minimize", "win.max": "Maximize", "win.restore": "Restore down", "win.close": "Close",
+  "set.frame": "Windows title bar", "set.frameD": "Windows' standard title bar instead of the app's own. The tray button moves to the bottom of the sidebar.",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -2980,6 +3051,7 @@ const ICONS = {
   open: P('<path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>'),
   rocket: P('<path d="M5 15c-1.5 1.5-2 4.5-2 6 1.5 0 4.5-.5 6-2"/><path d="M9 15l-3-3c1-4 4.5-8.5 12-9 0 7.5-5 11-9 12z"/><circle cx="14.5" cy="9.5" r="1.6"/>'),
   pie: P('<path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/>'),
+  window: P('<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M14 6.5h1M17 6.5h1"/>'),
   download: P('<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>'),
   upload: P('<path d="M12 20V9M7 14l5-5 5 5M5 4h14"/>'),
   trash: P('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'),
@@ -3286,6 +3358,60 @@ function makeSeg(el, options, value, onChange) {
 const handlers = {};
 window.__ev = (type, data) => { const h = handlers[type]; if (h) h(data); };
 const on = (tp, f) => { handlers[tp] = f; };
+
+/* The window's own title bar: drag to move, double-click to maximize, and
+   the buttons (to the tray, minimize, maximize, close). */
+const WB = { own: true, max: false };
+function paintWin(d) {
+  if (d && typeof d === "object") { if (typeof d.max === "boolean") WB.max = d.max; if (typeof d.own === "boolean") WB.own = d.own; if (typeof d.active === "boolean") document.body.classList.toggle("win-off", !d.active); }
+  document.body.classList.toggle("win-max", WB.max);
+  document.body.classList.toggle("classic-frame", !WB.own);
+  const b = $("#brand"), side = $(".side"), left = $("#wbLeft");
+  if (b && side && left) { if (WB.own && b.parentElement !== left) left.appendChild(b); else if (!WB.own && b.parentElement !== side) side.insertBefore(b, side.firstChild); }
+  const mx = $("#wbMax"); if (mx) { mx.dataset.iTitle = WB.max ? "win.restore" : "win.max"; mx.title = t(mx.dataset.iTitle); }
+  const ft = $("#frameToggle"); if (ft) ft.checked = !WB.own;
+}
+/* Rows that scroll sideways fade out at the side where there is more. */
+function fadeEdges(el) {
+  const upd = () => {
+    const max = el.scrollWidth - el.clientWidth;
+    el.classList.toggle("fade-x", max > 1);
+    const w = (+el.dataset.fade || 36) + "px";
+    el.style.setProperty("--fl", el.scrollLeft > 1 ? w : "0px");
+    el.style.setProperty("--fr", el.scrollLeft < max - 1 ? w : "0px");
+  };
+  el.addEventListener("scroll", upd, { passive: true });
+  if (window.ResizeObserver) new ResizeObserver(upd).observe(el);
+  new MutationObserver(upd).observe(el, { childList: true, subtree: true });
+  upd();
+}
+function toTray() {
+  api.winTray(!S.settings.trayTold);
+  if (!S.settings.trayTold) { S.settings.trayTold = true; storeSettings(); }
+}
+(() => {
+  const bar = $("#winbar");
+  let down = null;
+  bar.addEventListener("mousedown", e => {
+    if (e.button !== 0 || e.target.closest("button, a, input")) return;
+    down = { x: e.screenX, y: e.screenY };
+    e.preventDefault();
+  });
+  window.addEventListener("mousemove", e => {
+    if (!down) return;
+    if (!(e.buttons & 1)) { down = null; return; }
+    if (Math.abs(e.screenX - down.x) + Math.abs(e.screenY - down.y) >= 3) { down = null; api.winDrag(); }
+  });
+  window.addEventListener("mouseup", () => { down = null; });
+  bar.addEventListener("dblclick", e => { if (!e.target.closest("button")) api.winMaximize(); });
+  $("#wbTray").addEventListener("click", toTray);
+  $("#sideTray").addEventListener("click", toTray);
+  $("#wbMin").addEventListener("click", () => api.winMinimize());
+  $("#wbMax").addEventListener("click", () => api.winMaximize());
+  $("#wbClose").addEventListener("click", () => api.winClose());
+})();
+on("win", paintWin);
+document.querySelectorAll(".cards, .tw-cats, .da-vols").forEach(fadeEdges);
 // Go bindings live in window.__go (see third_party/go-webview2/PATCHES.md): a page
 // function with the same name as a binding would otherwise replace window[name].
 const GO = window.__go || {};
@@ -4352,8 +4478,9 @@ function renderTwCats() {
   const cats = ["all"].concat(TW_GROUPS);
   $("#twCats").innerHTML = cats.map(c => {
     const all = c === "all" ? TW.meta : TW.meta.filter(m => m.group === c);
-    const on = all.filter(m => twIsOn(m.id)).length;
-    return `<button class="tw-cat" data-cat="${c}" aria-pressed="${TW.cat === c}">${c === "all" ? ICONS.tweaks : ICONS[TW_ICON[c]]}<span>${esc(t(c === "all" ? "tw.cat.all" : "tw.g." + c))}</span><span class="c">${TW.loaded && all.length ? on + "/" + all.length : all.length || ""}</span></button>`;
+    const avail = twAvail(all); // counted like the summary: the tweaks this Windows has
+    const on = avail.filter(m => twIsOn(m.id)).length;
+    return `<button class="tw-cat" data-cat="${c}" aria-pressed="${TW.cat === c}">${c === "all" ? ICONS.tweaks : ICONS[TW_ICON[c]]}<span>${esc(t(c === "all" ? "tw.cat.all" : "tw.g." + c))}</span><span class="c">${TW.loaded && avail.length ? on + "/" + avail.length : all.length || ""}</span></button>`;
   }).join("");
   $$("#twCats .tw-cat").forEach(b => b.addEventListener("click", () => { TW.cat = b.dataset.cat; renderTweaks(); $("#twBody").scrollTo({ top: 0, behavior: motionOK() ? "smooth" : "auto" }); }));
 }
@@ -4421,10 +4548,12 @@ function paintTwSummary() {
   $("#twAdmin").hidden = !S.info || !!S.info.admin;
   renderTwCatsCounts();
 }
+// the tweaks of a group that this Windows has (the summary counts the same)
+function twAvail(list) { return TW.loaded ? list.filter(m => { const st = (TW.state[m.id] || {}).state; return st && st !== "na"; }) : list; }
 function renderTwCatsCounts() {
   $$("#twCats .tw-cat").forEach(b => {
-    const c = b.dataset.cat, all = c === "all" ? TW.meta : TW.meta.filter(m => m.group === c);
-    b.querySelector(".c").textContent = TW.loaded && all.length ? all.filter(m => twIsOn(m.id)).length + "/" + all.length : (all.length || "");
+    const c = b.dataset.cat, all = c === "all" ? TW.meta : TW.meta.filter(m => m.group === c), avail = twAvail(all);
+    b.querySelector(".c").textContent = TW.loaded && avail.length ? avail.filter(m => twIsOn(m.id)).length + "/" + avail.length : (all.length || "");
   });
 }
 function paintTwRp(text) {
@@ -5329,6 +5458,12 @@ function setupLangSeg() {
 }
 $("#pulseToggle").addEventListener("change", e => { S.settings.pulse = e.target.checked; storeSettings(); pulseTick(); });
 $("#autoDiskToggle").addEventListener("change", e => { S.settings.autoDisk = e.target.checked; storeSettings(); });
+$("#frameToggle").addEventListener("change", async e => {
+  S.settings.classicFrame = e.target.checked; storeSettings();
+  paintWin({ own: !e.target.checked });
+  try { paintWin(await api.winFrame(!e.target.checked)); } catch (err) {}
+  requestAnimationFrame(moveNav);
+});
 $("#motionToggle").addEventListener("change", e => { S.settings.motion = e.target.checked; document.documentElement.classList.toggle("nomotion", !e.target.checked); storeSettings(); });
 $("#rpToggle").addEventListener("change", e => { S.settings.restorePoint = e.target.checked; storeSettings(); });
 $("#forceToggle").addEventListener("change", e => { S.settings.forceClose = e.target.checked; storeSettings(); });
@@ -5366,7 +5501,8 @@ function applyAccent(id) {
   r.setProperty("--blue", a[0]); r.setProperty("--blue-2", a[1]); r.setProperty("--blue-hi", a[2]);
   r.setProperty("--blue-light", a[3]); r.setProperty("--blue-deep", a[4]); r.setProperty("--blue-rgb", hexRgb(a[0]));
   const g = $$("#gGrad stop"), c = $$("#cGrad stop");
-  g[0].setAttribute("stop-color", a[3]); g[1].setAttribute("stop-color", a[0]);
+  const stops = id === "blue" || !ACCENTS[id] ? ["#b47cff", "#2a9dff", "#3ee8b0"] : [a[0], a[1], a[3]];
+  g.forEach((x, i) => x.setAttribute("stop-color", stops[i]));
   c.forEach(x => x.setAttribute("stop-color", a[0]));
   $$("#swatches .sw-btn").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.acc === id)));
 }
@@ -7218,6 +7354,8 @@ async function init() {
     if (typeof st.accent === "string" && ACCENTS[st.accent]) s.accent = st.accent;
     if (typeof st.pulse === "boolean") s.pulse = st.pulse;
     if (typeof st.autoDisk === "boolean") s.autoDisk = st.autoDisk;
+    if (typeof st.classicFrame === "boolean") s.classicFrame = st.classicFrame;
+    if (st.trayTold === true) s.trayTold = true;
     if (st.find && typeof st.find === "object") s.find = st.find;
     if (typeof st.logSeen === "number") s.logSeen = st.logSeen;
     if (typeof st.forceClose === "boolean") s.forceClose = st.forceClose;
@@ -7234,6 +7372,8 @@ async function init() {
   $("#motionToggle").checked = S.settings.motion;
   $("#pulseToggle").checked = S.settings.pulse !== false;
   $("#autoDiskToggle").checked = S.settings.autoDisk !== false;
+  $("#frameToggle").checked = !!S.settings.classicFrame;
+  paintWin({ own: !S.settings.classicFrame });
   document.documentElement.classList.toggle("nomotion", !S.settings.motion);
   const info = await api.appInfo();
   S.info = info; S.drive = info.drive;
@@ -7254,6 +7394,7 @@ async function init() {
   // after the splash: what is new (once after an update), then the update check
   setTimeout(async () => { await maybeShowNews(); if (S.settings.updates !== false) updCheck(false); }, 3800);
   requestAnimationFrame(moveNav);
+  api.winReady().then(paintWin).catch(() => {});
   setTimeout(() => maybeHideSplash(true), 3200); // never longer: the scan goes on in the window
   setTimeout(diskHealthWarn, 9000); // warn early about a disk in trouble
   setTimeout(async () => {
@@ -7273,6 +7414,7 @@ setTimeout(hideSplash, 6000); // never stay stuck on the splash
 /* =====================================================================
    Mock backend for previewing in a normal browser
 ===================================================================== */
+const MOCKWIN = { max: false, own: new URLSearchParams(location.search).get("frame") !== "classic" };
 const Mock = (() => {
   const GB = 1024 ** 3, MB = 1024 ** 2;
   const q = new URLSearchParams(location.search), scen = q.get("s") || "";
@@ -7427,7 +7569,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "2.8.1", author: "xKi4o", admin: scen !== "noadmin", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "2.9.0", author: "xKi4o", admin: scen !== "noadmin", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -7683,11 +7825,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "2.8.1", latest: nw ? "2.9.0" : "2.8.1", newer: nw, name: "xKi4o Cleaner 2.9.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v2.9.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "2.9.0", latest: nw ? "3.0.0" : "2.9.0", newer: nw, name: "xKi4o Cleaner 3.0.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.0.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders
@@ -7841,6 +7983,14 @@ Object.assign(Mock, (() => {
       return { state: JSON.parse(JSON.stringify(game)) };
     },
     gameStop: async () => { await new Promise(r => setTimeout(r, 300)); game = { active: false, since: 0, closed: [], freed: 0 }; return { state: game }; },
+    // the window (a browser has none: the calls are only recorded)
+    winDrag: async () => { (window.__winCalls = window.__winCalls || []).push("drag"); return true; },
+    winMinimize: async () => { (window.__winCalls = window.__winCalls || []).push("min"); return true; },
+    winMaximize: async () => { (window.__winCalls = window.__winCalls || []).push("max"); MOCKWIN.max = !MOCKWIN.max; setTimeout(() => window.__ev("win", { max: MOCKWIN.max, active: true, own: MOCKWIN.own }), 30); return true; },
+    winClose: async () => { (window.__winCalls = window.__winCalls || []).push("close"); return true; },
+    winTray: async hint => { (window.__winCalls = window.__winCalls || []).push(hint ? "tray+hint" : "tray"); return true; },
+    winFrame: async own => { MOCKWIN.own = own; (window.__winCalls = window.__winCalls || []).push(own ? "frame:own" : "frame:classic"); return { own, max: MOCKWIN.max, active: true }; },
+    winReady: async () => ({ own: MOCKWIN.own, max: MOCKWIN.max, active: true }),
     tidyPlaces: async () => [
       { id: "desktop", path: "C:\\Users\\demo\\Desktop", def: true }, { id: "documents", path: "C:\\Users\\demo\\Documents", def: true },
       { id: "downloads", path: "C:\\Users\\demo\\Downloads", def: true }, { id: "pictures", path: "C:\\Users\\demo\\Pictures", def: true },

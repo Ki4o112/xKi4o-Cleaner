@@ -50,6 +50,10 @@ type WebView interface {
 	// thread.
 	SetTitle(title string)
 
+	// SetTopInset leaves px pixels of the window above the page (patched in
+	// for xKi4o Cleaner). Must be called from the UI thread.
+	SetTopInset(px int)
+
 	// SetSize updates native window size. See Hint constants.
 	SetSize(w int, h int, hint Hint)
 
