@@ -101,7 +101,12 @@ func runPS(timeout time.Duration, script string) (string, int, error) {
 
 // runStream runs a console tool hidden and reports its output line by line.
 func runStream(name string, args []string, onLine func(text string, replace bool)) (int, error) {
-	cmd := hiddenCmd(context.Background(), name, args...)
+	return runStreamCtx(context.Background(), name, args, onLine)
+}
+
+// runStreamCtx is runStream that ends the tool when ctx is cancelled.
+func runStreamCtx(ctx context.Context, name string, args []string, onLine func(text string, replace bool)) (int, error) {
+	cmd := hiddenCmd(ctx, name, args...)
 	pr, pw := io.Pipe()
 	cmd.Stdout = pw
 	cmd.Stderr = pw

@@ -3,6 +3,24 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 2.10.0 — 2026-10-16
+
+### English
+- Added optimization for HDDs (defragmentation with progress and Stop), not only TRIM for SSDs
+- Added an analysis of how fragmented an HDD is
+- Added the details of each disk: S.M.A.R.T. counters by name, Windows' log of disk errors and what can help
+- Added a read-only check and a bad sector check (chkdsk /r) of a drive from its details
+- Removed Epic Games and other launchers that update themselves from program updates
+- Added a clear message when an update removes the program instead of updating it
+
+### Български
+- Добавена оптимизация и за HDD дисковете (дефрагментация с прогрес и „Спри“), не само TRIM за SSD
+- Добавен анализ колко е фрагментиран един HDD
+- Добавени подробности за всеки диск: S.M.A.R.T. показателите с имена, грешките на диска в дневника на Windows и какво може да помогне
+- Добавени проверка само за четене и проверка за лоши сектори (chkdsk /r) на диск от подробностите му
+- Махнати Epic Games и другите лаунчери, които се обновяват сами, от обновяването на програми
+- Добавено ясно съобщение, когато обновяване премахне програмата, вместо да я обнови
+
 ## 2.9.1 — 2026-10-16
 
 ### English

@@ -1332,6 +1332,9 @@ body.dock-on .toasts { bottom: 84px; }
 .rc-cards.five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 @media (max-width: 1180px) { .rc-cards.five { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
+.wg-self { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; padding: 8px 14px 10px; }
+.wg-self svg { width: 15px; height: 15px; flex: none; color: var(--faint); }
+
 /* ================= 2.9: own title bar, the logo, the brand colours ================= */
 :root {
   --wb: 38px;
@@ -1388,6 +1391,62 @@ body.dock-on .toasts { bottom: 84px; }
 /* rows that scroll sideways show that there is more */
 .tw-cats { -webkit-mask-image: none; mask-image: none; padding-right: 0; }
 .fade-x { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--fl, 0px), #000 calc(100% - var(--fr, 0px)), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 var(--fl, 0px), #000 calc(100% - var(--fr, 0px)), transparent 100%); }
+
+/* ================= 2.10: drive optimization for every drive, the details of a disk ================= */
+.drive-row { grid-template-columns: 54px minmax(0, 1fr) 190px 200px; }
+.res-col { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; min-width: 0; text-align: right; }
+.res-col .res { font-size: 12.5px; font-weight: 700; color: var(--muted); }
+.res-col .res.ok { color: var(--mint); }
+.opt-run { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12.5px; font-weight: 700; }
+.opt-bar { width: 150px; height: 5px; border-radius: 3px; background: #0d1326; overflow: hidden; }
+.opt-bar i { display: block; height: 100%; border-radius: 3px; background: var(--brand); transition: width .6s var(--ease); }
+.opt-frag { font-size: 12.5px; font-weight: 700; color: var(--mint); }
+.opt-frag.need { color: #ffcf8a; }
+.opt-fragd { color: var(--faint); font-size: 11.5px; }
+.opt-weekly { display: flex; align-items: center; gap: 8px; color: var(--faint); font-size: 12px; padding: 12px 18px 14px; border-top: 1px solid var(--line-soft); }
+.opt-weekly svg { width: 15px; height: 15px; flex: none; }
+.opt-picks { display: flex; flex-direction: column; gap: 8px; }
+.opt-pick { display: grid; grid-template-columns: auto 46px minmax(0, 1fr); gap: 12px; align-items: center; padding: 12px 14px; border-radius: var(--r-m); background: var(--card); border: 1px solid var(--line-soft); cursor: pointer; }
+.opt-pick .letter { font-weight: 800; font-size: 15px; padding-top: 1px; }
+.opt-pick .t { font-weight: 600; }
+.opt-pick .d { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.opt-pick .w { color: #ffcf8a; font-size: 12px; margin-top: 4px; }
+.opt-pick.risky { border-color: rgba(255,181,71,.35); }
+.dh-foot { display: flex; justify-content: flex-end; margin-top: -2px; }
+.dh-foot .btn svg { width: 15px; height: 15px; }
+.dd-sec { margin-bottom: 18px; }
+.dd-sec h4 { margin: 0 0 8px; font-size: 13.5px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.dd-h { color: var(--faint); font-size: 11px; font-weight: 700; }
+.dd-adv { display: flex; flex-direction: column; gap: 6px; }
+.dd-a { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 12px; border-radius: var(--r-m); background: var(--card); border: 1px solid var(--line-soft); }
+.dd-a .btn svg { width: 15px; height: 15px; }
+.dd-ai { width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; background: var(--amber-soft); color: #ffcf8a; }
+.dd-ai svg { width: 16px; height: 16px; }
+.dd-adv.ok .dd-ai { background: var(--mint-soft); color: var(--mint); }
+.dd-at { font-size: 13px; line-height: 1.45; }
+.dd-smh, .dd-sm { display: grid; grid-template-columns: 34px minmax(0, 1fr) 110px 110px; gap: 10px; align-items: center; padding: 7px 12px; }
+.dd-smh { color: var(--faint); font-size: 11px; font-weight: 700; padding-top: 0; padding-bottom: 4px; }
+.dd-sms { border-radius: var(--r-m); background: var(--card); border: 1px solid var(--line-soft); overflow: hidden; }
+.dd-sm { border-top: 1px solid var(--line-soft); font-size: 12.5px; }
+.dd-sm:first-child { border-top: 0; }
+.dd-sm .id { color: var(--faint); font: 11px var(--mono); }
+.dd-sm .v { font-weight: 700; text-align: right; }
+.dd-sm .q { color: var(--faint); font-size: 11.5px; text-align: right; }
+.dd-smh span:nth-child(3), .dd-smh span:nth-child(4) { text-align: right; }
+.dd-sm.warn .v { color: #ffcf8a; }
+.dd-sm.bad .v, .dd-sm.bad .n { color: #ffb3bc; }
+.dd-all { margin-top: 8px; }
+.dd-all summary, .dd-ev summary { cursor: pointer; color: var(--muted); font-size: 12.5px; font-weight: 600; }
+.dd-all[open] summary { margin-bottom: 8px; }
+.dd-nv { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.dd-ev { border-radius: var(--r-m); background: var(--card); border: 1px solid var(--line-soft); padding: 10px 12px; margin-bottom: 6px; }
+.dd-ev summary { display: flex; gap: 10px; align-items: baseline; list-style: none; }
+.dd-ev summary::-webkit-details-marker { display: none; }
+.dd-evn { color: var(--text); font-size: 13px; font-weight: 600; flex: 1; min-width: 0; }
+.dd-evc { color: #ffcf8a; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.dd-evm { margin-top: 8px; color: var(--muted); font-size: 12px; user-select: text; line-height: 1.5; }
+.dd-evm .k { display: block; color: var(--faint); font: 11px var(--mono); margin-bottom: 3px; }
+@media (max-width: 1080px) { .dd-nv { grid-template-columns: repeat(3, minmax(0, 1fr)); } .drive-row { grid-template-columns: 44px minmax(0, 1fr) 150px 170px; } }
 </style>
 </head>
 <body>
@@ -2017,8 +2076,8 @@ bg: {
   "rg.modified": "Modified списък", "rg.modified.d": "Може да даде кратко засичане, докато се записва",
   "rg.combine": "Обединяване на еднакви страници", "rg.combine.d": "Windows 10 и 11",
   "rg.registry": "Кеш на регистъра", "rg.registry.d": "Записва чакащите промени в регистъра на диска",
-  "opt.title": "Оптимизация на дисковете", "opt.sub": "TRIM казва на SSD кои блокове са свободни, за да пази скоростта си. HDD дисковете Windows ги поддържа сам.",
-  "opt.btn": "Оптимизирай SSD дисковете", "opt.running": "Оптимизира се…", "opt.loading": "Зареждане на дисковете…", "opt.none": "Не са намерени локални дискове.",
+  "opt.title": "Оптимизация на дисковете", "opt.sub": "TRIM за SSD, дефрагментация за HDD — със собствения инструмент на Windows. Нищо не се изтрива.",
+  "opt.btn": "Оптимизирай дисковете", "opt.running": "Оптимизира се…", "opt.loading": "Зареждане на дисковете…", "opt.none": "Не са намерени локални дискове.",
   "opt.hdd": "Windows го поддържа сам", "opt.ok": "TRIM готов", "opt.unsupported": "Не се поддържа", "opt.unknown": "Неизвестен тип", "opt.local": "Локален диск", "opt.free": "{0} свободни от {1}", "opt.done": "Готово.",
   "rep.title": "Поправка на Windows", "rep.sub": "Когато Windows се държи странно — сривове, грешки, ъпдейти, които не минават",
   "rep.full.t": "Пълна проверка", "rep.full.d": "DISM поправя хранилището на Windows, после SFC проверява системните файлове. Това е препоръчителният ред.", "rep.full.w": "20–40 минути, нужен е интернет",
@@ -2311,7 +2370,7 @@ bg: {
   "job.drop": "Махни", "job.recent": "Наскоро", "job.stopping": "Спира…", "job.scan": "Сканиране за почистване", "job.rescan": "Обновяване на списъка",
   "job.waitFor": "На опашката — започва след „{0}“.", "job.scanRes": "{0} за почистване", "job.preview": "Преглед на почистването", "job.clean": "Почистване",
   "job.droppedClean": "Почистването е махнато от опашката.", "job.previewRes": "Ще се освободят {0}", "job.cleanRes": "Освободени {0}", "job.memory": "Освобождаване на RAM",
-  "job.unqueue": "Чака — махни от опашката", "mem.toastDone": "Освободени {0} RAM", "job.trim": "TRIM на SSD", "job.repair": "Поправка: {0}", "job.rp": "Точка за възстановяване",
+  "job.unqueue": "Чака — махни от опашката", "mem.toastDone": "Освободени {0} RAM", "job.trim": "Оптимизация на дисковете", "job.repair": "Поправка: {0}", "job.rp": "Точка за възстановяване",
   "job.large": "Търсене на големи файлове", "job.dupes": "Търсене на дубликати", "job.files": "{0} файла", "job.largeRes": "{0} големи файла", "job.dupesRes": "{0} групи дубликати",
   "da.searchTree": "Филтрирай имена…", "da.expandBig": "Разгъни най-голямото", "da.collapse": "Свий всичко", "da.exts": "По разширение",
   "da.extsD": "Най-големите видове файлове по разширение", "da.pctFree": "{0}% свободни", "job.disk": "Анализ на {0}", "job.diskRe": "Повторно сканиране на {0}",
@@ -2338,7 +2397,7 @@ bg: {
   "upd.busyJobs": "Първо изчакай задачите отдолу да свършат, после обнови.", "upd.working": "Обновявам…", "upd.downloading": "Изтеглям и проверявам…",
   "upd.restarting": "Готово — рестартирам с новата версия…", "upd.noNotes": "Няма описание за тази версия.", "upd.newsTitleU": "Обновено до {0} — какво е новото",
   "upd.newsTitle": "Какво е новото във {0}", "upd.newsSub": "Програмата беше обновена успешно.", "upd.ok": "Добре", "lg.k.update": "Ъпдейти",
-  "nav.home": "Здраве на PC", "nav.programs": "Програми", "nav.game": "Режим „Игри“", "nav.tidy": "Празни и счупени", "opt.trimT": "TRIM на SSD дисковете",
+  "nav.home": "Здраве на PC", "nav.programs": "Програми", "nav.game": "Режим „Игри“", "nav.tidy": "Празни и счупени", "opt.trimT": "Дисковете",
   "lg.k.uninstall": "Деинсталиране", "lg.k.winget": "Обновления (winget)", "lg.k.game": "Режим „Игри“", "lg.k.tidy": "Празни папки и преки пътища", "hm.title": "Здраве на компютъра",
   "hm.sub": "Всичко накратко — и какво да се направи", "hm.checking": "Проверява се…", "hm.checkingD": "Събират се данните за диска, паметта и програмите.",
   "hm.good": "Компютърът е в добро състояние", "hm.fair": "Има неща за оправяне", "hm.poor": "Нужна е намеса", "hm.issues": "Неща, които свалят оценката: {0}. Виж картите отдолу.",
@@ -2469,6 +2528,47 @@ bg: {
   "gm.helpersT": "Помощните ѝ програми се броят с нея и се затварят заедно с нея.",
   "win.tray": "Скрий в трея — програмата продължава да работи до часовника", "win.min": "Минимизирай", "win.max": "Увеличи", "win.restore": "Възстанови", "win.close": "Затвори",
   "set.frame": "Заглавна лента на Windows", "set.frameD": "Стандартната лента на Windows вместо тази на програмата. Бутонът за трея отива долу в страничната лента.",
+  "opt.okHdd": "Дефрагментиран", "opt.analyze": "Анализирай", "opt.analyzing": "Анализира се…", "opt.analyzeFail": "Анализът не стана", "opt.frag": "Фрагментиран {0}%",
+  "opt.fragNeed": "струва си да се оптимизира", "opt.fragOk": "няма нужда", "opt.chooseT": "Оптимизиране на дисковете",
+  "opt.chooseD": "Прави го собственият инструмент на Windows. Може да се спре по всяко време.", "opt.ssdAct": "TRIM — няколко секунди",
+  "opt.hddAct": "Дефрагментация — от минути до часове; компютърът може да се ползва междувременно",
+  "opt.diskWarn": "Този диск отчита грешки. Дефрагментацията чете и пише много — първо копирай важното от него.", "opt.go": "Оптимизирай ({0})", "opt.stop": "Спри",
+  "opt.stopping": "Спира се…", "opt.stoppedT": "Спряно", "opt.skipped": "Пропуснат",
+  "opt.weekly": "Windows сам оптимизира дисковете веднъж седмично (Оптимизиране на устройства) — тук е, когато искаш сега.", "dh.detailsBtn": "Подробно",
+  "dh.whatHelps": "Какво има и какво помага", "dh.thisDisk": "този диск", "dh.d.loading": "Чете се какво отчита дискът и дневникът на Windows…", "dh.d.help": "Какво може да помогне",
+  "dh.d.reports": "Какво отчита дискът", "dh.d.log": "Дневникът на Windows — последните 60 дни", "dh.d.noLog": "Няма грешки за този диск в дневника на Windows.",
+  "dh.d.attr": "Показател", "dh.d.count": "Стойност", "dh.d.norm": "Сега/най-лошо · праг",
+  "dh.d.normT": "Оценката на диска за показателя (по-високото е по-добре), най-ниската досега и прагът, под който производителят го смята за повреден.",
+  "dh.d.all": "Всички показатели ({0})", "dh.d.times": "{0} пъти · последно {1}", "dh.d.copy": "Копирай отчета", "dh.d.copied": "Отчетът е копиран", "dh.d.open": "Отвори {0}",
+  "dh.d.scan": "Провери {0} (само четене)", "dh.d.fix": "Провери {0} за лоши сектори", "dh.d.fixT": "Проверка на {0} за лоши сектори?",
+  "dh.d.fixD": "Windows ще прочете всеки сектор на {0} и ще премести данните от лошите (chkdsk /r). За голям HDD отнема часове. Докато трае, {0} не е достъпен за програмите — затвори каквото го ползва и запази работата си. Първо копирай важното.",
+  "dh.d.fixOk": "Започни проверката", "dh.a.backup": "Копирай важното от {0} на друг диск сега, докато още се чете.",
+  "dh.a.sectors": "{1} сектора не могат да се прочетат в момента (чакащи). Дискът ги заменя с резервни, когато се запишат отново — проверката за лоши сектори прави точно това.",
+  "dh.a.unc": "{1} четения или записа не са станали дори след собствената корекция на диска — данните на тези места може да са повредени.",
+  "dh.a.logged": "Windows е записал {1} грешки при четене (лош блок) за този диск — виж дневника по-долу.",
+  "dh.a.fix": "Провери {0} за лоши сектори: Windows чете всеки сектор и мести данните от лошите. Отнема часове и през това време {0} не се ползва.",
+  "dh.a.fixSys": "Това е дискът на Windows: пълна проверка за лоши сектори става само при рестарт (в терминал като администратор: chkdsk C: /r, после рестарт).",
+  "dh.a.watch": "Погледни пак след няколко седмици: ако числата растат, дискът се износва — планирай нов.",
+  "dh.a.realloc": "Дискът вече е заменил {1} лоши сектора с резервни. Няколко са нормални за стар диск, но растящо число не е.",
+  "dh.a.cable": "{1} грешки при пренос между диска и компютъра (CRC) — обикновено кабелът или портът. Смени SATA кабела или пробвай друг порт.",
+  "dh.a.retry": "{1} пъти дискът е отговорил късно или четенето е повторено — провери захранването и кабелите; може и дискът да се износва.",
+  "dh.a.fs": "Файловата система на {0} е отчела грешки {1} пъти — провери я (първо само четене).", "dh.a.cool": "Дискът е топъл — почисти праха и осигури въздух около него.",
+  "dh.a.wear": "Повечето от записите, за които е направен SSD-то, са използвани — пази резервно копие и планирай нов.",
+  "dh.a.ok": "Няма какво да се прави — дискът не отчита проблеми.", "dh.e.badblock": "Лош блок — място на диска, което не се е прочело",
+  "dh.e.controller": "Грешка от контролера (често кабелът или портът)", "dh.e.notready": "Дискът не е бил готов (не е отговорил)",
+  "dh.e.paging": "Грешка при четене или запис за паметта на Windows", "dh.e.predict": "Дискът предсказва повреда (S.M.A.R.T.)",
+  "dh.e.retried": "Четене или запис е трябвало да се повтори", "dh.e.hwfail": "Четене или запис не е станал заради хардуерна грешка", "dh.e.removed": "Дискът е изчезнал неочаквано",
+  "dh.e.fs": "Файловата система е отчела повреда", "dh.e.other": "Друго предупреждение от драйвера на диска", "dh.n.temp": "Температура", "dh.n.used": "Износване",
+  "dh.n.spare": "Резервно място", "dh.n.written": "Записани", "dh.n.hours": "Работил", "dh.n.cycles": "Включвания", "dh.n.unsafe": "Изключвания без спиране",
+  "dh.n.media": "Грешки на носителя", "dh.n.errlog": "Записи в дневника за грешки", "dh.n.critical": "Критично предупреждение", "dh.n.none": "Няма",
+  "sm.1": "Грешки при четене (скорост)", "sm.3": "Време за завъртане", "sm.4": "Пускания/спирания", "sm.5": "Заменени сектори", "sm.7": "Грешки при позициониране", "sm.9": "Работил",
+  "sm.10": "Повторни завъртания", "sm.12": "Включвания", "sm.177": "Износване (SSD)", "sm.183": "Лоши блокове по време на работа", "sm.184": "Грешки по пътя на данните",
+  "sm.187": "Непоправени грешки", "sm.188": "Изтекли команди", "sm.189": "Записи от твърде високо", "sm.190": "Температура на въздуха", "sm.191": "Удари (G-sense)",
+  "sm.192": "Аварийни паркирания", "sm.193": "Цикли на главите", "sm.194": "Температура", "sm.196": "Замени на сектори", "sm.197": "Чакащи (нечетими) сектори",
+  "sm.198": "Непоправими сектори (офлайн)", "sm.199": "Грешки при пренос (CRC)", "sm.200": "Грешки при запис", "sm.231": "Оставащ живот (SSD)", "sm.241": "Общо записани",
+  "sm.242": "Общо прочетени", "sm.other": "Показател на производителя", "wg.selfList": "Не са в списъка, защото се обновяват сами: {0}",
+  "wg.h.gone": "Обновяването премахна програмата, вместо да я обнови. Инсталирай я отново от сайта ѝ — данните и игрите ѝ остават на мястото си.",
+  "dh.err.read": "Данните на диска не можаха да се прочетат.", "dh.noSmart": "Дискът не дава S.M.A.R.T. данни през Windows (често при USB кутии).",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -2542,8 +2642,8 @@ en: {
   "rg.modified": "Modified list", "rg.modified.d": "Can cause a brief stutter while it writes",
   "rg.combine": "Combine identical pages", "rg.combine.d": "Windows 10 and 11",
   "rg.registry": "Registry cache", "rg.registry.d": "Writes pending registry changes to disk",
-  "opt.title": "Drive optimization", "opt.sub": "TRIM tells an SSD which blocks are free so it keeps its speed. Windows maintains HDDs by itself.",
-  "opt.btn": "Optimize SSDs", "opt.running": "Optimizing…", "opt.loading": "Loading drives…", "opt.none": "No local drives were found.",
+  "opt.title": "Drive optimization", "opt.sub": "TRIM for SSDs, defragmentation for HDDs — with Windows' own tool. Nothing is deleted.",
+  "opt.btn": "Optimize drives", "opt.running": "Optimizing…", "opt.loading": "Loading drives…", "opt.none": "No local drives were found.",
   "opt.hdd": "Windows maintains it", "opt.ok": "TRIM done", "opt.unsupported": "Not supported", "opt.unknown": "Unknown type", "opt.local": "Local disk", "opt.free": "{0} free of {1}", "opt.done": "Done.",
   "rep.title": "Windows repair", "rep.sub": "For when Windows acts up — crashes, errors, updates that won't install",
   "rep.full.t": "Full check", "rep.full.d": "DISM repairs the Windows component store, then SFC checks the system files. This is the recommended order.", "rep.full.w": "20–40 minutes, needs internet",
@@ -2826,7 +2926,7 @@ en: {
   "job.queue": "In the queue", "job.place": "Waiting — #{0}", "job.drop": "Remove", "job.recent": "Recently", "job.stopping": "Stopping…", "job.scan": "Scan for cleaning",
   "job.rescan": "Refreshing the list", "job.waitFor": "In the queue — starts after “{0}”.", "job.scanRes": "{0} to clean", "job.preview": "Cleaning preview", "job.clean": "Cleaning",
   "job.droppedClean": "The cleaning was taken out of the queue.", "job.previewRes": "{0} would be freed", "job.cleanRes": "{0} freed", "job.memory": "Freeing RAM",
-  "job.unqueue": "Waiting — remove from queue", "mem.toastDone": "{0} of RAM freed", "job.trim": "SSD TRIM", "job.repair": "Repair: {0}", "job.rp": "Restore point",
+  "job.unqueue": "Waiting — remove from queue", "mem.toastDone": "{0} of RAM freed", "job.trim": "Drive optimization", "job.repair": "Repair: {0}", "job.rp": "Restore point",
   "job.large": "Large files search", "job.dupes": "Duplicate search", "job.files": "{0} files", "job.largeRes": "{0} large files", "job.dupesRes": "{0} duplicate groups",
   "da.searchTree": "Filter names…", "da.expandBig": "Expand the largest", "da.collapse": "Collapse all", "da.exts": "By extension",
   "da.extsD": "The largest kinds of files by extension", "da.pctFree": "{0}% free", "job.disk": "Analysing {0}", "job.diskRe": "Rescanning {0}", "job.diskProg": "{0} files · {1}",
@@ -2852,7 +2952,7 @@ en: {
   "upd.busyJobs": "Let the jobs at the bottom finish first, then update.", "upd.working": "Updating…", "upd.downloading": "Downloading and checking…",
   "upd.restarting": "Done — restarting with the new version…", "upd.noNotes": "There is no description for this version.", "upd.newsTitleU": "Updated to {0} — what's new",
   "upd.newsTitle": "What's new in {0}", "upd.newsSub": "The app was updated successfully.", "upd.ok": "OK", "lg.k.update": "Updates",
-  "nav.home": "PC health", "nav.programs": "Programs", "nav.game": "Game mode", "nav.tidy": "Empty & broken", "opt.trimT": "TRIM for SSDs", "lg.k.uninstall": "Uninstall",
+  "nav.home": "PC health", "nav.programs": "Programs", "nav.game": "Game mode", "nav.tidy": "Empty & broken", "opt.trimT": "Drives", "lg.k.uninstall": "Uninstall",
   "lg.k.winget": "Updates (winget)", "lg.k.game": "Game mode", "lg.k.tidy": "Empty folders & shortcuts", "hm.title": "PC health",
   "hm.sub": "Everything at a glance — and what to do about it", "hm.checking": "Checking…", "hm.checkingD": "Reading the disks, memory and programs.",
   "hm.good": "Your PC is in good shape", "hm.fair": "A few things need attention", "hm.poor": "Your PC needs attention",
@@ -2981,6 +3081,45 @@ en: {
   "gm.helpersT": "Its helper programs are counted with it and close together with it.",
   "win.tray": "Hide to the tray — the app keeps running next to the clock", "win.min": "Minimize", "win.max": "Maximize", "win.restore": "Restore down", "win.close": "Close",
   "set.frame": "Windows title bar", "set.frameD": "Windows' standard title bar instead of the app's own. The tray button moves to the bottom of the sidebar.",
+  "opt.okHdd": "Defragmented", "opt.analyze": "Analyze", "opt.analyzing": "Analyzing…", "opt.analyzeFail": "The analysis did not work", "opt.frag": "Fragmented {0}%",
+  "opt.fragNeed": "worth optimizing", "opt.fragOk": "no need", "opt.chooseT": "Optimize drives", "opt.chooseD": "Windows' own tool does it. You can stop at any time.",
+  "opt.ssdAct": "TRIM — a few seconds", "opt.hddAct": "Defragmentation — minutes to hours; the PC can be used meanwhile",
+  "opt.diskWarn": "This disk reports errors. Defragmenting reads and writes a lot — copy what matters from it first.", "opt.go": "Optimize ({0})", "opt.stop": "Stop",
+  "opt.stopping": "Stopping…", "opt.stoppedT": "Stopped", "opt.skipped": "Skipped",
+  "opt.weekly": "Windows also optimizes the drives once a week by itself (Optimize Drives) — this is for when you want it now.", "dh.detailsBtn": "Details",
+  "dh.whatHelps": "What it is and what helps", "dh.thisDisk": "this disk", "dh.d.loading": "Reading what the disk reports and Windows' log…", "dh.d.help": "What can help",
+  "dh.d.reports": "What the disk reports", "dh.d.log": "Windows' log — the last 60 days", "dh.d.noLog": "No errors for this disk in Windows' log.", "dh.d.attr": "Attribute",
+  "dh.d.count": "Value", "dh.d.norm": "Now/worst · limit",
+  "dh.d.normT": "The disk's own score for the attribute (higher is better), the lowest so far, and the limit below which the maker calls it failing.",
+  "dh.d.all": "All attributes ({0})", "dh.d.times": "{0} times · last {1}", "dh.d.copy": "Copy the report", "dh.d.copied": "Report copied", "dh.d.open": "Open {0}",
+  "dh.d.scan": "Check {0} (read-only)", "dh.d.fix": "Check {0} for bad sectors", "dh.d.fixT": "Check {0} for bad sectors?",
+  "dh.d.fixD": "Windows reads every sector of {0} and moves the data off the bad ones (chkdsk /r). For a big HDD it takes hours. Meanwhile {0} is taken away from all programs — close what uses it and save your work. Copy what matters first.",
+  "dh.d.fixOk": "Start the check", "dh.a.backup": "Copy what matters from {0} to another disk now, while it still reads.",
+  "dh.a.sectors": "{1} sectors cannot be read right now (pending). The disk replaces them with spare ones when they are written again — the bad sector check does exactly that.",
+  "dh.a.unc": "{1} reads or writes failed even after the disk's own correction — data in those places may be damaged.",
+  "dh.a.logged": "Windows logged {1} read errors (bad block) for this disk — see the log below.",
+  "dh.a.fix": "Check {0} for bad sectors: Windows reads every sector and moves the data off the bad ones. It takes hours, and {0} cannot be used meanwhile.",
+  "dh.a.fixSys": "This is the Windows drive: a full bad sector check of it runs only at a restart (in a terminal as administrator: chkdsk C: /r, then restart).",
+  "dh.a.watch": "Look again in a few weeks: if the numbers grow, the disk is wearing out — plan a new one.",
+  "dh.a.realloc": "The disk has already replaced {1} bad sectors with spare ones. A few is normal for an old disk; a growing number is not.",
+  "dh.a.cable": "{1} transfer errors between the disk and the PC (CRC) — usually the cable or the port. Replace the SATA cable or try another port.",
+  "dh.a.retry": "{1} times the disk answered late or a read had to be repeated — check the power and data cables; the disk may also be wearing.",
+  "dh.a.fs": "The file system on {0} reported errors {1} times — check it (read-only first).", "dh.a.cool": "The disk runs warm — clean the dust and let air reach it.",
+  "dh.a.wear": "Most of the writes the SSD is made for are used — keep a backup and plan a new one.", "dh.a.ok": "Nothing to do — the disk reports no problems.",
+  "dh.e.badblock": "A bad block — a place on the disk that could not be read", "dh.e.controller": "The controller reported an error (often the cable or the port)",
+  "dh.e.notready": "The disk was not ready (did not answer)", "dh.e.paging": "An error reading or writing for Windows' memory",
+  "dh.e.predict": "The disk predicts a failure (S.M.A.R.T.)", "dh.e.retried": "A read or write had to be repeated",
+  "dh.e.hwfail": "A read or write failed because of a hardware error", "dh.e.removed": "The disk disappeared unexpectedly", "dh.e.fs": "The file system reported damage",
+  "dh.e.other": "Another warning from the disk driver", "dh.n.temp": "Temperature", "dh.n.used": "Wear", "dh.n.spare": "Spare space", "dh.n.written": "Written",
+  "dh.n.hours": "Powered on", "dh.n.cycles": "Power cycles", "dh.n.unsafe": "Unsafe shutdowns", "dh.n.media": "Media errors", "dh.n.errlog": "Error log entries",
+  "dh.n.critical": "Critical warning", "dh.n.none": "None", "sm.1": "Read error rate", "sm.3": "Spin-up time", "sm.4": "Starts and stops", "sm.5": "Reallocated sectors",
+  "sm.7": "Seek error rate", "sm.9": "Powered on", "sm.10": "Spin retries", "sm.12": "Power cycles", "sm.177": "Wear leveling (SSD)", "sm.183": "Runtime bad blocks",
+  "sm.184": "End-to-end errors", "sm.187": "Reported uncorrectable errors", "sm.188": "Command timeouts", "sm.189": "High fly writes", "sm.190": "Airflow temperature",
+  "sm.191": "Shocks (G-sense)", "sm.192": "Emergency retracts", "sm.193": "Load cycles", "sm.194": "Temperature", "sm.196": "Reallocation events",
+  "sm.197": "Pending (unreadable) sectors", "sm.198": "Offline uncorrectable sectors", "sm.199": "Transfer errors (CRC)", "sm.200": "Write error rate", "sm.231": "Life left (SSD)",
+  "sm.241": "Total written", "sm.242": "Total read", "sm.other": "Maker's attribute", "wg.selfList": "Not listed because they update themselves: {0}",
+  "wg.h.gone": "The update removed the program instead of updating it. Install it again from its website — its data and games stay where they are.",
+  "dh.err.read": "The disk's data could not be read.", "dh.noSmart": "The disk gives no S.M.A.R.T. data through Windows (common for USB enclosures).",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -5380,6 +5519,7 @@ function confirmDiskDelete(pick) {
    OPTIMIZE page
 ===================================================================== */
 let drives = [];
+const OPT = { frag: {}, state: {}, running: false };
 async function loadDrives() {
   if (S.busy && drives.length) return;
   if (!drives.length) $("#trimStatus").textContent = t("opt.loading");
@@ -5387,43 +5527,105 @@ async function loadDrives() {
   $("#trimStatus").textContent = "";
   renderDrives();
 }
+// the health of the disk a drive is on (warn / bad when it reports errors)
+function driveHealth(d) { const ds = (HM.dh && HM.dh.disks) || []; return ds.find(x => x.id === d.disk) || ds.find(x => (x.letters || []).includes(d.letter)) || null; }
+function driveRisky(d) { const h = driveHealth(d); return !!h && (h.verdict === "bad" || (h.reasons || []).includes("dh.r.errors")); }
 function renderDrives() {
   const list = $("#driveList");
   if (!drives.length) { list.innerHTML = `<div class="item"><span></span><div class="d">${esc(t("opt.none"))}</div><span></span></div>`; return; }
   list.innerHTML = drives.map(d => {
     const used = d.total - d.free, pct = d.total ? used / d.total * 100 : 0;
     const kind = d.media === "SSD" ? "SSD" : d.media === "HDD" ? "HDD" : t("opt.unknown");
-    return `<div class="drive-row"><div class="letter">${esc(d.letter)}:</div>
-      <div><div style="font-weight:600">${esc(d.label || t("opt.local"))} <span class="chip">${esc(kind)}</span></div><div class="mini"><i style="width:${pct}%"></i></div></div>
+    const st = OPT.state[d.letter] || {}, fr = OPT.frag[d.letter];
+    let res = "";
+    if (st.state === "run") res = `<div class="opt-run"><span class="spin"></span><span>${esc(st.pct != null ? Math.round(st.pct) + "%" : t("opt.running"))}</span></div>${st.pct != null ? `<div class="opt-bar"><i style="width:${st.pct}%"></i></div>` : ""}`;
+    else if (st.state === "queued") res = `<span class="tw-st off">${esc(t("wg.queued"))}</span>`;
+    else if (st.state === "ok") res = `<span class="res ok">${esc(d.media === "HDD" ? t("opt.okHdd") : t("opt.ok"))}</span>`;
+    else if (st.state === "fail") res = `<span class="res" title="${esc(st.note || "")}">${esc(st.note || t("opt.unsupported"))}</span>`;
+    else if (st.state === "stopped" || st.state === "skip") res = `<span class="tw-st off">${esc(t(st.state === "stopped" ? "opt.stoppedT" : "opt.skipped"))}</span>`;
+    else if (d.media === "HDD" && fr && fr.loading) res = `<div class="opt-run"><span class="spin"></span><span>${esc(t("opt.analyzing"))}</span></div>`;
+    else if (d.media === "HDD" && fr && !fr.error) res = `<span class="opt-frag ${fr.recommended ? "need" : ""}">${esc(t("opt.frag", fr.total))}</span><span class="opt-fragd">${esc(t(fr.recommended ? "opt.fragNeed" : "opt.fragOk"))}</span>`;
+    else if (d.media === "HDD") res = `<button class="btn small" data-analyze="${esc(d.letter)}" ${OPT.running ? "disabled" : ""}>${esc(t("opt.analyze"))}</button>${fr && fr.error ? `<div class="opt-fragd" title="${esc(fr.error)}">${esc(t("opt.analyzeFail"))}</div>` : ""}`;
+    const risky = driveRisky(d);
+    return `<div class="drive-row" data-drive="${esc(d.letter)}"><div class="letter">${esc(d.letter)}:</div>
+      <div style="min-width:0"><div style="font-weight:600">${esc(d.label || t("opt.local"))} <span class="chip">${esc(kind)}</span>${risky ? ` <span class="tw-b caution" title="${esc(t("opt.diskWarn"))}">${esc(t("dh.v.warn"))}</span>` : ""}</div><div class="mini"><i style="width:${pct}%"></i></div></div>
       <div class="mt">${esc(t("opt.free", fmt(d.free), fmt(d.total)))}</div>
-      <div class="res" data-res="${esc(d.letter)}">${d.media === "HDD" ? esc(t("opt.hdd")) : ""}</div></div>`;
-  }).join("");
-  $("#btnTrim").disabled = S.busy || !drives.some(d => d.media !== "HDD");
+      <div class="res-col" data-res="${esc(d.letter)}">${res}</div></div>`;
+  }).join("") + `<div class="opt-weekly">${ICONS.info}<span>${esc(t("opt.weekly"))}</span></div>`;
+  list.querySelectorAll("[data-analyze]").forEach(b => b.addEventListener("click", () => analyzeDriveUI(b.dataset.analyze)));
+  const btn = $("#btnTrim");
+  btn.disabled = (S.busy && !OPT.running) || !drives.some(d => d.media === "SSD" || d.media === "HDD");
+  btn.classList.toggle("danger", OPT.running); btn.classList.toggle("primary", !OPT.running);
+  btn.textContent = OPT.running ? t("opt.stop") : t("opt.btn");
+}
+async function analyzeDriveUI(letter) {
+  OPT.frag[letter] = { loading: true }; renderDrives();
+  let r = null; try { r = await api.analyzeDrive(letter); } catch (e) { r = { error: String(e) }; }
+  OPT.frag[letter] = r || { error: "?" }; renderDrives();
 }
 $("#btnTrim").addEventListener("click", () => {
+  if (OPT.running) { api.optimizeStop(); $("#btnTrim").disabled = true; $("#trimStatus").textContent = t("opt.stopping"); return; }
   if (jobOf("trim")) return;
+  const can = drives.filter(d => d.media === "SSD" || d.media === "HDD");
+  if (!can.length) return;
+  const row = d => {
+    const risky = driveRisky(d), fr = OPT.frag[d.letter];
+    const pick = !risky && (d.media === "SSD" || !fr || fr.error || fr.recommended || fr.loading);
+    return `<label class="opt-pick${risky ? " risky" : ""}"><input type="checkbox" class="cb" data-optpick="${esc(d.letter)}" ${pick ? "checked" : ""}>
+      <span class="letter">${esc(d.letter)}:</span><div style="min-width:0"><div class="t">${esc(d.label || t("opt.local"))} <span class="chip">${esc(d.media)}</span>${fr && !fr.error && !fr.loading ? ` <span class="opt-fragd">${esc(t("opt.frag", fr.total))}</span>` : ""}</div>
+      <div class="d">${esc(t(d.media === "SSD" ? "opt.ssdAct" : "opt.hddAct"))}</div>${risky ? `<div class="w">${esc(t("opt.diskWarn"))}</div>` : ""}</div></label>`;
+  };
+  openSheet({ title: t("opt.chooseT"), sub: t("opt.chooseD"), body: `<div class="opt-picks">${can.map(row).join("")}</div>`,
+    foot: `<button class="btn" id="optCancel">${esc(t("modal.cancel"))}</button><button class="btn primary" id="optGo"></button>` });
+  const paintGo = () => { const n = $$("[data-optpick]:checked").length; $("#optGo").textContent = t("opt.go", n); $("#optGo").disabled = !n; };
+  $$("[data-optpick]").forEach(c => c.addEventListener("change", paintGo)); paintGo();
+  $("#optCancel").addEventListener("click", () => closeSheet(false));
+  $("#optGo").addEventListener("click", () => {
+    const letters = $$("[data-optpick]:checked").map(c => c.dataset.optpick);
+    closeSheet(false);
+    if (letters.length) queueOptimize(letters);
+  });
+});
+function queueOptimize(letters) {
   jobAdd({ kind: "trim", page: "optimize", title: t("job.trim"),
     onWait: () => { $("#btnTrim").disabled = true; $("#trimStatus").textContent = t("job.waitFor", JOBS.cur ? JOBS.cur.title : ""); },
     onDrop: () => { $("#trimStatus").textContent = ""; renderDrives(); },
     run: job => new Promise(res => {
       job.done = res;
-      setBusy(true); $("#trimStatus").textContent = t("opt.running");
-      drives.filter(d => d.media !== "HDD").forEach(d => { const r = document.querySelector(`[data-res="${d.letter}"]`); if (r) { r.className = "res"; r.innerHTML = '<span class="spin"></span>'; } });
-      api.startTrim().then(ok => { if (ok === false) { setBusy(false); $("#trimStatus").textContent = t("status.busy"); renderDrives(); res("error"); } }).catch(() => { setBusy(false); renderDrives(); res("error"); });
+      setBusy(true); OPT.running = true; OPT.state = {};
+      letters.forEach(l => { OPT.state[l] = { state: "queued" }; });
+      $("#trimStatus").textContent = t("opt.running"); renderDrives();
+      api.optimizeDrives({ letters }).then(ok => { if (ok === false) { OPT.running = false; setBusy(false); $("#trimStatus").textContent = t("status.busy"); renderDrives(); res("error"); } })
+        .catch(() => { OPT.running = false; setBusy(false); renderDrives(); res("error"); });
     }) });
+}
+on("opt-drive", d => {
+  OPT.state[d.letter] = Object.assign(OPT.state[d.letter] || {}, d);
+  if (d.state === "ok" && d.media === "HDD") delete OPT.frag[d.letter]; // analyze again for the new number
+  const text = d.letter + ": " + (d.state === "run" ? (d.pct != null ? Math.round(d.pct) + "%" : t("opt.running")) : d.state === "ok" ? t(d.media === "HDD" ? "opt.okHdd" : "opt.ok") : d.state === "fail" ? (d.note || t("opt.unsupported")) : t("opt.stoppedT"));
+  jobText("trim", text, d.state === "run" && d.pct != null ? d.pct : null);
+  if (S.page === "optimize") renderDrives();
 });
-on("trim-drive", d => { jobText("trim", d.letter + ": " + (d.ok ? t("opt.ok") : (d.note || t("opt.unsupported"))), null); const r = document.querySelector(`[data-res="${d.letter}"]`); if (!r) return; r.className = "res" + (d.ok ? " ok" : ""); r.textContent = d.ok ? t("opt.ok") : (d.note || t("opt.unsupported")); });
-on("trim-done", () => { setBusy(false); $("#trimStatus").textContent = t("opt.done"); $("#btnTrim").disabled = false; toast(t("opt.done")); jobFinish("trim", "ok", t("opt.done")); });
+on("opt-done", d => {
+  OPT.running = false; setBusy(false);
+  const msg = d.stopped ? t("opt.stoppedT") : t("opt.done");
+  $("#trimStatus").textContent = msg; renderDrives(); toast(msg);
+  jobFinish("trim", d.stopped ? "cancel" : d.ok === d.of ? "ok" : "warn", msg);
+});
+// TRIM from the cleaning ("Clean everything") still reports this way
+on("trim-drive", d => { jobText("trim", d.letter + ": " + (d.ok ? t("opt.ok") : (d.note || t("opt.unsupported"))), null); OPT.state[d.letter] = { state: d.ok ? "ok" : "fail", note: d.note, media: "SSD" }; if (S.page === "optimize") renderDrives(); });
+on("trim-done", () => { setBusy(false); $("#trimStatus").textContent = t("opt.done"); renderDrives(); toast(t("opt.done")); jobFinish("trim", "ok", t("opt.done")); });
 
 /* =====================================================================
    REPAIR page
 ===================================================================== */
 const con = $("#console");
 let lastReplace = false;
-$$("[data-repair]").forEach(b => b.addEventListener("click", () => {
-  if (S.busy || jobOf("repair")) return;
-  const what = b.dataset.repair;
-  jobAdd({ kind: "repair", page: "repair", title: t("job.repair", ((b.closest(".item") || b).querySelector(".t") || b).textContent.trim()),
+$$("[data-repair]").forEach(b => b.addEventListener("click", () => runRepairKind(b.dataset.repair, ((b.closest(".item") || b).querySelector(".t") || b).textContent.trim())));
+function runRepairKind(what, name) {
+  if (jobOf("repair")) { go("repair"); return; }
+  go("repair");
+  jobAdd({ kind: "repair", page: "repair", title: t("job.repair", name),
     onWait: () => { $$("[data-repair]").forEach(x => x.disabled = true); $("#repairStatus").textContent = t("job.waitFor", JOBS.cur ? JOBS.cur.title : ""); },
     onDrop: () => { $$("[data-repair]").forEach(x => x.disabled = S.busy); $("#repairStatus").textContent = ""; },
     run: job => new Promise(res => {
@@ -5433,7 +5635,7 @@ $$("[data-repair]").forEach(b => b.addEventListener("click", () => {
       $("#repairStatus").textContent = t("rep.running");
       api.startRepair(what).then(ok => { if (ok === false) { setBusy(false); pr.hidden = true; $("#repairStatus").textContent = t("status.busy"); res("error"); } }).catch(() => { setBusy(false); pr.hidden = true; res("error"); });
     }) });
-}));
+}
 on("repair-head", d => {
   jobText("repair", d.text, null); const s = document.createElement("div"); s.className = "hd"; s.textContent = d.text; con.appendChild(s); lastReplace = false; con.scrollTop = con.scrollHeight; $("#repairStatus").textContent = d.text; });
 on("repair-line", d => {
@@ -6784,8 +6986,70 @@ function paintDiskHealth() {
       <span class="dh-v ${d.verdict}">${esc(t("dh.v." + d.verdict))}</span></div>
       <div class="dh-sts">${st("dh.temp", d.temp != null && d.temp > 0 ? d.temp + " °C" : "—", tempCls)}${st("dh.wear", d.wear != null ? d.wear + "%" : "—", wearCls)}${st("dh.on", dhHours(d.hours))}${st("dh.errs", d.readUnc == null && d.writeUnc == null ? "—" : nfi(errs), errs ? "warn" : "")}</div>
       ${(d.reasons || []).length ? `<ul class="dh-r">${d.reasons.map(r => `<li>${esc(t(r))}</li>`).join("")}</ul>` : d.noData ? `<div class="dh-note">${esc(t("dh.noData"))}</div>` : `<div class="dh-note ok">${esc(t("dh.okNote"))}</div>`}
+      <div class="dh-foot"><button class="btn small" data-dhmore="${esc(d.id)}">${ICONS.info}<span>${esc(t((d.reasons || []).length ? "dh.whatHelps" : "dh.detailsBtn"))}</span></button></div>
       </div>`;
   }).join("");
+  el.querySelectorAll("[data-dhmore]").forEach(b => b.addEventListener("click", () => openDiskDetails(b.dataset.dhmore)));
+}
+
+/* The details of one disk: what it reports, what Windows logged about it,
+   and what may help (with the actions for it). */
+const SMART_KEY = [5, 187, 197, 198, 199, 188, 10, 196, 184, 9, 194];
+const SMART_COUNTS = new Set([5, 10, 184, 187, 188, 196, 197, 198, 199]);
+function smartCountJS(a) { return [188, 190, 194].includes(a.id) ? a.raw % 65536 : a.raw % 4294967296; }
+function diskLetters(dd) { return (dd.letters || []).map(l => l + ":").join(" ") || t("dh.thisDisk"); }
+async function openDiskDetails(id) {
+  const h = ((HM.dh && HM.dh.disks) || []).find(x => x.id === id) || {};
+  openSheet({ wide: true, title: h.name || t("dh.disk", id), sub: [h.media && h.media !== "Unspecified" ? h.media : "", h.bus, h.size ? fmt(h.size) : "", (h.letters || []).map(l => l + ":").join(" ")].filter(Boolean).join(" · "),
+    body: `<div class="tw-empty"><span class="spin"></span> ${esc(t("dh.d.loading"))}</div>`, foot: `<button class="btn" id="ddClose">${esc(t("modal.close"))}</button>` });
+  $("#ddClose").addEventListener("click", () => closeSheet(false));
+  let dd = null; try { dd = await api.diskDetails(id); } catch (e) { dd = null; }
+  if (!$("#sveil").classList.contains("on") || !$("#ddClose")) return; // closed meanwhile
+  if (!dd) { $("#shBody").innerHTML = `<div class="tw-empty">${esc(t("dh.err.read"))}</div>`; return; }
+  const L2 = diskLetters(dd);
+  const fixL = (dd.letters || [])[0], act = a => {
+    if (a.action === "backup" && fixL) return `<button class="btn small" data-ddact="open">${ICONS.folder || ""}<span>${esc(t("dh.d.open", fixL + ":"))}</span></button>`;
+    if (a.action === "scan" && fixL) return `<button class="btn small" data-ddact="scan">${esc(t("dh.d.scan", fixL + ":"))}</button>`;
+    if (a.action === "fix" && fixL) return `<button class="btn small danger" data-ddact="fix">${esc(t("dh.d.fix", fixL + ":"))}</button>`;
+    return "";
+  };
+  const ok = (dd.advice || []).length === 1 && dd.advice[0].key === "dh.a.ok";
+  const advice = `<div class="dd-sec"><h4>${esc(t("dh.d.help"))}</h4><div class="dd-adv ${ok ? "ok" : ""}">${(dd.advice || []).map(a =>
+    `<div class="dd-a"><span class="dd-ai">${ICONS[a.key === "dh.a.ok" ? "check" : a.action === "backup" || a.key === "dh.a.backup" ? "alert" : "info"]}</span><div class="dd-at">${esc(t(a.key, L2, nfi(a.n || 0)))}</div>${act(a)}</div>`).join("")}</div></div>`;
+  let reports = "";
+  if (dd.nvme) {
+    const n = dd.nvme, cell = (k, v, cls) => `<div class="dh-st ${cls || ""}"><span>${esc(t(k))}</span><b>${esc(v)}</b></div>`;
+    reports = `<div class="dd-sec"><h4>${esc(t("dh.d.reports"))}</h4><div class="dd-nv">${cell("dh.n.temp", n.temp ? n.temp + " °C" : "—")}${cell("dh.n.used", n.used + "%", n.used >= 70 ? "warn" : "")}${cell("dh.n.spare", n.spare + "%", n.spareMin && n.spare <= n.spareMin ? "bad" : "")}${cell("dh.n.written", nf(1).format(n.written) + " TB")}
+      ${cell("dh.n.hours", dhHours(n.hours))}${cell("dh.n.cycles", nfi(n.cycles))}${cell("dh.n.unsafe", nfi(n.unsafe))}${cell("dh.n.media", nfi(n.mediaErr), n.mediaErr ? "warn" : "")}${cell("dh.n.errlog", nfi(n.errLog))}${cell("dh.n.critical", n.critical ? "0x" + n.critical.toString(16) : t("dh.n.none"), n.critical ? "bad" : "")}</div></div>`;
+  } else if ((dd.smart || []).length) {
+    const rowOf = a => { const c = smartCountJS(a), warn = SMART_COUNTS.has(a.id) && c > 0, val = a.id === 9 ? dhHours(c) : a.id === 194 || a.id === 190 ? c + " °C" : nfi(c);
+      return `<div class="dd-sm ${a.bad ? "bad" : warn ? "warn" : ""}"><span class="id">${a.id}</span><span class="n">${esc(t("sm." + a.id) !== "sm." + a.id ? t("sm." + a.id) : t("sm.other"))}</span><span class="v">${esc(val)}</span><span class="q">${a.cur}/${a.worst}${a.thr ? " · " + a.thr : ""}</span></div>`; };
+    const key = dd.smart.filter(a => SMART_KEY.includes(a.id)).sort((a, b) => SMART_KEY.indexOf(a.id) - SMART_KEY.indexOf(b.id));
+    reports = `<div class="dd-sec"><h4>${esc(t("dh.d.reports"))} <span class="dd-h">S.M.A.R.T.</span></h4><div class="dd-smh"><span></span><span>${esc(t("dh.d.attr"))}</span><span>${esc(t("dh.d.count"))}</span><span title="${esc(t("dh.d.normT"))}">${esc(t("dh.d.norm"))}</span></div>
+      <div class="dd-sms">${(key.length ? key : dd.smart).map(rowOf).join("")}</div>
+      ${key.length && key.length < dd.smart.length ? `<details class="dd-all"><summary>${esc(t("dh.d.all", dd.smart.length))}</summary><div class="dd-sms">${dd.smart.map(rowOf).join("")}</div></details>` : ""}</div>`;
+  } else reports = `<div class="dd-sec"><h4>${esc(t("dh.d.reports"))}</h4><div class="dh-note">${esc(dd.smartNote || t("dh.noSmart"))}</div></div>`;
+  const dfmt = ms => new Date(ms).toLocaleDateString(L === "bg" ? "bg-BG" : "en-GB", { day: "numeric", month: "short", year: "numeric" });
+  const evs = dd.events || [];
+  const log = `<div class="dd-sec"><h4>${esc(t("dh.d.log"))}</h4>${evs.length ? evs.map(e => `<details class="dd-ev"><summary><span class="dd-evn">${esc(t(e.key))}</span><span class="dd-evc">${esc(t("dh.d.times", nfi(e.count), dfmt(e.last)))}</span></summary><div class="dd-evm"><span class="k">${esc(e.provider)} · ${e.id}</span>${esc(e.msg || "")}</div></details>`).join("")
+    : `<div class="dh-note ${dd.eventNote ? "" : "ok"}">${esc(dd.eventNote || t("dh.d.noLog"))}</div>`}</div>`;
+  $("#shBody").innerHTML = advice + reports + log;
+  $("#shFoot").innerHTML = `<button class="btn" id="ddCopy">${ICONS.copy || ""}<span>${esc(t("dh.d.copy"))}</span></button><button class="btn primary" id="ddClose">${esc(t("modal.close"))}</button>`;
+  $("#ddClose").addEventListener("click", () => closeSheet(false));
+  $("#ddCopy").addEventListener("click", async () => {
+    const lines = [h.name || "", [h.media, h.bus, h.size ? fmt(h.size) : "", L2].filter(Boolean).join(" · "), "",
+      t("dh.d.help") + ":", ...(dd.advice || []).map(a => "- " + t(a.key, L2, nfi(a.n || 0))), "",
+      ...(dd.smart || []).map(a => `${a.id} ${t("sm." + a.id) !== "sm." + a.id ? t("sm." + a.id) : ""}: ${smartCountJS(a)} (${a.cur}/${a.worst}/${a.thr})`),
+      ...(dd.nvme ? [JSON.stringify(dd.nvme)] : []), "", t("dh.d.log") + ":", ...evs.map(e => `- ${e.provider} ${e.id} ×${e.count} (${dfmt(e.last)}): ${e.msg || ""}`)];
+    try { await api.copyText(lines.join("\n")); toast(t("dh.d.copied"), "check"); } catch (e) {}
+  });
+  $$("#shBody [data-ddact]").forEach(b => b.addEventListener("click", () => {
+    const what = b.dataset.ddact;
+    if (what === "open") { api.openDrive(fixL); return; }
+    if (what === "scan") { closeSheet(false); runRepairKind("scan:" + fixL, t("dh.d.scan", fixL + ":")); return; }
+    confirmBox({ title: t("dh.d.fixT", fixL + ":"), text: t("dh.d.fixD", fixL + ":"), okText: t("dh.d.fixOk"), danger: true,
+      ok: () => { closeSheet(false); runRepairKind("fix:" + fixL, t("dh.d.fix", fixL + ":")); } });
+  }));
 }
 function loadDiskHealth(force) {
   if (HM.loading.dh) return;
@@ -7091,8 +7355,9 @@ function renderUpdates() {
     $("#wgGet").addEventListener("click", () => api.openAppInstaller()); paintWgBar(); return;
   }
   const ups = u.updates || [];
-  if (!ups.length) { box.innerHTML = `<div class="tw-empty">${u.error ? esc(u.error) : `${ICONS.check} ${esc(t("wg.none"))}`}</div>`; paintWgBar(); return; }
-  box.innerHTML = ups.map(x => {
+  const selfNote = (u.self || []).length ? `<div class="wg-self" id="wgSelf">${ICONS.info || ""}<span>${esc(t("wg.selfList", u.self.join(", ")))}</span></div>` : "";
+  if (!ups.length) { box.innerHTML = `<div class="tw-empty">${u.error ? esc(u.error) : `${ICONS.check} ${esc(t("wg.none"))}`}</div>` + selfNote; paintWgBar(); return; }
+  box.innerHTML = selfNote + ups.map(x => {
     const st = PR.wg[x.id] || {};
     const status = st.state === "run" ? `<span class="spin"></span><span class="wg-s">${esc(st.closing ? t("wg.closing") : st.secs ? secsClock(st.secs) : t("wg.running"))}</span>` : st.state === "ok" ? `<span class="tw-st on">${esc(t("wg.ok"))}</span>`
       : st.state === "fail" ? `<span class="tw-st err" title="${esc(st.msg || "")}">${esc(t("wg.fail"))}</span>` : st.state === "queued" ? `<span class="tw-st off">${esc(t("wg.queued"))}</span>` : st.state === "skip" ? `<span class="tw-st off">${esc(t("wg.skipped"))}</span>` : "";
@@ -7568,7 +7833,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "2.9.1", author: "xKi4o", admin: scen !== "noadmin", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "2.10.0", author: "xKi4o", admin: scen !== "noadmin", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -7659,10 +7924,45 @@ const Mock = (() => {
       return { freed: f, stats: await Mock.getMemory() };
     },
     getDrives: async () => [
-      { letter: "C", label: "Windows", total: 953 * GB, free: drive.free, media: "SSD" },
-      { letter: "D", label: "Games", total: 1863 * GB, free: 640 * GB, media: "SSD" },
-      { letter: "E", label: "Archive", total: 3726 * GB, free: 1210 * GB, media: "HDD" },
+      { letter: "C", label: "Windows", total: 953 * GB, free: drive.free, media: "SSD", disk: "0", system: true },
+      { letter: "D", label: "Games", total: 1863 * GB, free: 640 * GB, media: "HDD", disk: "1" },
+      { letter: "F", label: "Archive", total: 3726 * GB, free: 1210 * GB, media: "HDD", disk: "3" },
     ],
+    analyzeDrive: async l => { await new Promise(r => setTimeout(r, 900)); return l === "D" ? { letter: l, total: 14, files: 9, recommended: true } : { letter: l, total: 3, files: 1, recommended: false }; },
+    optimizeDrives: async o => {
+      const ls = (o && o.letters) || []; let i = 0, ok = 0; window.__optStop = false; window.__optRan = ls.slice();
+      const media = { C: "SSD", D: "HDD", F: "HDD" };
+      const next = () => {
+        if (i >= ls.length) { window.__ev("opt-done", { ok, of: ls.length, stopped: window.__optStop }); return; }
+        const l = ls[i++], m = media[l] || "HDD";
+        if (window.__optStop) { window.__ev("opt-drive", { letter: l, state: "skip" }); next(); return; }
+        window.__ev("opt-drive", { letter: l, state: "run", media: m });
+        if (m === "SSD") { later(400, () => { ok++; window.__ev("opt-drive", { letter: l, state: "ok", media: m }); next(); }); return; }
+        let p = 0;
+        const step = () => {
+          if (window.__optStop) { window.__ev("opt-drive", { letter: l, state: "stopped", media: m }); next(); return; }
+          p += 20; window.__ev("opt-drive", { letter: l, state: "run", media: m, pct: Math.min(p, 100), line: "Defragmentation: " + p + "% complete..." });
+          if (p >= 100) { ok++; window.__ev("opt-drive", { letter: l, state: "ok", media: m }); next(); } else later(300, step);
+        };
+        later(200, step);
+      };
+      later(100, next);
+      return true;
+    },
+    optimizeStop: async () => { window.__optStop = true; return true; },
+    diskDetails: async id => {
+      await new Promise(r => setTimeout(r, 500));
+      const day = 86400e3, now = Date.now();
+      if (id === "1") return { id, letters: ["D"], system: false,
+        smart: [[1, 117, 99, 6, 0], [5, 100, 100, 10, 0], [9, 71, 71, 0, 26400], [10, 100, 100, 97, 0], [187, 96, 96, 0, 4], [188, 100, 100, 0, 0], [194, 43, 52, 0, 57], [197, 100, 100, 0, 2], [198, 100, 100, 0, 2], [199, 200, 200, 0, 0], [12, 100, 100, 20, 3100]]
+          .map(([id, cur, worst, thr, raw]) => ({ id, cur, worst, thr, raw })),
+        events: [{ provider: "disk", id: 7, count: 3, first: now - 9 * day, last: now - 2 * day, msg: "The device, \\Device\\Harddisk1\\DR1, has a bad block.", key: "dh.e.badblock" },
+          { provider: "disk", id: 153, count: 5, first: now - 20 * day, last: now - 3 * day, msg: "The IO operation at logical block address 0x3a2f1c for Disk 1 (PDO name: \\Device\\00000034) was retried.", key: "dh.e.retried" }],
+        advice: [{ key: "dh.a.backup", action: "backup" }, { key: "dh.a.sectors", n: 4 }, { key: "dh.a.unc", n: 4 }, { key: "dh.a.logged", n: 3 }, { key: "dh.a.fix", action: "fix" }, { key: "dh.a.watch" }, { key: "dh.a.retry", n: 5 }, { key: "dh.a.cool" }] };
+      if (id === "0") return { id, letters: ["C"], system: true, smart: [], events: [], nvme: { critical: 0, temp: 43, spare: 100, spareMin: 10, used: 4, written: 18.2, hours: 8120, cycles: 1430, unsafe: 41, mediaErr: 0, errLog: 12 }, advice: [{ key: "dh.a.ok" }] };
+      return { id, letters: ["E"], system: false, smart: [], events: [], advice: [{ key: "dh.a.ok" }] };
+    },
+    openDrive: async () => true,
     startTrim: async () => { later(700, () => window.__ev("trim-drive", { letter: "C", ok: true })); later(1200, () => window.__ev("trim-drive", { letter: "D", ok: true })); later(1300, () => window.__ev("trim-done", {})); return true; },
     startRepair: async () => {
       window.__ev("repair-head", { text: "DISM — checking and repairing the Windows component store" });
@@ -7824,11 +8124,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "2.9.1", latest: nw ? "3.0.0" : "2.9.1", newer: nw, name: "xKi4o Cleaner 3.0.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.0.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "2.10.0", latest: nw ? "3.0.0" : "2.10.0", newer: nw, name: "xKi4o Cleaner 3.0.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.0.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders
@@ -7888,7 +8188,7 @@ Object.assign(Mock, (() => {
   const health = () => scen === "diskbad"
     ? [{ id: "0", name: "Samsung SSD 970 EVO Plus 1TB", media: "SSD", bus: "NVMe", size: 1000 * 1e9, letters: ["C"], health: "Warning", status: ["OK"], temp: 82, tempMax: 86, wear: 93, hours: 31000, readErr: 0, readUnc: 0, writeErr: 0, writeUnc: 0, verdict: "bad", reasons: ["dh.r.wearBad", "dh.r.hot", "dh.r.warning"] }]
     : [{ id: "0", name: "Samsung SSD 970 EVO Plus 1TB", media: "SSD", bus: "NVMe", size: 1000 * 1e9, letters: ["C"], health: "Healthy", status: ["OK"], temp: 43, tempMax: 71, wear: 4, hours: 8120, readErr: 0, readUnc: 0, writeErr: 0, writeUnc: 0, verdict: "good", reasons: [] },
-      { id: "1", name: "ST2000DM008-2FR102", media: "HDD", bus: "SATA", size: 2000 * 1e9, letters: ["D"], health: "Healthy", status: ["OK"], temp: 57, tempMax: 61, wear: null, hours: 26400, readErr: 12, readUnc: 0, writeErr: 0, writeUnc: 0, starts: 3100, verdict: "warn", reasons: ["dh.r.warm"] },
+      { id: "1", name: "ST2000DM008-2FR102", media: "HDD", bus: "SATA", size: 2000 * 1e9, letters: ["D"], health: "Healthy", status: ["OK"], temp: 57, tempMax: 61, wear: null, hours: 26400, readErr: 12, readUnc: 4, writeErr: 0, writeUnc: 0, starts: 3100, verdict: "warn", reasons: ["dh.r.warm", "dh.r.errors"] },
       { id: "2", name: "SanDisk Ultra USB 3.0", media: "Unspecified", bus: "USB", size: 64 * 1e9, letters: ["E"], health: "Healthy", status: ["OK"], temp: null, wear: null, hours: null, readErr: null, readUnc: null, writeErr: null, writeUnc: null, verdict: "good", reasons: [], noData: true }];
   const empties = [
     { path: "C:\\Users\\demo\\Documents\\New folder", subs: 0, root: "C:\\Users\\demo\\Documents" },
@@ -7938,7 +8238,7 @@ Object.assign(Mock, (() => {
     wingetUpdates: async fresh => {
       if (scen === "nowinget") return { available: false, updates: [], checked: Date.now() };
       if (fresh || !updChecked) { await new Promise(r => setTimeout(r, 700)); updChecked = Date.now(); }
-      return { available: true, updates: upd.slice(), checked: updChecked };
+      return { available: true, updates: upd.slice(), self: ["Epic Games Launcher", "Steam"], checked: updChecked };
     },
     wingetOpen: async ids => ids.includes("OBSProject.OBSStudio") ? [{ id: "OBSProject.OBSStudio", name: "OBS Studio", count: 1 }] : [],
     wingetSite: async () => true,

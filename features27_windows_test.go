@@ -323,3 +323,79 @@ func TestShellResolve(t *testing.T) {
 		t.Error("a missing shortcut file")
 	}
 }
+
+// The details of every disk: S.M.A.R.T., the System log, the advice. Only reads.
+func TestDiskDetailsRead(t *testing.T) {
+	v := diskHealthList(false)
+	if underWine() {
+		dd := diskDetails("0")
+		t.Logf("Wine: %+v", dd)
+		return
+	}
+	for _, d := range v.Disks {
+		start := time.Now()
+		dd := diskDetails(d.ID)
+		t.Logf("disk %s %q letters=%v system=%v: %d attributes %q, %d kinds of log entries %q (%v)", d.ID, d.Name, dd.Letters, dd.System,
+			len(dd.Smart), dd.SmartNote, len(dd.Events), dd.EventNote, time.Since(start).Round(time.Millisecond))
+		for _, a := range dd.Smart {
+			t.Logf("    smart %3d cur=%d worst=%d thr=%d raw=%d count=%d bad=%v", a.ID, a.Cur, a.Worst, a.Thr, a.Raw, smartCount(a), a.Bad)
+		}
+		if dd.NVMe != nil {
+			t.Logf("    nvme %+v", *dd.NVMe)
+		}
+		for _, e := range dd.Events {
+			msg := e.Msg
+			if r := []rune(msg); len(r) > 140 {
+				msg = string(r[:140])
+			}
+			t.Logf("    log %s %d x%d last %s (%s): %s", e.Provider, e.ID, e.Count, time.UnixMilli(e.Last).Format("2006-01-02"), e.Key, msg)
+		}
+		for _, a := range dd.Advice {
+			t.Logf("    advice %s n=%d action=%q", a.Key, a.N, a.Action)
+		}
+		if len(dd.Advice) == 0 {
+			t.Errorf("disk %s: no advice", d.ID)
+		}
+	}
+}
+
+// How fragmented the HDDs are (Windows' own analysis: only reads).
+func TestAnalyzeHDDs(t *testing.T) {
+	if underWine() {
+		t.Logf("Wine: %+v", analyzeDrive("C"))
+		return
+	}
+	for _, d := range getDrives() {
+		t.Logf("drive %s: %s disk %q system=%v", d.Letter, d.Media, d.Disk, d.System)
+		if d.Media != "HDD" {
+			continue
+		}
+		start := time.Now()
+		f := analyzeDrive(d.Letter)
+		t.Logf("    fragmented %d%% (files %d%%), recommended=%v error=%q (%v)", f.Total, f.Files, f.Recommended, f.Error, time.Since(start).Round(time.Second))
+	}
+}
+
+// The disk checks a disk's details offer: a read-only check of any fixed
+// drive, the bad sector check never on the Windows drive. Nothing runs here.
+func TestRepairPlanForDrives(t *testing.T) {
+	sys := strings.TrimSuffix(systemDrive(), ":")
+	if p := repairPlan("scan:" + sys); len(p) != 1 || len(p[0].args) != 2 || p[0].args[1] != "/scan" {
+		t.Errorf("scan: %+v", p)
+	}
+	if p := repairPlan("fix:" + sys); p != nil {
+		t.Errorf("the Windows drive must not get chkdsk /r /x: %+v", p)
+	}
+	for _, bad := range []string{"fix:1", "scan:", "scan:CC", "rm:" + sys, "fix:" + sys + `\`} {
+		if p := repairPlan(bad); p != nil {
+			t.Errorf("%q: %+v", bad, p)
+		}
+	}
+	for _, d := range getDrives() {
+		if !d.System {
+			if p := repairPlan("fix:" + d.Letter); len(p) != 1 || strings.Join(p[0].args, " ") != d.Letter+": /r /x" {
+				t.Errorf("fix %s: %+v", d.Letter, p)
+			}
+		}
+	}
+}

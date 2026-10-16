@@ -34,7 +34,7 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 | **Programs** | Uninstall with a scan for leftovers (like Revo), remove Store apps, update programs with winget |
 | **Tweaker** | About 65 Windows tweaks; switching one off brings back exactly what you had |
 | **Memory and game mode** | Free RAM; close the programs you choose while you play and start them again after |
-| **Disks** | Disk Analyzer, disk health (S.M.A.R.T.), duplicates, empty folders, broken shortcuts, TRIM |
+| **Disks** | Disk Analyzer, disk health (S.M.A.R.T., what the errors mean and what helps), TRIM and defragmentation, duplicates, empty folders, broken shortcuts |
 | **System** | Processes, startup apps, Windows repair (DISM, SFC, disk check) |
 | **Restore Center** | Puts back what the app changed; every operation has a step-by-step log |
 

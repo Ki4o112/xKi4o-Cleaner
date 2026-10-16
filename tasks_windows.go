@@ -233,19 +233,24 @@ type driveRow struct {
 	Total  int64  `json:"total"`
 	Free   int64  `json:"free"`
 	Media  string `json:"media"`
+	Disk   string `json:"disk"` // the physical disk's number ("" when unknown)
+	System bool   `json:"system,omitempty"`
 }
 
 const drivesScript = `$r=@(); foreach ($v in (Get-Volume | Where-Object { $_.DriveLetter -and $_.DriveType -eq 'Fixed' } | Sort-Object DriveLetter)) { ` +
-	`$m='Unknown'; try { $p=Get-Partition -DriveLetter $v.DriveLetter -ErrorAction Stop; ` +
+	`$m='Unknown'; $dn=''; try { $p=Get-Partition -DriveLetter $v.DriveLetter -ErrorAction Stop; $dn=[string]$p.DiskNumber; ` +
 	`$pd=Get-PhysicalDisk -ErrorAction SilentlyContinue | Where-Object { $_.DeviceId -eq [string]$p.DiskNumber } | Select-Object -First 1; ` +
 	`if ($pd) { $m=[string]$pd.MediaType } } catch {}; ` +
-	`$r += [pscustomobject]@{ letter=[string]$v.DriveLetter; label=[string]$v.FileSystemLabel; total=[int64]$v.Size; free=[int64]$v.SizeRemaining; media=$m } }; ` +
+	`$r += [pscustomobject]@{ letter=[string]$v.DriveLetter; label=[string]$v.FileSystemLabel; total=[int64]$v.Size; free=[int64]$v.SizeRemaining; media=$m; disk=$dn } }; ` +
 	`ConvertTo-Json -InputObject @($r) -Compress`
 
 func getDrives() []driveRow {
 	out, _, err := runPS(90*time.Second, drivesScript)
 	var rows []driveRow
 	if err == nil && json.Unmarshal([]byte(out), &rows) == nil && len(rows) > 0 {
+		for i := range rows {
+			rows[i].System = strings.EqualFold(rows[i].Letter+":", systemDrive())
+		}
 		return rows
 	}
 	// Fallback without media type.
@@ -261,7 +266,7 @@ func getDrives() []driveRow {
 			continue
 		}
 		t, f := diskSpace(root)
-		rows = append(rows, driveRow{Letter: root[:1], Total: int64(t), Free: int64(f), Media: "Unknown"})
+		rows = append(rows, driveRow{Letter: root[:1], Total: int64(t), Free: int64(f), Media: "Unknown", System: strings.EqualFold(root[:2], systemDrive())})
 	}
 	return rows
 }
@@ -289,6 +294,21 @@ func repairPlan(kind string) []repairStep {
 	case "chkdsk":
 		return []repairStep{{T("repair.chkdsk", systemDrive()), sys32("chkdsk.exe"),
 			[]string{systemDrive(), "/scan"}, 0, 100}}
+	}
+	// one drive: "scan:E" (read-only check), "fix:E" (find and fix bad sectors)
+	if what, l, ok := strings.Cut(kind, ":"); ok && validLetter(l) && driveFixed(strings.ToUpper(l)+`:\`) {
+		drive := strings.ToUpper(l) + ":"
+		switch what {
+		case "scan":
+			return []repairStep{{T("repair.chkdsk", drive), sys32("chkdsk.exe"), []string{drive, "/scan"}, 0, 100}}
+		case "fix":
+			if strings.EqualFold(drive, systemDrive()) {
+				return nil // the system drive can only be checked like this at a restart
+			}
+			// /r reads every sector and moves what it can off the bad ones;
+			// /x takes the drive away from programs for the time of the check
+			return []repairStep{{T("repair.chkfix", drive), sys32("chkdsk.exe"), []string{drive, "/r", "/x"}, 0, 100}}
+		}
 	}
 	return nil
 }
@@ -320,7 +340,9 @@ func runRepair(kind string) (bool, string) {
 		case err != nil && code < 0:
 			ok = false
 			summary = append(summary, T("repair.nostart", name))
-		case name == "CHKDSK" && code != 0:
+		case name == "CHKDSK" && code == 1:
+			summary = append(summary, T("repair.chkfixed"))
+		case name == "CHKDSK" && code != 0 && code != 2:
 			ok = false
 			summary = append(summary, T("repair.chkbad"))
 		case name == "CHKDSK":

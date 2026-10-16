@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/binary"
 	"reflect"
+	"strconv"
+	"strings"
 	"testing"
 )
 
@@ -78,5 +80,111 @@ func TestParseNVMeLog(t *testing.T) {
 	binary.LittleEndian.PutUint64(b[136:], 1)
 	if l, _ := parseNVMeLog(b); l.Hours != 1<<63-1 {
 		t.Errorf("huge: %d", l.Hours)
+	}
+}
+
+func smartTable(attrs [][4]int64) []byte { // id, cur, worst, raw
+	b := make([]byte, 512)
+	for i, a := range attrs {
+		o := 2 + 12*i
+		b[o], b[o+3], b[o+4] = byte(a[0]), byte(a[1]), byte(a[2])
+		for k := 0; k < 6; k++ {
+			b[o+5+k] = byte(a[3] >> (8 * k))
+		}
+	}
+	return b
+}
+
+func TestParseSmart(t *testing.T) {
+	data := smartTable([][4]int64{{1, 50, 48, 0}, {5, 200, 200, 0}, {9, 45, 45, 40292}, {194, 112, 98, 30 | 20<<16 | 45<<32}, {197, 200, 200, 2}, {198, 200, 200, 2}, {199, 200, 200, 0}})
+	thr := make([]byte, 512)
+	for i, p := range [][2]byte{{1, 51}, {5, 140}, {197, 0}} {
+		thr[2+12*i], thr[3+12*i] = p[0], p[1]
+	}
+	as := parseSmart(data, thr)
+	if len(as) != 7 {
+		t.Fatalf("%d attributes: %+v", len(as), as)
+	}
+	if !as[0].Bad || as[0].Thr != 51 || as[1].Bad || as[1].Thr != 140 {
+		t.Errorf("thresholds: %+v %+v", as[0], as[1])
+	}
+	if smartValue(as, 9) != 40292 || smartValue(as, 194) != 30 || smartValue(as, 197) != 2 || smartValue(as, 4) != 0 {
+		t.Errorf("values: hours %d temp %d pending %d", smartValue(as, 9), smartValue(as, 194), smartValue(as, 197))
+	}
+	if parseSmart(nil, nil) != nil || parseSmart(make([]byte, 512), nil) != nil {
+		t.Error("an empty table gives attributes")
+	}
+}
+
+func TestEventsForDisk(t *testing.T) {
+	day := int64(86400e3)
+	evs := []rawEvent{
+		{P: "disk", ID: 7, T: 10 * day, M: `The device, \Device\Harddisk1\DR1, has a bad block.`, A: []string{`\Device\Harddisk1\DR1`}},
+		{P: "disk", ID: 7, T: 12 * day, M: `The device, \Device\Harddisk1\DR1, has a bad block.`},
+		{P: "disk", ID: 153, T: 11 * day, M: "The IO operation at logical block address 0x9 for Disk 1 (PDO name: \\Device\\00000034) was retried."},
+		{P: "disk", ID: 153, T: 11 * day, M: "Операцията за вход/изход на логически адрес 0x9 за Диск 1 беше повторена."},
+		{P: "disk", ID: 7, T: 13 * day, M: `The device, \Device\Harddisk10\DR10, has a bad block.`},
+		{P: "disk", ID: 153, T: 13 * day, M: "The IO operation ... for Disk 10 was retried."},
+		{P: "disk", ID: 7, T: 13 * day, M: `The device, \Device\Harddisk0\DR0, has a bad block.`},
+		{P: "Ntfs", ID: 55, T: 9 * day, M: "A corruption was discovered in the file system structure on volume E:."},
+		{P: "Ntfs", ID: 55, T: 9 * day, M: "A corruption was discovered in the file system structure on volume C:."},
+		{P: "Ntfs", ID: 98, T: 9 * day, M: `Volume D: (\Device\HarddiskVolume3) needs to be taken offline.`},
+		{P: "Ntfs", ID: 140, T: 8 * day, M: `The system failed to flush data. Path E:\Games\x.dat`},
+	}
+	got := eventsForDisk(evs, "1", []string{"E"})
+	if len(got) != 3 {
+		t.Fatalf("%d kinds: %+v", len(got), got)
+	}
+	if got[0].ID != 7 || got[0].Count != 2 || got[0].First != 10*day || got[0].Last != 12*day || got[0].Key != "dh.e.badblock" {
+		t.Errorf("bad blocks: %+v", got[0])
+	}
+	if got[1].ID != 153 || got[1].Count != 2 || got[1].Key != "dh.e.retried" {
+		t.Errorf("retried (English and Bulgarian): %+v", got[1])
+	}
+	if got[2].Provider != "Ntfs" || got[2].ID != 55 || got[2].Count != 1 || got[2].Key != "dh.e.fs" {
+		t.Errorf("file system of E: %+v", got[2])
+	}
+	if eventsForDisk(evs, "", nil) != nil {
+		t.Error("no disk number")
+	}
+}
+
+func TestAdviseDisk(t *testing.T) {
+	i64 := func(v int64) *int64 { return &v }
+	keys := func(as []diskAdvice) string {
+		var k []string
+		for _, a := range as {
+			k = append(k, a.Key+"/"+a.Action+"/"+strconv.FormatInt(a.N, 10))
+		}
+		return strings.Join(k, " ")
+	}
+	// the WD drive of the report: 4 uncorrected reads, 2 pending sectors
+	wd := diskHealth{Media: "HDD", Health: "Healthy", ReadUnc: i64(4), Verdict: "warn"}
+	smart := parseSmart(smartTable([][4]int64{{197, 200, 200, 2}, {199, 200, 200, 0}}), nil)
+	got := keys(adviseDisk(wd, smart, nil, nil, []string{"E"}, false))
+	if got != "dh.a.backup/backup/0 dh.a.sectors//2 dh.a.unc//4 dh.a.fix/fix/0 dh.a.watch//0" {
+		t.Errorf("WD: %s", got)
+	}
+	// the same on the system drive: no bad sector check offered here (it needs a restart)
+	if got := keys(adviseDisk(wd, smart, nil, nil, []string{"C"}, true)); !strings.Contains(got, "dh.a.fixSys") || strings.Contains(got, "/fix/") {
+		t.Errorf("system: %s", got)
+	}
+	// a cable: transfer errors only
+	cable := parseSmart(smartTable([][4]int64{{199, 200, 200, 37}}), nil)
+	if got := keys(adviseDisk(diskHealth{Media: "HDD"}, cable, nil, nil, []string{"D"}, false)); got != "dh.a.cable//37" {
+		t.Errorf("cable: %s", got)
+	}
+	// the file system's errors in the log: a read-only check first
+	evs := []diskEvent{{Provider: "Ntfs", ID: 55, Count: 3, Key: "dh.e.fs"}}
+	if got := keys(adviseDisk(diskHealth{Media: "HDD"}, nil, evs, nil, []string{"D"}, false)); got != "dh.a.fs/scan/3" {
+		t.Errorf("file system: %s", got)
+	}
+	// NVMe: spare space at its limit
+	nv := &nvmeLog{Spare: 9, SpareMin: 10}
+	if got := keys(adviseDisk(diskHealth{Bus: "NVMe"}, nil, nil, nv, []string{"C"}, true)); !strings.HasPrefix(got, "dh.a.backup") {
+		t.Errorf("nvme: %s", got)
+	}
+	if got := keys(adviseDisk(diskHealth{Media: "SSD", Verdict: "good"}, nil, nil, &nvmeLog{Spare: 100, SpareMin: 10}, []string{"C"}, true)); got != "dh.a.ok//0" {
+		t.Errorf("healthy: %s", got)
 	}
 }

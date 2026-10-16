@@ -226,6 +226,18 @@ var texts = map[string][2]string{ // [bg, en]
 	"tray.hint":        {"Програмата продължава да работи тук. Щракни иконата, за да я отвориш.", "The app keeps running here. Click the icon to open it."},
 	"tray.open":        {"Отвори xKi4o Cleaner", "Open xKi4o Cleaner"},
 	"tray.exit":        {"Изход", "Exit"},
+	"repair.chkfix":    {"CHKDSK — търсене и поправка на лоши сектори на %s (отнема часове)", "CHKDSK — finding and fixing bad sectors on %s (takes hours)"},
+	"repair.chkfixed":  {"CHKDSK намери проблеми и ги поправи.", "CHKDSK found problems and fixed them."},
+	"opt.badDrive":     {"Невалиден диск", "Not a drive"},
+	"opt.analyzeFail":  {"Windows не можа да анализира диска", "Windows could not analyze the drive"},
+	"opt.stopped":      {"Спряно", "Stopped"},
+	"opt.failCode":     {"Не стана (код %d)", "Did not work (code %d)"},
+	"log.opt":          {"Оптимизация на дисковете", "Drive optimization"},
+	"log.optDrive":     {"Оптимизиран (%s)", "Optimized (%s)"},
+	"log.optDone":      {"Оптимизирани: %d от %d", "Optimized: %d of %d"},
+	"dh.noSmart":       {"Дискът не дава S.M.A.R.T. данни през Windows.", "The drive gives no S.M.A.R.T. data through Windows."},
+	"dh.err.events":    {"Дневникът на Windows не можа да бъде прочетен.", "Windows' log could not be read."},
+	"wg.gone":          {"Обновяването премахна програмата, вместо да я обнови.", "The update removed the program instead of updating it."},
 	// disk health
 	"dh.err.read": {"Състоянието на дисковете не можа да се прочете", "The disks' health could not be read"},
 	// game mode

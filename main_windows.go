@@ -221,8 +221,13 @@ func main() {
 		"wingetSite":       wingetSite,
 		"wingetStop":       wingetStop,
 		"openAppInstaller": openAppInstaller,
-		// disk health (S.M.A.R.T.)
-		"diskHealth": diskHealthList,
+		// disk health (S.M.A.R.T.), the details of a disk, drive optimization
+		"diskHealth":     diskHealthList,
+		"diskDetails":    diskDetails,
+		"openDrive":      openDrive,
+		"analyzeDrive":   analyzeDrive,
+		"optimizeDrives": optimizeDrives,
+		"optimizeStop":   optimizeStop,
 		// game mode
 		"gameApps":  gameApps,
 		"gameState": gameState,

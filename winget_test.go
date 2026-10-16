@@ -148,3 +148,21 @@ func TestSameProgram(t *testing.T) {
 		}
 	}
 }
+
+// Launchers that update themselves are never offered (the Epic Games
+// Launcher's update through winget removed it).
+func TestWingetSelfUpdating(t *testing.T) {
+	for _, id := range []string{"EpicGames.EpicGamesLauncher", "Valve.Steam", "RiotGames.Valorant.EU", "Discord.Discord", "Blizzard.BattleNet"} {
+		if !wingetSelfUpdating(id) {
+			t.Errorf("%s should be left out", id)
+		}
+	}
+	for _, id := range []string{"OBSProject.OBSStudio", "Microsoft.VisualStudioCode", "Intel.IntelExtremeTuningUtility", "7zip.7zip"} {
+		if wingetSelfUpdating(id) {
+			t.Errorf("%s should be offered", id)
+		}
+	}
+	if !wingetSiteHint("wg.h.gone") {
+		t.Error("a removed program: its site to install it again")
+	}
+}

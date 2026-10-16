@@ -221,7 +221,21 @@ func wingetHint(code uint32) string {
 
 // wingetSiteHint: hints after which the program's own site is the way to update.
 func wingetSiteHint(h string) bool {
-	return h == "wg.h.403" || h == "wg.h.404" || h == "wg.h.http" || h == "wg.h.tech" || h == "wg.h.hash"
+	return h == "wg.h.403" || h == "wg.h.404" || h == "wg.h.http" || h == "wg.h.tech" || h == "wg.h.hash" || h == "wg.h.gone"
+}
+
+// wingetSelfUpdating: programs that update themselves every time they start
+// and that winget's update can break (the Epic Games Launcher's update
+// removed it). They are not offered for updating.
+func wingetSelfUpdating(id string) bool {
+	l := strings.ToLower(id)
+	switch l {
+	case "epicgames.epicgameslauncher", "valve.steam", "blizzard.battlenet", "electronicarts.eadesktop", "electronicarts.origin",
+		"ubisoft.connect", "gog.galaxy", "discord.discord", "discord.discord.ptb", "discord.discord.canary", "spotify.spotify",
+		"rockstargames.launcher":
+		return true
+	}
+	return strings.HasPrefix(l, "riotgames.")
 }
 
 // selfUpdater: browsers that update themselves (Omaha updaters). winget

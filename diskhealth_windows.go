@@ -3,9 +3,11 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/binary"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"sort"
 	"strings"
 	"sync"
@@ -132,4 +134,138 @@ func nvmeHealthLog(disk string) ([]byte, error) {
 		return nil, errors.New("unexpected answer")
 	}
 	return buf[8+off : 8+off+ln], nil
+}
+
+// ---------------------------------------------------------------- the details of one disk
+
+// Read-only: the drive's S.M.A.R.T. table (ATA/SATA drives, through
+// Windows' storage driver) and the System log's entries of the last 60 days
+// from the disk driver and the file system.
+const diskDetailScript = `$o = [ordered]@{}
+try {
+  $dd = Get-CimInstance Win32_DiskDrive -Filter "Index=%s" -ErrorAction Stop
+  $pnp = ([string]$dd.PNPDeviceID).ToUpper()
+  $fp = @(Get-CimInstance -Namespace root\wmi -ClassName MSStorageDriver_FailurePredictData -ErrorAction Stop | Where-Object { ([string]$_.InstanceName).ToUpper().StartsWith($pnp) })
+  $th = @(Get-CimInstance -Namespace root\wmi -ClassName MSStorageDriver_FailurePredictThresholds -ErrorAction SilentlyContinue | Where-Object { ([string]$_.InstanceName).ToUpper().StartsWith($pnp) })
+  if ($fp.Count) { $o.data = [Convert]::ToBase64String([byte[]]$fp[0].VendorSpecific) }
+  if ($th.Count) { $o.thr = [Convert]::ToBase64String([byte[]]$th[0].VendorSpecific) }
+} catch { $o.smartErr = [string]$_.Exception.Message }
+try {
+  $x = "*[System[(Provider[@Name='disk'] or Provider[@Name='Ntfs'] or Provider[@Name='Microsoft-Windows-Ntfs']) and (Level=1 or Level=2 or Level=3) and TimeCreated[timediff(@SystemTime) <= 5184000000]]]"
+  $ev = Get-WinEvent -LogName System -FilterXPath $x -MaxEvents 400 -ErrorAction Stop
+  $o.events = @($ev | ForEach-Object { [pscustomobject]@{ p=[string]$_.ProviderName; id=[int]$_.Id; t=[int64]((($_.TimeCreated).ToUniversalTime() - [datetime]'1970-01-01').TotalMilliseconds); m=[string]$_.Message; a=@($_.Properties | ForEach-Object { [string]$_.Value }) } })
+} catch { if ([string]$_.FullyQualifiedErrorId -notmatch 'NoMatchingEventsFound') { $o.evErr = [string]$_.Exception.Message } }
+ConvertTo-Json -InputObject ([pscustomobject]$o) -Compress -Depth 4`
+
+// nvmeView: an NVMe drive's own log, for the page.
+type nvmeView struct {
+	Critical int     `json:"critical"`
+	Temp     int     `json:"temp"`
+	Spare    int     `json:"spare"`
+	SpareMin int     `json:"spareMin"`
+	Used     int     `json:"used"`
+	Written  float64 `json:"written"` // TB
+	Hours    uint64  `json:"hours"`
+	Cycles   uint64  `json:"cycles"`
+	Unsafe   uint64  `json:"unsafe"`
+	MediaErr uint64  `json:"mediaErr"`
+	ErrLog   uint64  `json:"errLog"`
+}
+
+type diskDetail struct {
+	ID        string       `json:"id"`
+	Disk      *diskHealth  `json:"disk"`
+	Letters   []string     `json:"letters"`
+	System    bool         `json:"system"`
+	Smart     []smartAttr  `json:"smart"`
+	SmartNote string       `json:"smartNote,omitempty"`
+	NVMe      *nvmeView    `json:"nvme,omitempty"`
+	Events    []diskEvent  `json:"events"`
+	EventNote string       `json:"eventNote,omitempty"`
+	Advice    []diskAdvice `json:"advice"`
+}
+
+// diskDetails reads everything known about one disk and what may help.
+func diskDetails(id string) diskDetail {
+	res := diskDetail{ID: id, Letters: []string{}, Smart: []smartAttr{}, Events: []diskEvent{}, Advice: []diskAdvice{}}
+	if id == "" || strings.Trim(id, "0123456789") != "" {
+		return res
+	}
+	for _, d := range diskHealthList(false).Disks {
+		if d.ID == id {
+			c := d
+			res.Disk = &c
+		}
+	}
+	for _, d := range getDrives() {
+		if d.Disk == id {
+			res.Letters = append(res.Letters, d.Letter)
+			res.System = res.System || d.System
+		}
+	}
+	if res.Disk != nil && len(res.Letters) == 0 {
+		res.Letters = append(res.Letters, res.Disk.Letters...)
+		for _, l := range res.Letters {
+			res.System = res.System || strings.EqualFold(l+":", systemDrive())
+		}
+	}
+	sort.Strings(res.Letters)
+	out, _, err := runPS(2*time.Minute, fmt.Sprintf(diskDetailScript, id))
+	var r struct {
+		Data     string     `json:"data"`
+		Thr      string     `json:"thr"`
+		SmartErr string     `json:"smartErr"`
+		Events   []rawEvent `json:"events"`
+		EvErr    string     `json:"evErr"`
+	}
+	if jerr := json.Unmarshal([]byte(strings.TrimSpace(out)), &r); jerr != nil {
+		res.SmartNote, res.EventNote = T("dh.err.read"), T("dh.err.read")
+		if err != nil {
+			res.EventNote += " (" + err.Error() + ")"
+		}
+	}
+	var nv *nvmeLog
+	if res.Disk != nil && strings.EqualFold(res.Disk.Bus, "NVMe") {
+		if b, err := nvmeHealthLog(id); err == nil {
+			if l, ok := parseNVMeLog(b); ok {
+				nv = &l
+				res.NVMe = &nvmeView{Critical: l.Critical, Spare: l.Spare, SpareMin: l.SpareMin, Used: l.Used, Hours: l.Hours, Cycles: l.Cycles,
+					Unsafe: l.Unsafe, MediaErr: l.MediaErr, ErrLog: l.ErrLog, Written: float64(l.Written) * 512000 / 1e12}
+				if l.TempK > 273 {
+					res.NVMe.Temp = l.TempK - 273
+				}
+			}
+		}
+	}
+	if data, err := base64.StdEncoding.DecodeString(r.Data); err == nil && len(data) > 0 {
+		thr, _ := base64.StdEncoding.DecodeString(r.Thr)
+		if s := parseSmart(data, thr); s != nil {
+			res.Smart = s
+		}
+	}
+	if len(res.Smart) == 0 && res.NVMe == nil && res.SmartNote == "" {
+		res.SmartNote = T("dh.noSmart")
+	}
+	if r.EvErr != "" {
+		res.EventNote = T("dh.err.events")
+	}
+	res.Events = eventsForDisk(r.Events, id, res.Letters)
+	if res.Events == nil {
+		res.Events = []diskEvent{}
+	}
+	d := diskHealth{}
+	if res.Disk != nil {
+		d = *res.Disk
+	}
+	res.Advice = adviseDisk(d, res.Smart, res.Events, nv, res.Letters, res.System)
+	return res
+}
+
+// openDrive opens a drive in File Explorer (to copy what matters off it).
+func openDrive(letter string) bool {
+	if !validLetter(letter) {
+		return false
+	}
+	shellOpen(strings.ToUpper(letter) + `:\`)
+	return true
 }

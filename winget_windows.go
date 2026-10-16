@@ -22,6 +22,7 @@ import (
 type wgList struct {
 	Available bool       `json:"available"` // winget is installed
 	Updates   []wgUpdate `json:"updates"`
+	Self      []string   `json:"self,omitempty"` // left out: they update themselves (names)
 	Error     string     `json:"error,omitempty"`
 	Checked   int64      `json:"checked"` // unix ms
 }
@@ -114,11 +115,23 @@ func wingetUpdates(fresh bool) wgList {
 			break
 		}
 	}
-	if ups != nil {
-		res.Updates = ups
+	for _, u := range ups {
+		if wingetSelfUpdating(u.ID) {
+			res.Self = append(res.Self, u.Name)
+			continue
+		}
+		res.Updates = append(res.Updates, u)
 	}
 	wg.cache = res
 	return res
+}
+
+// wingetGone: after its update, the program is not installed any more
+// (its installer removed the old version and did not put the new one).
+func wingetGone(id string) bool {
+	_, code, _ := runWinget(2*time.Minute, "list", "--id", id, "--exact", "--accept-source-agreements", "--disable-interactivity")
+	const noneFound = 0x8A150014 // APPINSTALLER_CLI_ERROR_NO_APPLICATIONS_FOUND
+	return code != -1 && uint32(code) == noneFound
 }
 
 type wgOpts struct {
@@ -276,7 +289,7 @@ func wingetUpgrade(ids []string, o wgOpts) bool {
 	wg.stop.Store(false)
 	var clean []string
 	for _, id := range ids {
-		if validWingetID(id) {
+		if validWingetID(id) && !wingetSelfUpdating(id) {
 			clean = append(clean, id)
 		}
 	}
@@ -327,10 +340,12 @@ func wingetUpgrade(ids []string, o wgOpts) bool {
 				out, code, err = runSelfUpdater(self)
 				usedSelf = err == nil || code != -1
 			}
+			gone := false
 			if !usedSelf {
 				wg.mu.Lock()
 				out, code, err = runWinget(45*time.Minute, "upgrade", "--id", id, "--exact", "--silent",
 					"--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity")
+				gone = (err == nil || code != -1) && wingetGone(id) // winget ran: the update may have removed the program
 				wg.mu.Unlock()
 			}
 			tick.Stop()
@@ -347,6 +362,10 @@ func wingetUpgrade(ids []string, o wgOpts) bool {
 				msg = err.Error()
 			}
 			switch {
+			case gone:
+				msg = T("wg.gone")
+				op.fail(id, msg, map[string]any{"exit": uint32(code)})
+				emit("winget", map[string]any{"id": id, "state": "fail", "msg": msg, "code": uint32(code), "hint": "wg.h.gone", "site": true})
 			case usedSelf && code == 0:
 				ok++
 				op.info(id, T("log.wgSelf"), nil)
