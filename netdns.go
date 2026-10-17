@@ -29,7 +29,6 @@ type dnsProvider struct {
 var dnsProviders = []dnsProvider{
 	{ID: "cloudflare", Name: "Cloudflare", V4: []string{"1.1.1.1", "1.0.0.1"}, V6: []string{"2606:4700:4700::1111", "2606:4700:4700::1001"}, Note: "dns.n.cloudflare"},
 	{ID: "google", Name: "Google", V4: []string{"8.8.8.8", "8.8.4.4"}, V6: []string{"2001:4860:4860::8888", "2001:4860:4860::8844"}, Note: "dns.n.google"},
-	{ID: "quad9", Name: "Quad9", V4: []string{"9.9.9.9", "149.112.112.112"}, V6: []string{"2620:fe::fe", "2620:fe::9"}, Note: "dns.n.quad9"},
 	{ID: "adguard", Name: "AdGuard", V4: []string{"94.140.14.14", "94.140.15.15"}, V6: []string{"2a10:50c0::ad1:ff", "2a10:50c0::ad2:ff"}, Note: "dns.n.adguard"},
 	{ID: "opendns", Name: "OpenDNS", V4: []string{"208.67.222.222", "208.67.220.220"}, V6: []string{"2620:119:35::35", "2620:119:53::53"}, Note: "dns.n.opendns"},
 	{ID: "cloudflare-family", Name: "Cloudflare Family", V4: []string{"1.1.1.3", "1.0.0.3"}, V6: []string{"2606:4700:4700::1113", "2606:4700:4700::1003"}, Note: "dns.n.family"},

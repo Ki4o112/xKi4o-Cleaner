@@ -3,6 +3,30 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 3.2.0 — 2026-10-18
+
+### English
+- New logo — in the app, on its icon and while it loads
+- New loading animation in the Graphite colours
+- Added the Graphics card page: live sensors, checks and details
+- Added going back to an older graphics driver: one on the PC, or a recent one from NVIDIA
+- Added removing the graphics driver like DDU, with a copy to put it back
+- Added a check and a one-click fix for screens below their refresh rate
+- Cloudflare is now the recommended DNS; Quad9 was removed
+- Fixed Windows' white scrollbars in the Disk Analyzer and other lists
+- The credits page in the new look
+
+### Български
+- Ново лого — в програмата, на иконата и при зареждане
+- Нова анимация при зареждане в цветовете на Графит
+- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности
+- Добавено връщане към по-стар драйвер на видеокартата — от компютъра или от NVIDIA
+- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане
+- Добавена проверка и поправка с един клик за екрани под максималната им честота
+- Cloudflare е препоръчаният DNS; Quad9 е премахнат
+- Поправени белите плъзгачи на Windows в „Анализ на диска“ и други списъци
+- Страницата „За програмата“ в новия вид
+
 ## 3.1.0 — 2026-10-17
 
 ### English

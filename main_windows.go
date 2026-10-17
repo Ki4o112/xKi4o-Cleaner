@@ -187,6 +187,23 @@ func main() {
 		"tweakStates":        tweakStates,
 		"tweakPresets":       tweakPresets,
 		"liveStats":          liveStats,
+		"gpuState":           gpuStateRead,
+		"gpuSensors":         gpuSensorsRead,
+		"gpuNvDrivers":       gpuNvDrivers,
+		"gpuNvDownload":      gpuNvDownload,
+		"gpuCancelDownload":  gpuCancelDownload,
+		"gpuRunInstaller":    gpuRunInstaller,
+		"gpuUseDriver":       gpuUseDriver,
+		"gpuDeletePackage":   gpuDeletePackage,
+		"gpuRemove":          gpuRemove,
+		"gpuRestoreBackup":   gpuRestoreBackup,
+		"gpuDeleteBackup":    gpuDeleteBackup,
+		"gpuWU":              gpuWU,
+		"gpuSetRefresh":      gpuSetRefresh,
+		"gpuKeepRefresh":     gpuKeepRefresh,
+		"gpuOpenBackups":     gpuOpenBackups,
+		"gpuOpenDetails":     gpuOpenDetails,
+		"restartPC":          restartPC,
 		"setTweak":           setTweak,
 		"debloatApps":        debloatApps,
 		"tweakHistory":       tweakHistory,
@@ -318,13 +335,15 @@ func saveAndApplySettings(m map[string]any) bool {
 	return savePageSettings(m)
 }
 
-// openLink opens only the fixed links the credits page shows.
+// openLink opens only fixed links: the credits, help and the card makers' driver pages.
 func openLink(url string) bool {
 	switch url {
 	case "https://github.com/jchv/go-webview2", "https://go.dev", "https://github.com/rsms/inter",
 		"https://github.com/henrypp/memreduct", "https://www.bleachbit.org", "https://github.com/MoscaDotTo/Winapp2",
 		"https://github.com/Parcoil/Sparkle", "https://github.com/ChrisTitusTech/winutil", "https://github.com/NVIDIA/nvapi",
-		"https://github.com/meetrevision/playbook", "https://github.com/Ki4o112/xKi4o-Cleaner/issues/new":
+		"https://github.com/meetrevision/playbook", "https://github.com/Ki4o112/xKi4o-Cleaner/issues/new",
+		"https://www.nvidia.com/en-us/drivers/", "https://www.amd.com/en/support/download/drivers.html",
+		"https://www.intel.com/content/www/us/en/download-center/home.html":
 		shellOpen(url)
 		return true
 	}

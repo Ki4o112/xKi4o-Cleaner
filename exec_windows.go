@@ -83,9 +83,14 @@ func runQuiet(timeout time.Duration, name string, args ...string) (string, int, 
 
 // runPS runs a Windows PowerShell script hidden. Output is UTF-8.
 func runPS(timeout time.Duration, script string) (string, int, error) {
+	return runPSCtx(context.Background(), timeout, script)
+}
+
+// runPSCtx is runPS that also stops when ctx ends.
+func runPSCtx(parent context.Context, timeout time.Duration, script string) (string, int, error) {
 	ps := sys32(`WindowsPowerShell\v1.0\powershell.exe`)
 	full := "[Console]::OutputEncoding=[Text.Encoding]::UTF8; $ProgressPreference='SilentlyContinue'; " + script
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	ctx, cancel := context.WithTimeout(parent, timeout)
 	defer cancel()
 	cmd := hiddenCmd(ctx, ps, "-NoLogo", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", full)
 	var out bytes.Buffer

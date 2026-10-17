@@ -54,6 +54,7 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html, body { height: 100%; margin: 0; }
+:root { color-scheme: dark; }
 body {
   background:
     radial-gradient(900px 500px at 92% -10%, rgba(var(--blue-rgb),.16), transparent 60%),
@@ -116,6 +117,12 @@ h1 { font-size: 23px; font-weight: 700; margin: 0; letter-spacing: -.02em; }
 .sub { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
 .head-r { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 .scroll { overflow-y: auto; min-height: 0; }
+::-webkit-scrollbar { width: 10px; height: 10px; background: transparent; }
+::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; }
+::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+::-webkit-scrollbar-thumb { background: var(--line-hi); border-radius: 8px; border: 3px solid transparent; background-clip: padding-box; min-height: 36px; }
+::-webkit-scrollbar-thumb:hover { background-color: var(--faint); }
+::-webkit-scrollbar-thumb:active { background-color: var(--muted); }
 .scroll::-webkit-scrollbar { width: 10px; }
 .scroll::-webkit-scrollbar-thumb { background: var(--line-hi); border-radius: 6px; border: 3px solid var(--panel); }
 .pad { padding: 18px 26px 26px; }
@@ -262,13 +269,13 @@ h1 { font-size: 23px; font-weight: 700; margin: 0; letter-spacing: -.02em; }
 .chip { font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: 99px; background: var(--card-2); color: var(--muted); white-space: nowrap; }
 .chip.open { background: var(--red-soft); color: #ffb3bc; }
 .chip.opt { background: var(--blue-soft); color: var(--blue-light); }
-.skel { display: inline-block; width: 56px; height: 10px; border-radius: 5px; background: linear-gradient(90deg, var(--card-2), #2a3557, var(--card-2)); background-size: 200% 100%; animation: sh 1.2s linear infinite; }
+.skel { display: inline-block; width: 56px; height: 10px; border-radius: 5px; background: linear-gradient(90deg, var(--card-2), var(--skel-hi, #2a3557), var(--card-2)); background-size: 200% 100%; animation: sh 1.2s linear infinite; }
 @keyframes sh { to { background-position: -200% 0; } }
 .spin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,.12); border-top-color: var(--blue-2); display: inline-block; animation: rot .7s linear infinite; vertical-align: -3px; }
 
 /* checkbox */
-.cb { appearance: none; -webkit-appearance: none; width: 20px; height: 20px; margin: 0; border-radius: 7px; border: 1.6px solid #36416a; background: #0f1530; display: grid; place-content: center; cursor: pointer; transition: background .2s, border-color .2s, transform .3s var(--spring); }
-.cb:hover:not(:disabled) { border-color: #5469a5; }
+.cb { appearance: none; -webkit-appearance: none; width: 20px; height: 20px; margin: 0; border-radius: 7px; border: 1.6px solid var(--cb-line, #36416a); background: var(--cb-bg, #0f1530); display: grid; place-content: center; cursor: pointer; transition: background .2s, border-color .2s, transform .3s var(--spring); }
+.cb:hover:not(:disabled) { border-color: var(--cb-hover, #5469a5); }
 .cb:checked, .cb:indeterminate { background: var(--blue); border-color: var(--blue); box-shadow: 0 4px 12px -4px var(--blue-glow); animation: pop .35s var(--spring); }
 .cb:checked::after { content: ""; width: 9px; height: 5px; margin-top: -2px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg); }
 .cb:indeterminate::after { content: ""; width: 9px; height: 2px; background: #fff; border-radius: 1px; }
@@ -352,7 +359,7 @@ h1 { font-size: 23px; font-weight: 700; margin: 0; letter-spacing: -.02em; }
 .drive-row:first-child { border-top: 0; }
 .letter { width: 46px; height: 46px; border-radius: 50%; background: var(--blue); color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 15px; box-shadow: 0 8px 20px -10px var(--blue-glow); }
 .mini { height: 7px; border-radius: 4px; background: var(--well); overflow: hidden; margin-top: 8px; }
-.mini i { display: block; height: 100%; background: linear-gradient(90deg, #3a4a72, #4c5f90); border-radius: 4px; }
+.mini i { display: block; height: 100%; background: linear-gradient(90deg, var(--used-a, #3a4a72), var(--used-b, #4c5f90)); border-radius: 4px; }
 .mt { color: var(--muted); font-size: 12.5px; }
 .res { text-align: right; font-size: 12.5px; color: var(--muted); font-weight: 600; }
 .res.ok { color: var(--mint); }
@@ -639,7 +646,7 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .sel { height: 34px; border-radius: 11px; border: 1px solid var(--line-soft); background: var(--well); color: var(--text); padding: 0 30px 0 12px; font: 600 12.5px var(--font); outline: none; cursor: pointer; appearance: none; -webkit-appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238c97b2' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
 .sel:focus { border-color: var(--blue); }
-.sel option { background: #10162a; }
+.sel option { background: var(--panel); }
 .tbl-input { height: 34px; width: 90px; border-radius: 11px; border: 1px solid var(--line-soft); background: var(--well); padding: 0 10px; font-size: 12.5px; outline: none; }
 .tbl-input:focus { border-color: var(--blue); }
 
@@ -1038,7 +1045,7 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .jobdock[hidden] { display: none; }
 .jobdock > * { pointer-events: auto; }
 .jd-bar { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 8px 8px 8px 14px; border-radius: 18px; background: var(--glass); backdrop-filter: blur(14px); border: 1px solid var(--line); box-shadow: 0 18px 44px -18px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,255,255,.04); cursor: pointer; animation: dockIn .45s var(--spring); }
-.jd-bar:hover { border-color: #2f3a60; }
+.jd-bar:hover { border-color: var(--line-hi); }
 @keyframes dockIn { from { opacity: 0; transform: translateY(16px) scale(.97); } }
 .jd-t { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 1px; }
 .jd-t b { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1114,7 +1121,7 @@ body.dock-on .toasts { bottom: 84px; }
 .tr .tp { display: grid; grid-template-columns: 1fr 44px; gap: 8px; align-items: center; }
 .tr .tp .bar { height: 12px; border-radius: 4px; background: var(--well); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,.03); }
 .tr .tp .bar i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--blue), var(--blue-2)); }
-.tr.file .tp .bar i { background: linear-gradient(90deg, #4b5a85, #6c7ba6); }
+.tr.file .tp .bar i { background: linear-gradient(90deg, var(--file-a, #4b5a85), var(--file-b, #6c7ba6)); }
 .tr .tp span { text-align: right; color: var(--muted); font-size: 11.5px; font-variant-numeric: tabular-nums; }
 .tr .r { text-align: right; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .tr.more { color: var(--blue-light); cursor: pointer; font-weight: 600; }
@@ -1183,7 +1190,7 @@ body.dock-on .toasts { bottom: 84px; }
 .upd-notes ul { margin: 4px 0 6px; padding-left: 18px; }
 .upd-notes li { margin: 5px 0; }
 .upd-notes p { margin: 6px 0; color: var(--muted); }
-.upd-notes code { font: 11.5px var(--mono); background: #182141; padding: 1px 5px; border-radius: 5px; }
+.upd-notes code { font: 11.5px var(--mono); background: var(--chip); padding: 1px 5px; border-radius: 5px; }
 .upd-prog { margin: 12px 0 2px; }
 .upd-prog .lbl { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
 
@@ -1349,10 +1356,10 @@ body.dock-on .toasts { bottom: 84px; }
 /* ================= 2.9: own title bar, the logo, the brand colours ================= */
 :root {
   --wb: 38px;
-  --logo: url(data:image/webp;base64,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);
-  --brand-a: #b47cff; --brand-b: #2a9dff; --brand-c: #3ee8b0;
+  --logo: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjQ3LjIgMjcuMiAzNDYuNyAzNDYuNyI+PHBhdGggZD0iTTYwIDczTDE0MyA3M0wyNTggMTg3TDE0MyAzMDFMNjAgMzAxTDE3NSAxODdaIiBmaWxsPSIjRUNFQ0VFIi8+PHBhdGggZD0iTTI5NyA3M0wzODEgNzNMMjc1IDE3OUwyMzIgMTM3WiIgZmlsbD0iI0VDRUNFRSIvPjxwYXRoIGQ9Ik0zNTAgMTkwQzMwNSAxOTkgMjY4IDIxNCAyNDAgMjQzTDE4NiAzMDJMMjUyIDMwMkMyNjEgMzAyIDI2NyAyOTkgMjczIDI5NEMyOTIgMzE1IDMxMyAzMjggMzQwIDMyOEwzNzkgMzI4TDMwNSAyNTJaIiBmaWxsPSIjNDZCRTlBIi8+PC9zdmc+);
+  --brand-a: #1e9f73; --brand-b: #46be9a; --brand-c: #a7f3d0;
   --brand: linear-gradient(45deg, var(--brand-a) 0%, var(--brand-b) 52%, var(--brand-c) 100%);
-  --ink: #0b1a4d;
+  --ink: #04281b;
 }
 .logo { display: block; flex: none; width: 40px; height: 40px; border-radius: 28%; background: var(--logo) center / cover no-repeat; }
 .winbar { position: relative; z-index: 30; height: var(--wb); display: flex; align-items: stretch; padding-left: 14px; }
@@ -1385,18 +1392,68 @@ body.dock-on .toasts { bottom: 84px; }
 .classic-frame #sideTray { display: grid; }
 .side > .brand .logo { width: 36px; height: 36px; border-radius: 11px; }
 /* the splash and the credits wear the logo */
-.splash-logo { background: none; box-shadow: 0 26px 70px -22px rgba(42, 157, 255, .65); border-radius: 28%; }
-.splash-logo .logo { width: 96px; height: 96px; }
-.splash { background: radial-gradient(560px 380px at 50% 40%, rgba(42, 157, 255, .2), transparent 70%), var(--bg); }
-.splash-bar i { background: var(--brand); }
-.credit-hero { background: var(--brand); box-shadow: 0 24px 60px -26px rgba(42, 157, 255, .7); }
-.credit-hero::before, .credit-hero::after { border-color: rgba(11, 26, 77, .14); }
-.credit-hero::before { box-shadow: 0 0 0 40px rgba(11, 26, 77, .035), 0 0 0 90px rgba(11, 26, 77, .02); }
-.credit-hero .made, .credit-hero .made-role { color: rgba(11, 26, 77, .78); }
-.credit-hero .made-name { color: var(--ink); text-shadow: none; }
-.credit-hero .made-meta span { background: rgba(11, 26, 77, .12); color: var(--ink); }
-.cr-logo { position: absolute; right: 34px; top: 50%; width: 124px; height: 124px; transform: translateY(-50%) rotate(-6deg); box-shadow: 0 26px 50px -18px rgba(11, 26, 77, .55), 0 0 0 1px rgba(255,255,255,.35); }
-@media (max-width: 1080px) { .cr-logo { width: 92px; height: 92px; right: 22px; } }
+/* 3.2: the splash in the Graphite look — the mark comes together from its three pieces */
+.splash { gap: 12px; background:
+    radial-gradient(420px 300px at 50% 36%, rgba(70, 190, 154, .16), transparent 70%),
+    radial-gradient(900px 600px at 50% 120%, rgba(255, 255, 255, .035), transparent 70%), var(--bg); }
+.splash::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  background-image: radial-gradient(circle, rgba(255,255,255,.07) 1px, transparent 1.6px); background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(420px 320px at 50% 42%, #000, transparent 75%); mask-image: radial-gradient(420px 320px at 50% 42%, #000, transparent 75%); }
+.splash > * { position: relative; }
+.sp-stage { position: relative; width: 200px; height: 200px; display: grid; place-items: center; margin-bottom: -26px; }
+.sp-stage > * { grid-area: 1 / 1; }
+.sp-glow { width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(closest-side, rgba(70, 190, 154, .34), rgba(70, 190, 154, .08) 55%, transparent 72%);
+  filter: blur(6px); animation: spGlowIn .9s var(--ease) .1s both, spBreathe 3.2s ease-in-out 1s infinite; }
+.sp-ring { width: 120px; height: 120px; border-radius: 50%; border: 1.5px solid rgba(70, 190, 154, .55); opacity: 0; animation: spRing 2.6s cubic-bezier(.2, .6, .3, 1) .85s infinite; }
+.sp-ring.r2 { animation-delay: 1.7s; } .sp-ring.r3 { animation-delay: 2.55s; }
+.sp-orbit { position: relative; width: 176px; height: 176px; border-radius: 50%; border: 1px dashed rgba(255, 255, 255, .07); animation: spFade .8s var(--ease) .9s both, spSpin 7s linear infinite; }
+.sp-orbit i { position: absolute; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #a7f3d0; box-shadow: 0 0 10px #46be9a, 0 0 2px #fff; left: 50%; top: 0; }
+.sp-orbit i:nth-child(2) { left: 6.7%; top: 75%; width: 4px; height: 4px; margin: -2px 0 0 -2px; opacity: .7; }
+.sp-orbit i:nth-child(3) { left: 93.3%; top: 75%; width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; opacity: .5; }
+.splash-mark { width: 116px; height: 116px; overflow: visible; filter: drop-shadow(0 18px 34px rgba(70, 190, 154, .32)); }
+.sp-shine { transform-box: view-box; animation: spShine 1.1s cubic-bezier(.5, 0, .3, 1) 1.05s both, spShineAgain 4.5s cubic-bezier(.5, 0, .3, 1) 3.2s infinite; }
+@keyframes spGlowIn { from { opacity: 0; transform: scale(.4); } }
+@keyframes spBreathe { 50% { transform: scale(1.12); opacity: .8; } }
+@keyframes spRing { 0% { opacity: .75; transform: scale(.75); } 100% { opacity: 0; transform: scale(1.75); } }
+@keyframes spFade { from { opacity: 0; transform: scale(.85); } }
+@keyframes spSpin { to { rotate: 360deg; } }
+@keyframes spShine { from { transform: translateX(0) skewX(-18deg); } to { transform: translateX(520px) skewX(-18deg); } }
+@keyframes spShineAgain { 0% { transform: translateX(0) skewX(-18deg); } 28%, 100% { transform: translateX(520px) skewX(-18deg); } }
+.splash-mark path { transform-box: fill-box; transform-origin: center; }
+.splash-mark .sm-a, .splash-mark .sm-b { fill: #ececee; }
+.splash-mark .sm-c { fill: #46be9a; }
+.splash-mark .sm-a { animation: smIn .8s var(--spring) .15s both; --fx: -60px; --fy: 0px; --fr: -10deg; }
+.splash-mark .sm-b { animation: smIn .8s var(--spring) .3s both; --fx: 44px; --fy: -44px; --fr: 8deg; }
+.splash-mark .sm-c { animation: smIn .8s var(--spring) .45s both, smGlow 2.4s ease-in-out 1.4s infinite; --fx: 44px; --fy: 44px; --fr: -8deg; }
+@keyframes smIn { from { opacity: 0; transform: translate(var(--fx), var(--fy)) rotate(var(--fr)) scale(.7); filter: blur(6px); } 60% { opacity: 1; filter: blur(0); } }
+@keyframes smGlow { 50% { fill: #6fd9b6; } }
+.splash-name { font-size: 26px; font-weight: 800; letter-spacing: -.03em; margin-top: 14px; display: flex; animation: none; }
+.splash-name span { display: inline-block; animation: spLetter .6s var(--spring) both; animation-delay: calc(.7s + var(--i) * .035s); }
+.splash-name span:nth-child(-n+5) { background: linear-gradient(180deg, #fff, #a7f3d0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+@keyframes spLetter { from { opacity: 0; transform: translateY(14px) scale(.9); filter: blur(4px); } }
+.splash-by { animation: rise .6s var(--ease) 1.15s both; }
+.splash-bar { animation: rise .6s var(--ease) 1.2s both; position: relative; }
+.splash-bar::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent); background-size: 40% 100%; background-repeat: no-repeat; animation: spBarShine 1.6s ease-in-out 1.4s infinite; mix-blend-mode: overlay; }
+@keyframes spBarShine { from { background-position: -60% 0; } to { background-position: 160% 0; } }
+.splash-step { animation: rise .6s var(--ease) 1.25s both; }
+.splash.out { opacity: 0; transform: scale(1.06); filter: blur(10px); transition: opacity .55s var(--ease), transform .6s var(--ease), filter .55s var(--ease); }
+.splash::before { animation: spDots 14s linear infinite; }
+@keyframes spDots { to { background-position: 22px 44px; } }
+.splash-by { color: var(--faint); font-size: 12px; font-weight: 600; letter-spacing: .02em; margin-top: -6px; }
+.splash-bar { width: 200px; height: 4px; border-radius: 99px; background: rgba(255,255,255,.07); margin-top: 16px; }
+.splash-bar i { border-radius: 99px; background: linear-gradient(90deg, #1e9f73, #46be9a 60%, #a7f3d0); box-shadow: 0 0 12px rgba(70, 190, 154, .55); }
+/* 3.2: the credits in the Graphite look, with the new mark */
+.credit-hero { padding: 40px 36px; border: 1px solid var(--edge);
+  background: radial-gradient(520px 320px at 86% 50%, rgba(70, 190, 154, .26), transparent 65%), radial-gradient(600px 300px at 0% 120%, rgba(255, 255, 255, .05), transparent 60%), linear-gradient(160deg, var(--card-2), var(--card) 70%);
+  box-shadow: 0 30px 70px -42px rgba(70, 190, 154, .65); }
+.credit-hero::before { border-color: rgba(70, 190, 154, .20); right: -60px; top: 50%; margin-top: -210px; box-shadow: 0 0 0 40px rgba(70, 190, 154, .045), 0 0 0 90px rgba(70, 190, 154, .025); }
+.credit-hero::after { border-color: rgba(255, 255, 255, .06); }
+.credit-hero .made, .credit-hero .made-role { color: var(--muted); }
+.credit-hero .made-name { background: linear-gradient(100deg, #fff 35%, #a7f3d0); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; }
+.credit-hero .made-meta span { background: rgba(255, 255, 255, .06); border: 1px solid var(--edge); color: var(--text); }
+.cr-logo { position: absolute; right: 56px; top: 50%; width: 150px; height: 150px; border-radius: 0; transform: translateY(-50%); filter: drop-shadow(0 22px 40px rgba(70, 190, 154, .38)); animation: crFloat 6s ease-in-out infinite; }
+@keyframes crFloat { 50% { transform: translateY(calc(-50% - 8px)); } }
+@media (max-width: 1080px) { .cr-logo { width: 104px; height: 104px; right: 28px; } }
 /* the active section: a thin bar in the brand colours */
 .nav-ind::before { content: ""; position: absolute; left: 3px; top: 50%; width: 3px; height: 14px; margin-top: -7px; border-radius: 3px; background: linear-gradient(180deg, var(--brand-c), var(--brand-b) 55%, var(--brand-a)); }
 /* rows that scroll sideways show that there is more */
@@ -1405,6 +1462,8 @@ body.dock-on .toasts { bottom: 84px; }
 .nav.fit .ico { width: min(26px, calc(var(--navh) - 3px)) !important; height: min(26px, calc(var(--navh) - 3px)) !important; }
 .nav.fit .ico svg { width: min(15px, calc(var(--navh) - 11px)) !important; height: min(15px, calc(var(--navh) - 11px)) !important; }
 .nav.fit { gap: 1px; }
+.nav.tight .nav-g { padding: 6px 12px 1px !important; font-size: 10px !important; line-height: 12px; }
+.nav.tight .nav-g.first { padding-top: 2px !important; }
 .nav.lines .nav-g { font-size: 0 !important; padding: 0 !important; height: 1px; margin: 4px 12px !important; background: var(--line-soft); }
 .nav.lines .nav-g.first { display: none; }
 .fade-y { -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 var(--ft, 0px), #000 calc(100% - var(--fb, 0px)), transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 var(--ft, 0px), #000 calc(100% - var(--fb, 0px)), transparent 100%); }
@@ -1418,6 +1477,8 @@ body.dock-on .toasts { bottom: 84px; }
   --well: #0a0a0c; --well-2: #08080a; --input-hi: #111114; --line-hi: #35353d; --chip: #25252b;
   --hero-a: #19191d; --hero-b: #131316; --glass: rgba(22,22,26,.97); --veil: rgba(0,0,0,.62);
   --edge: rgba(255,255,255,.065); --switch-off: #2c2c33;
+  --skel-hi: #2e2e35; --cb-line: #3c3c46; --cb-bg: #101013; --cb-hover: rgba(var(--blue-rgb), .75);
+  --used-a: #4a4a56; --used-b: #6c6c7a; --file-a: #55555f; --file-b: #7a7a88;
 }
 :root[data-theme="noir"] body {
   background:
@@ -1555,6 +1616,86 @@ h1 { font-size: 25px; letter-spacing: -.025em; }
 @media (max-width: 1339px) { .hh #hmDoAll { padding: 0 14px; } .hh #hmDoAll svg { display: none; } .hc-g, .hc-g svg { width: 74px; height: 74px; } .hc-g b { font-size: 18px; } .hc { padding-right: 38px; } .hc-go { width: 26px; } }
 @media (max-width: 1080px) { .hm-hero.hh { padding: 18px 18px 16px; } .hh #hmDoAll { padding: 0 10px; } .hc-g, .hc-g svg { width: 64px; height: 64px; } .hc-g b { font-size: 16px; } .hh #hmDoAll svg { display: none; } .hh .hm-ring, .hh .hm-ring svg { width: 64px; height: 64px; } .hh .hm-ring b { font-size: 21px; } .hh .hm-vt { font-size: 14px; } }
 
+/* ================= 3.2: the Graphics card page */
+.gp-pick { margin-bottom: 12px; }
+.gp-hero { --vc: #46be9a; background: radial-gradient(120% 160% at 100% 0%, color-mix(in srgb, var(--vc) 18%, transparent), transparent 60%), linear-gradient(135deg, var(--card-2), var(--card)); }
+.gp-hero .hi { background: linear-gradient(145deg, color-mix(in srgb, var(--vc) 92%, #fff), color-mix(in srgb, var(--vc) 55%, #000)); box-shadow: 0 12px 28px -12px color-mix(in srgb, var(--vc) 70%, transparent); }
+.gp-hero .chip.ok { background: var(--mint-soft); color: var(--mint); }
+.gp-hero .chip.bad { background: var(--red-soft); color: #ffb3bc; }
+.gp-hero .chip.warn { background: var(--amber-soft); color: #ffcf8a; }
+.gp-live { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin-bottom: 10px; }
+@media (max-width: 1240px) { .gp-live { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.gl { background: var(--card); border: 1px solid var(--edge); border-radius: var(--r-l); padding: 12px 14px; min-width: 0; display: flex; flex-direction: column; gap: 3px; position: relative; overflow: hidden; }
+.gl .k { color: var(--faint); font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; display: flex; align-items: center; gap: 6px; }
+.gl .k svg { width: 13px; height: 13px; color: var(--blue-2); }
+.gl .v { font-size: 22px; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gl .v small { font-size: 12px; font-weight: 700; color: var(--muted); margin-left: 3px; letter-spacing: 0; }
+.gl .v.dim { color: var(--faint); }
+.gl .s { color: var(--muted); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 15px; }
+.gl .hc-bar { margin-top: 6px; }
+.gl canvas { width: 100%; height: 26px; display: block; margin-top: 4px; }
+.gp-lim { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; color: var(--muted); font-size: 12px; margin: 0 2px 14px; min-height: 18px; }
+.gp-lim b { color: var(--text); font-weight: 700; }
+.gp-lim .hm-dot { width: 7px; height: 7px; }
+.gp-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+.gp-grid .gp-wide { grid-column: 1 / -1; }
+@media (max-width: 1080px) { .gp-grid { grid-template-columns: 1fr; } }
+.gf { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 9px 0; border-top: 1px solid var(--line-soft); font-size: 12.5px; }
+.gf:first-of-type { border-top: 0; padding-top: 2px; }
+.gf .hm-dot { width: 8px; height: 8px; }
+.gf .hm-dot.info { background: #6aa8ff; box-shadow: 0 0 0 3px rgba(106, 168, 255, .16); }
+.gf b { display: block; font-weight: 700; }
+.gf span.d { display: block; color: var(--muted); font-size: 11.5px; margin-top: 1px; line-height: 1.4; }
+.gf .btn { white-space: nowrap; }
+.gd { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line-soft); }
+.gd:first-of-type { border-top: 0; padding-top: 2px; }
+.gd b { font-size: 13.5px; }
+.gd .m { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.gd .r { display: flex; align-items: center; gap: 8px; }
+.gd .r .sel { height: 34px; min-width: 92px; }
+.gp-drv { margin-top: 16px; }
+.gp-drv-h { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 0 2px 10px; }
+.gp-drv-h h2 { margin: 0; font-size: 16px; font-weight: 800; letter-spacing: -.01em; }
+.gp-drv-h .seg { margin-left: auto; }
+.gp-busy { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--r-l); background: radial-gradient(120% 160% at 0% 0%, rgba(var(--blue-rgb), .14), transparent 60%), var(--card); border: 1px solid rgba(var(--blue-rgb), .3); margin-bottom: 10px; font-size: 13px; }
+.gp-busy .t { flex: 1; min-width: 0; }
+.gp-busy .t b { display: block; }
+.gp-busy .t span { color: var(--muted); font-size: 12px; }
+.gp-busy .si-bar { margin-top: 8px; }
+.gp-list { background: var(--card); border: 1px solid var(--edge); border-radius: var(--r-l); overflow: hidden; }
+.gp-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 16px; border-top: 1px solid var(--line-soft); }
+.gp-row:first-child { border-top: 0; }
+.gp-row.cur { background: linear-gradient(90deg, rgba(var(--blue-rgb), .10), transparent 60%); }
+.gp-row .v { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.gp-row .v b { font-size: 15px; font-weight: 800; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.gp-row .v small { color: var(--faint); font-size: 11.5px; }
+.gp-row .m { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.gp-row .a { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.gp-row .tag { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: var(--chip); color: var(--muted); }
+.gp-row .tag.use { background: var(--mint-soft); color: var(--mint); }
+.gp-row .tag.new { background: rgba(var(--blue-rgb), .16); color: var(--blue-light); }
+.gp-row .tag.st { background: rgba(169, 139, 255, .16); color: #cbb8ff; }
+.gp-row .prog { width: 160px; }
+.gp-row .prog .lbl { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+.gp-note { color: var(--muted); font-size: 12px; margin: 10px 2px 0; line-height: 1.5; }
+.gp-tools { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.gp-tools .grow { flex: 1; }
+.gp-rm { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 12px; align-items: start; }
+@media (max-width: 1080px) { .gp-rm { grid-template-columns: 1fr; } }
+.gp-rm .si-card { gap: 12px; }
+.gp-opt { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 12px; align-items: start; cursor: pointer; padding: 6px 0; }
+.gp-opt input { margin-top: 2px; }
+.gp-opt b { font-size: 13px; }
+.gp-opt span { grid-column: 2; color: var(--muted); font-size: 12px; line-height: 1.45; }
+.gp-id { font: 11px var(--mono); display: inline-block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom; }
+.gp-empty { color: var(--muted); font-size: 12.5px; padding: 14px 16px; }
+.gp-vendor { display: flex; gap: 14px; align-items: center; }
+.gp-vendor .hi { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; color: #fff; flex: none; background: var(--vc, var(--blue)); }
+.gp-vendor .hi svg { width: 22px; height: 22px; }
+.gp-ask { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--r-l); background: var(--amber-soft); color: #ffcf8a; border: 1px solid rgba(255,181,71,.3); margin-bottom: 10px; font-size: 13px; }
+.gp-ask .t { flex: 1; }
+.gp-ask b { color: var(--text); }
+
 /* ================= 3.0: tweak presets */
 .tw-pre { margin-top: 16px; }
 .tw-pre-h { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 0 0 10px; }
@@ -1588,8 +1729,8 @@ h1 { font-size: 25px; letter-spacing: -.025em; }
 .pl-sec { font-size: 12px; font-weight: 700; color: var(--muted); margin: 14px 0 4px; }
 
 /* ================= 3.0: system information, network, right-click menu, automatic cleaning */
-.si-hero { display: flex; align-items: center; gap: 16px; padding: 18px 20px; border-radius: var(--r-l); background: linear-gradient(135deg, rgba(42,157,255,.15), rgba(180,124,255,.10) 55%, var(--card) 92%); border: 1px solid rgba(255,255,255,.05); margin-bottom: 14px; flex-wrap: wrap; }
-.si-hero .hi { width: 52px; height: 52px; border-radius: 16px; background: var(--brand); display: grid; place-items: center; color: #fff; flex: none; box-shadow: 0 12px 28px -12px rgba(42,157,255,.6); }
+.si-hero { display: flex; align-items: center; gap: 16px; padding: 18px 20px; border-radius: var(--r-l); background: radial-gradient(120% 140% at 100% 0%, rgba(70,190,154,.14), transparent 60%), linear-gradient(135deg, var(--card-2), var(--card)); border: 1px solid rgba(255,255,255,.05); margin-bottom: 14px; flex-wrap: wrap; }
+.si-hero .hi { width: 52px; height: 52px; border-radius: 16px; background: var(--brand); display: grid; place-items: center; color: #fff; flex: none; box-shadow: 0 12px 28px -12px rgba(70,190,154,.6); }
 .si-hero .hi svg { width: 26px; height: 26px; }
 .si-hero .ht { min-width: 0; flex: 1 1 260px; }
 .si-hero h2 { margin: 0; font-size: 18px; font-weight: 800; letter-spacing: -.01em; overflow-wrap: anywhere; }
@@ -1646,7 +1787,7 @@ h1 { font-size: 25px; letter-spacing: -.025em; }
 .dns-row { display: grid; grid-template-columns: 38px minmax(0, 1fr) 150px 112px; gap: 14px; align-items: center; padding: 12px 14px; border-top: 1px solid var(--line-soft); transition: background .2s; }
 .dns-row:first-child { border-top: 0; }
 .dns-row:hover { background: rgba(255,255,255,.015); }
-.dns-row.cur { background: linear-gradient(90deg, rgba(42,157,255,.09), transparent 65%); }
+.dns-row.cur { background: linear-gradient(90deg, rgba(var(--blue-rgb),.10), transparent 65%); }
 .dns-av { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; font-size: 15px; color: #fff; background: var(--av, var(--card-2)); }
 .dns-av svg { width: 18px; height: 18px; color: var(--blue-2); }
 .dns-row .n { font-weight: 700; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
@@ -1659,12 +1800,13 @@ h1 { font-size: 25px; letter-spacing: -.025em; }
 .dns-row .btn { justify-self: end; }
 .tw-b.cur { background: var(--blue-soft); color: var(--blue-light); }
 .tw-b.best { background: var(--mint-soft); color: var(--mint); }
+.tw-b.rec { background: rgba(243, 128, 32, .16); color: #ffb877; }
 @media (max-width: 1100px) { .dns-row { grid-template-columns: 38px minmax(0, 1fr) 110px 104px; } }
 
 .cm-row .su-m .where { color: var(--muted); flex: none; }
 .cm-row.off .su-n > span:first-child { color: var(--muted); text-decoration: line-through; text-decoration-color: rgba(255,255,255,.25); }
 
-.tw-b.new { background: linear-gradient(90deg, rgba(62,232,176,.18), rgba(42,157,255,.18)); color: #9ff3d6; }
+.tw-b.new { background: linear-gradient(90deg, rgba(70,190,154,.22), rgba(167,243,208,.12)); color: #a7f3d0; }
 .tw-sec.new span:first-child { display: inline-flex; align-items: center; gap: 7px; color: var(--text); }
 .tw-sec.new svg { width: 15px; height: 15px; color: var(--brand-c); }
 .tw-cat.new[aria-pressed="false"] svg { color: var(--brand-c); }
@@ -1728,8 +1870,19 @@ h1 { font-size: 25px; letter-spacing: -.025em; }
 </head>
 <body>
 <div class="splash" id="splash" aria-hidden="true">
-  <div class="splash-logo"><i class="logo"></i></div>
-  <div class="splash-name">xKi4o Cleaner</div>
+  <div class="sp-stage" aria-hidden="true">
+    <span class="sp-glow"></span><span class="sp-ring"></span><span class="sp-ring r2"></span><span class="sp-ring r3"></span>
+    <span class="sp-orbit"><i></i><i></i><i></i></span>
+    <svg class="splash-mark" viewBox="47.2 27.2 346.7 346.7">
+      <defs>
+        <linearGradient id="spShineG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        <mask id="spMask" maskUnits="userSpaceOnUse" x="47.2" y="27.2" width="346.7" height="346.7"><path d="M60 73L143 73L258 187L143 301L60 301L175 187Z" fill="#fff"/><path d="M297 73L381 73L275 179L232 137Z" fill="#fff"/><path d="M350 190C305 199 268 214 240 243L186 302L252 302C261 302 267 299 273 294C292 315 313 328 340 328L379 328L305 252Z" fill="#fff"/></mask>
+      </defs>
+      <path class="sm-a" d="M60 73L143 73L258 187L143 301L60 301L175 187Z"/><path class="sm-b" d="M297 73L381 73L275 179L232 137Z"/><path class="sm-c" d="M350 190C305 199 268 214 240 243L186 302L252 302C261 302 267 299 273 294C292 315 313 328 340 328L379 328L305 252Z"/>
+      <g mask="url(#spMask)"><rect class="sp-shine" x="-92.8" y="27.2" width="110" height="346.7" fill="url(#spShineG)"/></g>
+    </svg>
+  </div>
+  <div class="splash-name" aria-label="xKi4o Cleaner"><span style="--i:0">x</span><span style="--i:1">K</span><span style="--i:2">i</span><span style="--i:3">4</span><span style="--i:4">o</span><span style="--i:5">&nbsp;</span><span style="--i:6">C</span><span style="--i:7">l</span><span style="--i:8">e</span><span style="--i:9">a</span><span style="--i:10">n</span><span style="--i:11">e</span><span style="--i:12">r</span></div>
   <div class="splash-by">by xKi4o</div>
   <div class="splash-bar" id="splashBar"><i></i></div>
   <div class="splash-step" id="splashStep"></div>
@@ -1777,6 +1930,7 @@ h1 { font-size: 25px; letter-spacing: -.025em; }
       <button data-page="tweaks"><span class="ico" data-icon="tweaks"></span><span class="label" data-i="nav.tweaks"></span><span class="badge" id="twBadge" hidden></span></button>
       <div class="nav-g" data-i="nav.g.pc"></div>
       <button data-page="sysinfo"><span class="ico" data-icon="board"></span><span class="label" data-i="nav.sysinfo"></span></button>
+      <button data-page="gpu"><span class="ico" data-icon="gpu"></span><span class="label" data-i="nav.gpu"></span><span class="badge" id="gpBadge" hidden></span></button>
       <button data-page="optimize"><span class="ico" data-icon="optimize"></span><span class="label" data-i="nav.optimize"></span></button>
       <button data-page="network"><span class="ico" data-icon="network"></span><span class="label" data-i="nav.network"></span></button>
       <button data-page="repair"><span class="ico" data-icon="repair"></span><span class="label" data-i="nav.repair"></span></button>
@@ -2121,6 +2275,16 @@ h1 { font-size: 25px; letter-spacing: -.025em; }
         <div class="head-r"><button class="btn small" id="siCopy" disabled><span data-icon="copy"></span><span data-i="si.copy"></span></button><button class="btn icon-btn" id="siRefresh" data-i-title="si.refresh"><span data-icon="refresh"></span></button></div>
       </div>
       <div class="scroll pad" id="siBody"></div>
+    </section>
+
+    <!-- =============== GRAPHICS CARD =============== -->
+    <section class="page" id="page-gpu">
+      <div class="head">
+        <div class="head-ico" data-icon="gpu"></div>
+        <div><h1 data-i="gp.title"></h1><div class="sub" data-i="gp.sub"></div></div>
+        <div class="head-r"><button class="btn icon-btn" id="gpRefresh" data-i-title="gp.refresh"><span data-icon="refresh"></span></button></div>
+      </div>
+      <div class="scroll pad" id="gpBody"></div>
     </section>
 
     <!-- =============== NETWORK =============== -->
@@ -3010,7 +3174,7 @@ bg: {
   "net.bestT": "Най-бърз при теб е {0} — {1} ms (сегашният: {2}).", "net.useBest": "Използвай {0}", "net.done": "DNS: {0}", "net.failed": "DNS сървърът не можа да се смени",
   "net.restored": "Предишните DNS сървъри са върнати", "net.flushed": "DNS кешът е изчистен", "net.flushFail": "DNS кешът не можа да се изчисти",
   "net.testFail": "Тестът не можа да се направи", "net.noadmin": "Смяната на DNS иска администраторски права.", "dns.n.auto": "Каквото дава рутерът или доставчикът",
-  "dns.n.cloudflare": "Бърз, с акцент върху поверителността", "dns.n.google": "Бърз и надежден", "dns.n.quad9": "Спира опасни сайтове",
+  "dns.n.cloudflare": "Бърз, с акцент върху поверителността", "dns.n.google": "Бърз и надежден", 
   "dns.n.adguard": "Спира реклами и проследяване", "dns.n.opendns": "Стабилен, от Cisco", "dns.n.family": "Спира опасни сайтове и съдържание за възрастни",
   "cm.title": "Контекстно меню", "cm.sub": "Какво са добавили програмите в менюто с десен бутон. Скритото се връща със същия ключ.", "cm.refresh": "Опресни",
   "cm.search": "Търси в менюто…", "cm.stat.all": "Всички", "cm.stat.on": "Показани", "cm.stat.off": "Скрити", "cm.stat.missing": "Без програма", "cm.k.verb": "Команда",
@@ -3065,6 +3229,83 @@ bg: {
   "set.themeD": "Графит е новият неутрален вид; Океан е тъмносиният от предишните версии", "set.th.noir": "Графит", "set.th.ocean": "Океан",
   "hm.doAllS": "Направи всичко ({0})",
   "hc.stick1": "1 модул", "hc.sticks": "{0} модула",
+  "nav.gpu": "Видеокарта", "gp.title": "Видеокарта", "gp.sub": "Сензори, проверки и драйвери — връщане на по-стара версия или премахване като DDU", "gp.refresh": "Прочети отново",
+  "gp.loading": "Четат се видеокартата, драйверите и екраните…", "gp.none": "Не е намерена видеокарта.", "gp.driverV": "Драйвер {0}",
+  "gp.heroBasic": "Без драйвер на производителя — работи с основния на Windows", "gp.st.ok": "Работи нормално", "gp.st.basic": "Основен драйвер на Windows",
+  "gp.st.problem": "Проблем (код {0})", "gp.newer": "Има по-нов: {0}", "gp.l.temp": "Температура", "gp.l.util": "Натоварване", "gp.l.power": "Мощност", "gp.l.fan": "Вентилатори",
+  "gp.l.clock": "Честота", "gp.l.vram": "Видео памет", "gp.slow": "забавя се при {0} °C", "gp.onlyNv": "само за NVIDIA", "gp.reading": "Чете се…", "gp.noFan": "не се отчитат",
+  "gp.fanStop": "спрели — тих режим", "gp.of": "от {0}", "gp.memClock": "памет {0} MHz", "gp.total": "общо", "gp.pstate": "P{0}", "gp.ps.full": "пълна мощност", "gp.ps.mid": "средна",
+  "gp.ps.idle": "в покой", "gp.limited": "Честотата се ограничава от:", "gp.lim.power": "лимита на мощност", "gp.lim.thermal": "температурата", "gp.lim.hw": "хардуерна защита",
+  "gp.lim.none": "Нищо не ограничава картата в момента", "gp.lim.idleT": "Картата почива — няма натоварване", "gp.encdec": "Видео кодер {0}% · декодер {1}%",
+  "gp.pdh": "Натоварване и памет от Windows — останалото го дава само драйверът на NVIDIA", "gp.info": "Подробности", "gp.i.maker": "Производител", "gp.i.vram": "Видео памет",
+  "gp.i.driver": "Драйвер", "gp.i.date": "Дата на драйвера", "gp.i.inf": "Пакет", "gp.i.pcie": "PCIe", "gp.i.rebar": "Resizable BAR", "gp.i.hags": "Хардуерно планиране (HAGS)",
+  "gp.i.vbios": "VBIOS", "gp.i.cuda": "CUDA", "gp.i.id": "Устройство", "gp.on": "Включено", "gp.off": "Изключено", "gp.pcieV": "{0} x{1}", "gp.pcieNow": "сега {0} x{1}",
+  "gp.checks": "Проверки", "gp.f.ok": "Всичко изглежда наред", "gp.f.okD": "Драйверът, екраните и картата нямат нужда от внимание.", "gp.f.problem": "Windows спря картата (код {0})",
+  "gp.f.reinstall": "Към премахването", "gp.f.nodrv": "Няма драйвер на производителя",
+  "gp.f.nodrvD": "Работи с основния драйвер на Windows — без ускорение за игри и с ниска резолюция.", "gp.f.getDriver": "Изтегли драйвер", "gp.f.site": "Сайт на производителя",
+  "gp.f.newer": "Има по-нов драйвер: {0}", "gp.f.newerD": "Сега е {0}. Новият е в списъка на NVIDIA отдолу.", "gp.f.seeVersions": "Виж версиите", "gp.f.old": "Драйверът е от {0}",
+  "gp.f.oldD": "По-новите версии често оправят проблеми в нови игри.", "gp.f.hz": "{0} работи на {1} Hz, а може {2} Hz",
+  "gp.f.hzD": "По-висока честота = по-плавна картина. Windows я пита за потвърждение и я връща сам, ако екранът не я покаже.", "gp.f.setHz": "{0} Hz",
+  "gp.f.pcie": "Картата работи на x{0} вместо x{1} линии", "gp.f.pcieD": "Провери дали е в горния (основния) слот и дали няма удължител (riser) — губи се производителност.",
+  "gp.f.rebar": "Resizable BAR е изключен", "gp.f.rebarD": "Включва се в BIOS: „Above 4G Decoding“ и „Re-Size BAR Support“. Дава малко повече FPS в някои игри.",
+  "gp.f.hags": "Хардуерното планиране (HAGS) е изключено", "gp.f.hagsD": "Нужно е за DLSS Frame Generation и може да намали забавянето.", "gp.f.toTweaker": "Към Tweaker",
+  "gp.f.hot": "Картата е гореща: {0} °C", "gp.f.hotD": "Близо е до {0} °C, където сама намалява честотата. Почисти праха и провери вентилаторите.",
+  "gp.f.wu": "Windows не тегли драйвери сам", "gp.f.wuD": "Изключено е от тази програма при премахването на драйвера.", "gp.screens": "Екрани",
+  "gp.noScreens": "Не са намерени екрани.", "gp.primary": "основен", "gp.maxRes": "може до {0} × {1}", "gp.rate": "Честота", "gp.atMax": "Най-високата", "gp.conn.hdmi": "HDMI",
+  "gp.conn.dp": "DisplayPort", "gp.conn.dvi": "DVI", "gp.conn.vga": "VGA", "gp.conn.internal": "вграден", "gp.conn.wireless": "безжичен", "gp.conn.virtual": "виртуален",
+  "gp.keepQ": "Да запазя ли {1} Hz за {0}?", "gp.keepD": "Ако не потвърдиш до {0} с, се връща на {1} Hz — и ако екранът е угаснал.", "gp.keep": "Запази", "gp.back": "Върни",
+  "gp.kept": "Запазено: {0} Hz", "gp.keepLate": "Времето изтече — честотата вече е върната", "gp.reverted": "Не беше потвърдено — върнато на {0} Hz", "gp.drivers": "Драйвери",
+  "gp.tab.pc": "На компютъра", "gp.tab.nv": "Версии от NVIDIA", "gp.tab.web": "От производителя", "gp.tab.remove": "Премахване", "gp.inUse": "Използва се",
+  "gp.use": "Върни се на тази", "gp.useNewer": "Сложи тази", "gp.delete": "Изтрий", "gp.basicName": "Основен драйвер на Windows",
+  "gp.basicD": "Microsoft Basic Display Adapter — използва се само ако няма друг. Без ускорение.", "gp.noPkgs": "На компютъра няма драйвери на производителя за тази карта.",
+  "gp.pcNote": "Това са версиите, които Windows още пази. Връщането е като „Върни драйвера“ в Диспечера на устройствата — екранът ще примигне.",
+  "gp.pcOnly": "Windows пази само сегашната версия. По-стара се взима от сайта на производителя (бутонът е в „От производителя“).",
+  "gp.pcOnlyNv": "Windows пази само сегашната версия. По-стара може да се изтегли директно от NVIDIA — в „Версии от NVIDIA“.", "gp.useT": "Да сложа ли драйвер {0}?",
+  "gp.useD": "Сега е {0}. Windows ще сложи {1} на картата — екранът ще примигне и може да угасне за няколко секунди. После е добре да рестартираш.", "gp.useOk": "Сложи го",
+  "gp.usedT": "Драйвер {0} е сложен", "gp.delT": "Да изтрия ли {0} от компютъра?",
+  "gp.delD": "Ще се освободят {0}. Към тази версия вече няма да може да се върнеш без да я изтеглиш отново.", "gp.delOk": "Изтрий", "gp.deleted": "{0} е изтрит — освободени {1}",
+  "gp.k.all": "Всички", "gp.nvSite": "Сайтът на NVIDIA", "gp.nvLoading": "Взима се списъкът на NVIDIA…", "gp.nvNone": "Няма драйвери за този избор.",
+  "gp.nvNote": "Списъкът е на NVIDIA за {0}. Инсталаторът им се отваря в свой прозорец: за връщане към по-стара версия избери „Персонализирана“ и „Чисто инсталиране“.",
+  "gp.installed": "Инсталиран", "gp.newerTag": "По-нов", "gp.notes": "Какво е новото", "gp.download": "Изтегли", "gp.install": "Инсталирай", "gp.stop": "Спри",
+  "gp.downloading": "Изтегля се…", "gp.checkingSig": "Проверява се подписът…", "gp.downloaded": "Драйвер {0} е изтеглен и подписан от NVIDIA",
+  "gp.runT": "Да стартирам ли инсталатора на {0}?", "gp.runD": "Инсталаторът на NVIDIA се отваря в свой прозорец и води до края.",
+  "gp.runOlder": "Това е по-стара версия от сегашната. В инсталатора избери „Персонализирана (разширена)“ и отметни „Чисто инсталиране“ — така заменя сегашната.",
+  "gp.runOk": "Стартирай", "gp.ran": "Инсталаторът на NVIDIA е стартиран", "gp.vendorT": "Драйвери за {0}", "gp.vendorT0": "Драйвери на производителя",
+  "gp.vendorD": "Списъкът с версии се взима от сайта на производителя. Изтегли желаната версия оттам; ако искаш чиста инсталация, първо премахни сегашния драйвер от „Премахване“.",
+  "gp.vendorBtn": "Отвори сайта на {0}", "gp.rmT": "Премахване на драйвера",
+  "gp.rmD": "Маха драйвер {0} от картата, като DDU. Windows минава на основния си драйвер (или на по-стара версия, ако има на компютъра). Полезно преди чиста инсталация или когато драйверът създава проблеми.",
+  "gp.rmBasic": "Картата вече работи с основния драйвер на Windows — няма какво да се премахне.", "gp.optKeep": "Запази копие, за да може да се върне",
+  "gp.optKeepD": "Около {0} в папката на програмата. Връща се с един клик отдясно.", "gp.optAll": "Премахни и по-старите версии",
+  "gp.optAllD": "{0} версии на компютъра, общо {1}. Тогава остава само основният драйвер на Windows.", "gp.optAll0": "Няма по-стари версии на компютъра.",
+  "gp.optWU": "Windows да не тегли драйвер сам",
+  "gp.optWUD": "Като опцията на DDU: изключва „Автоматично изтегляне на драйвери“ на Windows, докато сам си сложиш желания. Връща се с един клик.",
+  "gp.optWUAlready": "Вече е изключено.", "gp.rmBtn": "Премахни драйвера", "gp.rmQ": "Да премахна ли драйвера на {0}?", "gp.rmQD": "Ето какво ще стане:",
+  "gp.rmS.keep": "Копие на сегашния драйвер в папката на програмата", "gp.rmS.noKeep": "Без копие — връщане само с ново изтегляне",
+  "gp.rmS.cur": "Драйвер {0} се маха от картата и от компютъра", "gp.rmS.all": "Махат се и по-старите: {0}",
+  "gp.rmS.basic": "Картата минава на основния драйвер на Windows (екранът примигва, резолюцията може да падне)", "gp.rmS.next": "Windows слага следващата версия на компютъра: {0}",
+  "gp.rmS.wu": "Windows няма да тегли драйвер сам, докато не го разрешиш", "gp.rmS.reboot": "Препоръчва се рестарт след това", "gp.rpBox": "Точка за възстановяване преди промяната",
+  "gp.s.start": "Започва…", "gp.s.rp": "Създава се точка за възстановяване… {0} с", "gp.s.copy": "Копие на драйвера: {0} от {1}", "gp.s.remove": "Премахване {0} от {1}: {2}…",
+  "gp.s.install": "Windows слага драйвер {0}…", "gp.s.wu": "Изключва се автоматичното изтегляне на драйвери…",
+  "gp.s.note": "Екранът може да примигне или да угасне за няколко секунди — не затваряй програмата.", "gp.removedT": "Драйверът е премахнат",
+  "gp.nowHas": "Сега картата използва: {0}", "gp.doneRemoved": "Премахнати: {0}", "gp.doneCopy": "Копие: {0}", "gp.doneReboot": "Windows иска рестарт, за да завърши.",
+  "gp.doneRestart": "Рестартът не е задължителен, но е препоръчителен.", "gp.later": "По-късно", "gp.rebootNow": "Рестартирай сега", "gp.rebootT": "Да рестартирам ли компютъра?",
+  "gp.rebootD": "Запази отворените файлове. Windows рестартира след 5 секунди.", "gp.copies": "Запазени копия", "gp.noCopies": "Още няма копия. Правят се при премахване на драйвер.",
+  "gp.openFolder": "Отвори папката", "gp.copyMade": "направено {0}", "gp.putBack": "Върни", "gp.putT": "Да върна ли драйвер {0}?",
+  "gp.putD": "Windows го слага обратно в хранилището и на картата, дори да има по-нов. Екранът ще примигне.", "gp.putDone": "Драйвер {0} е върнат",
+  "gp.copyDelT": "Да изтрия ли копието на {0}?", "gp.copyDelD": "Освобождава {0}. Тази версия вече няма да може да се върне оттук.", "gp.copyDeleted": "Копието е изтрито",
+  "gp.wuOffUs": "Windows не тегли драйвери сам — изключено от тази програма.",
+  "gp.wuOffOther": "Windows не тегли драйвери сам — изключено в настройките на Windows (не от тази програма).", "gp.wuAllow": "Разреши отново",
+  "gp.wuOnT": "Windows отново може да тегли драйвери сам", "gp.wuOffT": "Windows вече не тегли драйвери сам",
+  "gpu.p.10": "Устройството не може да стартира — драйверът най-често е повреден.", "gpu.p.12": "Няма достатъчно ресурси — понякога помага изключване на други устройства.",
+  "gpu.p.14": "Нужен е рестарт, за да заработи.", "gpu.p.18": "Драйверът трябва да се инсталира отново.",
+  "gpu.p.19": "Настройките в регистъра са повредени — инсталирай драйвера отново.", "gpu.p.21": "Windows маха устройството.",
+  "gpu.p.22": "Устройството е изключено в Диспечера на устройствата.", "gpu.p.24": "Устройството липсва или не работи правилно.", "gpu.p.28": "Няма инсталиран драйвер.",
+  "gpu.p.31": "Windows не може да зареди драйвера — инсталирай го наново.", "gpu.p.32": "Драйверът е изключен.", "gpu.p.37": "Драйверът не тръгна — инсталирай го наново.",
+  "gpu.p.39": "Драйверът липсва или е повреден.",
+  "gpu.p.43": "Windows спря устройството, защото е докладвало проблем — чест знак за повреден драйвер (опитай чиста инсталация) или за хардуерен проблем.",
+  "gpu.p.45": "Устройството не е свързано.", "gpu.p.52": "Подписът на драйвера не може да се провери.", "gpu.p.x": "Windows отчита проблем с устройството.",
+  "net.rec": "Препоръчан", "net.recT": "Препоръчваме Cloudflare (1.1.1.1).",
+  "net.recD": "Бърз навсякъде, не пази история на сайтовете ти и се сменя с един клик — връща се по всяко време.",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -3663,7 +3904,7 @@ en: {
   "net.bestT": "The fastest here is {0} — {1} ms (the one in use: {2}).", "net.useBest": "Use {0}", "net.done": "DNS: {0}", "net.failed": "The DNS server could not be changed",
   "net.restored": "The previous DNS servers are back", "net.flushed": "DNS cache flushed", "net.flushFail": "The DNS cache could not be flushed",
   "net.testFail": "The test could not run", "net.noadmin": "Changing DNS needs administrator rights.", "dns.n.auto": "Whatever the router or the provider gives",
-  "dns.n.cloudflare": "Fast, privacy-focused", "dns.n.google": "Fast and reliable", "dns.n.quad9": "Stops dangerous sites", "dns.n.adguard": "Stops ads and trackers",
+  "dns.n.cloudflare": "Fast, privacy-focused", "dns.n.google": "Fast and reliable",  "dns.n.adguard": "Stops ads and trackers",
   "dns.n.opendns": "Stable, run by Cisco", "dns.n.family": "Stops dangerous sites and adult content", "cm.title": "Right-click menu",
   "cm.sub": "What programs added to the right-click menu. Hidden entries come back with the same switch.", "cm.refresh": "Refresh", "cm.search": "Search the menu…",
   "cm.stat.all": "All", "cm.stat.on": "Shown", "cm.stat.off": "Hidden", "cm.stat.missing": "Program missing", "cm.k.verb": "Command", "cm.k.ext": "Extension",
@@ -3716,6 +3957,81 @@ en: {
   "set.th.ocean": "Ocean",
   "hm.doAllS": "Do it all ({0})",
   "hc.stick1": "1 stick", "hc.sticks": "{0} sticks",
+  "nav.gpu": "Graphics card", "gp.title": "Graphics card", "gp.sub": "Sensors, checks and drivers — go back to an older one or take it off like DDU", "gp.refresh": "Read again",
+  "gp.loading": "Reading the graphics card, the drivers and the screens…", "gp.none": "No graphics card was found.", "gp.driverV": "Driver {0}",
+  "gp.heroBasic": "No driver from the maker — running on Windows' basic one", "gp.st.ok": "Working normally", "gp.st.basic": "Windows' basic driver",
+  "gp.st.problem": "Problem (code {0})", "gp.newer": "Newer: {0}", "gp.l.temp": "Temperature", "gp.l.util": "Load", "gp.l.power": "Power", "gp.l.fan": "Fans", "gp.l.clock": "Clock",
+  "gp.l.vram": "Video memory", "gp.slow": "slows down at {0} °C", "gp.onlyNv": "NVIDIA only", "gp.reading": "Reading…", "gp.noFan": "not reported",
+  "gp.fanStop": "stopped — quiet mode", "gp.of": "of {0}", "gp.memClock": "memory {0} MHz", "gp.total": "total", "gp.pstate": "P{0}", "gp.ps.full": "full power",
+  "gp.ps.mid": "medium", "gp.ps.idle": "idle", "gp.limited": "The clock is held back by:", "gp.lim.power": "the power limit", "gp.lim.thermal": "the temperature",
+  "gp.lim.hw": "a hardware safeguard", "gp.lim.none": "Nothing holds the card back right now", "gp.lim.idleT": "The card is resting — no load",
+  "gp.encdec": "Video encoder {0}% · decoder {1}%", "gp.pdh": "Load and memory from Windows — the rest only NVIDIA's driver tells", "gp.info": "Details", "gp.i.maker": "Maker",
+  "gp.i.vram": "Video memory", "gp.i.driver": "Driver", "gp.i.date": "Driver date", "gp.i.inf": "Package", "gp.i.pcie": "PCIe", "gp.i.rebar": "Resizable BAR",
+  "gp.i.hags": "Hardware scheduling (HAGS)", "gp.i.vbios": "VBIOS", "gp.i.cuda": "CUDA", "gp.i.id": "Device", "gp.on": "On", "gp.off": "Off", "gp.pcieV": "{0} x{1}",
+  "gp.pcieNow": "now {0} x{1}", "gp.checks": "Checks", "gp.f.ok": "Everything looks fine", "gp.f.okD": "The driver, the screens and the card need no attention.",
+  "gp.f.problem": "Windows stopped the card (code {0})", "gp.f.reinstall": "To removal", "gp.f.nodrv": "No driver from the maker",
+  "gp.f.nodrvD": "It runs on Windows' basic driver — no acceleration for games and a low resolution.", "gp.f.getDriver": "Get a driver", "gp.f.site": "Maker's site",
+  "gp.f.newer": "A newer driver is out: {0}", "gp.f.newerD": "Now {0}. The new one is in NVIDIA's list below.", "gp.f.seeVersions": "See versions",
+  "gp.f.old": "The driver is from {0}", "gp.f.oldD": "Newer versions often fix problems in new games.", "gp.f.hz": "{0} runs at {1} Hz but can do {2} Hz",
+  "gp.f.hzD": "A higher rate = smoother motion. Windows asks to keep it and goes back by itself if the screen cannot show it.", "gp.f.setHz": "{0} Hz",
+  "gp.f.pcie": "The card runs on x{0} instead of x{1} lanes", "gp.f.pcieD": "Check that it sits in the top (main) slot and that there is no riser — it costs performance.",
+  "gp.f.rebar": "Resizable BAR is off", "gp.f.rebarD": "Turn it on in the BIOS: “Above 4G Decoding” and “Re-Size BAR Support”. A little more FPS in some games.",
+  "gp.f.hags": "Hardware scheduling (HAGS) is off", "gp.f.hagsD": "DLSS Frame Generation needs it, and it can lower latency.", "gp.f.toTweaker": "To the Tweaker",
+  "gp.f.hot": "The card is hot: {0} °C", "gp.f.hotD": "Close to {0} °C, where it slows itself down. Clean the dust and check the fans.",
+  "gp.f.wu": "Windows does not download drivers by itself", "gp.f.wuD": "Turned off by this app when the driver was removed.", "gp.screens": "Screens",
+  "gp.noScreens": "No screens were found.", "gp.primary": "main", "gp.maxRes": "can do {0} × {1}", "gp.rate": "Refresh rate", "gp.atMax": "Highest", "gp.conn.hdmi": "HDMI",
+  "gp.conn.dp": "DisplayPort", "gp.conn.dvi": "DVI", "gp.conn.vga": "VGA", "gp.conn.internal": "built-in", "gp.conn.wireless": "wireless", "gp.conn.virtual": "virtual",
+  "gp.keepQ": "Keep {1} Hz on {0}?", "gp.keepD": "Unless you confirm within {0} s it goes back to {1} Hz — also if the screen went dark.", "gp.keep": "Keep", "gp.back": "Go back",
+  "gp.kept": "Kept: {0} Hz", "gp.keepLate": "Time ran out — the rate is already back", "gp.reverted": "Not confirmed — set back to {0} Hz", "gp.drivers": "Drivers",
+  "gp.tab.pc": "On this PC", "gp.tab.nv": "NVIDIA versions", "gp.tab.web": "From the maker", "gp.tab.remove": "Remove", "gp.inUse": "In use", "gp.use": "Go back to this",
+  "gp.useNewer": "Use this", "gp.delete": "Delete", "gp.basicName": "Windows' basic driver",
+  "gp.basicD": "Microsoft Basic Display Adapter — used only when there is no other. No acceleration.", "gp.noPkgs": "There is no driver from the maker for this card on the PC.",
+  "gp.pcNote": "These are the versions Windows still keeps. Going back works like “Roll back driver” in Device Manager — the screen will flicker.",
+  "gp.pcOnly": "Windows keeps only the current version. Get an older one from the maker's site (the button is in “From the maker”).",
+  "gp.pcOnlyNv": "Windows keeps only the current version. An older one can be downloaded straight from NVIDIA — in “NVIDIA versions”.", "gp.useT": "Install driver {0}?",
+  "gp.useD": "Now {0}. Windows puts {1} on the card — the screen will flicker and may go dark for a few seconds. A restart afterwards is a good idea.", "gp.useOk": "Install it",
+  "gp.usedT": "Driver {0} is installed", "gp.delT": "Delete {0} from the PC?", "gp.delD": "Frees {0}. You can no longer go back to this version without downloading it again.",
+  "gp.delOk": "Delete", "gp.deleted": "{0} deleted — {1} freed", "gp.k.all": "All", "gp.nvSite": "NVIDIA's site", "gp.nvLoading": "Getting NVIDIA's list…",
+  "gp.nvNone": "No drivers for this choice.",
+  "gp.nvNote": "The list is NVIDIA's for {0}. Their installer opens in its own window: to go back to an older version choose “Custom” and “Perform a clean installation”.",
+  "gp.installed": "Installed", "gp.newerTag": "Newer", "gp.notes": "What's new", "gp.download": "Download", "gp.install": "Install", "gp.stop": "Stop",
+  "gp.downloading": "Downloading…", "gp.checkingSig": "Checking the signature…", "gp.downloaded": "Driver {0} downloaded and signed by NVIDIA",
+  "gp.runT": "Start the installer of {0}?", "gp.runD": "NVIDIA's installer opens in its own window and leads to the end.",
+  "gp.runOlder": "This is older than the current version. In the installer choose “Custom (Advanced)” and tick “Perform a clean installation” — that replaces the current one.",
+  "gp.runOk": "Start", "gp.ran": "NVIDIA's installer was started", "gp.vendorT": "Drivers for {0}", "gp.vendorT0": "Drivers from the maker",
+  "gp.vendorD": "The list of versions comes from the maker's site. Download the version you want there; for a clean installation remove the current driver first in “Remove”.",
+  "gp.vendorBtn": "Open {0}'s site", "gp.rmT": "Remove the driver",
+  "gp.rmD": "Takes driver {0} off the card, like DDU. Windows switches to its basic driver (or to an older version, if the PC has one). Useful before a clean installation or when the driver causes problems.",
+  "gp.rmBasic": "The card already runs on Windows' basic driver — there is nothing to remove.", "gp.optKeep": "Keep a copy to put it back",
+  "gp.optKeepD": "About {0} in the app's folder. One click on the right puts it back.", "gp.optAll": "Remove the older versions too",
+  "gp.optAllD": "{0} versions on the PC, {1} in all. Then only Windows' basic driver is left.", "gp.optAll0": "There are no older versions on the PC.",
+  "gp.optWU": "Windows does not download a driver by itself",
+  "gp.optWUD": "Like DDU's option: turns off Windows' automatic driver downloads until you install the one you want. One click turns it back on.", "gp.optWUAlready": "Already off.",
+  "gp.rmBtn": "Remove the driver", "gp.rmQ": "Remove the driver of {0}?", "gp.rmQD": "This is what happens:", "gp.rmS.keep": "A copy of the current driver in the app's folder",
+  "gp.rmS.noKeep": "No copy — going back needs a new download", "gp.rmS.cur": "Driver {0} comes off the card and the PC", "gp.rmS.all": "The older ones go too: {0}",
+  "gp.rmS.basic": "The card switches to Windows' basic driver (the screen flickers, the resolution may drop)", "gp.rmS.next": "Windows puts the next version on the PC on it: {0}",
+  "gp.rmS.wu": "Windows does not download a driver until you allow it", "gp.rmS.reboot": "A restart afterwards is recommended", "gp.rpBox": "A restore point before the change",
+  "gp.s.start": "Starting…", "gp.s.rp": "Creating a restore point… {0} s", "gp.s.copy": "Copy of the driver: {0} of {1}", "gp.s.remove": "Removing {0} of {1}: {2}…",
+  "gp.s.install": "Windows is installing driver {0}…", "gp.s.wu": "Turning off automatic driver downloads…",
+  "gp.s.note": "The screen may flicker or go dark for a few seconds — do not close the app.", "gp.removedT": "The driver was removed", "gp.nowHas": "The card now uses: {0}",
+  "gp.doneRemoved": "Removed: {0}", "gp.doneCopy": "Copy: {0}", "gp.doneReboot": "Windows wants a restart to finish.", "gp.doneRestart": "A restart is not required, but recommended.",
+  "gp.later": "Later", "gp.rebootNow": "Restart now", "gp.rebootT": "Restart the PC?", "gp.rebootD": "Save your open files. Windows restarts in 5 seconds.",
+  "gp.copies": "Saved copies", "gp.noCopies": "No copies yet. One is made when a driver is removed.", "gp.openFolder": "Open the folder", "gp.copyMade": "made {0}",
+  "gp.putBack": "Put back", "gp.putT": "Put driver {0} back?",
+  "gp.putD": "Windows puts it back into the store and on the card, even if a newer one is there. The screen will flicker.", "gp.putDone": "Driver {0} is back",
+  "gp.copyDelT": "Delete the copy of {0}?", "gp.copyDelD": "Frees {0}. This version can then no longer be put back from here.", "gp.copyDeleted": "The copy was deleted",
+  "gp.wuOffUs": "Windows does not download drivers by itself — turned off by this app.",
+  "gp.wuOffOther": "Windows does not download drivers by itself — turned off in Windows' settings (not by this app).", "gp.wuAllow": "Allow again",
+  "gp.wuOnT": "Windows may download drivers by itself again", "gp.wuOffT": "Windows no longer downloads drivers by itself",
+  "gpu.p.10": "The device cannot start — most often the driver is damaged.", "gpu.p.12": "Not enough resources — turning other devices off sometimes helps.",
+  "gpu.p.14": "It needs a restart to work.", "gpu.p.18": "The driver needs to be installed again.", "gpu.p.19": "Its registry settings are damaged — install the driver again.",
+  "gpu.p.21": "Windows is removing the device.", "gpu.p.22": "The device is disabled in Device Manager.", "gpu.p.24": "The device is missing or not working properly.",
+  "gpu.p.28": "No driver is installed.", "gpu.p.31": "Windows cannot load the driver — install it again.", "gpu.p.32": "The driver is disabled.",
+  "gpu.p.37": "The driver did not start — install it again.", "gpu.p.39": "The driver is missing or damaged.",
+  "gpu.p.43": "Windows stopped the device because it reported a problem — often a damaged driver (try a clean installation) or a hardware problem.",
+  "gpu.p.45": "The device is not connected.", "gpu.p.52": "The driver's signature cannot be checked.", "gpu.p.x": "Windows reports a problem with the device.",
+  "net.rec": "Recommended", "net.recT": "We recommend Cloudflare (1.1.1.1).",
+  "net.recD": "Fast everywhere, keeps no history of your sites and switches in one click — you can go back any time.",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -4170,15 +4486,16 @@ fadeEdgesY($(".nav"));
 // become thin lines) instead of scrolling
 function fitNav() {
   const n = $(".nav"); if (!n) return;
-  n.classList.remove("fit", "lines"); n.style.removeProperty("--navh");
+  n.classList.remove("fit", "lines", "tight"); n.style.removeProperty("--navh");
   const bs = n.querySelectorAll("button");
   if (!bs.length || n.scrollHeight <= n.clientHeight + 1) { moveNav(); return; }
   const h0 = bs[0].offsetHeight;
-  for (const lines of [false, true]) {
-    n.classList.toggle("lines", lines);
+  // first smaller buttons, then smaller group titles, then lines instead of titles
+  for (const mode of ["", "tight", "lines"]) {
+    n.classList.toggle("tight", mode === "tight"); n.classList.toggle("lines", mode === "lines");
     const over = n.scrollHeight - n.clientHeight;
     const h = Math.floor(h0 - over / bs.length - .5);
-    if (h >= 25 || lines) { n.style.setProperty("--navh", Math.max(21, Math.min(h0, h)) + "px"); n.classList.add("fit"); break; }
+    if (h >= 24 || mode === "lines") { n.style.setProperty("--navh", Math.max(21, Math.min(h0, h)) + "px"); n.classList.add("fit"); break; }
   }
   moveNav();
 }
@@ -4292,6 +4609,7 @@ function go(page, opt) {
   if (page === "tweaks") { loadTweaks(); requestAnimationFrame(() => $("#twFilter")._place && $("#twFilter")._place()); }
   if (page === "startup") loadStartup();
   if (page === "sysinfo") loadSysInfo(false);
+  if (page === "gpu") loadGpu(false);
   if (page === "network") loadNet(false);
   if (page === "ctxmenu") loadCtx(false);
   if (page === "settings") { loadAuto(); requestAnimationFrame(() => $("#segAuto")._place && $("#segAuto")._place()); }
@@ -6432,6 +6750,395 @@ on("rp-done", d => {
 });
 $("#btnRstrui").addEventListener("click", () => api.openSystemRestore());
 
+
+/* =====================================================================
+   3.2 — GRAPHICS CARD: what it is and how it is doing, its drivers (go
+   back to one on this PC, older ones from NVIDIA, take it off like DDU,
+   copies to put back) and the screens' refresh rate
+===================================================================== */
+const GP = { st: null, loading: false, err: "", sel: "", tab: "pc", sens: null, util: [], ticking: false, timer: 0,
+  nv: null, nvLoading: false, nvKind: "all", dl: null, got: {}, busy: null, ask: null, opts: null, findKey: "" };
+const GP_VC = { nvidia: "#76b900", amd: "#e8323c", intel: "#1f7fd6", other: "#46be9a" };
+const GP_LINKS = { nvidia: "https://www.nvidia.com/en-us/drivers/", amd: "https://www.amd.com/en/support/download/drivers.html", intel: "https://www.intel.com/content/www/us/en/download-center/home.html" };
+function gpCards() { return ((GP.st && GP.st.devices) || []).filter(d => !d.virtual); }
+function gpCard() { const cs = gpCards(); return cs.find(d => d.id === GP.sel) || cs[0] || null; }
+const gpVer = p => p && p.vendorVer ? p.vendorVer : (p && p.version) || "—";
+const gpDays = iso => { const d = iso ? new Date(iso) : null; return d && !isNaN(d) ? Math.max(0, Math.floor((Date.now() - d.getTime()) / 86400e3)) : -1; };
+function gpAge(iso) { const n = gpDays(iso); if (n < 0) return ""; return n < 1 ? t("pr.today") : n < 45 ? t("pr.daysAgo", n) : n < 365 ? t("pr.monthsAgo", Math.round(n / 30)) : t("pr.yearsAgo", nf(1).format(n / 365)); }
+async function loadGpu(force) {
+  if (GP.loading) return;
+  if (GP.st && !force) { renderGpu(); gpTick(); return; }
+  GP.loading = true; $("#gpRefresh").classList.add("spin");
+  if (!GP.st) renderGpu();
+  try { GP.st = await api.gpuState(); GP.err = (GP.st && GP.st.error) || ""; } catch (e) { GP.err = String((e && e.message) || e); }
+  GP.loading = false; $("#gpRefresh").classList.remove("spin");
+  renderGpu(); gpTick();
+  const c = gpCard();
+  if (c && c.vendor === "nvidia" && !GP.nv && !GP.nvLoading) loadNv(false);
+}
+async function loadNv(force) {
+  GP.nvLoading = true; if (S.page === "gpu") renderGpuTab();
+  try { GP.nv = await api.gpuNvDrivers(!!force); } catch (e) { GP.nv = { error: String((e && e.message) || e), drivers: [] }; }
+  GP.nvLoading = false;
+  if (S.page === "gpu") { renderGpuTab(); renderGpuHero(); renderGpuFind(); }
+  paintGpBadge();
+}
+function paintGpBadge() {
+  const b = $("#gpBadge"); if (!b) return;
+  const c = gpCard(), bad = c && (c.problem || c.noDriver);
+  b.hidden = !bad; b.textContent = bad ? "!" : ""; b.classList.toggle("err", !!bad);
+}
+async function gpTick() {
+  clearTimeout(GP.timer); GP.timer = 0;
+  if (S.page !== "gpu" || document.visibilityState === "hidden" || GP.ticking) return;
+  GP.ticking = true;
+  let s = null; try { s = await api.gpuSensors(); } catch (e) {}
+  GP.ticking = false;
+  if (s) { GP.sens = s; GP.util.push(Math.max(0, s.util)); if (GP.util.length > 60) GP.util.shift(); paintGpuLive(); }
+  if (S.page === "gpu") GP.timer = setTimeout(gpTick, 1500);
+}
+document.addEventListener("visibilitychange", () => { if (document.visibilityState !== "hidden" && S.page === "gpu" && !GP.timer) gpTick(); });
+
+function renderGpu() {
+  const body = $("#gpBody"); if (!body) return;
+  const c = gpCard();
+  if (!GP.st) {
+    body.innerHTML = `<div class="si-load"><span class="spin"></span><span>${esc(t("gp.loading"))}</span></div><div class="si-grid">${`<div class="skel si-skel"></div>`.repeat(4)}</div>`;
+    return;
+  }
+  if (!c) { body.innerHTML = `<div class="tw-empty">${esc(GP.err || t("gp.none"))}</div>`; return; }
+  GP.sel = c.id;
+  const cs = gpCards();
+  body.innerHTML = `${cs.length > 1 ? `<div class="gp-pick"><div class="seg blue" id="gpPick"></div></div>` : ""}
+    <div class="si-hero gp-hero" id="gpHero"></div>
+    <div class="gp-live" id="gpLive"></div>
+    <div class="gp-lim" id="gpLim"></div>
+    <div class="gp-grid">
+      <div class="si-card" id="gpFind"></div>
+      <div class="si-card" id="gpInfo"></div>
+      <div class="si-card gp-wide" id="gpDisp"></div>
+    </div>
+    <div class="gp-drv">
+      <div class="gp-drv-h"><h2>${esc(t("gp.drivers"))}</h2><div class="seg blue" id="gpTab"></div></div>
+      <div id="gpAsk"></div><div id="gpBusy"></div>
+      <div id="gpTabBody"></div>
+    </div>`;
+  if (cs.length > 1) makeSeg($("#gpPick"), cs.map(d => ({ v: d.id, label: d.name.replace(/^(NVIDIA|AMD|Intel\(R\))\s+/i, "") })), c.id, v => { GP.sel = v; GP.sens = null; renderGpu(); });
+  const tabs = [{ v: "pc", label: t("gp.tab.pc") }, { v: "web", label: t(c.vendor === "nvidia" ? "gp.tab.nv" : "gp.tab.web") }, { v: "remove", label: t("gp.tab.remove") }];
+  makeSeg($("#gpTab"), tabs, GP.tab, v => { GP.tab = v; renderGpuTab(); });
+  renderGpuHero(); paintGpuLive(); renderGpuInfo(); renderGpuDisp(); renderGpuFind(); renderGpuTab(); paintGpuBusy(); paintGpuAsk(); paintGpBadge();
+  requestAnimationFrame(() => { $$("#gpBody .seg").forEach(x => x._place && x._place()); });
+}
+function renderGpuHero() {
+  const el = $("#gpHero"), c = gpCard(); if (!el || !c) return;
+  el.style.setProperty("--vc", GP_VC[c.vendor] || GP_VC.other);
+  const d = c.driver, nv = GP.nv && !GP.nv.error ? GP.nv : null;
+  const st = c.problem ? ["bad", t("gp.st.problem", c.problem)] : c.noDriver ? ["warn", t("gp.st.basic")] : ["ok", t("gp.st.ok")];
+  const meta = c.noDriver ? t("gp.heroBasic") : [t("gp.driverV", gpVer(d)) + (d.vendorVer ? ` (${d.version})` : ""), siDate(d.date), gpAge(d.date)].filter(Boolean).join(" · ");
+  el.innerHTML = `<div class="hi">${ICONS.gpu}</div><div class="ht"><h2>${esc(c.name)}</h2><div class="m">${esc(meta)}</div></div>
+    <div class="si-chips"><span class="chip ${st[0]}">${esc(st[1])}</span>${c.vram ? `<span class="chip">${esc(siGB(c.vram))} VRAM</span>` : ""}${nv && nv.newer ? `<span class="chip opt">${esc(t("gp.newer", nv.latest))}</span>` : ""}</div>`;
+}
+function gpTile(k, icon, v, unit, sub, bar, cls) {
+  return `<div class="gl" data-gl="${k}"><div class="k">${ICONS[icon] || ""}<span>${esc(t("gp.l." + k))}</span></div>
+    <div class="v ${v === "—" ? "dim" : ""}">${esc(v)}${unit && v !== "—" ? `<small>${esc(unit)}</small>` : ""}</div><div class="s" title="${esc(sub || "")}">${esc(sub || "")}</div>
+    ${bar != null ? `<div class="hc-bar"><i class="${cls || ""}" style="width:${Math.max(0, Math.min(100, bar * 100)).toFixed(1)}%"></i></div>` : k === "util" ? `<canvas id="gpUtilC"></canvas>` : ""}</div>`;
+}
+function paintGpuLive() {
+  const el = $("#gpLive"), c = gpCard(); if (!el || !c) return;
+  const s = GP.sens && GP.sens.ok ? GP.sens : null, nvml = s && s.src === "nvml";
+  const dash = "—";
+  const tiles = [];
+  if (nvml && s.temp > 0) {
+    const cls = s.slowTemp && s.temp >= s.slowTemp - 5 ? "bad" : s.temp >= 80 ? "warn" : "";
+    tiles.push(gpTile("temp", "thermo", String(s.temp), "°C", s.slowTemp ? t("gp.slow", s.slowTemp) : "", s.slowTemp ? s.temp / s.slowTemp : s.temp / 100, cls));
+  } else tiles.push(gpTile("temp", "thermo", dash, "", t(s ? "gp.onlyNv" : "gp.reading")));
+  tiles.push(gpTile("util", "cpu", s && s.util >= 0 ? String(s.util) : dash, "%", nvml && s.pstate >= 0 ? t("gp.pstate", s.pstate) + " · " + t(s.pstate <= 2 ? "gp.ps.full" : s.pstate >= 8 ? "gp.ps.idle" : "gp.ps.mid") : ""));
+  tiles.push(nvml && s.power > 0 ? gpTile("power", "bolt", nfi(s.power), "W", s.powerLimit ? t("gp.of", nfi(s.powerLimit) + " W") : "", s.powerLimit ? s.power / s.powerLimit : null, s.powerLimit && s.power / s.powerLimit > .95 ? "warn" : "")
+    : gpTile("power", "bolt", dash, "", t(s ? "gp.onlyNv" : "gp.reading")));
+  tiles.push(nvml && s.fan >= 0 ? gpTile("fan", "refresh", String(s.fan), "%", s.fan === 0 ? t("gp.fanStop") : "", s.fan / 100) : gpTile("fan", "refresh", dash, "", t(s ? (nvml ? "gp.noFan" : "gp.onlyNv") : "gp.reading")));
+  tiles.push(nvml && s.clock > 0 ? gpTile("clock", "rocket", nfi(s.clock), "MHz", s.memClock ? t("gp.memClock", nfi(s.memClock)) : "", s.maxClock ? s.clock / s.maxClock : null) : gpTile("clock", "rocket", dash, "", t(s ? "gp.onlyNv" : "gp.reading")));
+  const total = (s && s.memTotal) || c.vram;
+  tiles.push(s && s.memUsed && total ? gpTile("vram", "memory", fmt(s.memUsed), "", t("gp.of", fmt(total)), s.memUsed / total, s.memUsed / total > .95 ? "warn" : "") : gpTile("vram", "memory", total ? fmt(total) : dash, "", t(s ? "gp.total" : "gp.reading")));
+  el.innerHTML = tiles.join("");
+  paintIcons(el);
+  const cv = $("#gpUtilC"); if (cv && GP.util.length > 1) sparkline(cv, [{ data: GP.util, color: "--blue-2", fill: .14, width: 1.5 }], { points: Math.max(10, GP.util.length) });
+  // what slows the card down right now
+  const lim = $("#gpLim");
+  if (lim) {
+    const ls = (nvml && s.limits || []).filter(x => x !== "idle" && x !== "app" && x !== "sync");
+    lim.innerHTML = !s ? "" : nvml ? (ls.length ? `<span class="hm-dot warn"></span><span>${esc(t("gp.limited"))} <b>${esc(ls.map(x => t("gp.lim." + x)).join(", "))}</b></span>`
+      : `<span class="hm-dot"></span><span>${esc(t((s.limits || []).includes("idle") ? "gp.lim.idleT" : "gp.lim.none"))}</span>`)
+      + (s.enc >= 0 ? `<span>${esc(t("gp.encdec", s.enc, s.dec))}</span>` : "") : `<span class="hm-dot off"></span><span>${esc(t("gp.pdh"))}</span>`;
+  }
+  // checks that need the sensors (PCIe, Resizable BAR, heat)
+  const key = gpFindings().map(f => f.id).join();
+  if (key !== GP.findKey) renderGpuFind();
+  const info = $("#gpInfo"); if (info && s && !info.dataset.sens) renderGpuInfo();
+}
+function renderGpuInfo() {
+  const el = $("#gpInfo"), c = gpCard(); if (!el || !c) return;
+  const s = GP.sens && GP.sens.ok && GP.sens.src === "nvml" ? GP.sens : null, st = GP.st || {};
+  if (s) el.dataset.sens = "1";
+  const vendorName = { nvidia: "NVIDIA", amd: "AMD", intel: "Intel" }[c.vendor] || t("si.unknown");
+  const row = (k, v) => v ? `<dt>${esc(t(k))}</dt><dd>${v}</dd>` : "";
+  const onoff = v => v === "on" ? `<span class="si-good">${esc(t("gp.on"))}</span>` : v === "off" ? `<span class="si-warn">${esc(t("gp.off"))}</span>` : "";
+  const pcie = s && s.pcieMaxGen ? esc(t("gp.pcieV", s.pcieMaxGen + ".0", s.pcieMaxWidth)) + (s.pcieGen && (s.pcieGen !== s.pcieMaxGen || s.pcieWidth !== s.pcieMaxWidth) ? ` <span class="si-dim">${esc(t("gp.pcieNow", s.pcieGen + ".0", s.pcieWidth))}</span>` : "") : "";
+  el.innerHTML = `<div class="top"><span class="ic">${ICONS.info}</span><h3>${esc(t("gp.info"))}</h3></div><dl class="si-kv">
+    ${row("gp.i.maker", esc(vendorName) + (c.venId ? ` <span class="si-dim">VEN_${esc(c.venId)} · DEV_${esc(c.devId)}</span>` : ""))}
+    ${row("gp.i.vram", c.vram ? esc(siGB(c.vram)) : "")}
+    ${row("gp.i.driver", c.noDriver ? esc(t("gp.st.basic")) : esc(gpVer(c.driver)) + (c.driver.vendorVer ? ` <span class="si-dim">${esc(c.driver.version)}</span>` : ""))}
+    ${row("gp.i.date", c.noDriver ? "" : esc([siDate(c.driver.date), gpAge(c.driver.date)].filter(Boolean).join(" · ")))}
+    ${row("gp.i.inf", c.noDriver ? "" : esc([c.driver.inf, c.driver.provider].filter(Boolean).join(" · ")))}
+    ${row("gp.i.pcie", pcie)}
+    ${row("gp.i.rebar", s ? onoff(s.rebar) : "")}
+    ${row("gp.i.hags", onoff(st.hags))}
+    ${row("gp.i.vbios", s && s.vbios ? esc(s.vbios) : "")}
+    ${row("gp.i.cuda", s && s.cuda ? esc(s.cuda) : "")}
+    ${row("gp.i.id", `<span class="si-dim gp-id" title="${esc(c.id)}">${esc(c.id.split("\\").slice(0, 2).join("\\"))}</span>`)}
+  </dl>`;
+}
+function gpFindings() {
+  const c = gpCard(), out = []; if (!c) return out;
+  const s = GP.sens && GP.sens.ok && GP.sens.src === "nvml" ? GP.sens : null, st = GP.st || {}, nv = GP.nv && !GP.nv.error ? GP.nv : null;
+  if (c.problem) out.push({ id: "problem", sev: "bad", t: t("gp.f.problem", c.problem), d: t(["gpu.p." + c.problem, "gpu.p.x"].find(k => t(k) !== k) || "gpu.p.x"), act: [t("gp.f.reinstall"), () => { GP.tab = "remove"; renderGpu(); }] });
+  if (c.noDriver) out.push({ id: "nodrv", sev: "warn", t: t("gp.f.nodrv"), d: t("gp.f.nodrvD"), act: c.vendor === "nvidia" ? [t("gp.f.getDriver"), () => { GP.tab = "web"; renderGpu(); }] : GP_LINKS[c.vendor] ? [t("gp.f.site"), () => api.openLink(GP_LINKS[c.vendor])] : null });
+  if (nv && nv.newer) out.push({ id: "newer", sev: "info", t: t("gp.f.newer", nv.latest), d: t("gp.f.newerD", nv.installed), act: [t("gp.f.seeVersions"), () => { GP.tab = "web"; renderGpu(); }] });
+  else if (!c.noDriver && gpDays(c.driver.date) > 180) out.push({ id: "old", sev: "info", t: t("gp.f.old", gpAge(c.driver.date)), d: t("gp.f.oldD"), act: [t("gp.f.seeVersions"), () => { GP.tab = "web"; renderGpu(); }] });
+  (st.displays || []).forEach((d, i) => { if (d.maxHz > d.hz + 1) out.push({ id: "hz" + i, sev: "warn", t: t("gp.f.hz", d.monitor || d.name, d.hz, d.maxHz), d: t("gp.f.hzD"), act: [t("gp.f.setHz", d.maxHz), () => gpSetRate(d, d.maxHz)] }); });
+  if (s && s.pcieWidth && s.pcieMaxWidth && s.pcieWidth < s.pcieMaxWidth && s.util >= 20) out.push({ id: "pcie", sev: "warn", t: t("gp.f.pcie", s.pcieWidth, s.pcieMaxWidth), d: t("gp.f.pcieD") });
+  if (s && s.rebar === "off") out.push({ id: "rebar", sev: "info", t: t("gp.f.rebar"), d: t("gp.f.rebarD") });
+  if (st.hags === "off") out.push({ id: "hags", sev: "info", t: t("gp.f.hags"), d: t("gp.f.hagsD"), act: [t("gp.f.toTweaker"), () => gpToTweak("hags")] });
+  if (s && s.temp > 0 && s.slowTemp && s.temp >= s.slowTemp - 5) out.push({ id: "hot", sev: "bad", t: t("gp.f.hot", s.temp), d: t("gp.f.hotD", s.slowTemp) });
+  if (st.wuByUs) out.push({ id: "wu", sev: "info", t: t("gp.f.wu"), d: t("gp.f.wuD"), act: [t("gp.wuAllow"), () => gpWU(true)] });
+  return out;
+}
+function renderGpuFind() {
+  const el = $("#gpFind"); if (!el) return;
+  const fs = gpFindings(); GP.findKey = fs.map(f => f.id).join();
+  el.innerHTML = `<div class="top"><span class="ic">${ICONS.check}</span><h3>${esc(t("gp.checks"))}</h3></div>` + (fs.length
+    ? fs.map((f, i) => `<div class="gf" data-gf="${esc(f.id)}"><span class="hm-dot ${f.sev}"></span><div><b>${esc(f.t)}</b><span class="d">${esc(f.d || "")}</span></div>${f.act ? `<button class="btn small" data-gfa="${i}">${esc(f.act[0])}</button>` : "<span></span>"}</div>`).join("")
+    : `<div class="gf"><span class="hm-dot"></span><div><b>${esc(t("gp.f.ok"))}</b><span class="d">${esc(t("gp.f.okD"))}</span></div><span></span></div>`);
+  el.querySelectorAll("[data-gfa]").forEach(b => b.addEventListener("click", () => { const f = fs[+b.dataset.gfa]; if (f && f.act) f.act[1](); }));
+}
+function gpToTweak(id) {
+  go("tweaks");
+  const name = t("tw." + id + ".n");
+  const box = $("#twSearch"); if (box) { box.value = name; TW.q = name.toLowerCase(); renderTweaks(); }
+}
+function renderGpuDisp() {
+  const el = $("#gpDisp"); if (!el) return;
+  const ds = (GP.st && GP.st.displays) || [];
+  const conn = c => c ? t("gp.conn." + c) : "";
+  el.innerHTML = `<div class="top"><span class="ic">${ICONS.monitor}</span><h3>${esc(t("gp.screens"))}</h3></div>` + (ds.length ? ds.map((d, i) => `<div class="gd">
+      <div><b>${esc(d.monitor || d.name)}</b><div class="m">${esc([`${d.w} × ${d.h}`, conn(d.conn), d.primary ? t("gp.primary") : "", d.maxW && (d.maxW > d.w || d.maxH > d.h) ? t("gp.maxRes", d.maxW, d.maxH) : ""].filter(Boolean).join(" · "))}</div></div>
+      <div class="r">${!d.rates.length || !d.hz ? `<span class="chip">${d.hz ? esc(d.hz + " Hz") : "—"}</span>` : `<select class="sel" data-gdrate="${i}" aria-label="${esc(t("gp.rate"))}">${d.rates.map(r => `<option value="${r}" ${r === d.hz ? "selected" : ""}>${r} Hz</option>`).join("")}</select>
+      ${d.maxHz > d.hz + 1 ? `<button class="btn small primary" data-gdmax="${i}">${esc(t("gp.f.setHz", d.maxHz))}</button>` : `<span class="chip ok" style="background:var(--mint-soft);color:var(--mint)">${esc(t("gp.atMax"))}</span>`}`}</div></div>`).join("")
+    : `<div class="gp-empty">${esc(t("gp.noScreens"))}</div>`);
+  el.querySelectorAll("[data-gdrate]").forEach(x => x.addEventListener("change", () => { const d = ds[+x.dataset.gdrate]; if (d) gpSetRate(d, +x.value); }));
+  el.querySelectorAll("[data-gdmax]").forEach(x => x.addEventListener("click", () => { const d = ds[+x.dataset.gdmax]; if (d) gpSetRate(d, d.maxHz); }));
+}
+// the refresh rate: Windows' own way — the new one stays only if it is kept within 15 s
+async function gpSetRate(d, hz) {
+  if (hz === d.hz || GP.ask) return;
+  let r = null; try { r = await api.gpuSetRefresh(d.name, hz); } catch (e) { r = { error: String(e) }; }
+  if (!r || !r.ok) { toast((r && r.error) || t("tw.failed"), "alert", "warn"); renderGpuDisp(); return; }
+  const was = d.hz;
+  d.hz = hz;
+  GP.ask = { name: d.name, monitor: d.monitor || d.name, hz, was, until: Date.now() + (r.seconds || 15) * 1000 };
+  renderGpuDisp(); renderGpuFind(); paintGpuAsk();
+}
+function paintGpuAsk() {
+  const el = $("#gpAsk"); if (!el) return;
+  clearTimeout(GP.askT);
+  const a = GP.ask;
+  if (!a) { el.innerHTML = ""; return; }
+  const left = Math.max(0, Math.ceil((a.until - Date.now()) / 1000));
+  el.innerHTML = `<div class="gp-ask">${ICONS.monitor}<div class="t"><b>${esc(t("gp.keepQ", a.monitor, a.hz))}</b><br>${esc(t("gp.keepD", left, a.was))}</div>
+    <button class="btn small" id="gpBack">${esc(t("gp.back"))}</button><button class="btn small primary" id="gpKeep">${esc(t("gp.keep"))}</button></div>`;
+  $("#gpKeep").addEventListener("click", async () => { const x = GP.ask; GP.ask = null; paintGpuAsk(); let ok = false; try { ok = await api.gpuKeepRefresh(x.name); } catch (e) {} toast(ok ? t("gp.kept", x.hz) : t("gp.keepLate"), ok ? "check" : "alert", ok ? "" : "warn"); if (!ok) loadGpu(true); });
+  $("#gpBack").addEventListener("click", async () => { const x = GP.ask; GP.ask = null; paintGpuAsk(); try { await api.gpuSetRefresh(x.name, x.was); await api.gpuKeepRefresh(x.name); } catch (e) {} loadGpu(true); });
+  if (left > 0) GP.askT = setTimeout(paintGpuAsk, 500);
+}
+on("gpu-refresh", d => {
+  if (GP.ask && GP.ask.name === d.display) GP.ask = null;
+  paintGpuAsk();
+  if (d.reverted) toast(t("gp.reverted", d.hz), "undo", "info");
+  loadGpu(true);
+});
+
+function renderGpuTab() {
+  const el = $("#gpTabBody"), c = gpCard(); if (!el || !c) return;
+  const seg = $("#gpTab"); if (seg && seg._set) seg._set(GP.tab);
+  if (GP.tab === "pc") el.innerHTML = gpTabPC(c);
+  else if (GP.tab === "web") el.innerHTML = c.vendor === "nvidia" ? gpTabNV(c) : gpTabVendor(c);
+  else el.innerHTML = gpTabRemove(c);
+  paintIcons(el);
+  gpWire(el, c);
+}
+function gpTabPC(c) {
+  const ps = (c.packages || []).filter(p => !p.basic), basic = (c.packages || []).find(p => p.basic);
+  const rows = ps.map(p => `<div class="gp-row ${p.inUse ? "cur" : ""}"><div><div class="v"><b>${esc(gpVer(p))}</b>${p.vendorVer ? `<small>${esc(p.version)}</small>` : ""}${p.inUse ? `<span class="tag use">${esc(t("gp.inUse"))}</span>` : ""}</div>
+      <div class="m">${esc([siDate(p.date), gpAge(p.date), p.provider, p.size ? fmt(p.size) : "", p.inf].filter(Boolean).join(" · "))}</div></div>
+      <div class="a">${p.inUse ? "" : `<button class="btn small" data-gpdel="${esc(p.inf)}">${ICONS.trash}<span>${esc(t("gp.delete"))}</span></button><button class="btn small primary" data-gpuse="${esc(p.inf)}|${esc(p.version)}">${ICONS.undo}<span>${esc(t(gpNewer(p, c) ? "gp.useNewer" : "gp.use"))}</span></button>`}</div></div>`).join("");
+  const only = ps.length <= 1;
+  return `<div class="gp-list">${rows || `<div class="gp-empty">${esc(t("gp.noPkgs"))}</div>`}${basic ? `<div class="gp-row ${c.noDriver ? "cur" : ""}"><div><div class="v"><b>${esc(t("gp.basicName"))}</b>${c.noDriver ? `<span class="tag use">${esc(t("gp.inUse"))}</span>` : ""}</div><div class="m">${esc(t("gp.basicD"))}</div></div><div class="a"></div></div>` : ""}</div>
+    <div class="gp-note">${esc(t(only ? (c.vendor === "nvidia" ? "gp.pcOnlyNv" : "gp.pcOnly") : "gp.pcNote"))}</div>`;
+}
+function gpNewer(p, c) { return (p.date || "") > (c.driver.date || ""); }
+function gpTabNV(c) {
+  const nv = GP.nv;
+  const tools = `<div class="gp-tools"><div class="seg blue" id="gpKind"></div><span class="grow"></span><button class="linkbtn" id="gpNvSite">${esc(t("gp.nvSite"))}</button><button class="btn small icon-btn" id="gpNvRefresh" title="${esc(t("gp.refresh"))}">${ICONS.refresh}</button></div>`;
+  if (GP.nvLoading && !nv) return tools + `<div class="gp-list"><div class="gp-empty"><span class="spin"></span> ${esc(t("gp.nvLoading"))}</div></div>`;
+  if (!nv) return tools + `<div class="gp-list"><div class="gp-empty">${esc(t("gp.nvLoading"))}</div></div>`;
+  if (nv.error && !(nv.drivers || []).length) return tools + `<div class="gp-list"><div class="gp-empty">${esc(nv.error)}</div></div>`;
+  const list = (nv.drivers || []).filter(d => GP.nvKind === "all" || (GP.nvKind === "studio") === !!d.studio);
+  const inst = nv.installed;
+  const rows = list.map(d => {
+    const dl = GP.dl && GP.dl.url === d.url ? GP.dl : null, got = GP.got[d.url];
+    const isInst = inst && d.version === inst, newer = inst && nvNum(d.version) > nvNum(inst);
+    const act = dl ? `<div class="prog"><div class="lbl"><span>${esc(dl.checking ? t("gp.checkingSig") : t("gp.downloading"))}</span><span>${esc(dl.total ? Math.floor(dl.done / dl.total * 100) + "%" : fmt(dl.done || 0))}</span></div><div class="si-bar"><i style="width:${dl.total ? (dl.done / dl.total * 100).toFixed(1) : 3}%"></i></div></div><button class="btn small" id="gpDlStop">${esc(t("gp.stop"))}</button>`
+      : got ? `<button class="btn small primary" data-gprun="${esc(d.url)}">${ICONS.rocket}<span>${esc(t("gp.install"))}</span></button>`
+      : `<button class="btn small ${newer ? "primary" : ""}" data-gpdl="${esc(d.url)}" ${GP.dl || GP.busy ? "disabled" : ""}>${ICONS.download}<span>${esc(t("gp.download"))}</span></button>`;
+    return `<div class="gp-row ${isInst ? "cur" : ""}"><div><div class="v"><b>${esc(d.version)}</b><span class="tag ${d.studio ? "st" : ""}">${esc(d.studio ? "Studio" : "Game Ready")}</span>${isInst ? `<span class="tag use">${esc(t("gp.installed"))}</span>` : newer ? `<span class="tag new">${esc(t("gp.newerTag"))}</span>` : ""}</div>
+      <div class="m">${esc([siDate(d.date), gpAge(d.date), d.size].filter(Boolean).join(" · "))}${d.details ? ` · <button class="linkbtn" data-gpnotes="${esc(d.details)}">${esc(t("gp.notes"))}</button>` : ""}</div></div><div class="a">${act}</div></div>`;
+  }).join("");
+  return tools + `<div class="gp-list">${rows || `<div class="gp-empty">${esc(t("gp.nvNone"))}</div>`}</div><div class="gp-note">${esc(t("gp.nvNote", nv.product || c.name))}</div>`;
+}
+const nvNum = v => { const m = /^(\d+)\.(\d{2})$/.exec(String(v || "")); return m ? +m[1] * 100 + +m[2] : -1; };
+function gpTabVendor(c) {
+  const name = { amd: "AMD", intel: "Intel" }[c.vendor] || "";
+  return `<div class="si-card"><div class="gp-vendor" style="--vc:${GP_VC[c.vendor] || GP_VC.other}"><span class="hi">${ICONS.gpu}</span><div><div class="si-big">${esc(name ? t("gp.vendorT", name) : t("gp.vendorT0"))}</div>
+    <div class="gp-note" style="margin:4px 0 0">${esc(t("gp.vendorD"))}</div></div></div>${GP_LINKS[c.vendor] ? `<div><button class="btn primary" id="gpVendorSite">${ICONS.open}<span>${esc(t("gp.vendorBtn", name))}</span></button></div>` : ""}</div>`;
+}
+function gpTabRemove(c) {
+  const st = GP.st || {}, bs = st.backups || [];
+  const o = GP.opts || (GP.opts = { keep: true, all: false, blockWU: false });
+  const olds = (c.packages || []).filter(p => !p.basic && !p.inUse);
+  const oldSize = olds.reduce((a, p) => a + (p.size || 0), 0);
+  const can = !c.noDriver && st.admin !== false;
+  const copies = bs.length ? bs.map((b, i) => `<div class="gp-row"><div><div class="v"><b>${esc(b.vendorVer || b.version)}</b>${b.vendorVer ? `<small>${esc(b.version)}</small>` : ""}</div><div class="m">${esc([b.name, t("gp.copyMade", dateTimeS(b.made)), fmt(b.size)].filter(Boolean).join(" · "))}</div></div>
+      <div class="a"><button class="btn small" data-gpbdel="${i}">${ICONS.trash}<span>${esc(t("gp.delete"))}</span></button><button class="btn small primary" data-gpbput="${i}" ${GP.busy ? "disabled" : ""}>${ICONS.undo}<span>${esc(t("gp.putBack"))}</span></button></div></div>`).join("")
+    : `<div class="gp-empty">${esc(t("gp.noCopies"))}</div>`;
+  return `<div class="gp-rm"><div class="si-card"><div class="top"><span class="ic" style="color:#ffb3bc">${ICONS.trash}</span><h3>${esc(t("gp.rmT"))}</h3></div>
+      <div class="gp-note" style="margin:0">${esc(t(c.noDriver ? "gp.rmBasic" : "gp.rmD", gpVer(c.driver)))}</div>
+      <label class="gp-opt"><input type="checkbox" class="cb" id="gpOptKeep" ${o.keep ? "checked" : ""} ${can ? "" : "disabled"}><b>${esc(t("gp.optKeep"))}</b><span>${esc(t("gp.optKeepD", c.driver.size ? fmt(c.driver.size) : "…"))}</span></label>
+      <label class="gp-opt"><input type="checkbox" class="cb" id="gpOptAll" ${o.all ? "checked" : ""} ${can && olds.length ? "" : "disabled"}><b>${esc(t("gp.optAll"))}</b><span>${esc(olds.length ? t("gp.optAllD", olds.length, fmt(oldSize)) : t("gp.optAll0"))}</span></label>
+      <label class="gp-opt"><input type="checkbox" class="cb" id="gpOptWU" ${o.blockWU ? "checked" : ""} ${can && st.wuDrivers ? "" : "disabled"}><b>${esc(t("gp.optWU"))}</b><span>${esc(t(st.wuDrivers ? "gp.optWUD" : "gp.optWUAlready"))}</span></label>
+      <div><button class="btn danger" id="gpRemoveBtn" ${can && !GP.busy ? "" : "disabled"}>${ICONS.trash}<span>${esc(t("gp.rmBtn"))}</span></button></div>
+      ${st.admin === false ? `<div class="si-tip">${ICONS.alert}<span>${esc(t("rc.needAdmin"))}</span></div>` : ""}</div>
+    <div class="si-card"><div class="top"><span class="ic">${ICONS.archive}</span><h3>${esc(t("gp.copies"))}</h3><button class="linkbtn" id="gpOpenCopies">${esc(t("gp.openFolder"))}</button></div>
+      <div class="gp-list" style="border:0;background:none">${copies}</div>
+      ${!st.wuDrivers ? `<div class="si-tip info">${ICONS.info}<span>${esc(t(st.wuByUs ? "gp.wuOffUs" : "gp.wuOffOther"))}</span></div>${st.wuByUs ? `<div><button class="btn small" id="gpWUAllow">${esc(t("gp.wuAllow"))}</button></div>` : ""}` : ""}</div></div>`;
+}
+function gpWire(el, c) {
+  const kind = $("#gpKind");
+  if (kind) makeSeg(kind, [{ v: "all", label: t("gp.k.all") }, { v: "gr", label: "Game Ready" }, { v: "studio", label: "Studio" }], GP.nvKind, v => { GP.nvKind = v; renderGpuTab(); });
+  const b = (id, f) => { const x = el.querySelector("#" + id); if (x) x.addEventListener("click", f); };
+  b("gpNvRefresh", () => loadNv(true));
+  b("gpNvSite", () => api.openLink(GP_LINKS.nvidia));
+  b("gpVendorSite", () => api.openLink(GP_LINKS[c.vendor]));
+  b("gpDlStop", () => api.gpuCancelDownload());
+  b("gpOpenCopies", () => api.gpuOpenBackups());
+  b("gpWUAllow", () => gpWU(true));
+  b("gpRemoveBtn", () => gpRemoveAsk(c));
+  [["gpOptKeep", "keep"], ["gpOptAll", "all"], ["gpOptWU", "blockWU"]].forEach(([id, k]) => { const x = el.querySelector("#" + id); if (x) x.addEventListener("change", () => { GP.opts[k] = x.checked; }); });
+  el.querySelectorAll("[data-gpuse]").forEach(x => x.addEventListener("click", () => { const [inf, version] = x.dataset.gpuse.split("|"); gpUseAsk(c, (c.packages || []).find(p => p.inf === inf && p.version === version)); }));
+  el.querySelectorAll("[data-gpdel]").forEach(x => x.addEventListener("click", () => gpDelAsk(c, (c.packages || []).find(p => p.inf === x.dataset.gpdel))));
+  el.querySelectorAll("[data-gpdl]").forEach(x => x.addEventListener("click", () => gpDownload((GP.nv.drivers || []).find(d => d.url === x.dataset.gpdl))));
+  el.querySelectorAll("[data-gprun]").forEach(x => x.addEventListener("click", () => gpRunAsk((GP.nv.drivers || []).find(d => d.url === x.dataset.gprun))));
+  el.querySelectorAll("[data-gpnotes]").forEach(x => x.addEventListener("click", () => api.gpuOpenDetails(x.dataset.gpnotes)));
+  const bs = (GP.st && GP.st.backups) || [];
+  el.querySelectorAll("[data-gpbput]").forEach(x => x.addEventListener("click", () => gpPutBackAsk(bs[+x.dataset.gpbput])));
+  el.querySelectorAll("[data-gpbdel]").forEach(x => x.addEventListener("click", () => gpCopyDelAsk(bs[+x.dataset.gpbdel])));
+}
+const gpRPBox = () => `<label class="extra"><input type="checkbox" class="cb" id="gpRP" ${S.settings.restorePoint ? "checked" : ""}><span>${esc(t("gp.rpBox"))}</span></label>`;
+function gpUseAsk(c, p) {
+  if (!p || GP.busy) return;
+  confirmBox({ title: t("gp.useT", gpVer(p)), text: t("gp.useD", gpVer(c.driver), gpVer(p)), extras: gpRPBox(), okText: t("gp.useOk"),
+    ok: () => gpRun("use", () => api.gpuUseDriver({ device: c.id, inf: p.inf, version: p.version, restorePoint: !!($("#gpRP") || {}).checked }), t("gp.usedT", gpVer(p))) });
+}
+function gpDelAsk(c, p) {
+  if (!p || GP.busy) return;
+  confirmBox({ title: t("gp.delT", gpVer(p)), text: t("gp.delD", fmt(p.size || 0)), okText: t("gp.delOk"), danger: true,
+    ok: async () => { let r = null; try { r = await api.gpuDeletePackage(p.inf); } catch (e) { r = { error: String(e) }; }
+      if (r && r.ok) toast(t("gp.deleted", gpVer(p), fmt(p.size || 0)), "trash"); else toast((r && r.error) || t("tw.failed"), "alert", "warn");
+      loadGpu(true); } });
+}
+function gpRemoveAsk(c) {
+  const o = GP.opts || {}, olds = (c.packages || []).filter(p => !p.basic && !p.inUse);
+  const steps = [o.keep ? t("gp.rmS.keep") : t("gp.rmS.noKeep"), t("gp.rmS.cur", gpVer(c.driver))];
+  if (o.all && olds.length) steps.push(t("gp.rmS.all", olds.map(gpVer).join(", ")));
+  steps.push(o.all || !olds.length ? t("gp.rmS.basic") : t("gp.rmS.next", gpVer(olds[0])));
+  if (o.blockWU) steps.push(t("gp.rmS.wu"));
+  steps.push(t("gp.rmS.reboot"));
+  confirmBox({ title: t("gp.rmQ", c.name), text: t("gp.rmQD"), list: steps, extras: gpRPBox(), okText: t("gp.rmBtn"), danger: true,
+    ok: () => gpRun("remove", () => api.gpuRemove({ device: c.id, all: !!o.all, keep: !!o.keep, blockWU: !!o.blockWU, restorePoint: !!($("#gpRP") || {}).checked }), t("gp.removedT")) });
+}
+function gpPutBackAsk(b) {
+  if (!b || GP.busy) return;
+  confirmBox({ title: t("gp.putT", b.vendorVer || b.version), text: t("gp.putD"), extras: gpRPBox(), okText: t("gp.putBack"),
+    ok: () => gpRun("put", () => api.gpuRestoreBackup(b.dir, !!($("#gpRP") || {}).checked), t("gp.putDone", b.vendorVer || b.version)) });
+}
+function gpCopyDelAsk(b) {
+  if (!b) return;
+  confirmBox({ title: t("gp.copyDelT", b.vendorVer || b.version), text: t("gp.copyDelD", fmt(b.size)), okText: t("gp.delOk"), danger: true,
+    ok: async () => { let ok = false; try { ok = await api.gpuDeleteBackup(b.dir); } catch (e) {} toast(ok ? t("gp.copyDeleted") : t("tw.failed"), ok ? "trash" : "alert", ok ? "" : "warn"); loadGpu(true); } });
+}
+async function gpWU(allow) {
+  let r = null; try { r = await api.gpuWU(!!allow); } catch (e) { r = { error: String(e) }; }
+  if (r && r.ok) toast(t(allow ? "gp.wuOnT" : "gp.wuOffT"), "check"); else toast((r && r.error) || t("tw.failed"), "alert", "warn");
+  loadGpu(true);
+}
+// a driver change: steps from the backend, then what the card has now
+async function gpRun(kind, call, okTitle) {
+  if (GP.busy) return;
+  GP.busy = { kind, step: "", data: {} }; paintGpuBusy(); renderGpuTab();
+  let r = null; try { r = await call(); } catch (e) { r = { error: String((e && e.message) || e) }; }
+  GP.busy = null; paintGpuBusy();
+  await loadGpu(true);
+  if (r && r.ok) gpDoneSheet(okTitle, r);
+  else toast((r && r.error) || t("tw.failed"), "alert", "warn");
+}
+on("gpu-step", d => { if (!GP.busy) return; GP.busy.step = d.step; GP.busy.data = d; paintGpuBusy(); });
+function paintGpuBusy() {
+  const el = $("#gpBusy"); if (!el) return;
+  const b = GP.busy;
+  if (!b) { el.innerHTML = ""; return; }
+  const d = b.data || {};
+  const txt = b.step === "rp" ? t("gp.s.rp", d.secs || 0) : b.step === "copy" ? t("gp.s.copy", fmt(d.done || 0), fmt(d.total || 0)) : b.step === "remove" ? t("gp.s.remove", d.n, d.of, d.version || "")
+    : b.step === "install" ? t("gp.s.install", d.version || "") : b.step === "wu" ? t("gp.s.wu") : t("gp.s.start");
+  const pct = b.step === "copy" && d.total ? d.done / d.total * 100 : null;
+  el.innerHTML = `<div class="gp-busy"><span class="spin"></span><div class="t"><b>${esc(txt)}</b><span>${esc(t("gp.s.note"))}</span>${pct != null ? `<div class="si-bar"><i style="width:${pct.toFixed(1)}%"></i></div>` : ""}</div></div>`;
+}
+function gpDoneSheet(title, r) {
+  openSheet({ title, sub: r.now ? t("gp.nowHas", r.now) : "",
+    body: `${(r.done || []).length ? `<div class="sh-note">${esc(t("gp.doneRemoved", r.done.join(", ")))}</div>` : ""}${r.backup ? `<div class="sh-note">${esc(t("gp.doneCopy", r.backup))}</div>` : ""}<div class="sh-note">${esc(t(r.reboot ? "gp.doneReboot" : "gp.doneRestart"))}</div>`,
+    foot: `<span class="grow"></span><button class="btn" id="gpLater">${esc(t("gp.later"))}</button><button class="btn primary" id="gpReboot">${ICONS.refresh}<span>${esc(t("gp.rebootNow"))}</span></button>` });
+  $("#gpLater").addEventListener("click", () => closeSheet(false));
+  $("#gpReboot").addEventListener("click", () => {
+    closeSheet(false);
+    confirmBox({ title: t("gp.rebootT"), text: t("gp.rebootD"), okText: t("gp.rebootNow"), ok: async () => { let ok = false; try { ok = await api.restartPC(); } catch (e) {} if (!ok) toast(t("tw.failed"), "alert", "warn"); } });
+  });
+}
+async function gpDownload(d) {
+  if (!d || GP.dl) return;
+  GP.dl = { url: d.url, version: d.version, done: 0, total: 0 }; renderGpuTab();
+  let r = null; try { r = await api.gpuNvDownload(d.url); } catch (e) { r = { error: String(e) }; }
+  GP.dl = null;
+  if (r && r.ok) { GP.got[d.url] = r.path; toast(t("gp.downloaded", d.version), "download", "", { label: t("gp.install"), run: () => gpRunAsk(d) }); }
+  else if (r) toast(r.error || t("tw.failed"), "alert", "warn");
+  renderGpuTab();
+}
+on("gpu-dl", d => { if (!GP.dl) return; GP.dl.done = d.done; GP.dl.total = d.total; GP.dl.checking = !!d.checking;
+  const bar = $("#gpTabBody .prog"); if (bar && S.page === "gpu") renderGpuTab(); });
+function gpRunAsk(d) {
+  const path = d && GP.got[d.url]; if (!path) return;
+  const c = gpCard(), older = c && c.driver.vendorVer && nvNum(d.version) < nvNum(c.driver.vendorVer);
+  confirmBox({ title: t("gp.runT", d.version), text: t(older ? "gp.runOlder" : "gp.runD"), okText: t("gp.runOk"),
+    ok: async () => { let r = null; try { r = await api.gpuRunInstaller(path); } catch (e) { r = { error: String(e) }; } toast(r && r.ok ? t("gp.ran") : (r && r.error) || t("tw.failed"), r && r.ok ? "rocket" : "alert", r && r.ok ? "" : "warn"); } });
+}
+$("#gpRefresh").addEventListener("click", () => { GP.sens = null; loadGpu(true); const c = gpCard(); if (c && c.vendor === "nvidia") loadNv(true); });
+
 /* Accent colours */
 const ACCENTS = {
   emerald: ["#0c9364", "#34d399", "#13a873", "#a7f3d0", "#06734d"],
@@ -6467,7 +7174,7 @@ function setupSwatches() {
 }
 
 /* Keyboard shortcuts */
-const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "ctxmenu", "tweaks", "sysinfo", "optimize", "network", "repair", "restore", "logs", "settings", "credits"];
+const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "ctxmenu", "tweaks", "sysinfo", "gpu", "optimize", "network", "repair", "restore", "logs", "settings", "credits"];
 document.addEventListener("keydown", e => {
   if ($("#veil").classList.contains("on") || $("#sveil").classList.contains("on")) return;
   if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K" || e.key === "p" || e.key === "P")) { e.preventDefault(); if ($("#palVeil").classList.contains("on")) palClose(); else palOpen(); return; }
@@ -7530,7 +8237,8 @@ $("#siRefresh").addEventListener("click", () => loadSysInfo(true));
    NETWORK: DNS servers, speed test, DNS cache
 ===================================================================== */
 const NET = { st: null, loading: false, busy: "", test: null, testing: false };
-const DNS_AV = { cloudflare: ["C", "#f38020"], google: ["G", "#4285f4"], quad9: ["9", "#d4145a"], adguard: ["A", "#47a35a"], opendns: ["O", "#e8a317"], "cloudflare-family": ["F", "#f38020"] };
+const DNS_REC = "cloudflare"; // the one the page recommends
+const DNS_AV = { cloudflare: ["C", "#f38020"], google: ["G", "#4285f4"], adguard: ["A", "#47a35a"], opendns: ["O", "#e8a317"], "cloudflare-family": ["F", "#f38020"] };
 async function loadNet(force) {
   if (NET.loading) return;
   if (NET.st && !force) { renderNet(); return; }
@@ -7573,7 +8281,7 @@ function renderNet() {
     const btn = NET.busy === p.id ? `<span class="spin" style="justify-self:end;margin-right:30px"></span>`
       : `<button class="btn small ${cur ? "" : "primary"}" data-dns="${esc(p.id)}" ${cur || NET.busy || !can ? "disabled" : ""}>${esc(t(cur ? "net.cur" : "net.use"))}</button>`;
     return `<div class="dns-row ${cur ? "cur" : ""}" data-dnsrow="${esc(p.id)}"><span class="dns-av" ${av ? `style="--av:${av[1]}"` : ""}>${av ? esc(av[0]) : ICONS.network}</span>
-      <div style="min-width:0"><div class="n">${esc(p.name)}${isBest ? `<span class="tw-b best">${esc(t("net.best"))}</span>` : ""}</div><div class="d">${esc(t(p.note))}</div>${p.v4 && p.v4.length ? `<div class="a">${esc(p.v4.join(", "))}</div>` : ""}</div>
+      <div style="min-width:0"><div class="n">${esc(p.name)}${p.id === DNS_REC ? `<span class="tw-b rec">${esc(t("net.rec"))}</span>` : ""}${isBest ? `<span class="tw-b best">${esc(t("net.best"))}</span>` : ""}</div><div class="d">${esc(t(p.note))}</div>${p.v4 && p.v4.length ? `<div class="a">${esc(p.v4.join(", "))}</div>` : ""}</div>
       ${ms}${btn}</div>`;
   }).join("");
   list.querySelectorAll("[data-dns]").forEach(b => b.addEventListener("click", () => dnsUse(b.dataset.dns)));
@@ -7586,6 +8294,12 @@ function renderNet() {
     nb.hidden = false;
     $("#netUseBest").addEventListener("click", () => dnsUse(bestP.id));
   } else if (!can && st.adapters.length && !(S.info && S.info.admin)) { nb.innerHTML = `<p>${esc(t("net.noadmin"))}</p>`; nb.hidden = false; }
+  else if (!NET.test && st.current !== DNS_REC && can) {
+    // before a test: the recommended one, Cloudflare (fast, private, everywhere)
+    nb.innerHTML = `<p><b>${esc(t("net.recT"))}</b> ${esc(t("net.recD"))}</p><button class="btn small primary" id="netUseRec">${esc(t("net.useBest", dnsName(DNS_REC)))}</button>`;
+    nb.hidden = false;
+    $("#netUseRec").addEventListener("click", () => dnsUse(DNS_REC));
+  }
   else nb.hidden = true;
 }
 async function netTest() {
@@ -7770,8 +8484,8 @@ on("auto-clean", d => {
    Command palette (Ctrl+K): every section, action, tweak and category
 ===================================================================== */
 const PAL = { items: [], idx: 0 };
-const PAGE_ICON = { home: "heart", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", ctxmenu: "menu", sysinfo: "board", network: "network", tweaks: "tweaks", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
-const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", ctxmenu: "cm.sub", sysinfo: "si.sub", network: "net.sub", tweaks: "tw.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
+const PAGE_ICON = { home: "heart", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", ctxmenu: "menu", sysinfo: "board", gpu: "gpu", network: "network", tweaks: "tweaks", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
+const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", ctxmenu: "cm.sub", sysinfo: "si.sub", gpu: "gp.sub", network: "net.sub", tweaks: "tw.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
 function palSources() {
   const items = [];
   PAGES.forEach((p, i) => items.push({ g: "pal.g.pages", icon: PAGE_ICON[p], title: t("nav." + p), sub: t(PAGE_SUB[p]), hint: i < 9 ? "Ctrl " + (i + 1) : "", kw: p, run: () => go(p) }));
@@ -9064,7 +9778,6 @@ const Mock = (() => {
   const DNSP = [
     { id: "cloudflare", name: "Cloudflare", v4: ["1.1.1.1", "1.0.0.1"], v6: ["2606:4700:4700::1111", "2606:4700:4700::1001"], note: "dns.n.cloudflare" },
     { id: "google", name: "Google", v4: ["8.8.8.8", "8.8.4.4"], v6: ["2001:4860:4860::8888", "2001:4860:4860::8844"], note: "dns.n.google" },
-    { id: "quad9", name: "Quad9", v4: ["9.9.9.9", "149.112.112.112"], v6: ["2620:fe::fe", "2620:fe::9"], note: "dns.n.quad9" },
     { id: "adguard", name: "AdGuard", v4: ["94.140.14.14", "94.140.15.15"], v6: ["2a10:50c0::ad1:ff", "2a10:50c0::ad2:ff"], note: "dns.n.adguard" },
     { id: "opendns", name: "OpenDNS", v4: ["208.67.222.222", "208.67.220.220"], v6: ["2620:119:35::35", "2620:119:53::53"], note: "dns.n.opendns" },
     { id: "cloudflare-family", name: "Cloudflare Family", v4: ["1.1.1.3", "1.0.0.3"], v6: ["2606:4700:4700::1113", "2606:4700:4700::1003"], note: "dns.n.family" },
@@ -9187,6 +9900,26 @@ const Mock = (() => {
     return { id, state: twOn[id] ? "on" : "off", applied: !!mockApplied[id] && !!twOn[id], reboot: id === "hags" && !!twOn[id] };
   };
   // ---- 2.5 demo data
+
+  const mockGpu = {
+    devices: [
+      { id: "PCI\\VEN_10DE&DEV_2484&SUBSYS_88701043&REV_A1\\4&1F7DBC9F&0&0008", name: scen === "amdgpu" ? "AMD Radeon RX 7800 XT" : "NVIDIA GeForce RTX 3070", vendor: scen === "amdgpu" ? "amd" : "nvidia",
+        venId: scen === "amdgpu" ? "1002" : "10DE", devId: scen === "amdgpu" ? "747E" : "2484", subsys: "88701043", problem: scen === "code43" ? 43 : 0, disabled: false, noDriver: false, vram: (scen === "amdgpu" ? 16 : 8) * GB, virtual: false,
+        driver: { inf: "oem45.inf", version: "32.0.15.6094", vendorVer: scen === "amdgpu" ? "" : "560.94", date: "2024-08-14", provider: scen === "amdgpu" ? "Advanced Micro Devices, Inc." : "NVIDIA", size: 1.42 * GB, inUse: true },
+        packages: [
+          { inf: "oem45.inf", version: "32.0.15.6094", vendorVer: "560.94", date: "2024-08-14", provider: "NVIDIA", size: 1.42 * GB, inUse: true },
+          { inf: "oem12.inf", version: "32.0.15.5612", vendorVer: "556.12", date: "2024-06-04", provider: "NVIDIA", size: 1.38 * GB, inUse: false },
+          { inf: "oem7.inf", version: "31.0.15.3623", vendorVer: "536.23", date: "2023-06-14", provider: "NVIDIA", size: 1.21 * GB, inUse: false },
+          { inf: "display.inf", version: "10.0.26100.1", date: "2006-06-21", provider: "Microsoft", size: 0, inUse: false, basic: true },
+        ] },
+      { id: "ROOT\\DISPLAY\\0000", name: "Parsec Virtual Display Adapter", vendor: "other", problem: 0, noDriver: false, vram: 0, virtual: true, driver: { inf: "oem3.inf", version: "0.45.0.0", provider: "Parsec Cloud, Inc." }, packages: [] },
+    ],
+    displays: [
+      { name: "\\\\.\\DISPLAY1", monitor: "VG27AQ", adapter: "NVIDIA GeForce RTX 3070", conn: "dp", primary: true, w: 2560, h: 1440, hz: 144, maxHz: 165, maxW: 2560, maxH: 1440, rates: [165, 144, 120, 100, 60, 59] },
+      { name: "\\\\.\\DISPLAY2", monitor: "24G2W1G4", adapter: "NVIDIA GeForce RTX 3070", conn: "hdmi", primary: false, w: 1920, h: 1080, hz: 60, maxHz: 144, maxW: 1920, maxH: 1080, rates: [144, 120, 100, 75, 60, 50] },
+    ],
+    hags: "off", wuDrivers: true, wuByUs: false, backups: [], admin: scen !== "noadmin", took: 420,
+  };
   const vit = { cpu: 14, mem: 65 }, lv = { cpu: 18, gpu: 24, temp: 54, rx: 1.4e6, tx: 2e5 };
   let findRun = "", findStop = false;
   const findRes = {};
@@ -9243,7 +9976,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "3.1.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "3.2.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -9457,6 +10190,85 @@ const Mock = (() => {
     diskRefresh: async p => { setTimeout(() => window.__ev("disk-done", { ok: true, refresh: true, path: p, progress: { files: 1200, dirs: 80, bytes: 3 * GB, denied: 0, ms: 300 } }), 500); return true; },
     diskDelete: async paths => paths.map(p => ({ path: p, ok: !p.includes("Windows"), error: p.includes("Windows") ? "Protected system item — the app does not delete it." : "" })),
     restartExplorer: async () => { await new Promise(r => setTimeout(r, 800)); return true; },
+
+    // ---- 3.2: the Graphics card page
+    gpuState: async () => { await new Promise(r => setTimeout(r, 450)); return JSON.parse(JSON.stringify(mockGpu)); },
+    gpuSensors: async () => {
+      const cl = (x, a, b) => Math.max(a, Math.min(b, x));
+      if (scen === "amdgpu") return { ok: true, src: "pdh", util: Math.round(lv.gpu), temp: 0, memUsed: 3.1 * GB, memTotal: 0, fan: -1, pstate: -1, enc: -1, dec: -1 };
+      lv.gpu = cl(lv.gpu + (Math.random() - .5) * 18, 0, 99); lv.temp = cl(lv.temp + (Math.random() - .5) * 2.5, 38, 79);
+      const u = Math.round(lv.gpu);
+      return { ok: true, src: "nvml", name: "NVIDIA GeForce RTX 3070", util: u, temp: Math.round(lv.temp), memUsed: (2.4 + u / 100 * 4) * GB, memTotal: 8 * GB,
+        power: 30 + u * 1.9, powerLimit: 220, fan: u > 30 ? 30 + Math.round(u / 3) : 0, clock: u > 10 ? 1890 + Math.round(Math.random() * 60) : 210, memClock: u > 10 ? 7000 : 405, maxClock: 2100, maxMemClock: 7001,
+        pstate: u > 30 ? 0 : u > 10 ? 2 : 8, limits: u > 85 ? ["power"] : u < 10 ? ["idle"] : [], pcieGen: u > 10 ? 4 : 1, pcieWidth: scen === "x8" ? 8 : 16, pcieMaxGen: 4, pcieMaxWidth: 16,
+        bar1: 256 * MB, rebar: "off", driver: mockGpu.devices[0].driver.vendorVer || "", vbios: "94.04.3A.00.8E", cuda: "12.6", slowTemp: 93, enc: 0, dec: u > 50 ? 4 : 0 };
+    },
+    gpuNvDrivers: async () => {
+      await new Promise(r => setTimeout(r, 600));
+      if (scen === "nvoff") return { card: "NVIDIA GeForce RTX 3070", error: "NVIDIA did not answer: no connection", drivers: [], at: Date.now() };
+      const vs = [["617.42", "2026-09-30"], ["611.10", "2026-08-03", 1], ["606.02", "2026-07-22"], ["600.22", "2026-06-17"], ["591.44", "2026-04-29"], ["588.12", "2026-03-31", 1], ["580.97", "2025-08-12"],
+        ["576.88", "2025-06-26"], ["572.83", "2025-03-18"], ["566.36", "2024-12-05"], ["560.94", "2024-08-14"], ["556.12", "2024-06-04"], ["552.22", "2024-04-16"]];
+      const inst = mockGpu.devices[0].driver.vendorVer;
+      return { card: "NVIDIA GeForce RTX 3070", product: "GeForce RTX 3070", psid: 120, pfid: 933, notebook: false, installed: inst, latest: "617.42", newer: inst ? +inst.replace(".", "") < 61742 : false, at: Date.now(),
+        drivers: vs.map(([v, d, st]) => ({ id: v, version: v, name: st ? "NVIDIA Studio Driver" : "GeForce Game Ready Driver", studio: !!st, date: d, size: (850 + Math.round(+v.replace(".", "") / 1000)) + " MB",
+          url: `https://us.download.nvidia.com/Windows/${v}/${v}-desktop-win10-win11-64bit-international-${st ? "nsd-" : ""}dch-whql.exe`, details: "https://www.nvidia.com/en-us/drivers/details/" + v.replace(".", "") + "/" })) };
+    },
+    gpuNvDownload: async u => {
+      const v = (/Windows\/([\d.]+)\//.exec(u) || [])[1] || "";
+      const total = 900 * MB; window.__gpCancel = false;
+      for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, q.get("fast") ? 60 : 250)); if (window.__gpCancel) return { error: "The download was stopped" }; window.__ev("gpu-dl", { done: total * i / 10, total, version: v }); }
+      window.__ev("gpu-dl", { done: total, total, version: v, checking: true }); await new Promise(r => setTimeout(r, 200));
+      return { ok: true, path: "C:\\Users\\demo\\Downloads\\NVIDIA driver " + v + ".exe", signer: "NVIDIA Corporation" };
+    },
+    gpuCancelDownload: async () => { window.__gpCancel = true; return true; },
+    gpuRunInstaller: async p => { window.__ranInstaller = p; return { ok: true }; },
+    gpuUseDriver: async o => {
+      const d = mockGpu.devices[0];
+      if (o.restorePoint) { window.__ev("gpu-step", { step: "rp", secs: 1 }); await new Promise(r => setTimeout(r, 300)); }
+      window.__ev("gpu-step", { step: "install", version: o.version }); await new Promise(r => setTimeout(r, q.get("fast") ? 200 : 1200));
+      const p = d.packages.find(x => x.inf === o.inf && x.version === o.version); if (!p) return { error: "This driver is no longer on the PC — refresh the page" };
+      d.packages.forEach(x => { x.inUse = x === p; }); d.driver = Object.assign({}, p, { inUse: true }); d.noDriver = false; window.__gpUsed = o;
+      return { ok: true, now: "NVIDIA " + p.vendorVer + " (" + p.version + ")" };
+    },
+    gpuDeletePackage: async inf => { const d = mockGpu.devices[0]; const p = d.packages.find(x => x.inf === inf); if (!p || p.inUse) return { error: "A graphics card uses this driver" }; d.packages = d.packages.filter(x => x !== p); return { ok: true }; },
+    gpuRemove: async o => {
+      const d = mockGpu.devices[0], wait = ms => new Promise(r => setTimeout(r, q.get("fast") ? 40 : ms));
+      window.__gpRemoved = o;
+      if (o.restorePoint) { window.__ev("gpu-step", { step: "rp", secs: 1 }); await wait(400); }
+      if (o.keep && !d.noDriver) { for (let i = 1; i <= 4; i++) { window.__ev("gpu-step", { step: "copy", done: d.driver.size * i / 4, total: d.driver.size }); await wait(250); }
+        mockGpu.backups.unshift({ dir: "C:\\Users\\demo\\AppData\\Local\\xKi4oCleaner\\drivers\\nvidia-" + d.driver.version, name: d.name, vendor: "nvidia", version: d.driver.version, vendorVer: d.driver.vendorVer, date: d.driver.date, inf: "nv_dispi.inf", size: d.driver.size, made: Date.now() }); }
+      const plan = d.packages.filter(p => !p.basic && (o.all ? true : p.inUse)), done = [];
+      for (let i = 0; i < plan.length; i++) { window.__ev("gpu-step", { step: "remove", n: i + 1, of: plan.length, version: plan[i].version }); await wait(400); done.push(plan[i].version); }
+      d.packages = d.packages.filter(p => !plan.includes(p));
+      const next = d.packages.find(p => !p.basic);
+      if (next) { next.inUse = true; d.driver = Object.assign({}, next, { inUse: true }); d.noDriver = false; }
+      else { d.driver = { inf: "display.inf", version: "10.0.26100.1", provider: "Microsoft", basic: true, size: 0 }; d.noDriver = true; d.packages.forEach(p => { p.inUse = !!p.basic; }); }
+      if (o.blockWU) { window.__ev("gpu-step", { step: "wu" }); mockGpu.wuDrivers = false; mockGpu.wuByUs = true; }
+      return { ok: true, reboot: true, done, backup: o.keep ? mockGpu.backups[0].dir : "", now: d.noDriver ? "Windows' basic driver (Microsoft Basic Display Adapter)" : "NVIDIA " + d.driver.vendorVer + " (" + d.driver.version + ")" };
+    },
+    gpuRestoreBackup: async (dir, rp) => {
+      const b = mockGpu.backups.find(x => x.dir === dir); if (!b) return { error: "The copy was not found" };
+      if (rp) { window.__ev("gpu-step", { step: "rp", secs: 1 }); await new Promise(r => setTimeout(r, 200)); }
+      window.__ev("gpu-step", { step: "install", version: b.version }); await new Promise(r => setTimeout(r, q.get("fast") ? 100 : 900));
+      const d = mockGpu.devices[0];
+      d.packages.forEach(p => { p.inUse = false; });
+      const p = { inf: "oem" + (60 + mockGpu.backups.length) + ".inf", version: b.version, vendorVer: b.vendorVer, date: b.date, provider: "NVIDIA", size: b.size, inUse: true };
+      d.packages.unshift(p); d.driver = Object.assign({}, p); d.noDriver = false;
+      return { ok: true, now: "NVIDIA " + b.vendorVer + " (" + b.version + ")" };
+    },
+    gpuDeleteBackup: async dir => { const n = mockGpu.backups.length; mockGpu.backups = mockGpu.backups.filter(b => b.dir !== dir); return mockGpu.backups.length < n; },
+    gpuWU: async allow => { if (allow) { mockGpu.wuDrivers = true; mockGpu.wuByUs = false; } else { mockGpu.wuDrivers = false; mockGpu.wuByUs = true; } return { ok: true }; },
+    gpuSetRefresh: async (name, hz) => {
+      const d = mockGpu.displays.find(x => x.name === name); if (!d) return { error: "The screen was not found" };
+      if (!d.rates.includes(hz)) return { error: "The screen does not support " + hz + " Hz at this resolution" };
+      clearTimeout(window.__gpRateT); const old = d.hz; d.hz = hz; window.__gpRate = { name, hz, old };
+      if (old !== hz) window.__gpRateT = setTimeout(() => { d.hz = old; window.__gpRate = null; window.__ev("gpu-refresh", { display: name, reverted: true, hz: old, ok: true }); }, q.get("fast") ? 1800 : 15000);
+      return { ok: true, seconds: q.get("fast") ? 2 : 15 };
+    },
+    gpuKeepRefresh: async name => { if (!window.__gpRate || window.__gpRate.name !== name) return false; clearTimeout(window.__gpRateT); window.__gpKept = window.__gpRate; window.__gpRate = null; return true; },
+    gpuOpenBackups: async () => true,
+    gpuOpenDetails: async u => { window.__notes = u; return true; },
+    restartPC: async () => { window.__restarted = true; return true; },
     // ---- 3.0: system information, network, right-click menu, automatic cleaning
     systemInfo: async () => {
       await new Promise(r => setTimeout(r, scen === "slowinfo" ? 4000 : 700));
@@ -9493,7 +10305,7 @@ const Mock = (() => {
     dnsRestore: async () => { await new Promise(r => setTimeout(r, 700)); mockNet.current = "auto"; mockNet.backup = false; mockNet.adapters.forEach(a => { a.static = false; a.provider = ""; a.dns = ["192.168.1.1"]; }); return { ok: true, state: JSON.parse(JSON.stringify(mockNet)) }; },
     dnsTest: async () => {
       await new Promise(r => setTimeout(r, 1600));
-      const ms = { "": 24, cloudflare: 9, google: 14, quad9: 31, adguard: 38, opendns: 22, "cloudflare-family": 11 };
+      const ms = { "": 24, cloudflare: 9, google: 14, adguard: 38, opendns: 22, "cloudflare-family": 11 };
       const res = [{ server: "192.168.1.1", id: "", ms: ms[""], lost: 0, of: 7 }].concat(DNSP.map(p => ({ server: p.v4[0], id: p.id, ms: p.id === "adguard" && scen === "dnsloss" ? -1 : ms[p.id], lost: p.id === "adguard" && scen === "dnsloss" ? 7 : p.id === "quad9" ? 1 : 0, of: 7 })));
       return res.sort((a, b) => (a.ms < 0) - (b.ms < 0) || a.ms - b.ms);
     },
@@ -9601,11 +10413,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "3.1.0", latest: nw ? "3.2.0" : "3.1.0", newer: nw, name: "xKi4o Cleaner 3.2.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.2.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "3.2.0", latest: nw ? "3.3.0" : "3.2.0", newer: nw, name: "xKi4o Cleaner 3.3.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.3.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders

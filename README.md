@@ -35,8 +35,9 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 | **Tweaker** | About 80 Windows tweaks and one-click presets (Essential, Gaming, Privacy, Ultimate); switching one off brings back exactly what you had |
 | **Memory and game mode** | Free RAM; close the programs you choose while you play and start them again after |
 | **Disks** | Disk Analyzer, disk health (S.M.A.R.T., what the errors mean and what helps), TRIM and defragmentation, duplicates, empty folders, broken shortcuts |
+| **Graphics card** | Live sensors (temperature, power, fans, clocks on NVIDIA), checks (refresh rate, PCIe lanes, Resizable BAR, HAGS), go back to an older driver or download one from NVIDIA, and remove the driver like DDU — with a copy to put it back |
 | **System info** | Processor, graphics card, memory sticks, motherboard, drives, monitors, security and battery — with tips (XMP, old drivers) and a report to copy |
-| **Network** | Switch DNS (Cloudflare, Google, Quad9, AdGuard…) after a speed test that shows the fastest for you; flush the DNS cache |
+| **Network** | Switch DNS (Cloudflare recommended, Google, AdGuard…) after a speed test that shows the fastest for you; flush the DNS cache |
 | **System** | Processes, startup apps, the right-click menu (hide what programs added), Windows repair (DISM, SFC, disk check) |
 | **Automatic cleaning** | Daily, weekly or monthly, with no window; open apps and sensitive categories are left out |
 | **Restore Center** | Puts back what the app changed; every operation has a step-by-step log |
@@ -47,6 +48,7 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 <img src="docs/screenshots/tweaker.png" width="430" alt="Tweaker">
 <img src="docs/screenshots/disk.png" width="430" alt="Disk Analyzer">
 <img src="docs/screenshots/sysinfo.png" width="430" alt="System info">
+<img src="docs/screenshots/gpu.png" width="430" alt="Graphics card">
 <img src="docs/screenshots/network.png" width="430" alt="Network and DNS">
 </p>
 
