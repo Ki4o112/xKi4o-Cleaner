@@ -1400,6 +1400,38 @@ body.dock-on .toasts { bottom: 84px; }
 .fade-y { -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 var(--ft, 0px), #000 calc(100% - var(--fb, 0px)), transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 var(--ft, 0px), #000 calc(100% - var(--fb, 0px)), transparent 100%); }
 .fade-x { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--fl, 0px), #000 calc(100% - var(--fr, 0px)), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 var(--fl, 0px), #000 calc(100% - var(--fr, 0px)), transparent 100%); }
 
+/* ================= 3.0: tweak presets */
+.tw-pre { margin-top: 16px; }
+.tw-pre-h { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 0 0 10px; }
+.tw-pre-h > span:first-child { display: inline-flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 700; }
+.tw-pre-h > span:first-child svg { width: 15px; height: 15px; color: var(--brand-c); }
+.tw-pre-h .d { color: var(--muted); font-size: 12px; }
+.tw-pre-g { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 1060px) { .tw-pre-g { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.tw-pc { --pc: var(--blue); --pc2: var(--brand-b); position: relative; display: flex; flex-direction: column; gap: 6px; text-align: left; padding: 14px 14px 12px; border-radius: var(--r-l); border: 1px solid rgba(255,255,255,.05); background: linear-gradient(160deg, color-mix(in srgb, var(--pc) 16%, var(--card)) 0%, var(--card) 62%); color: var(--text); cursor: pointer; overflow: hidden; transition: transform .25s var(--spring), border-color .2s, box-shadow .25s; min-width: 0; font: inherit; }
+.tw-pc:hover:not(:disabled) { transform: translateY(-2px); border-color: color-mix(in srgb, var(--pc) 45%, transparent); box-shadow: 0 16px 34px -20px var(--pc); }
+.tw-pc:active:not(:disabled) { transform: scale(.98); }
+.tw-pc:disabled { cursor: default; opacity: .7; }
+.tw-pc.gaming { --pc: #b47cff; --pc2: #ff5fa2; }
+.tw-pc.privacy { --pc: #3ee8b0; --pc2: #2a9dff; }
+.tw-pc.ultimate { --pc: #ffb547; --pc2: #ff6b7a; }
+.tw-pc .pi { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; color: #fff; background: linear-gradient(135deg, var(--pc), var(--pc2)); box-shadow: 0 8px 18px -10px var(--pc); }
+.tw-pc .pi svg { width: 17px; height: 17px; }
+.tw-pc .pn { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px; margin-top: 4px; }
+.tw-pc .pd { color: var(--muted); font-size: 11.5px; line-height: 1.4; flex: 1; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.tw-pc .pf { display: flex; flex-direction: column; gap: 5px; margin-top: 4px; font-size: 11.5px; color: var(--faint); }
+.tw-pc .pf .si-bar i { background: linear-gradient(90deg, var(--pc), var(--pc2)); }
+.tw-pc.done { border-color: color-mix(in srgb, var(--pc) 35%, transparent); }
+.tw-b.on { background: var(--mint-soft); color: var(--mint); }
+.pl-row { display: flex; gap: 10px; align-items: center; padding: 8px 4px; border-top: 1px solid var(--line-soft); font-size: 13px; }
+.pl-row:first-child { border-top: 0; }
+.pl-row .nm { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pl-row .er { color: #ffb3bc; font-size: 11.5px; }
+.pl-row.dim { opacity: .55; }
+.pl-row .spin { width: 14px; height: 14px; margin: 0 46px; flex: none; }
+.pl-row .tw-st { min-width: 106px; text-align: center; flex: none; }
+.pl-sec { font-size: 12px; font-weight: 700; color: var(--muted); margin: 14px 0 4px; }
+
 /* ================= 3.0: system information, network, right-click menu, automatic cleaning */
 .si-hero { display: flex; align-items: center; gap: 16px; padding: 18px 20px; border-radius: var(--r-l); background: linear-gradient(135deg, rgba(42,157,255,.15), rgba(180,124,255,.10) 55%, var(--card) 92%); border: 1px solid rgba(255,255,255,.05); margin-bottom: 14px; flex-wrap: wrap; }
 .si-hero .hi { width: 52px; height: 52px; border-radius: 16px; background: var(--brand); display: grid; place-items: center; color: #fff; flex: none; box-shadow: 0 12px 28px -12px rgba(42,157,255,.6); }
@@ -1763,6 +1795,7 @@ body.dock-on .toasts { bottom: 84px; }
         <div class="notice info" id="twExplorer" hidden><p data-i="tw.explorerNote"></p><button class="btn small" id="btnExplorer" data-i="tw.restartExplorer"></button></div>
         <div class="notice info" id="twReboot" hidden><p data-i="tw.rebootNote"></p></div>
         <div class="notice info" id="twAdmin" hidden><p data-i="tw.noadmin"></p></div>
+        <div class="tw-pre" id="twPresets" hidden></div>
         <div class="tw-tools">
           <label class="search"><span data-icon="search"></span><input id="twSearch" type="search" spellcheck="false" autocomplete="off" data-i-ph="tw.search"></label>
           <div class="seg" id="twFilter"></div>
@@ -2791,6 +2824,17 @@ bg: {
   "auto.listSub": "Само категории, които приложенията създават наново. Никога: кошчето, последните файлове, клипборда, стария Windows, драйверите.",
   "auto.onT": "Автоматично почистване: {0}", "auto.offT": "Автоматичното почистване е изключено", "pal.a.dnsFlush": "Изчисти DNS кеша", "pal.a.dnsTest": "Тествай скоростта на DNS",
   "pal.a.siCopy": "Копирай информацията за системата", "pal.a.auto": "Автоматично почистване",
+  "tp.title": "Пресети", "tp.sub": "Един клик включва подбрани туийкове. Изключват се поотделно или с „Върни всички“.", "tp.essential": "Основен",
+  "tp.essential.d": "Безопасната основа за всеки компютър: по-малко реклами и телеметрия, по-удобен Explorer.", "tp.gaming": "Игри",
+  "tp.gaming.d": "Повече FPS и по-малко прекъсвания: Game Mode, приоритет на игрите, без запис във фона.", "tp.privacy": "Поверителност",
+  "tp.privacy.d": "Най-малко данни към Microsoft: без телеметрия, реклами, Copilot, Recall и местоположение.", "tp.ultimate": "Максимален",
+  "tp.ultimate.d": "Всичко от другите три плюс по-бърз и изчистен интерфейс. Без рисковите туийкове.", "tp.done": "Приложен", "tp.count": "{0} от {1} включени",
+  "tp.applyT": "Пресет „{0}“", "tp.plan": "Ще се включат: {0}. Вече включени: {1}.", "tp.na": "Не са за този компютър: {0}.",
+  "tp.admin": "Без администраторски права се пропускат: {0}.", "tp.already": "Вече включени", "tp.st.todo": "Ще се включи",
+  "tp.rp": "Преди първата системна промяна се прави точка за възстановяване.", "tp.undo": "Всеки туийк се изключва поотделно, а всички наведнъж — с „Върни всички“.",
+  "tp.never": "Пресетите никога не пипат Windows Update, Defender, хибернацията и плановете за захранване и не трият приложения.", "tp.ok": "Включи {0}",
+  "tp.allOn": "Всичко от пресета вече е включено.", "tp.running": "Включва се {0} от {1}…", "tp.finish": "Готово", "tp.doneT": "Пресет „{0}“: включени {1}",
+  "tp.badT": "Пресет „{0}“: включени {1}, неуспешни {2}",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -3413,6 +3457,17 @@ en: {
   "auto.listSub": "Only categories the apps make again. Never: the Recycle Bin, recent files, the clipboard, old Windows, drivers.", "auto.onT": "Automatic cleaning: {0}",
   "auto.offT": "Automatic cleaning is off", "pal.a.dnsFlush": "Flush DNS cache", "pal.a.dnsTest": "Test DNS speed", "pal.a.siCopy": "Copy system information",
   "pal.a.auto": "Automatic cleaning",
+  "tp.title": "Presets", "tp.sub": "One click switches on a chosen set of tweaks. Switch them off one by one or with Undo all.", "tp.essential": "Essential",
+  "tp.essential.d": "The safe basics for any PC: fewer ads and less telemetry, a handier Explorer.", "tp.gaming": "Gaming",
+  "tp.gaming.d": "More FPS and fewer hiccups: Game Mode, priority for games, no background recording.", "tp.privacy": "Privacy",
+  "tp.privacy.d": "The least data to Microsoft: no telemetry, ads, Copilot, Recall or location.", "tp.ultimate": "Ultimate",
+  "tp.ultimate.d": "All of the other three plus a faster, cleaner interface. No risky tweaks.", "tp.done": "Applied", "tp.count": "{0} of {1} on", "tp.applyT": "Preset: {0}",
+  "tp.plan": "To switch on: {0}. Already on: {1}.", "tp.na": "Not for this PC: {0}.", "tp.admin": "Skipped without administrator rights: {0}.", "tp.already": "Already on",
+  "tp.st.todo": "To switch on", "tp.rp": "A restore point is made before the first system change.",
+  "tp.undo": "Each tweak can be switched off on its own, or all of them with Undo all.",
+  "tp.never": "Presets never touch Windows Update, Defender, hibernation or power plans, and never remove apps.", "tp.ok": "Switch on {0}",
+  "tp.allOn": "Everything in this preset is already on.", "tp.running": "Switching on {0} of {1}…", "tp.finish": "Done", "tp.doneT": "Preset {0}: {1} switched on",
+  "tp.badT": "Preset {0}: {1} switched on, {2} failed",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -4906,6 +4961,7 @@ const twIsOn = id => (TW.state[id] || {}).state === "on";
 const twMeta = id => TW.meta.find(m => m.id === id);
 
 async function loadTweaks(force) {
+  loadPresets();
   if (TW.loading || (TW.loaded && !force)) { renderTweaks(); return; }
   TW.loading = true;
   if (force) TW.err = {};
@@ -5033,6 +5089,7 @@ function paintTwSummary() {
   $("#twExplorer").hidden = !TW.explorer; $("#twReboot").hidden = !TW.reboot;
   $("#twAdmin").hidden = !S.info || !!S.info.admin;
   renderTwCatsCounts();
+  renderPresets();
 }
 // the tweaks of a group that this Windows has (the summary counts the same)
 function twAvail(list) { return TW.loaded ? list.filter(m => { const st = (TW.state[m.id] || {}).state; return st && st !== "na"; }) : list; }
@@ -5134,6 +5191,95 @@ $("#btnExplorer").addEventListener("click", async () => {
   try { await api.restartExplorer(); } catch (e) {}
   b.disabled = false; TW.explorer = false; paintTwSummary(); toast(t("tw.restartExplorer"), "refresh");
 });
+
+
+/* ---- Tweaker: presets (one click, a chosen set of tweaks switched on) ---- */
+const TWP = { list: [], loading: false, running: false };
+async function loadPresets() {
+  if (TWP.list.length || TWP.loading) return;
+  TWP.loading = true;
+  try { TWP.list = (await api.tweakPresets()) || []; } catch (e) { TWP.list = []; }
+  TWP.loading = false;
+  renderPresets();
+}
+function presetPlan(p) {
+  const admin = !!(S.info && S.info.admin);
+  const metas = p.ids.map(twMeta).filter(Boolean);
+  const avail = twAvail(metas);
+  const on = avail.filter(m => twIsOn(m.id));
+  const off = avail.filter(m => !twIsOn(m.id));
+  return { metas, avail, on, todo: off.filter(m => admin || !m.sys), admin: admin ? [] : off.filter(m => m.sys), na: metas.length - avail.length };
+}
+function renderPresets() {
+  const el = $("#twPresets"); if (!el) return;
+  if (!TWP.list.length) { el.hidden = true; return; }
+  el.hidden = false;
+  el.innerHTML = `<div class="tw-pre-h"><span>${ICONS.sparkle}${esc(t("tp.title"))}</span><span class="d">${esc(t("tp.sub"))}</span></div><div class="tw-pre-g">` + TWP.list.map(p => {
+    const pl = presetPlan(p), done = TW.loaded && pl.avail.length > 0 && pl.on.length === pl.avail.length;
+    const pct = pl.avail.length ? Math.round(pl.on.length / pl.avail.length * 100) : 0;
+    return `<button class="tw-pc ${esc(p.id)} ${done ? "done" : ""}" data-preset="${esc(p.id)}" ${TW.busy || TWP.running || !TW.loaded ? "disabled" : ""}>
+      <span class="pi">${ICONS[p.icon] || ICONS.tweaks}</span>
+      <span class="pn">${esc(t("tp." + p.id))}${done ? `<span class="tw-b on">${esc(t("tp.done"))}</span>` : ""}</span>
+      <span class="pd">${esc(t("tp." + p.id + ".d"))}</span>
+      <span class="pf"><span>${TW.loaded ? esc(t("tp.count", pl.on.length, pl.avail.length)) : "…"}</span><span class="si-bar"><i style="width:${pct}%"></i></span></span>
+    </button>`;
+  }).join("") + `</div>`;
+  el.querySelectorAll("[data-preset]").forEach(b => b.addEventListener("click", () => openPreset(b.dataset.preset)));
+}
+function presetBadges(m) {
+  const b = [];
+  if (m.risk === "caution") b.push(`<span class="tw-b caution">${esc(t("tw.b.caution"))}</span>`);
+  if (m.reboot) b.push(`<span class="tw-b">${esc(t("tw.b.reboot"))}</span>`);
+  if (m.explorer) b.push(`<span class="tw-b">${esc(t("tw.b.explorer"))}</span>`);
+  return b.join("");
+}
+function openPreset(id) {
+  const p = TWP.list.find(x => x.id === id); if (!p || TW.busy || TWP.running || !TW.loaded) return;
+  const pl = presetPlan(p), name = t("tp." + p.id);
+  const sys = pl.todo.some(m => m.sys);
+  let body = `<div class="sh-note">${esc(t("tp.plan", pl.todo.length, pl.on.length))}${pl.na ? " " + esc(t("tp.na", pl.na)) : ""}${pl.admin.length ? " " + esc(t("tp.admin", pl.admin.length)) : ""}</div>`;
+  body += pl.todo.length ? `<div id="tpRows">${pl.todo.map(m => `<div class="pl-row" data-tp="${esc(m.id)}"><span class="tw-st off" data-tpst>${esc(t("tp.st.todo"))}</span><span class="nm">${esc(twName(m.id))}</span>${presetBadges(m)}</div>`).join("")}</div>` : `<div class="sh-empty">${esc(t("tp.allOn"))}</div>`;
+  if (pl.on.length) body += `<div class="pl-sec">${esc(t("tp.already"))}</div>` + pl.on.map(m => `<div class="pl-row dim"><span class="tw-st on">${esc(t("tw.st.on"))}</span><span class="nm">${esc(twName(m.id))}</span></div>`).join("");
+  body += `<div class="sh-note">${esc([sys && S.settings.restorePoint ? t("tp.rp") : "", t("tp.undo"), t("tp.never")].filter(Boolean).join(" "))}</div>`;
+  openSheet({ title: t("tp.applyT", name), sub: t("tp." + p.id + ".d"), body,
+    foot: `<span class="grow" id="tpSum"></span><button class="btn" id="tpCancel">${esc(t("modal.cancel"))}</button>` + (pl.todo.length ? `<button class="btn primary" id="tpOk">${esc(t("tp.ok", pl.todo.length))}</button>` : "") });
+  $("#tpCancel").addEventListener("click", () => closeSheet(true));
+  if (pl.todo.length) $("#tpOk").addEventListener("click", () => applyPreset(p, pl.todo.map(m => m.id)));
+}
+async function applyPreset(p, ids) {
+  if (TWP.running) return;
+  TWP.running = true;
+  const ok = $("#tpOk"), cancel = $("#tpCancel"), name = t("tp." + p.id);
+  ok.disabled = cancel.disabled = true; $("#shX").disabled = true;
+  renderPresets();
+  let good = 0, bad = 0;
+  for (let i = 0; i < ids.length; i++) {
+    const id = ids[i], row = document.querySelector(`#tpRows [data-tp="${id}"]`);
+    ok.innerHTML = `<span class="spin"></span><span>${esc(t("tp.running", i + 1, ids.length))}</span>`;
+    if (row) { row.querySelector("[data-tpst]").outerHTML = `<span class="spin" data-tpst></span>`; row.scrollIntoView({ block: "nearest" }); }
+    let r = null;
+    for (let tries = 0; tries < 50 && !r; tries++) {   // a tweak switched by hand meanwhile: wait for it
+      r = await runTweak(id, true, { source: "preset", preset: p.id }, true);
+      if (!r) await new Promise(res => setTimeout(res, 200));
+    }
+    const done = !!(r && r.ok);
+    if (done) good++; else bad++;
+    if (row) {
+      row.querySelector("[data-tpst]").outerHTML = done ? `<span class="tw-st ${r.reboot ? "reboot" : "on"}" data-tpst>${esc(t(r.reboot ? "tw.st.reboot" : "tw.st.on"))}</span>`
+        : `<span class="tw-st err" data-tpst>${esc(t("tw.st.err"))}</span>`;
+      if (!done) row.insertAdjacentHTML("beforeend", `<span class="er">${esc((r && r.error) || t("tw.failed"))}</span>`);
+    }
+  }
+  TWP.running = false;
+  $("#shX").disabled = false;
+  cancel.remove();
+  ok.disabled = false; ok.textContent = t("tp.finish");
+  ok.replaceWith(ok.cloneNode(true));
+  const fin = $("#tpOk"); if (fin) fin.addEventListener("click", () => closeSheet(false));
+  const sum = $("#tpSum"); if (sum) sum.textContent = bad ? t("tp.badT", name, good, bad) : t("tp.doneT", name, good);
+  toast(bad ? t("tp.badT", name, good, bad) : t("tp.doneT", name, good), bad ? "alert" : "check", bad ? "warn" : "");
+  renderTweaks(); paintTwSummary(); refreshTwTools();
+}
 
 /* ---- Tweaker: verified states, history, undo, profiles ---- */
 function twStatus(st) {
@@ -6965,6 +7111,11 @@ function siMemType(v) {
   const sp = Math.max(0, ...r.map(m => m.cfg || m.mhz || 0));
   return { r, total, types, sp };
 }
+// a self-built PC reports the board as the PC too: said once is enough
+function siSamePC(b) {
+  const pc = [b.pcMaker, b.pcModel].filter(Boolean).join(" ").trim().toLowerCase(), mb = [b.maker, b.model].filter(Boolean).join(" ").trim().toLowerCase();
+  return !pc || pc === mb;
+}
 function siPCName(v) {
   const b = v.board;
   const pc = [b.pcMaker, b.pcModel].filter(Boolean).join(" ").trim();
@@ -7032,7 +7183,7 @@ function renderSysInfo() {
   const b = v.board;
   cards.push(siCard("board", t("si.board"), siKV([
     [t("si.k.board"), [b.maker, b.model].filter(Boolean).join(" ")],
-    [t("si.k.pc"), [b.pcMaker, b.pcModel].filter(Boolean).join(" ") + (b.laptop ? " · " + t("si.laptop") : "")],
+    [t("si.k.pc"), siSamePC(b) ? (b.laptop ? t("si.laptop") : "") : [b.pcMaker, b.pcModel].filter(Boolean).join(" ") + (b.laptop ? " · " + t("si.laptop") : "")],
     [t("si.k.bios"), [b.biosMaker, b.bios, siDate(b.biosDate) ? "(" + siDate(b.biosDate) + ")" : ""].filter(Boolean).join(" ")],
     [t("si.k.fw"), v.security.firmware || ""],
   ])));
@@ -7087,7 +7238,7 @@ function sysInfoReport() {
   L2.push(t("si.r.title"), "");
   L2.push(`Windows: ${[os.name, os.ver, os.build ? os.build + (os.ubr ? "." + os.ubr : "") : "", os.arch].filter(Boolean).join(", ")}`);
   L2.push(`${t("si.k.pc")}: ${siPCName(v)}`);
-  if (v.board.maker || v.board.model) L2.push(`${t("si.k.board")}: ${[v.board.maker, v.board.model].filter(Boolean).join(" ")}`);
+  if ((v.board.maker || v.board.model) && !siSamePC(v.board)) L2.push(`${t("si.k.board")}: ${[v.board.maker, v.board.model].filter(Boolean).join(" ")}`);
   if (v.board.bios) L2.push(`BIOS: ${[v.board.biosMaker, v.board.bios, siDate(v.board.biosDate)].filter(Boolean).join(" ")}${v.security.firmware ? " (" + v.security.firmware + ")" : ""}`);
   v.cpu.forEach(c => L2.push(`${t("si.cpu")}: ${c.name}${c.cores ? ` — ${c.cores}/${c.threads}` : ""}${c.mhz ? ", " + siClock(c.mhz) : ""}`));
   v.gpu.filter(g => !g.virtual).forEach(g => L2.push(`${t("si.gpu")}: ${g.name}${g.ram > 0 ? ", " + siGB(g.ram) : ""}${g.driver ? ", " + t("si.k.driver").toLowerCase() + " " + g.driver + (siDate(g.date) ? " (" + siDate(g.date) + ")" : "") : ""}${g.w ? `, ${g.w}×${g.h}${g.hz > 1 ? " " + g.hz + " Hz" : ""}` : ""}`));
@@ -8631,7 +8782,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "3.0.0", author: "xKi4o", admin: scen !== "noadmin", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "3.0.1", author: "xKi4o", admin: scen !== "noadmin", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -8771,6 +8922,12 @@ const Mock = (() => {
     },
     createRestorePoint: async () => { later(900, () => window.__ev("rp-done", { ok: true })); return true; },
     openSystemRestore: async () => true, openLink: async () => true,
+    tweakPresets: async () => [
+      { id: "essential", icon: "shield", ids: ["telemetry-off", "activity-off", "consumer-off", "start-recs-off", "settings-ads-off", "bing-off", "lockscreen-tips-off", "appcompat-off", "ceip-off", "explorer-ads-off", "edge-shortcut-off", "file-ext", "end-task", "sticky-keys-off", "autoplay-off", "copy-details", "menu-delay", "shutdown-fast", "game-mode"] },
+      { id: "gaming", icon: "gamepad", ids: ["game-mode", "gamebar-off", "hags", "windowed-opt", "games-priority", "mouse-accel-off", "nvidia-opt", "ducking-off", "win32-priority", "bg-apps-off", "startup-delay-off", "menu-delay", "search-low-priority", "net-throttle-off", "sticky-keys-off", "shutdown-fast", "edge-bg-off"] },
+      { id: "privacy", icon: "lock", ids: ["telemetry-off", "activity-off", "consumer-off", "location-off", "copilot-off", "recall-off", "start-recs-off", "settings-ads-off", "bing-off", "lockscreen-tips-off", "appcompat-off", "ceip-off", "typing-insights-off", "spotlight-off", "explorer-ads-off", "wifi-sense-off", "recent-files-off", "edge-shortcut-off", "edge-bg-off"] },
+      { id: "ultimate", icon: "bolt", ids: ["telemetry-off", "activity-off", "consumer-off", "start-recs-off", "settings-ads-off", "bing-off", "lockscreen-tips-off", "appcompat-off", "ceip-off", "explorer-ads-off", "edge-shortcut-off", "file-ext", "end-task", "sticky-keys-off", "autoplay-off", "copy-details", "menu-delay", "shutdown-fast", "game-mode", "gamebar-off", "hags", "windowed-opt", "games-priority", "mouse-accel-off", "nvidia-opt", "ducking-off", "win32-priority", "bg-apps-off", "startup-delay-off", "search-low-priority", "net-throttle-off", "edge-bg-off", "location-off", "copilot-off", "recall-off", "typing-insights-off", "spotlight-off", "wifi-sense-off", "recent-files-off", "animations-off", "transparency-off", "folder-discovery-off", "home-gallery-off", "store-openwith-off", "multi-select-menu", "full-path-title", "logon-blur-off", "detailed-bsod", "verbose-status", "long-paths", "shortcut-suffix-off"] },
+    ],
     tweakList: async () => TWM.map(([id, group, f]) => ({ id, group, new: f.includes("n"), rec: f.includes("r"), risk: f.includes("!") ? "risky" : f.includes("c") ? "caution" : "",
       reboot: f.includes("b"), explorer: f.includes("e"), oneWay: f.includes("o"), sys: f.includes("s") })),
     tweakStates: async () => {
@@ -8779,7 +8936,7 @@ const Mock = (() => {
       return TWM.map(([id]) => slow.has(id) ? { id, state: "pending" } : twState(id));
     },
     setTweak: async (id, on, o) => {
-      await new Promise(r => setTimeout(r, id === "debloat" ? 1600 : 650));
+      await new Promise(r => setTimeout(r, id === "debloat" ? 1600 : q.get("fast") ? 40 : 650));
       const m = TWM.find(x => x[0] === id), f = m ? m[2] : "";
       if (id === "ultimate-power" && on && scen === "fail") return { ok: false, error: "This PC does not support the Ultimate Performance plan.", state: twState(id) };
       if (!on && !mockApplied[id] && !o.useDefaults && !f.includes("o")) return { ok: false, noBackup: true, state: twState(id) };
@@ -8973,11 +9130,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "3.0.0", latest: nw ? "3.1.0" : "3.0.0", newer: nw, name: "xKi4o Cleaner 3.1.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.1.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "3.0.1", latest: nw ? "3.1.0" : "3.0.1", newer: nw, name: "xKi4o Cleaner 3.1.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.1.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders

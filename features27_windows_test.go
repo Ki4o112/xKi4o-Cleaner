@@ -3,6 +3,8 @@
 package main
 
 import (
+	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -301,24 +303,75 @@ func TestBrokenScanTwinFolders(t *testing.T) {
 	}
 }
 
+// shellSaveLink makes a shortcut the way programs do, through Windows
+// itself (IShellLink.SetPath + IPersistFile.Save).
+func shellSaveLink(lnk, target string) error {
+	pl, _ := windows.UTF16PtrFromString(lnk)
+	pt, _ := windows.UTF16PtrFromString(target)
+	err := errors.New("COM")
+	withCOM(func() {
+		var psl uintptr
+		if r, _, _ := procCoCreateInstance.Call(uintptr(unsafe.Pointer(&clsidShellLink)), 0, 1, uintptr(unsafe.Pointer(&iidShellLinkW)), uintptr(unsafe.Pointer(&psl))); r != 0 || psl == 0 {
+			err = fmt.Errorf("CoCreateInstance %#x", uint32(r))
+			return
+		}
+		defer comCall(psl, 2)
+		if r := comCall(psl, 20, uintptr(unsafe.Pointer(pt))); r != 0 { // SetPath
+			err = fmt.Errorf("SetPath %#x", uint32(r))
+			return
+		}
+		var ppf uintptr
+		if r := comCall(psl, 0, uintptr(unsafe.Pointer(&iidPersistFile)), uintptr(unsafe.Pointer(&ppf))); r != 0 || ppf == 0 {
+			err = fmt.Errorf("QueryInterface %#x", uint32(r))
+			return
+		}
+		defer comCall(ppf, 2)
+		if r := comCall(ppf, 6, uintptr(unsafe.Pointer(pl)), 1); r != 0 { // Save
+			err = fmt.Errorf("Save %#x", uint32(r))
+			return
+		}
+		err = nil
+	})
+	return err
+}
+
 // Windows' own answer for a shortcut: one that works resolves to its
-// target, one whose target is gone does not. Temporary files only.
+// target, one whose program was removed does not. The shortcuts are made
+// by Windows itself, as installers make them (and, where it can read it,
+// the app's own minimal one). Temporary files only.
 func TestShellResolve(t *testing.T) {
 	dir := t.TempDir()
 	target := filepath.Join(dir, "app.exe")
 	mk(t, target, 10, 0)
 	ok := filepath.Join(dir, "ok.lnk")
-	makeLnk(t, ok, target)
-	if got, works := shellResolve(ok, 1500*time.Millisecond); !works || !strings.EqualFold(got, target) {
-		t.Errorf("a working shortcut: %q %v", got, works)
+	if err := shellSaveLink(ok, target); err != nil {
+		t.Logf("Windows could not make a shortcut (%v): the app's own one is used", err)
+		makeLnk(t, ok, target)
 	}
+	if got, works, why := shellResolveWhy(ok, 1500*time.Millisecond); !works || !strings.EqualFold(got, target) {
+		t.Errorf("a working shortcut: %q %v (%s)", got, works, why)
+	}
+	// the app's own minimal shortcut (the parser tests use it)
+	own := filepath.Join(dir, "own.lnk")
+	makeLnk(t, own, target)
+	got, works, why := shellResolveWhy(own, 1500*time.Millisecond)
+	t.Logf("the minimal shortcut: %q %v %s", got, works, why)
+	// a program that was removed: its file is gone, the shortcut stays
 	gone := filepath.Join(dir, "gone.lnk")
-	makeLnk(t, gone, filepath.Join(dir, "sub", "missing-xki4o-test.exe"))
-	start := time.Now()
-	if got, works := shellResolve(gone, 1500*time.Millisecond); works {
-		t.Errorf("a broken shortcut resolved to %q", got)
+	victim := filepath.Join(dir, "sub", "removed-xki4o-test.exe")
+	mk(t, victim, 10, 0)
+	if err := shellSaveLink(gone, victim); err != nil {
+		makeLnk(t, gone, victim)
 	}
-	t.Logf("broken shortcut checked in %v", time.Since(start).Round(time.Millisecond))
+	if err := os.RemoveAll(filepath.Dir(victim)); err != nil {
+		t.Fatal(err)
+	}
+	start := time.Now()
+	if got, works, why := shellResolveWhy(gone, 1500*time.Millisecond); works {
+		t.Errorf("a broken shortcut resolved to %q (%s)", got, why)
+	} else {
+		t.Logf("broken shortcut checked in %v (%s)", time.Since(start).Round(time.Millisecond), why)
+	}
 	if _, works := shellResolve(filepath.Join(dir, "no-such.lnk"), time.Second); works {
 		t.Error("a missing shortcut file")
 	}

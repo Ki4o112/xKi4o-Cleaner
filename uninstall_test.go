@@ -121,8 +121,11 @@ func makeLnk(t *testing.T, path, target string) {
 	for i, c := range u {
 		binary.LittleEndian.PutUint16(uni[2*i:], c)
 	}
-	vol := make([]byte, 0x14)
+	vol := make([]byte, 0x14) // a fixed drive with an empty label, as Windows writes it
 	binary.LittleEndian.PutUint32(vol, 0x14)
+	binary.LittleEndian.PutUint32(vol[4:], 3)
+	binary.LittleEndian.PutUint32(vol[8:], 0x1234ABCD)
+	binary.LittleEndian.PutUint32(vol[12:], 0x10)
 	const hsize = 0x24
 	volOff := hsize
 	ansiOff := volOff + len(vol)

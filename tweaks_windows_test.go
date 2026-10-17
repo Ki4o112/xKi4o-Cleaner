@@ -335,3 +335,59 @@ func TestServiceRead(t *testing.T) {
 		t.Skip("none of the probe services exist here")
 	}
 }
+
+// The presets: every tweak exists, none is on the never list, none is risky,
+// one-way or removes something; a caution tweak only where it is meant to
+// be. Ultimate holds all the others.
+func TestTweakPresets(t *testing.T) {
+	buildTweaks()
+	by := map[string]*tweak{}
+	for _, tw := range tweaks {
+		by[tw.id] = tw
+	}
+	allowedCaution := map[string]bool{"gamebar-off": true}
+	ps := tweakPresets()
+	if len(ps) != 4 {
+		t.Fatalf("%d presets", len(ps))
+	}
+	seen := map[string]bool{}
+	var ult tweakPreset
+	for _, p := range ps {
+		if seen[p.ID] || p.Icon == "" || len(p.IDs) < 8 {
+			t.Errorf("preset %+v", p)
+		}
+		seen[p.ID] = true
+		if p.ID == "ultimate" {
+			ult = p
+		}
+		dup := map[string]bool{}
+		for _, id := range p.IDs {
+			tw := by[id]
+			switch {
+			case tw == nil:
+				t.Errorf("%s: no tweak %q", p.ID, id)
+				continue
+			case dup[id]:
+				t.Errorf("%s: %s twice", p.ID, id)
+			case presetNever[id]:
+				t.Errorf("%s: %s is never in a preset", p.ID, id)
+			case tw.risk == "risky", tw.oneWay, tw.risk == "caution" && !allowedCaution[id]:
+				t.Errorf("%s: %s (risk %q, one way %v) must not be in a preset", p.ID, id, tw.risk, tw.oneWay)
+			case tw.group == "look" && id != "transparency-off" && id != "logon-blur-off" && id != "end-task":
+				t.Errorf("%s: %s is a matter of taste", p.ID, id)
+			}
+			dup[id] = true
+		}
+	}
+	in := map[string]bool{}
+	for _, id := range ult.IDs {
+		in[id] = true
+	}
+	for _, p := range ps {
+		for _, id := range p.IDs {
+			if !in[id] {
+				t.Errorf("ultimate lacks %s (from %s)", id, p.ID)
+			}
+		}
+	}
+}

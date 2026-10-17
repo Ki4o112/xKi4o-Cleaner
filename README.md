@@ -32,7 +32,7 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 | **PC health** | One score, what lowers it, and one button that does what is recommended |
 | **Cleanup** | Caches and temporary files of Windows, browsers, games and apps — the size of each before you clean |
 | **Programs** | Uninstall with a scan for leftovers (like Revo), remove Store apps, update programs with winget |
-| **Tweaker** | About 80 Windows tweaks, the newest marked *New*; switching one off brings back exactly what you had |
+| **Tweaker** | About 80 Windows tweaks and one-click presets (Essential, Gaming, Privacy, Ultimate); switching one off brings back exactly what you had |
 | **Memory and game mode** | Free RAM; close the programs you choose while you play and start them again after |
 | **Disks** | Disk Analyzer, disk health (S.M.A.R.T., what the errors mean and what helps), TRIM and defragmentation, duplicates, empty folders, broken shortcuts |
 | **System info** | Processor, graphics card, memory sticks, motherboard, drives, monitors, security and battery — with tips (XMP, old drivers) and a report to copy |
@@ -105,7 +105,7 @@ Made by **xKi4o**. Built with [go-webview2](https://github.com/jchv/go-webview2)
 
 **Как се пуска:** свали **xKi4oCleaner.exe** от [последната версия](../../releases/latest), пусни го и разреши администраторските права. Ако SmartScreen каже *„Windows защити компютъра ви“*, натисни **Още информация → Изпълни въпреки това**.
 
-**Какво може:** здраве на компютъра с една оценка, почистване на кеш и временни файлове (и автоматично по график), деинсталиране с остатъци, обновяване на програми, около 80 туийка с връщане назад, освобождаване на RAM, режим „Игри“, анализ и здраве на дисковете, дубликати, празни папки, информация за системата, смяна на DNS с тест на скоростта, контекстното меню, процеси, стартиращи програми, поправка на Windows и център за възстановяване.
+**Какво може:** здраве на компютъра с една оценка, почистване на кеш и временни файлове (и автоматично по график), деинсталиране с остатъци, обновяване на програми, около 80 туийка с връщане назад и пресети (Игри, Поверителност…), освобождаване на RAM, режим „Игри“, анализ и здраве на дисковете, дубликати, празни папки, информация за системата, смяна на DNS с тест на скоростта, контекстното меню, процеси, стартиращи програми, поправка на Windows и център за възстановяване.
 
 **Безопасно ли е:** трие само кеш и временни данни. Лични файлове, история, пароли и запазени игри не се пипат. Избраните от теб файлове отиват в кошчето. Windows Update, Defender, хибернацията, плановете за захранване и стартиращите програми се променят само ако ти ги превключиш.
 

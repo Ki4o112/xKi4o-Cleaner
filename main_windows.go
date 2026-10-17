@@ -185,6 +185,7 @@ func main() {
 		"diskPickFolder":     diskPickFolder,
 		"tweakList":          tweakList,
 		"tweakStates":        tweakStates,
+		"tweakPresets":       tweakPresets,
 		"setTweak":           setTweak,
 		"debloatApps":        debloatApps,
 		"tweakHistory":       tweakHistory,

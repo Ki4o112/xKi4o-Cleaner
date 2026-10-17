@@ -85,3 +85,32 @@ func TestTweaksHaveTexts(t *testing.T) {
 		}
 	}
 }
+
+// The page's demo has the same presets as the app (so what the tests and
+// the screenshots show is what the app does).
+func TestPresetsMatchThePage(t *testing.T) {
+	page, err := os.ReadFile(filepath.Join("ui", "app.html"))
+	if err != nil {
+		t.Skip("the source files are not here")
+	}
+	s := string(page)
+	i := strings.Index(s, "tweakPresets: async () => [")
+	if i < 0 {
+		t.Fatal("no tweakPresets in the page's demo")
+	}
+	block := s[i : i+strings.Index(s[i:], "\n    ],")]
+	re := regexp.MustCompile(`\{ id: "([a-z]+)", icon: "([a-z]+)", ids: \[([^\]]*)\] \}`)
+	got := map[string]string{}
+	for _, m := range re.FindAllStringSubmatch(block, -1) {
+		ids := strings.ReplaceAll(strings.ReplaceAll(m[3], `"`, ""), " ", "")
+		got[m[1]] = m[2] + ":" + ids
+	}
+	for _, p := range tweakPresets() {
+		if want := p.Icon + ":" + strings.Join(p.IDs, ","); got[p.ID] != want {
+			t.Errorf("preset %s:\n page %s\n app  %s", p.ID, got[p.ID], want)
+		}
+	}
+	if len(got) != len(tweakPresets()) {
+		t.Errorf("%d presets in the page", len(got))
+	}
+}

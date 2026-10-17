@@ -3,6 +3,16 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 3.0.1 — 2026-10-17
+
+### English
+- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate
+- Fixed the motherboard shown twice in System info on self-built PCs
+
+### Български
+- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален
+- Поправено: дънната платка се показваше два пъти в „Информация“ при сглобени компютри
+
 ## 3.0.0 — 2026-10-17
 
 ### English
