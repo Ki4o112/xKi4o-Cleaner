@@ -29,7 +29,7 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 
 | | |
 | --- | --- |
-| **PC health** | One score, what lowers it, and one button that does what is recommended |
+| **PC health** | A live dashboard — processor, graphics card (temperature and video memory on NVIDIA), memory, system drive and network — with one score, what lowers it, and one button for what is recommended |
 | **Cleanup** | Caches and temporary files of Windows, browsers, games and apps — the size of each before you clean |
 | **Programs** | Uninstall with a scan for leftovers (like Revo), remove Store apps, update programs with winget |
 | **Tweaker** | About 80 Windows tweaks and one-click presets (Essential, Gaming, Privacy, Ultimate); switching one off brings back exactly what you had |
@@ -66,6 +66,8 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 
 **Does automatic cleaning need the app open?** No. Windows' Task Scheduler starts it at the chosen time. Turn it off in Settings before you delete the app.
 
+**Can I have the old blue look back?** Yes — Settings → Theme → Ocean. The accent colour is chosen right below it.
+
 **How do I undo something?** Switch the tweak off, or open the Restore Center: tweaks, startup changes, deleted files and registry backups are all there.
 
 ## Build from source
@@ -90,7 +92,7 @@ GOOS=windows GOARCH=amd64 go build -trimpath -ldflags "-s -w -H windowsgui" -o x
 
 ## Credits
 
-Made by **xKi4o**. Built with [go-webview2](https://github.com/jchv/go-webview2), [Go](https://go.dev) and the [Montserrat](https://github.com/JulietaUla/Montserrat) font. The cleaning rules were checked against [BleachBit](https://www.bleachbit.org) and [Winapp2](https://github.com/MoscaDotTo/Winapp2), RAM cleaning follows [Mem Reduct](https://github.com/henrypp/memreduct), and the Tweaker follows the lists of [Sparkle](https://github.com/Parcoil/Sparkle), [WinUtil](https://github.com/ChrisTitusTech/winutil) and the [ReviOS playbook](https://github.com/meetrevision/playbook) — everything was written anew. Licenses of the components are in `third_party/` and on the app's Credits page.
+Made by **xKi4o**. Built with [go-webview2](https://github.com/jchv/go-webview2), [Go](https://go.dev) and the [Inter](https://github.com/rsms/inter) font. The cleaning rules were checked against [BleachBit](https://www.bleachbit.org) and [Winapp2](https://github.com/MoscaDotTo/Winapp2), RAM cleaning follows [Mem Reduct](https://github.com/henrypp/memreduct), and the Tweaker follows the lists of [Sparkle](https://github.com/Parcoil/Sparkle), [WinUtil](https://github.com/ChrisTitusTech/winutil) and the [ReviOS playbook](https://github.com/meetrevision/playbook) — everything was written anew. Licenses of the components are in `third_party/` and on the app's Credits page.
 
 ## License
 

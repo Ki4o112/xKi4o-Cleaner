@@ -315,3 +315,40 @@ func TestPageSaveKeepsBackendSettings(t *testing.T) {
 		t.Errorf("the page's own setting was not saved: %v", m["lang"])
 	}
 }
+
+// The dashboard's live numbers: two readings a second apart. Only reads
+// (NVIDIA's library and Windows' counters, when they are there).
+func TestLiveStats(t *testing.T) {
+	initPaths()
+	a := liveStats()
+	time.Sleep(1200 * time.Millisecond)
+	b := liveStats()
+	t.Logf("cpu %.1f%%, memory %d%% (%d of %d MB)", b.CPU, b.MemLoad, b.MemUsed>>20, b.MemTotal>>20)
+	t.Logf("gpu %+v", b.GPU)
+	t.Logf("net %+v (first reading %+v)", b.Net, a.Net)
+	if b.CPU < 0 || b.CPU > 100 || b.MemTotal == 0 || b.MemLoad > 100 {
+		t.Errorf("cpu %v memory %v/%v", b.CPU, b.MemLoad, b.MemTotal)
+	}
+	if b.GPU.OK && (b.GPU.Util > 100 || b.GPU.Temp < 0 || b.GPU.Temp > 130 || b.GPU.MemUsed > b.GPU.MemTotal && b.GPU.MemTotal > 0) {
+		t.Errorf("gpu %+v", b.GPU)
+	}
+	if b.Net.Rx < 0 || b.Net.Tx < 0 {
+		t.Errorf("net %+v", b.Net)
+	}
+}
+
+// The welcome on PC health: the PC's name and the account's name.
+func TestWelcomeNames(t *testing.T) {
+	pc, user := pcName(), userDisplayName()
+	t.Logf("pc %q, user %q (USERNAME %q)", pc, user, os.Getenv("USERNAME"))
+	if pc == "" {
+		t.Error("no PC name")
+	}
+	if user == "" && os.Getenv("USERNAME") != "" {
+		t.Error("no user name although USERNAME is set")
+	}
+	info := appInfo()
+	if info["pc"] != pc || info["user"] != user {
+		t.Errorf("appInfo: pc %v, user %v", info["pc"], info["user"])
+	}
+}

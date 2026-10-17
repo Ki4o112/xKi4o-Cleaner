@@ -4,6 +4,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -390,4 +391,40 @@ func TestTweakPresets(t *testing.T) {
 			}
 		}
 	}
+}
+
+// The tweaks of the newest version that brought any are the "new" ones, with
+// that version line for the page's title (3.0 while the app is 3.1).
+func TestTweakListNew(t *testing.T) {
+	sinces := []string{}
+	for _, tw := range tweaks {
+		sinces = append(sinces, tw.since)
+	}
+	newest := newestSince(sinces, appVersion)
+	nv, ok := parseVersion(newest)
+	if !ok {
+		t.Fatalf("no tweak has a version (%q)", newest)
+	}
+	line := fmt.Sprintf("%d.%d", nv[0], nv[1])
+	want := 0
+	for _, tw := range tweaks {
+		if v, ok := parseVersion(tw.since); ok && v[0] == nv[0] && v[1] == nv[1] && !tw.legacy {
+			want++
+		}
+	}
+	got := 0
+	for _, m := range tweakList() {
+		if m.New {
+			got++
+			if m.NewIn != line {
+				t.Errorf("%s: new in %q, want %q", m.ID, m.NewIn, line)
+			}
+		} else if m.NewIn != "" {
+			t.Errorf("%s: not new but has newIn %q", m.ID, m.NewIn)
+		}
+	}
+	if got != want || got == 0 {
+		t.Errorf("new tweaks: %d, want %d (line %s, app %s)", got, want, line, appVersion)
+	}
+	t.Logf("%d tweaks new in %s (app %s)", got, line, appVersion)
 }

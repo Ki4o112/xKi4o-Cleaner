@@ -313,3 +313,37 @@ func osBuild() string {
 	}
 	return build
 }
+
+func pcName() string {
+	n, _ := os.Hostname()
+	return n
+}
+
+// userDisplayName: the name the user has in Windows ("Andrew Smith" for a
+// Microsoft account), else the account name.
+func userDisplayName() string {
+	n := uint32(256)
+	buf := make([]uint16, n)
+	if err := windows.GetUserNameEx(windows.NameDisplay, &buf[0], &n); err == nil {
+		if s := strings.TrimSpace(windows.UTF16ToString(buf[:n])); s != "" {
+			return s
+		}
+	}
+	// a local or Microsoft account outside a domain: the full name of the account
+	user := os.Getenv("USERNAME")
+	if u, err := windows.UTF16PtrFromString(user); err == nil && user != "" {
+		var b *byte
+		if windows.NetUserGetInfo(nil, u, 10, &b) == nil && b != nil {
+			info := (*windows.UserInfo10)(unsafe.Pointer(b))
+			full := ""
+			if info.FullName != nil {
+				full = strings.TrimSpace(windows.UTF16PtrToString(info.FullName))
+			}
+			_ = windows.NetApiBufferFree(b)
+			if full != "" {
+				return full
+			}
+		}
+	}
+	return user
+}

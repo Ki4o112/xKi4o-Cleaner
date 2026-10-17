@@ -24,7 +24,7 @@ var indexHTML string
 const (
 	appName   = "xKi4o Cleaner"
 	appAuthor = "xKi4o"
-	bgColor   = 0x0b1020
+	bgColor   = 0x070708 // the Graphite theme's background (no flash before the page paints)
 )
 
 type App struct {
@@ -186,6 +186,7 @@ func main() {
 		"tweakList":          tweakList,
 		"tweakStates":        tweakStates,
 		"tweakPresets":       tweakPresets,
+		"liveStats":          liveStats,
 		"setTweak":           setTweak,
 		"debloatApps":        debloatApps,
 		"tweakHistory":       tweakHistory,
@@ -320,9 +321,10 @@ func saveAndApplySettings(m map[string]any) bool {
 // openLink opens only the fixed links the credits page shows.
 func openLink(url string) bool {
 	switch url {
-	case "https://github.com/jchv/go-webview2", "https://go.dev", "https://github.com/JulietaUla/Montserrat",
+	case "https://github.com/jchv/go-webview2", "https://go.dev", "https://github.com/rsms/inter",
 		"https://github.com/henrypp/memreduct", "https://www.bleachbit.org", "https://github.com/MoscaDotTo/Winapp2",
-		"https://github.com/Parcoil/Sparkle", "https://github.com/ChrisTitusTech/winutil", "https://github.com/NVIDIA/nvapi":
+		"https://github.com/Parcoil/Sparkle", "https://github.com/ChrisTitusTech/winutil", "https://github.com/NVIDIA/nvapi",
+		"https://github.com/meetrevision/playbook", "https://github.com/Ki4o112/xKi4o-Cleaner/issues/new":
 		shellOpen(url)
 		return true
 	}
@@ -369,6 +371,8 @@ func appInfo() map[string]any {
 		"year":    time.Now().Year(),
 		"profile": P.profile,
 		"logDir":  olog.dir,
+		"pc":      pcName(),
+		"user":    userDisplayName(),
 	}
 }
 

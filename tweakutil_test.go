@@ -95,23 +95,30 @@ func TestMisc(t *testing.T) {
 	}
 }
 
-// A tweak is "new" in the version line it came with (3.0.x for 3.0.0) and
-// not after it.
+// A tweak is "new" while its version line is the newest that brought
+// tweaks, within the same major version.
 func TestIsNewIn(t *testing.T) {
 	cases := []struct {
-		since, cur string
-		want       bool
+		since, cur, newest string
+		want               bool
 	}{
-		{"3.0.0", "3.0.0", true},
-		{"3.0.0", "3.0.2", true},
-		{"3.0.0", "3.1.0", false},
-		{"2.10.0", "3.0.0", false},
-		{"", "3.0.0", false},
-		{"3.0.0", "dev", false},
+		{"3.0.0", "3.0.0", "3.0.0", true},
+		{"3.0.0", "3.0.2", "3.0.0", true},
+		{"3.0.0", "3.1.0", "3.0.0", true},  // 3.1 brought no tweaks
+		{"3.0.0", "3.2.0", "3.2.0", false}, // 3.2 did
+		{"3.2.0", "3.2.0", "3.2.0", true},
+		{"3.0.0", "4.0.0", "3.0.0", false},
+		{"2.10.0", "3.0.0", "3.0.0", false},
+		{"3.1.0", "3.0.2", "3.0.0", false}, // not yet
+		{"", "3.0.0", "3.0.0", false},
+		{"3.0.0", "dev", "3.0.0", false},
 	}
 	for _, c := range cases {
-		if got := isNewIn(c.since, c.cur); got != c.want {
-			t.Errorf("isNewIn(%q, %q) = %v, want %v", c.since, c.cur, got, c.want)
+		if got := isNewIn(c.since, c.cur, c.newest); got != c.want {
+			t.Errorf("isNewIn(%q, %q, %q) = %v, want %v", c.since, c.cur, c.newest, got, c.want)
 		}
+	}
+	if got := newestSince([]string{"", "2.9.0", "3.0.0", "2.10.0", "9.0.0", "x"}, "3.1.0"); got != "3.0.0" {
+		t.Errorf("newestSince = %q", got)
 	}
 }

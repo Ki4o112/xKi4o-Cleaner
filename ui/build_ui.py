@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Builds ui/index.html (embedded into the exe) from ui/app.html.
 
-It inlines the Montserrat font (Latin + Cyrillic), the logo and the license texts of
+It inlines the Inter font (Latin + Cyrillic), the logo and the license texts of
 the third-party components shown on the Credits page, so the app needs no
 files next to it and works offline.
 
@@ -26,8 +26,8 @@ def main():
 
     faces = []
     for subset, rng in RANGES.items():
-        data = base64.b64encode((UI / "fonts" / f"montserrat-{subset}-wght-normal.woff2").read_bytes()).decode()
-        faces.append('@font-face{font-family:"Montserrat";font-style:normal;font-display:block;'
+        data = base64.b64encode((UI / "fonts" / f"inter-{subset}-wght-normal.woff2").read_bytes()).decode()
+        faces.append('@font-face{font-family:"Inter";font-style:normal;font-display:block;'
                      f'font-weight:100 900;src:url(data:font/woff2;base64,{data}) format("woff2");unicode-range:{rng};}}')
     src = src.replace("/*@@FONTS@@*/", "\n".join(faces), 1)
 

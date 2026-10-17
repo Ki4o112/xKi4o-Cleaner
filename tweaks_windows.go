@@ -428,7 +428,7 @@ type tweak struct {
 	sys      bool   // system-wide change: a restore point is made first
 	slow     bool   // the state needs the PowerShell probe
 	legacy   bool   // removed from the list; shown only to turn an old change off
-	since    string // the version that brought it ("new" while that is the current version)
+	since    string // the version that brought it ("new" while it is the newest that brought tweaks)
 	checks   bool   // its apply step checks the result itself
 	reg      []rv
 	svc      []svcSet
@@ -463,7 +463,8 @@ type tweakMeta struct {
 	Sys      bool   `json:"sys,omitempty"`
 	Legacy   bool   `json:"legacy,omitempty"`
 	Exact    bool   `json:"exact,omitempty"` // undo restores the exact earlier state
-	New      bool   `json:"new,omitempty"`   // came with this version
+	New      bool   `json:"new,omitempty"`   // from the newest version that brought tweaks
+	NewIn    string `json:"newIn,omitempty"` // that version line ("3.0")
 }
 
 type tweakState struct {
@@ -627,12 +628,21 @@ func (t *tweak) exact() bool {
 // appears only while an old change of it is still in place.
 func tweakList() []tweakMeta {
 	out := make([]tweakMeta, 0, len(tweaks))
+	sinces := make([]string, 0, len(tweaks))
+	for _, t := range tweaks {
+		sinces = append(sinces, t.since)
+	}
+	newest := newestSince(sinces, appVersion)
 	for _, t := range tweaks {
 		if t.legacy && getBackup(t.id) == nil {
 			continue
 		}
 		out = append(out, tweakMeta{ID: t.id, Group: t.group, Rec: t.rec, Risk: t.risk, Reboot: t.reboot,
-			Explorer: t.explorer, OneWay: t.oneWay, Sys: t.sys, Legacy: t.legacy, Exact: t.exact(), New: isNewIn(t.since, appVersion)})
+			Explorer: t.explorer, OneWay: t.oneWay, Sys: t.sys, Legacy: t.legacy, Exact: t.exact(), New: isNewIn(t.since, appVersion, newest)})
+		if m := &out[len(out)-1]; m.New {
+			v, _ := parseVersion(t.since)
+			m.NewIn = fmt.Sprintf("%d.%d", v[0], v[1])
+		}
 	}
 	return out
 }

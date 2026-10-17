@@ -149,10 +149,27 @@ func is24h(format string) bool {
 // psQuote quotes a string for a single-quoted PowerShell literal.
 func psQuote(s string) string { return "'" + strings.ReplaceAll(s, "'", "''") + "'" }
 
-// isNewIn: something that came with version since is "new" while the app
-// is that version (the same major.minor).
-func isNewIn(since, current string) bool {
+// isNewIn: something that came with version since is "new" while it is
+// from the newest line (major.minor) that brought anything (newest) and the
+// app is still that major version: the 3.0 tweaks are new in 3.0.x and in
+// 3.1 (which brought no tweaks), not once 3.2 brings its own or in 4.0.
+func isNewIn(since, current, newest string) bool {
 	s, ok1 := parseVersion(since)
 	c, ok2 := parseVersion(current)
-	return since != "" && ok1 && ok2 && s[0] == c[0] && s[1] == c[1]
+	n, ok3 := parseVersion(newest)
+	return since != "" && ok1 && ok2 && ok3 && s[0] == n[0] && s[1] == n[1] && s[0] == c[0] && !newerVersion(since, current)
+}
+
+// newestSince: the latest of the versions that is not after current.
+func newestSince(sinces []string, current string) string {
+	best := ""
+	for _, v := range sinces {
+		if _, ok := parseVersion(v); !ok || newerVersion(v, current) {
+			continue
+		}
+		if best == "" || newerVersion(v, best) {
+			best = v
+		}
+	}
+	return best
 }

@@ -3,6 +3,24 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 3.1.0 — 2026-10-17
+
+### English
+- New look: the Graphite theme, the Inter font and an emerald accent
+- PC health is now a dashboard with live processor, graphics card, memory, drive and network
+- Added the graphics card's temperature, load and video memory (NVIDIA; load for other cards)
+- Added quick settings, help and presets cards on PC health
+- Added a theme choice in Settings: Graphite or the old Ocean
+- The 3.0 tweaks stay marked New until a version brings new ones
+
+### Български
+- Нов вид: тема Графит, шрифт Inter и изумруден акцент
+- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо
+- Добавени температура, натоварване и видео памет на видеокартата (NVIDIA; натоварване за другите)
+- Добавени бързи настройки, помощ и пресети в „Здраве на компютъра“
+- Добавен избор на тема в Настройки: Графит или старият Океан
+- Туийковете от 3.0 остават отбелязани като нови, докато някоя версия не добави нови
+
 ## 3.0.1 — 2026-10-17
 
 ### English
