@@ -3,6 +3,26 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 3.3.0 — 2026-10-18
+
+### English
+- Added the Updates page: search and install Windows and driver updates
+- Longer, smoother loading animation
+- Animations across the app: pages, cards, buttons and the menu
+- Keeping a new refresh rate is now asked in a notification on top
+- Removed the Right-click menu page; entries it hid can be shown again in the Restore Center
+- "Do it all" no longer suggests updating programs
+- Fixed: NVIDIA's driver list said "no drivers for this card"
+
+### Български
+- Добавен раздел „Обновления“: търсене и инсталиране на обновления за Windows и драйвери
+- По-дълга и по-плавна анимация при зареждане
+- Анимации в цялата програма: страници, карти, бутони и менюто
+- Запазването на нова честота на опресняване се пита с известие най-отгоре
+- Премахнат раздел „Контекстно меню“; скритите от него записи се връщат от Центъра за възстановяване
+- „Направи всичко“ вече не предлага обновяване на програми
+- Поправено: списъкът с драйвери на NVIDIA казваше „няма драйвери за тази карта“
+
 ## 3.2.0 — 2026-10-18
 
 ### English

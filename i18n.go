@@ -336,6 +336,23 @@ var texts = map[string][2]string{ // [bg, en]
 	"log.gpuWUOff":        {"Windows вече не тегли драйвери сам (настройки за инсталиране на устройства)", "Windows no longer downloads drivers by itself (device installation settings)"},
 	"log.restart":         {"Рестарт на Windows (по избор след смяна на драйвер)", "Restarting Windows (chosen after a driver change)"},
 	"log.gpuWUOn":         {"Windows отново може да тегли драйвери сам", "Windows may download drivers by itself again"},
+	// 3.3: Windows Update
+	"wu.err.noAnswer":  {"Windows Update не отговори", "Windows Update did not answer"},
+	"wu.err.busy":      {"Търсенето или инсталирането още работи", "A search or an installation is still running"},
+	"wu.err.run":       {"Windows Update не можа да се стартира: %s", "Windows Update could not be started: %s"},
+	"wu.err.ids":       {"Няма избрани обновления", "No updates are chosen"},
+	"wu.err.gone":      {"Избраните обновления вече не се предлагат — провери отново", "The chosen updates are no longer offered — search again"},
+	"wu.hr.net":        {"Няма връзка със сървърите на Windows Update.", "No connection to the Windows Update servers."},
+	"wu.hr.off":        {"Услугата Windows Update е изключена.", "The Windows Update service is turned off."},
+	"wu.hr.busy":       {"Windows вече инсталира нещо — опитай след малко.", "Windows is already installing something — try again shortly."},
+	"wu.hr.stopped":    {"Спряно.", "Stopped."},
+	"wu.hr.policy":     {"Обновленията се управляват от организацията (групова политика).", "Updates are managed by an organisation (group policy)."},
+	"log.wuSearched":   {"Windows Update: намерени обновления: %d", "Windows Update: updates found: %d"},
+	"log.wuSearchFail": {"Windows Update: търсенето не успя — %s", "Windows Update: the search failed — %s"},
+	"log.wuInstall":    {"Инсталиране на обновления на Windows (%d)", "Installing Windows updates (%d)"},
+	"log.wuInstalled":  {"Инсталирани: %d, неуспешни: %d", "Installed: %d, failed: %d"},
+	"log.wuOne":        {"Инсталирано", "Installed"},
+	"log.wuOneFail":    {"Не се инсталира: %s", "Not installed: %s"},
 }
 
 // T returns the text for key in the current language.

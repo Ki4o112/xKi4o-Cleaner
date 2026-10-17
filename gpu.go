@@ -340,7 +340,8 @@ func nvDrivers(b []byte) ([]nvDriver, error) {
 	if err := json.Unmarshal(b, &doc); err != nil {
 		return nil, err
 	}
-	if fmt.Sprint(doc.Success) != "1" {
+	// "Success" is how many drivers came back ("0": none for this card)
+	if n, err := strconv.Atoi(strings.TrimSpace(fmt.Sprint(doc.Success))); err != nil || n < 1 || len(doc.IDS) == 0 {
 		return nil, errors.New("NVIDIA: no drivers for this card")
 	}
 	str := func(m map[string]any, k string) string {

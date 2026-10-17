@@ -152,6 +152,13 @@ func TestNvDrivers(t *testing.T) {
 	if ds[0].Size != "912.30 MB" {
 		t.Errorf("size %q", ds[0].Size)
 	}
+	// NVIDIA's "Success" is the number of drivers (it says "3" for three)
+	if ds, err := nvDrivers([]byte(strings.Replace(nvDriversSample, `"Success":"1"`, `"Success":"5"`, 1))); err != nil || len(ds) != 3 {
+		t.Errorf("Success 5: %d %v", len(ds), err)
+	}
+	if ds, err := nvDrivers([]byte(strings.Replace(nvDriversSample, `"Success":"1"`, `"Success":3`, 1))); err != nil || len(ds) != 3 {
+		t.Errorf("Success as a number: %d %v", len(ds), err)
+	}
 	if _, err := nvDrivers([]byte(`{"Success":"0","IDS":[]}`)); err == nil {
 		t.Error("Success 0 is an error")
 	}

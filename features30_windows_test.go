@@ -352,3 +352,23 @@ func TestWelcomeNames(t *testing.T) {
 		t.Errorf("appInfo: pc %v, user %v", info["pc"], info["user"])
 	}
 }
+
+// Windows Update: what it offers this PC (a search only; nothing installed).
+func TestWUSearch(t *testing.T) {
+	st := wuSearch()
+	t.Logf("search in %d ms, error %q, restart pending %v, %d updates, %d in history", st.Took, st.Error, st.Reboot, len(st.Updates), len(st.History))
+	for _, u := range st.Updates {
+		t.Logf("  [%s] %s %s %d MB optional=%v reboot=%v %s %v", u.Kind, u.KB, u.Title, u.Size>>20, u.Optional, u.Reboot, u.Severity, u.Cats)
+	}
+	for i, h := range st.History {
+		if i < 6 {
+			t.Logf("  history: %s %s result=%d", h.Date, h.Title, h.Result)
+		}
+	}
+	if underWine() {
+		return // no Windows Update there: an error, not a crash
+	}
+	if st.Error != "" && !strings.Contains(st.Error, T("wu.hr.net")) {
+		t.Errorf("search: %s", st.Error)
+	}
+}
