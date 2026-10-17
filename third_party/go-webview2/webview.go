@@ -6,8 +6,10 @@ package webview2
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"reflect"
+	"runtime/debug"
 	"strconv"
 	"sync"
 	"unsafe"
@@ -190,7 +192,22 @@ func (w *webview) msgcb(msg string) {
 	go w.respond(id, d)
 }
 
+// BindingPanic, when set, is told about a bound function that panicked.
+// The call is then rejected in the page; the app keeps running.
+var BindingPanic func(method string, r interface{}, stack []byte)
+
 func (w *webview) respond(id string, d rpcMessage) {
+	defer func() {
+		if r := recover(); r != nil {
+			if BindingPanic != nil {
+				BindingPanic(d.Method, r, debug.Stack())
+			}
+			msg := jsString(fmt.Sprint("internal error: ", r))
+			w.Dispatch(func() {
+				w.Eval("if (window._rpc[" + id + "]) { window._rpc[" + id + "].reject(" + msg + "); window._rpc[" + id + "] = undefined; }")
+			})
+		}
+	}()
 	if res, err := w.callbinding(d); err != nil {
 		w.Dispatch(func() {
 			w.Eval("window._rpc[" + id + "].reject(" + jsString(err.Error()) + "); window._rpc[" + id + "] = undefined")

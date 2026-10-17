@@ -86,6 +86,7 @@ var win struct {
 	max      atomic.Bool
 	msgShow  uint32 // "come to the front", sent by a second copy of the app
 	msgTBar  uint32 // "TaskbarCreated": Explorer restarted, the tray icon must be added again
+	msgAuto  uint32 // "clean now", sent by the copy the automatic cleaning task started
 	trayIcon uintptr
 }
 
@@ -93,7 +94,7 @@ func registerWindowMessages() {
 	for _, m := range []struct {
 		name string
 		to   *uint32
-	}{{"xKi4oCleaner.Show", &win.msgShow}, {"TaskbarCreated", &win.msgTBar}} {
+	}{{"xKi4oCleaner.Show", &win.msgShow}, {"TaskbarCreated", &win.msgTBar}, {"xKi4oCleaner.AutoClean", &win.msgAuto}} {
 		p, _ := windows.UTF16PtrFromString(m.name)
 		r, _, _ := procRegisterWindowMessageW.Call(uintptr(unsafe.Pointer(p)))
 		*m.to = uint32(r)
@@ -224,6 +225,10 @@ func winHook(hwnd, msg, wp, lp uintptr) (uintptr, bool) {
 	}
 	if win.msgShow != 0 && uint32(msg) == win.msgShow {
 		winShow()
+		return 1, true
+	}
+	if win.msgAuto != 0 && uint32(msg) == win.msgAuto {
+		go runAutoClean("task")
 		return 1, true
 	}
 	if win.msgTBar != 0 && uint32(msg) == win.msgTBar && win.inTray.Load() {
@@ -453,6 +458,22 @@ func trayAdd(hint bool) bool {
 		d.HBalloonIcon = win.trayIcon
 		_, _, _ = procShellNotifyIconW.Call(nimModify, uintptr(unsafe.Pointer(d)))
 	}
+	return r != 0
+}
+
+// trayNotify shows a Windows notification from the tray icon (only while
+// the app is hidden there: otherwise the page itself shows the result).
+func trayNotify(title, text string) bool {
+	if !win.inTray.Load() || app.hwnd == 0 {
+		return false
+	}
+	d := trayData()
+	d.UFlags = nifInfo
+	copyUTF16(d.SzInfoTitle[:], title)
+	copyUTF16(d.SzInfo[:], text)
+	d.DwInfoFlags = 0x04 // NIIF_USER: the app's icon
+	d.HBalloonIcon = win.trayIcon
+	r, _, _ := procShellNotifyIconW.Call(nimModify, uintptr(unsafe.Pointer(d)))
 	return r != 0
 }
 

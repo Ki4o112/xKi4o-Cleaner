@@ -21,6 +21,14 @@ func settingsPath() string {
 func getSettings() map[string]any {
 	settingsMu.Lock()
 	defer settingsMu.Unlock()
+	return readSettingsLocked()
+}
+
+// Keys the backend owns: the page has a copy of the settings and saves it
+// whole, so these are always taken from the file, never from the page.
+var backendKeys = []string{"dnsBackup", "autoClean", "autoCleanDay", "autoCleanLast"}
+
+func readSettingsLocked() map[string]any {
 	m := map[string]any{}
 	if b, err := os.ReadFile(settingsPath()); err == nil {
 		_ = json.Unmarshal(b, &m)
@@ -28,9 +36,36 @@ func getSettings() map[string]any {
 	return m
 }
 
-func saveSettings(m map[string]any) bool {
+// updateSettings changes the saved settings in one step (read, change,
+// write), so a save of the page in between cannot undo it.
+func updateSettings(change func(m map[string]any)) bool {
 	settingsMu.Lock()
 	defer settingsMu.Unlock()
+	m := readSettingsLocked()
+	change(m)
+	return writeSettingsLocked(m)
+}
+
+// savePageSettings saves what the page sends, keeping the backend's keys.
+func savePageSettings(m map[string]any) bool {
+	settingsMu.Lock()
+	defer settingsMu.Unlock()
+	cur := readSettingsLocked()
+	out := make(map[string]any, len(m)+len(backendKeys))
+	for k, v := range m {
+		out[k] = v
+	}
+	for _, k := range backendKeys {
+		if v, ok := cur[k]; ok {
+			out[k] = v
+		} else {
+			delete(out, k)
+		}
+	}
+	return writeSettingsLocked(out)
+}
+
+func writeSettingsLocked(m map[string]any) bool {
 	b, err := json.MarshalIndent(m, "", "  ")
 	if err != nil {
 		return false

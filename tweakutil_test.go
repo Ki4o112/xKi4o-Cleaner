@@ -94,3 +94,24 @@ func TestMisc(t *testing.T) {
 		t.Error("psQuote")
 	}
 }
+
+// A tweak is "new" in the version line it came with (3.0.x for 3.0.0) and
+// not after it.
+func TestIsNewIn(t *testing.T) {
+	cases := []struct {
+		since, cur string
+		want       bool
+	}{
+		{"3.0.0", "3.0.0", true},
+		{"3.0.0", "3.0.2", true},
+		{"3.0.0", "3.1.0", false},
+		{"2.10.0", "3.0.0", false},
+		{"", "3.0.0", false},
+		{"3.0.0", "dev", false},
+	}
+	for _, c := range cases {
+		if got := isNewIn(c.since, c.cur); got != c.want {
+			t.Errorf("isNewIn(%q, %q) = %v, want %v", c.since, c.cur, got, c.want)
+		}
+	}
+}

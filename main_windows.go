@@ -57,6 +57,12 @@ var app = &App{}
 func init() { runtime.LockOSThread() }
 
 func main() {
+	for _, a := range os.Args[1:] {
+		if a == "--auto-clean" { // started by the automatic cleaning task: no window
+			autoCleanMain()
+			return
+		}
+	}
 	updated := afterUpdate(os.Args[1:]) // started by the old version: wait until it has closed
 	if !acquireSingleInstance() {
 		return
@@ -67,7 +73,10 @@ func main() {
 	app.admin = isElevated()
 	initPaths()
 	logInit(logDir())
-	onOpEnd = func(s opSummary) { emit("op-end", s) }
+	onOpEnd = func(s opSummary) {
+		emit("op-end", s)
+		notifyOpEnd(s)
+	}
 	rlog.path = dataDirPath("recycled.json")
 	rlog.load()
 	logEvent("app", "info", "", T("log.start", appVersion), map[string]any{"os": osName(), "admin": app.admin, "afterUpdate": updated})
@@ -124,9 +133,26 @@ func main() {
 	w.SetSize(min(int(980*scale), width), min(int(660*scale), height), webview2.HintMin)
 
 	binds := map[string]any{
-		"appInfo":            appInfo,
-		"startAnalyze":       startAnalyze,
-		"startClean":         startClean,
+		"appInfo":        appInfo,
+		"startAnalyze":   startAnalyze,
+		"startClean":     startClean,
+		"systemInfo":     systemInfo,
+		"netState":       getNetState,
+		"dnsSet":         dnsSet,
+		"dnsRestore":     dnsRestore,
+		"dnsTest":        dnsTest,
+		"dnsFlush":       dnsFlush,
+		"ctxMenuList":    ctxMenuList,
+		"ctxMenuSet":     ctxMenuSet,
+		"autoCleanState": autoCleanState,
+		"autoCleanSet":   autoCleanSet,
+		"autoCleanNow": func() bool {
+			if app.busy.Load() || autoCleanBusy() {
+				return false
+			}
+			go runAutoClean("now")
+			return true
+		},
 		"stopClean":          func() bool { app.stop.Store(true); return true },
 		"cleanState":         cleanState,
 		"getDrives":          getDrives,
@@ -250,6 +276,9 @@ func main() {
 			return map[string]any{"own": win.own.Load(), "max": win.max.Load(), "active": true}
 		},
 	}
+	webview2.BindingPanic = func(method string, r any, stack []byte) {
+		logEvent("app", "error", method, T("err.unexpected", r), map[string]any{"stack": string(stack)})
+	}
 	for name, f := range binds {
 		must(w.Bind(name, f))
 	}
@@ -284,7 +313,7 @@ func applySettings(m map[string]any) {
 
 func saveAndApplySettings(m map[string]any) bool {
 	applySettings(m)
-	return saveSettings(m)
+	return savePageSettings(m)
 }
 
 // openLink opens only the fixed links the credits page shows.
@@ -379,6 +408,26 @@ func logCloseResults(op *opHandle, res []closeResult) {
 	op.end(T("pm.sum", n, len(res)), nil)
 }
 
+// Long jobs worth a notification when they end while the app is in the tray.
+var notifyKinds = map[string]bool{"clean": true, "optimize": true, "winget": true, "repair": true, "uninstall": true, "dupes": true, "disk": true}
+
+func notifyOpEnd(s opSummary) {
+	if !notifyKinds[s.Kind] || s.End-s.Start < 5000 && s.Kind != "clean" {
+		return
+	}
+	text := s.Summary
+	if text == "" {
+		text = T("tray.done")
+	}
+	if s.State == "error" {
+		text = T("tray.failed") + " " + text
+	}
+	title := s.Title
+	if app.w != nil {
+		app.w.Dispatch(func() { trayNotify(title, text) })
+	}
+}
+
 func restartExplorerLogged() bool {
 	op := beginOp("tweak", "", T("log.explorer"), nil)
 	ok := restartExplorer()
@@ -420,6 +469,7 @@ type CleanOpts struct {
 	Exclude      []string `json:"exclude"`  // files and folders the user unticked in the preview
 	OpenApps     string   `json:"openApps"` // "skip": categories of open apps are skipped; "partial": cleaned, files in use stay
 	Reopen       bool     `json:"reopen"`   // start again the apps closed for this cleaning
+	Quiet        bool     `json:"-"`        // automatic cleaning: no news to the page's Cleanup rows
 }
 
 // stepMsg reports the state and the result of one category.
@@ -449,6 +499,9 @@ func (m *stepMsg) setStats(st stats) {
 }
 
 func startClean(ids []string, opts CleanOpts) bool {
+	if autoCleanBusy() {
+		return false // the automatic cleaning is running right now
+	}
 	if !app.busy.CompareAndSwap(false, true) {
 		return false
 	}
@@ -530,6 +583,10 @@ type cleanSummary struct {
 }
 
 func runClean(ids []string, opts CleanOpts, op *opHandle) (sum cleanSummary) {
+	send := emit
+	if opts.Quiet {
+		send = func(string, any) {}
+	}
 	sel := map[string]bool{}
 	for _, id := range ids {
 		sel[id] = true
@@ -551,16 +608,16 @@ func runClean(ids []string, opts CleanOpts, op *opHandle) (sum cleanSummary) {
 
 	rpOK := true
 	if deep && opts.RestorePoint && app.admin && !opts.DryRun {
-		emit("restore", map[string]any{"state": "running"})
+		send("restore", map[string]any{"state": "running"})
 		setPhase("restore", "")
 		app.critical.Store(true)
-		rpOK = restorePointTicking(func(sec int) { emit("restore", map[string]any{"state": "running", "secs": sec}) })
+		rpOK = restorePointTicking(func(sec int) { send("restore", map[string]any{"state": "running", "secs": sec}) })
 		app.critical.Store(false)
 		if rpOK {
-			emit("restore", map[string]any{"state": "done"})
+			send("restore", map[string]any{"state": "done"})
 			op.info("", T("log.rpDone"), nil)
 		} else {
-			emit("restore", map[string]any{"state": "failed"})
+			send("restore", map[string]any{"state": "failed"})
 			op.fail("", T("log.rpFail"), nil)
 		}
 	}
@@ -570,7 +627,7 @@ func runClean(ids []string, opts CleanOpts, op *opHandle) (sum cleanSummary) {
 			break
 		}
 		skip := func(note string) {
-			emit("step", stepMsg{ID: it.id, State: "skipped", Note: note})
+			send("step", stepMsg{ID: it.id, State: "skipped", Note: note})
 			op.warnf(it.id, note, map[string]any{"skipped": true})
 		}
 		procs := runningProcs()
@@ -593,7 +650,7 @@ func runClean(ids []string, opts CleanOpts, op *opHandle) (sum cleanSummary) {
 			continue
 		}
 
-		emit("step", stepMsg{ID: it.id, State: "running"})
+		send("step", stepMsg{ID: it.id, State: "running"})
 		setPhase("item", it.id)
 		lastNote := ""
 		ctx := &cleanCtx{
@@ -602,7 +659,7 @@ func runClean(ids []string, opts CleanOpts, op *opHandle) (sum cleanSummary) {
 			note: func(n string) {
 				if n != lastNote {
 					lastNote = n
-					emit("step", stepMsg{ID: it.id, State: "running", Note: n})
+					send("step", stepMsg{ID: it.id, State: "running", Note: n})
 				}
 			},
 			cl: &cleaner{stop: func() bool { return app.stop.Load() }, dry: opts.DryRun, exclude: excl},
@@ -625,7 +682,7 @@ func runClean(ids []string, opts CleanOpts, op *opHandle) (sum cleanSummary) {
 				sum.restart = true
 			}
 		}
-		emit("step", msg)
+		send("step", msg)
 		logStep(op, it.id, msg, opts.DryRun)
 	}
 
@@ -633,22 +690,22 @@ func runClean(ids []string, opts CleanOpts, op *opHandle) (sum cleanSummary) {
 		return sum
 	}
 	if opts.Memory && !app.stop.Load() && app.admin {
-		emit("step", stepMsg{ID: "ram", State: "running"})
+		send("step", stepMsg{ID: "ram", State: "running"})
 		setPhase("item", "ram")
 		res := cleanMemory(opts.MemRegions)
 		sum.ram = res.Freed
-		emit("step", stepMsg{ID: "ram", State: "done", Freed: res.Freed})
+		send("step", stepMsg{ID: "ram", State: "done", Freed: res.Freed})
 		op.info("ram", T("log.ramFreed", sizeText(res.Freed)), map[string]any{"freed": res.Freed})
 	}
 	if opts.Trim && !app.stop.Load() && app.admin {
-		emit("step", stepMsg{ID: "trim", State: "running"})
+		send("step", stepMsg{ID: "trim", State: "running"})
 		setPhase("item", "trim")
 		for _, d := range getDrives() {
 			if d.Media != "HDD" {
 				_, _, _ = runQuiet(15*time.Minute, sys32("defrag.exe"), d.Letter+":", "/L")
 			}
 		}
-		emit("step", stepMsg{ID: "trim", State: "done"})
+		send("step", stepMsg{ID: "trim", State: "done"})
 		op.info("trim", T("log.trimDone"), nil)
 	}
 	return sum

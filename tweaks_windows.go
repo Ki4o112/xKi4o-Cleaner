@@ -428,6 +428,7 @@ type tweak struct {
 	sys      bool   // system-wide change: a restore point is made first
 	slow     bool   // the state needs the PowerShell probe
 	legacy   bool   // removed from the list; shown only to turn an old change off
+	since    string // the version that brought it ("new" while that is the current version)
 	checks   bool   // its apply step checks the result itself
 	reg      []rv
 	svc      []svcSet
@@ -462,6 +463,7 @@ type tweakMeta struct {
 	Sys      bool   `json:"sys,omitempty"`
 	Legacy   bool   `json:"legacy,omitempty"`
 	Exact    bool   `json:"exact,omitempty"` // undo restores the exact earlier state
+	New      bool   `json:"new,omitempty"`   // came with this version
 }
 
 type tweakState struct {
@@ -630,7 +632,7 @@ func tweakList() []tweakMeta {
 			continue
 		}
 		out = append(out, tweakMeta{ID: t.id, Group: t.group, Rec: t.rec, Risk: t.risk, Reboot: t.reboot,
-			Explorer: t.explorer, OneWay: t.oneWay, Sys: t.sys, Legacy: t.legacy, Exact: t.exact()})
+			Explorer: t.explorer, OneWay: t.oneWay, Sys: t.sys, Legacy: t.legacy, Exact: t.exact(), New: isNewIn(t.since, appVersion)})
 	}
 	return out
 }

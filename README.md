@@ -32,10 +32,13 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 | **PC health** | One score, what lowers it, and one button that does what is recommended |
 | **Cleanup** | Caches and temporary files of Windows, browsers, games and apps — the size of each before you clean |
 | **Programs** | Uninstall with a scan for leftovers (like Revo), remove Store apps, update programs with winget |
-| **Tweaker** | About 65 Windows tweaks; switching one off brings back exactly what you had |
+| **Tweaker** | About 80 Windows tweaks, the newest marked *New*; switching one off brings back exactly what you had |
 | **Memory and game mode** | Free RAM; close the programs you choose while you play and start them again after |
 | **Disks** | Disk Analyzer, disk health (S.M.A.R.T., what the errors mean and what helps), TRIM and defragmentation, duplicates, empty folders, broken shortcuts |
-| **System** | Processes, startup apps, Windows repair (DISM, SFC, disk check) |
+| **System info** | Processor, graphics card, memory sticks, motherboard, drives, monitors, security and battery — with tips (XMP, old drivers) and a report to copy |
+| **Network** | Switch DNS (Cloudflare, Google, Quad9, AdGuard…) after a speed test that shows the fastest for you; flush the DNS cache |
+| **System** | Processes, startup apps, the right-click menu (hide what programs added), Windows repair (DISM, SFC, disk check) |
+| **Automatic cleaning** | Daily, weekly or monthly, with no window; open apps and sensitive categories are left out |
 | **Restore Center** | Puts back what the app changed; every operation has a step-by-step log |
 
 <p align="center">
@@ -43,6 +46,8 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 <img src="docs/screenshots/programs.png" width="430" alt="Programs">
 <img src="docs/screenshots/tweaker.png" width="430" alt="Tweaker">
 <img src="docs/screenshots/disk.png" width="430" alt="Disk Analyzer">
+<img src="docs/screenshots/sysinfo.png" width="430" alt="System info">
+<img src="docs/screenshots/network.png" width="430" alt="Network and DNS">
 </p>
 
 ## Is it safe?
@@ -50,14 +55,16 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 - It deletes only caches and temporary data that Windows and the apps rebuild. Documents, downloads, browser history, passwords, game saves and app settings are never touched.
 - Files you pick yourself (Disk Analyzer, duplicates) go to the Recycle Bin and can be restored.
 - Windows Update, Defender, hibernation, power plans and startup apps change only when you switch them yourself.
-- A restore point is made before system changes, and every tweak can be undone.
+- A restore point is made before system changes, and every tweak can be undone. DNS and right-click menu changes go back with one click too.
 - No telemetry. The app itself only asks GitHub whether there is a new version (this can be turned off); program updates go through winget.
 
 ## FAQ
 
 **Why does it need administrator rights?** Most caches, the tweaks and the uninstaller need them. Programs the app starts again (after game mode or an update) run without them.
 
-**Can I keep it running in the background?** Yes — the button next to minimize sends it to the tray, next to the clock. Click the icon to open it again.
+**Can I keep it running in the background?** Yes — the button next to minimize sends it to the tray, next to the clock. Click the icon to open it again. When a long job ends there, Windows shows a notification.
+
+**Does automatic cleaning need the app open?** No. Windows' Task Scheduler starts it at the chosen time. Turn it off in Settings before you delete the app.
 
 **How do I undo something?** Switch the tweak off, or open the Restore Center: tweaks, startup changes, deleted files and registry backups are all there.
 
@@ -83,7 +90,7 @@ GOOS=windows GOARCH=amd64 go build -trimpath -ldflags "-s -w -H windowsgui" -o x
 
 ## Credits
 
-Made by **xKi4o**. Built with [go-webview2](https://github.com/jchv/go-webview2), [Go](https://go.dev) and the [Montserrat](https://github.com/JulietaUla/Montserrat) font. The cleaning rules were checked against [BleachBit](https://www.bleachbit.org) and [Winapp2](https://github.com/MoscaDotTo/Winapp2), RAM cleaning follows [Mem Reduct](https://github.com/henrypp/memreduct), and the Tweaker follows the lists of [Sparkle](https://github.com/Parcoil/Sparkle) and [WinUtil](https://github.com/ChrisTitusTech/winutil) — everything was written anew. Licenses of the components are in `third_party/` and on the app's Credits page.
+Made by **xKi4o**. Built with [go-webview2](https://github.com/jchv/go-webview2), [Go](https://go.dev) and the [Montserrat](https://github.com/JulietaUla/Montserrat) font. The cleaning rules were checked against [BleachBit](https://www.bleachbit.org) and [Winapp2](https://github.com/MoscaDotTo/Winapp2), RAM cleaning follows [Mem Reduct](https://github.com/henrypp/memreduct), and the Tweaker follows the lists of [Sparkle](https://github.com/Parcoil/Sparkle), [WinUtil](https://github.com/ChrisTitusTech/winutil) and the [ReviOS playbook](https://github.com/meetrevision/playbook) — everything was written anew. Licenses of the components are in `third_party/` and on the app's Credits page.
 
 ## License
 
@@ -98,7 +105,7 @@ Made by **xKi4o**. Built with [go-webview2](https://github.com/jchv/go-webview2)
 
 **Как се пуска:** свали **xKi4oCleaner.exe** от [последната версия](../../releases/latest), пусни го и разреши администраторските права. Ако SmartScreen каже *„Windows защити компютъра ви“*, натисни **Още информация → Изпълни въпреки това**.
 
-**Какво може:** здраве на компютъра с една оценка, почистване на кеш и временни файлове, деинсталиране с остатъци, обновяване на програми, около 65 туийка с връщане назад, освобождаване на RAM, режим „Игри“, анализ и здраве на дисковете, дубликати, празни папки, процеси, стартиращи програми, поправка на Windows и център за възстановяване.
+**Какво може:** здраве на компютъра с една оценка, почистване на кеш и временни файлове (и автоматично по график), деинсталиране с остатъци, обновяване на програми, около 80 туийка с връщане назад, освобождаване на RAM, режим „Игри“, анализ и здраве на дисковете, дубликати, празни папки, информация за системата, смяна на DNS с тест на скоростта, контекстното меню, процеси, стартиращи програми, поправка на Windows и център за възстановяване.
 
 **Безопасно ли е:** трие само кеш и временни данни. Лични файлове, история, пароли и запазени игри не се пипат. Избраните от теб файлове отиват в кошчето. Windows Update, Defender, хибернацията, плановете за захранване и стартиращите програми се променят само ако ти ги превключиш.
 

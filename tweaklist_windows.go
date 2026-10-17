@@ -23,6 +23,7 @@ import (
 
 const (
 	advKey    = `Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced`
+	ifeoKey   = `SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options`
 	cdmKey    = `Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager`
 	searchKey = `Software\Microsoft\Windows\CurrentVersion\Search`
 	ctxMenu   = `Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}`
@@ -966,6 +967,75 @@ func buildTweaks() {
 				dw(hklm, `SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting`, "Value", 0, uint32(1)),
 				dw(hklm, `SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots`, "Value", 0, uint32(1)),
 			}},
+
+		// ---------------- 3.0.0 (several after ReviOS's playbook; the values are Windows' own settings)
+		{id: "appcompat-off", group: "privacy", rec: true, sys: true, since: "3.0.0",
+			reg: []rv{
+				dw(hklm, `SOFTWARE\Policies\Microsoft\Windows\AppCompat`, "AITEnable", 0, nil),
+				dw(hklm, `SOFTWARE\Policies\Microsoft\Windows\AppCompat`, "DisableInventory", 1, nil),
+				dw(hklm, `SOFTWARE\Policies\Microsoft\Windows\AppCompat`, "DisableUAR", 1, nil),
+				dw(hklm, `SOFTWARE\Policies\Microsoft\Windows\AppCompat`, "DisablePCA", 1, nil),
+			}},
+		{id: "ceip-off", group: "privacy", rec: true, sys: true, since: "3.0.0",
+			reg: []rv{
+				dw(hklm, `SOFTWARE\Policies\Microsoft\SQMClient\Windows`, "CEIPEnable", 0, nil),
+				dw(hklm, `SOFTWARE\Policies\Microsoft\AppV\CEIP`, "CEIPEnable", 0, nil),
+				dw(hklm, `SOFTWARE\Policies\Microsoft\Internet Explorer\SQM`, "DisableCustomerImprovementProgram", 1, nil),
+			}},
+		{id: "typing-insights-off", group: "privacy", since: "3.0.0",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Input\Settings`, "InsightsEnabled", 0, nil)}},
+		{id: "spotlight-off", group: "privacy", since: "3.0.0", explorer: true,
+			reg: []rv{
+				// the policy turns everything off on Enterprise and Education; the
+				// other two are what Settings changes on every edition
+				dw(hkcu, `Software\Policies\Microsoft\Windows\CloudContent`, "DisableWindowsSpotlightFeatures", 1, nil),
+				dw(hkcu, `Software\Policies\Microsoft\Windows\CloudContent`, "DisableSpotlightCollectionOnDesktop", 1, nil),
+				dw(hkcu, cdmKey, "RotatingLockScreenEnabled", 0, uint32(1)),
+			}},
+		{id: "shutdown-fast", group: "perf", rec: true, sys: true, since: "3.0.0",
+			reg: []rv{
+				sz(hkcu, `Control Panel\Desktop`, "HungAppTimeout", "2000", nil),
+				sz(hkcu, `Control Panel\Desktop`, "WaitToKillAppTimeout", "2000", nil),
+				sz(hklm, `SYSTEM\CurrentControlSet\Control`, "WaitToKillServiceTimeout", "2000", "5000"),
+			}},
+		{id: "search-low-priority", group: "perf", sys: true, reboot: true, since: "3.0.0",
+			reg: []rv{
+				{root: hklm, path: ifeoKey + `\SearchIndexer.exe\PerfOptions`, name: "CpuPriorityClass", kind: registry.DWORD, on: uint32(5), keys: []string{ifeoKey + `\SearchIndexer.exe\PerfOptions`, ifeoKey + `\SearchIndexer.exe`}},
+				{root: hklm, path: ifeoKey + `\SearchIndexer.exe\PerfOptions`, name: "IoPriority", kind: registry.DWORD, on: uint32(1), keys: []string{ifeoKey + `\SearchIndexer.exe\PerfOptions`, ifeoKey + `\SearchIndexer.exe`}},
+			}},
+		{id: "ducking-off", group: "gaming", rec: true, since: "3.0.0",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Multimedia\Audio`, "UserDuckingPreference", 3, nil)}},
+		{id: "full-path-title", group: "explorer", explorer: true, since: "3.0.0",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState`, "FullPath", 1, uint32(0))}},
+		{id: "copy-details", group: "explorer", rec: true, since: "3.0.0",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\Explorer\OperationStatusManager`, "EnthusiastMode", 1, nil)}},
+		{id: "autoplay-off", group: "explorer", rec: true, since: "3.0.0",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers`, "DisableAutoplay", 1, uint32(0))}},
+		{id: "clipboard-history", group: "explorer", since: "3.0.0",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Clipboard`, "EnableClipboardHistory", 1, uint32(0))}},
+		{id: "taskbar-labels", group: "look", explorer: true, since: "3.0.0",
+			avail: func(p *probe) string {
+				if p.build >= 22000 && p.build < 22631 {
+					return T("tw.na.build") // Windows 11 before 23H2 always combines
+				}
+				return ""
+			},
+			reg: []rv{
+				dw(hkcu, advKey, "TaskbarGlomLevel", 2, uint32(0)),
+				dw(hkcu, advKey, "MMTaskbarGlomLevel", 2, uint32(0)),
+			}},
+		{id: "logon-blur-off", group: "look", sys: true, since: "3.0.0",
+			reg: []rv{dw(hklm, `SOFTWARE\Policies\Microsoft\Windows\System`, "DisableAcrylicBackgroundOnLogon", 1, nil)}},
+		{id: "edge-shortcut-off", group: "apps", sys: true, since: "3.0.0",
+			reg: []rv{dw(hklm, `SOFTWARE\Policies\Microsoft\EdgeUpdate`, "CreateDesktopShortcutDefault", 0, nil)}},
+		{id: "explorer-ads-off", group: "privacy", rec: true, explorer: true, since: "3.0.0",
+			reg: []rv{dw(hkcu, advKey, "ShowSyncProviderNotifications", 0, uint32(1))}},
+		{id: "store-openwith-off", group: "explorer", sys: true, since: "3.0.0",
+			reg: []rv{dw(hklm, `SOFTWARE\Policies\Microsoft\Windows\Explorer`, "NoUseStoreOpenWith", 1, nil)}},
+		{id: "multi-select-menu", group: "explorer", since: "3.0.0",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\Explorer`, "MultipleInvokePromptMinimum", 100, nil)}},
+		{id: "printer-manual", group: "system", since: "3.0.0",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Windows NT\CurrentVersion\Windows`, "LegacyDefaultPrinterMode", 1, uint32(0))}},
 
 		// ---------------- Apps
 		{id: "edge-bg-off", group: "apps", sys: true,

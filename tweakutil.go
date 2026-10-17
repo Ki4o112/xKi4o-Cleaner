@@ -148,3 +148,11 @@ func is24h(format string) bool {
 
 // psQuote quotes a string for a single-quoted PowerShell literal.
 func psQuote(s string) string { return "'" + strings.ReplaceAll(s, "'", "''") + "'" }
+
+// isNewIn: something that came with version since is "new" while the app
+// is that version (the same major.minor).
+func isNewIn(since, current string) bool {
+	s, ok1 := parseVersion(since)
+	c, ok2 := parseVersion(current)
+	return since != "" && ok1 && ok2 && s[0] == c[0] && s[1] == c[1]
+}

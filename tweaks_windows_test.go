@@ -233,6 +233,15 @@ func TestCatalogue(t *testing.T) {
 		if len(tw.svc) > 0 && !tw.sys {
 			t.Errorf("%s: changes services but is not marked as a system change", tw.id)
 		}
+		if tw.since != "" {
+			v, ok := parseVersion(tw.since)
+			c, _ := parseVersion(appVersion)
+			if !ok {
+				t.Errorf("%s: since %q is not a version", tw.id, tw.since)
+			} else if v[0] > c[0] || v[0] == c[0] && (v[1] > c[1] || v[1] == c[1] && v[2] > c[2]) {
+				t.Errorf("%s: since %s is newer than the app (%s)", tw.id, tw.since, appVersion)
+			}
+		}
 	}
 	if len(tweaks) < 50 {
 		t.Errorf("only %d tweaks", len(tweaks))

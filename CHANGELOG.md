@@ -3,6 +3,26 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 3.0.0 — 2026-10-17
+
+### English
+- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips
+- Added Network: switch the DNS server after a speed test, and flush the DNS cache
+- Added the right-click menu: hide entries that programs added, and show them again
+- Added automatic cleaning on a schedule (Settings)
+- Added 18 tweaks; new tweaks are shown first and marked New
+- Added a Windows notification when a long job ends while the app is in the tray
+- Added a line about the PC on PC health
+
+### Български
+- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети
+- Добавена Мрежа: смяна на DNS сървъра след тест на скоростта и изчистване на DNS кеша
+- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им
+- Добавено автоматично почистване по график (Настройки)
+- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“
+- Добавено известие от Windows, когато дълга задача приключи, докато програмата е в трея
+- Добавен ред за компютъра в „Здраве на PC“
+
 ## 2.10.0 — 2026-10-16
 
 ### English

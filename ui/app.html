@@ -1390,7 +1390,96 @@ body.dock-on .toasts { bottom: 84px; }
 .nav-ind::before { content: ""; position: absolute; left: 3px; top: 50%; width: 3px; height: 14px; margin-top: -7px; border-radius: 3px; background: linear-gradient(180deg, var(--brand-c), var(--brand-b) 55%, var(--brand-a)); }
 /* rows that scroll sideways show that there is more */
 .tw-cats { -webkit-mask-image: none; mask-image: none; padding-right: 0; }
+.nav.fit button, .nav.fit .nav-ind { height: var(--navh) !important; }
+.nav.fit .ico { width: min(26px, calc(var(--navh) - 3px)) !important; height: min(26px, calc(var(--navh) - 3px)) !important; }
+.nav.fit .ico svg { width: min(15px, calc(var(--navh) - 11px)) !important; height: min(15px, calc(var(--navh) - 11px)) !important; }
+.nav.fit { gap: 1px; }
+.nav.lines .nav-g { font-size: 0 !important; padding: 0 !important; height: 1px; margin: 4px 12px !important; background: var(--line-soft); }
+.nav.lines .nav-g.first { display: none; }
+.fade-y { -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 var(--ft, 0px), #000 calc(100% - var(--fb, 0px)), transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 var(--ft, 0px), #000 calc(100% - var(--fb, 0px)), transparent 100%); }
 .fade-x { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--fl, 0px), #000 calc(100% - var(--fr, 0px)), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 var(--fl, 0px), #000 calc(100% - var(--fr, 0px)), transparent 100%); }
+
+/* ================= 3.0: system information, network, right-click menu, automatic cleaning */
+.si-hero { display: flex; align-items: center; gap: 16px; padding: 18px 20px; border-radius: var(--r-l); background: linear-gradient(135deg, rgba(42,157,255,.15), rgba(180,124,255,.10) 55%, var(--card) 92%); border: 1px solid rgba(255,255,255,.05); margin-bottom: 14px; flex-wrap: wrap; }
+.si-hero .hi { width: 52px; height: 52px; border-radius: 16px; background: var(--brand); display: grid; place-items: center; color: #fff; flex: none; box-shadow: 0 12px 28px -12px rgba(42,157,255,.6); }
+.si-hero .hi svg { width: 26px; height: 26px; }
+.si-hero .ht { min-width: 0; flex: 1 1 260px; }
+.si-hero h2 { margin: 0; font-size: 18px; font-weight: 800; letter-spacing: -.01em; overflow-wrap: anywhere; }
+.si-hero .m { color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+.si-hero .m .nw { white-space: nowrap; }
+.si-chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.si-grid { columns: 2 320px; column-gap: 12px; }
+.si-grid > * { break-inside: avoid; margin-bottom: 12px; }
+.si-grid > .skel { display: block; }
+.si-card { background: var(--card); border: 1px solid rgba(255,255,255,.035); border-radius: var(--r-l); padding: 14px 16px; min-width: 0; display: flex; flex-direction: column; gap: 9px; animation: pageIn .35s var(--ease) both; }
+.si-card .top { display: flex; align-items: center; gap: 10px; }
+.si-card .ic { width: 32px; height: 32px; border-radius: 10px; background: var(--card-2); color: var(--blue-2); display: grid; place-items: center; flex: none; }
+.si-card .ic svg { width: 16px; height: 16px; }
+.si-card h3 { margin: 0; font-size: 12.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.si-card .top .linkbtn { margin-left: auto; font-size: 12px; }
+.si-big { font-size: 15px; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+.si-kv { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 5px 14px; font-size: 12.5px; margin: 0; }
+.si-kv dt { color: var(--faint); white-space: nowrap; }
+.si-kv dd { margin: 0; text-align: right; overflow-wrap: anywhere; }
+.si-sep { border-top: 1px solid var(--line-soft); padding-top: 9px; }
+.si-tip { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; line-height: 1.45; color: #ffcf8a; background: var(--amber-soft); border-radius: 10px; padding: 8px 10px; }
+.si-tip svg { width: 14px; height: 14px; flex: none; margin-top: 1px; }
+.si-tip.info { color: var(--muted); background: #0d1428; }
+.si-mods { display: flex; flex-direction: column; gap: 5px; }
+.si-mod { display: grid; grid-template-columns: minmax(56px, auto) minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 12px; background: #0d1428; border-radius: 9px; padding: 7px 10px; }
+.si-mod .s { color: var(--faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 110px; }
+.si-mod .p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.si-mod b { white-space: nowrap; }
+.si-good { color: var(--mint); }
+.si-warn { color: #ffcf8a; }
+.si-dim { color: var(--faint); }
+.si-bar { height: 6px; border-radius: 99px; background: #0d1428; overflow: hidden; }
+.si-bar i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--brand-c), var(--brand-b)); transition: width .6s var(--ease); }
+.si-bar.warn i { background: linear-gradient(90deg, #ffb547, #ff8a5c); }
+.si-load { display: flex; align-items: center; gap: 12px; color: var(--muted); padding: 6px 2px 16px; font-size: 13px; }
+.si-skel { height: 150px; border-radius: var(--r-l); }
+.hm-pc { display: flex; align-items: center; gap: 10px; margin-top: 12px; margin-bottom: -2px; padding: 10px 14px; border-radius: var(--r-m); background: var(--card); border: 1px solid rgba(255,255,255,.035); color: var(--muted); font-size: 12.5px; cursor: pointer; width: 100%; text-align: left; transition: background .2s; }
+.hm-pc:hover { background: var(--card-2); color: var(--text); }
+.hm-pc svg { width: 16px; height: 16px; flex: none; color: var(--blue-2); }
+.hm-pc span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.hm-pc .go { margin-left: auto; flex: none; opacity: .6; }
+
+.net-conns { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin-bottom: 4px; }
+.net-c { background: var(--card); border: 1px solid rgba(255,255,255,.035); border-radius: var(--r-l); padding: 14px 16px; display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 12px; align-items: center; }
+.net-c .ic { width: 38px; height: 38px; border-radius: 12px; background: var(--card-2); color: var(--blue-2); display: grid; place-items: center; }
+.net-c .ic svg { width: 18px; height: 18px; }
+.net-c .n { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.net-c .d { color: var(--muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.net-c .dns { font-size: 12px; margin-top: 5px; color: var(--muted); overflow-wrap: anywhere; }
+.net-c .dns b { color: var(--text); font-weight: 700; }
+.net-h2 { margin-top: 20px !important; }
+.net-best { margin: 0 0 10px !important; }
+.net-best p { flex: 1; }
+.dns-row { display: grid; grid-template-columns: 38px minmax(0, 1fr) 150px 112px; gap: 14px; align-items: center; padding: 12px 14px; border-top: 1px solid var(--line-soft); transition: background .2s; }
+.dns-row:first-child { border-top: 0; }
+.dns-row:hover { background: rgba(255,255,255,.015); }
+.dns-row.cur { background: linear-gradient(90deg, rgba(42,157,255,.09), transparent 65%); }
+.dns-av { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; font-size: 15px; color: #fff; background: var(--av, var(--card-2)); }
+.dns-av svg { width: 18px; height: 18px; color: var(--blue-2); }
+.dns-row .n { font-weight: 700; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.dns-row .d { color: var(--muted); font-size: 12px; margin-top: 1px; }
+.dns-row .a { color: var(--faint); font-size: 11.5px; margin-top: 2px; font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dns-ms { display: flex; flex-direction: column; gap: 5px; font-size: 12px; color: var(--faint); min-width: 0; }
+.dns-ms b { font-size: 13px; color: var(--text); font-variant-numeric: tabular-nums; }
+.dns-ms.slow b { color: #ffcf8a; }
+.dns-ms.dead b { color: #ffb3bc; }
+.dns-row .btn { justify-self: end; }
+.tw-b.cur { background: var(--blue-soft); color: var(--blue-light); }
+.tw-b.best { background: var(--mint-soft); color: var(--mint); }
+@media (max-width: 1100px) { .dns-row { grid-template-columns: 38px minmax(0, 1fr) 110px 104px; } }
+
+.cm-row .su-m .where { color: var(--muted); flex: none; }
+.cm-row.off .su-n > span:first-child { color: var(--muted); text-decoration: line-through; text-decoration-color: rgba(255,255,255,.25); }
+
+.tw-b.new { background: linear-gradient(90deg, rgba(62,232,176,.18), rgba(42,157,255,.18)); color: #9ff3d6; }
+.tw-sec.new span:first-child { display: inline-flex; align-items: center; gap: 7px; color: var(--text); }
+.tw-sec.new svg { width: 15px; height: 15px; color: var(--brand-c); }
+.tw-cat.new[aria-pressed="false"] svg { color: var(--brand-c); }
 
 /* ================= 2.10: drive optimization for every drive, the details of a disk ================= */
 .drive-row { grid-template-columns: 54px minmax(0, 1fr) 190px 200px; }
@@ -1496,8 +1585,12 @@ body.dock-on .toasts { bottom: 84px; }
       <button data-page="programs"><span class="ico" data-icon="package"></span><span class="label" data-i="nav.programs"></span><span class="badge" id="prBadge" hidden></span></button>
       <button data-page="procs"><span class="ico" data-icon="cpu"></span><span class="label" data-i="nav.procs"></span></button>
       <button data-page="startup"><span class="ico" data-icon="rocket"></span><span class="label" data-i="nav.startup"></span></button>
+      <button data-page="ctxmenu"><span class="ico" data-icon="menu"></span><span class="label" data-i="nav.ctxmenu"></span></button>
       <button data-page="tweaks"><span class="ico" data-icon="tweaks"></span><span class="label" data-i="nav.tweaks"></span><span class="badge" id="twBadge" hidden></span></button>
+      <div class="nav-g" data-i="nav.g.pc"></div>
+      <button data-page="sysinfo"><span class="ico" data-icon="board"></span><span class="label" data-i="nav.sysinfo"></span></button>
       <button data-page="optimize"><span class="ico" data-icon="optimize"></span><span class="label" data-i="nav.optimize"></span></button>
+      <button data-page="network"><span class="ico" data-icon="network"></span><span class="label" data-i="nav.network"></span></button>
       <button data-page="repair"><span class="ico" data-icon="repair"></span><span class="label" data-i="nav.repair"></span></button>
       <div class="nav-g" data-i="nav.g.safety"></div>
       <button data-page="restore"><span class="ico" data-icon="lifebuoy"></span><span class="label" data-i="nav.restore"></span></button>
@@ -1527,6 +1620,7 @@ body.dock-on .toasts { bottom: 84px; }
       </div>
       <div class="tw-body" id="hmBody">
         <div class="hm-hero panel" id="hmScore"></div>
+        <button class="hm-pc" id="hmPC" hidden></button>
         <div class="hm-cards" id="hmCards"></div>
         <div class="note-line" data-i="hm.note"></div>
       </div>
@@ -1775,6 +1869,51 @@ body.dock-on .toasts { bottom: 84px; }
       <div class="console" id="console"></div>
     </section>
 
+    <!-- =============== SYSTEM INFO =============== -->
+    <section class="page" id="page-sysinfo">
+      <div class="head">
+        <div class="head-ico" data-icon="board"></div>
+        <div><h1 data-i="si.title"></h1><div class="sub" data-i="si.sub"></div></div>
+        <div class="head-r"><button class="btn small" id="siCopy" disabled><span data-icon="copy"></span><span data-i="si.copy"></span></button><button class="btn icon-btn" id="siRefresh" data-i-title="si.refresh"><span data-icon="refresh"></span></button></div>
+      </div>
+      <div class="scroll pad" id="siBody"></div>
+    </section>
+
+    <!-- =============== NETWORK =============== -->
+    <section class="page" id="page-network">
+      <div class="head">
+        <div class="head-ico" data-icon="network"></div>
+        <div><h1 data-i="net.title"></h1><div class="sub" data-i="net.sub"></div></div>
+        <div class="head-r"><button class="btn small" id="netFlush"><span data-icon="refresh"></span><span data-i="net.flush"></span></button><button class="btn primary" id="netTest"><span data-icon="bolt"></span><span id="netTestTxt" data-i="net.test"></span></button></div>
+      </div>
+      <div class="scroll pad" id="netBody">
+        <div class="dh-head"><h3 data-i="net.conn"></h3></div>
+        <div class="net-conns" id="netConns"></div>
+        <div class="dh-head net-h2"><h3 data-i="net.dns"></h3><button class="btn small" id="netRestore" hidden><span data-icon="undo"></span><span data-i="net.restore"></span></button></div>
+        <div class="dh-sub" data-i="net.dnsSub"></div>
+        <div class="notice info net-best" id="netBest" hidden></div>
+        <div class="list" id="dnsList"></div>
+        <div class="note-line" data-i="net.note"></div>
+      </div>
+    </section>
+
+    <!-- =============== CONTEXT MENU =============== -->
+    <section class="page" id="page-ctxmenu">
+      <div class="head">
+        <div class="head-ico" data-icon="menu"></div>
+        <div><h1 data-i="cm.title"></h1><div class="sub" data-i="cm.sub"></div></div>
+        <div class="head-r"><button class="btn small" id="cmMissing" hidden><span data-icon="broken"></span><span id="cmMissingTxt"></span></button><button class="btn icon-btn" id="cmRefresh" data-i-title="cm.refresh"><span data-icon="refresh"></span></button></div>
+      </div>
+      <div class="tw-body" id="cmBody">
+        <div class="su-stats" id="cmStats"></div>
+        <div class="notice info" id="cmAdmin" hidden><p data-i="cm.noadmin"></p></div>
+        <div class="notice info" id="cmExplorer" hidden><p data-i="cm.explorer"></p><button class="btn small" id="cmRestartEx" data-i="cm.restartEx"></button></div>
+        <div class="tw-tools"><label class="search"><span data-icon="search"></span><input id="cmSearch" type="search" spellcheck="false" autocomplete="off" data-i-ph="cm.search"></label></div>
+        <div class="list" id="cmList"></div>
+        <div class="note-line" data-i="cm.note"></div>
+      </div>
+    </section>
+
     <!-- =============== SETTINGS =============== -->
     <section class="page" id="page-settings">
       <div class="head">
@@ -1798,6 +1937,13 @@ body.dock-on .toasts { bottom: 84px; }
           <div class="item"><div class="i-ico" data-icon="stop"></div><div><div class="t" data-i="set.force"></div><div class="d" data-i="set.forceD"></div></div><input type="checkbox" class="switch" id="forceToggle" checked></div>
           <div class="item"><div class="i-ico" data-icon="flag"></div><div><div class="t" data-i="set.rpNow"></div><div class="d" id="rpStatus" data-i="set.rpNowD"></div></div><button class="btn small" id="btnRp" data-i="set.rpBtn"></button></div>
           <div class="item"><div class="i-ico" data-icon="undo"></div><div><div class="t" data-i="set.restore"></div><div class="d" data-i="set.restoreD"></div></div><button class="btn small" id="btnRstrui" data-i="set.open"></button></div>
+        </div>
+        <div class="section-t" data-i="auto.sec"></div>
+        <div class="list">
+          <div class="item"><div class="i-ico" data-icon="calendar"></div><div><div class="t" data-i="auto.t"></div><div class="d" data-i="auto.d"></div><div class="w" id="autoStatus"></div></div>
+            <div class="seg blue" id="segAuto"></div></div>
+          <div class="item" id="autoMovedRow" hidden><div class="i-ico" data-icon="alert"></div><div><div class="t" id="autoMovedT"></div><div class="d" id="autoMovedD"></div></div><button class="btn small" id="autoFix" data-i="auto.fix"></button></div>
+          <div class="item"><div class="i-ico" data-icon="list"></div><div><div class="t" data-i="auto.what"></div><div class="d" id="autoWhat"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="btn small" id="autoSee" data-i="auto.see"></button><button class="btn small" id="autoNow" data-i="auto.now"></button></div></div>
         </div>
         <div class="section-t" data-i="upd.sec"></div>
         <div class="list">
@@ -2352,7 +2498,7 @@ bg: {
   "lg.rApp": "Версия {0}", "lg.rAdmin": "Администратор: {0}", "lg.yes": "да", "lg.no": "не", "lg.rMade": "Създаден: {0}", "lg.rLang": "Език: {0}", "lg.rOp": "Операция: {0} — {1}",
   "lg.rSum": "Резултат: {0}", "lg.rSteps": "Стъпки:", "lg.rOther": "Последни проблеми другаде:", "lg.k.clean": "Почистване", "lg.k.tweak": "Туийкове", "lg.k.startup": "Стартиране",
   "lg.k.disk": "Анализатор на диска", "lg.k.files": "Големи файлове", "lg.k.dupes": "Дубликати", "lg.k.process": "Процеси", "lg.k.restore": "Възстановяване", "lg.k.memory": "Памет",
-  "lg.k.repair": "Поправка", "lg.k.optimize": "Оптимизация", "lg.k.app": "Програмата", "lg.k.ui": "Интерфейс", "lg.f.all": "Всички", "lg.f.problems": "Само проблеми",
+  "lg.k.network": "Мрежа", "lg.k.menu": "Контекстно меню", "lg.k.schedule": "График", "lg.k.repair": "Поправка", "lg.k.optimize": "Оптимизация", "lg.k.app": "Програмата", "lg.k.ui": "Интерфейс", "lg.f.all": "Всички", "lg.f.problems": "Само проблеми",
   "lg.allKinds": "Всички видове", "lg.opFailedT": "Грешка: {0}", "lg.rep.full": "пълна проверка", "lg.rep.sfc": "SFC", "lg.rep.chkdsk": "CHKDSK",
   "lf.colSize": "Размер",
   "lg.clear": "Изчисти", "lg.clearTitle": "Да изчистя ли логовете?",
@@ -2569,6 +2715,81 @@ bg: {
   "sm.242": "Общо прочетени", "sm.other": "Показател на производителя", "wg.selfList": "Не са в списъка, защото се обновяват сами: {0}",
   "wg.h.gone": "Обновяването премахна програмата, вместо да я обнови. Инсталирай я отново от сайта ѝ — данните и игрите ѝ остават на мястото си.",
   "dh.err.read": "Данните на диска не можаха да се прочетат.", "dh.noSmart": "Дискът не дава S.M.A.R.T. данни през Windows (често при USB кутии).",
+  "tw.b.new": "Ново", "tw.cat.new": "Нови", "tw.newT": "Ново във версия {0}", "tw.appcompat-off.n": "Без телеметрия за съвместимост",
+  "tw.appcompat-off.d": "Спира инвентара на програмите и проследяването на стартирането им, които Windows праща на Microsoft. Помощникът за съвместимост и Steps Recorder също спират.",
+  "tw.ceip-off.n": "Без програмата за подобряване (CEIP)", "tw.ceip-off.d": "Windows спира да събира и праща данни за това как се използва компютърът.",
+  "tw.typing-insights-off.n": "Без статистика за писането", "tw.typing-insights-off.d": "Windows спира да води статистика за писането ти — поправени и предложени думи.",
+  "tw.spotlight-off.n": "Без Windows Spotlight",
+  "tw.spotlight-off.d": "Заключеният екран и работният плот спират да сменят снимки от Bing и да показват съвети. Фона си избираш както обикновено.",
+  "tw.shutdown-fast.n": "По-бързо изключване",
+  "tw.shutdown-fast.d": "При изключване или рестарт Windows чака 2 секунди вместо 5–20 за програми и услуги, които не се затварят. Програмите, които отговарят, се затварят нормално.",
+  "tw.search-low-priority.n": "Търсенето с нисък приоритет",
+  "tw.search-low-priority.d": "Индексирането на търсенето работи с нисък приоритет за процесора и диска и не пречи на игри и програми. Търсенето работи както преди.",
+  "tw.ducking-off.n": "Без намаляване на звука при разговор", "tw.ducking-off.d": "Windows не намалява звука на играта и музиката, когато някой се обади в Discord, Teams и подобни.",
+  "tw.full-path-title.n": "Пълен път в заглавието", "tw.full-path-title.d": "Заглавието и табът на File Explorer показват целия път на папката.",
+  "tw.copy-details.n": "Подробности при копиране", "tw.copy-details.d": "Прозорецът за копиране и преместване винаги е разгънат — скорост, оставащо време и графика.",
+  "tw.autoplay-off.n": "Без AutoPlay", "tw.autoplay-off.d": "Нищо не се пуска само, когато включиш флашка, диск или телефон. По-безопасно е.",
+  "tw.clipboard-history.n": "История на клипборда", "tw.clipboard-history.d": "Win+V показва последните неща, които си копирал. Синхронизирането с други устройства не се включва.",
+  "tw.taskbar-labels.n": "Надписи в лентата на задачите", "tw.taskbar-labels.d": "Отворените прозорци в лентата на задачите се показват с името си, без да се групират.",
+  "tw.logon-blur-off.n": "Без замъгляване на входа", "tw.logon-blur-off.d": "Фонът на екрана за вход е ясен, без ефекта на матово стъкло.",
+  "tw.edge-shortcut-off.n": "Без пряк път към Edge при ъпдейт",
+  "tw.edge-shortcut-off.d": "Ъпдейтите на Microsoft Edge спират да слагат иконата му на работния плот. Самият Edge не се променя.",
+  "tw.explorer-ads-off.n": "Без реклами в File Explorer", "tw.explorer-ads-off.d": "File Explorer спира да показва предложения за OneDrive и Microsoft 365.",
+  "tw.store-openwith-off.n": "Без „Търси в Microsoft Store“",
+  "tw.store-openwith-off.d": "Файл без програма за него вече не предлага да търсиш приложение в Store — направо избираш с какво да се отвори.",
+  "tw.multi-select-menu.n": "Пълно меню при много файлове",
+  "tw.multi-select-menu.d": "Когато избереш повече от 15 файла, менюто с десен бутон пак има „Отвори“, „Печат“ и „Редактирай“ (до 100 файла).",
+  "tw.printer-manual.n": "Windows не сменя принтера по подразбиране", "tw.printer-manual.d": "Принтерът по подразбиране е този, който си избрал, а не последният използван.",
+  "nav.sysinfo": "Информация", "nav.network": "Мрежа", "nav.ctxmenu": "Контекстно меню", "nav.g.pc": "Компютър", "si.title": "Информация за системата",
+  "si.sub": "Какво има в компютъра — процесор, видеокарта, памет, дънна платка, дискове и защита.", "si.copy": "Копирай", "si.refresh": "Прочети отново",
+  "si.loading": "Чете се какво има в компютъра… (няколко секунди)", "si.copied": "Информацията за системата е копирана", "si.cpu": "Процесор", "si.gpu": "Видеокарта",
+  "si.ram": "Памет", "si.board": "Дънна платка и BIOS", "si.disks": "Дискове", "si.mon": "Монитори", "si.net": "Мрежа", "si.audio": "Звук", "si.sec": "Защита", "si.bat": "Батерия",
+  "si.k.cores": "Ядра / нишки", "si.k.threads": "Нишки", "si.k.clock": "Честота", "si.k.cache": "Кеш L2 / L3", "si.k.socket": "Сокет", "si.k.virt": "Виртуализация",
+  "si.k.vram": "Видео памет", "si.k.driver": "Драйвер", "si.k.mode": "Режим", "si.alsoV": "Също: {0}", "si.k.slots": "Слотове", "si.slotsV": "{0} от {1} заети",
+  "si.k.board": "Платка", "si.k.pc": "Компютър", "si.k.bios": "BIOS", "si.k.fw": "Фърмуер", "si.k.sb": "Secure Boot", "si.k.tpm": "TPM", "si.k.vbs": "Защита с виртуализация (VBS)",
+  "si.k.hvci": "Цялост на паметта", "si.k.av": "Антивирус", "si.k.charge": "Заряд", "si.k.health": "Здраве", "si.k.cap": "Капацитет", "si.capV": "{0} от {1} Wh", "si.yes": "Включено",
+  "si.no": "Изключено", "si.none": "Няма", "si.unknown": "Неизвестно", "si.laptop": "лаптоп", "si.thisPC": "Този компютър", "si.wifi": "Wi-Fi", "si.eth": "Кабел",
+  "si.noNet": "Няма активна връзка.", "si.up": "Работи от {0}", "si.upD": "{0} д. {1} ч.", "si.upH": "{0} ч. {1} мин.", "si.upM": "{0} мин.", "si.installed": "Windows е от {0}",
+  "si.build": "компилация {0}", "si.goDisks": "Здраве на дисковете", "si.goNet": "DNS и мрежа",
+  "si.tip.xmp": "Паметта работи на {0} MT/s, а може до {1} MT/s. Ако не е нарочно, включи XMP / EXPO в BIOS.",
+  "si.tip.single": "Една плочка памет: с две еднакви (в два канала) паметта е по-бърза, особено в игри.",
+  "si.tip.driver": "Драйверът на {0} е от {1} — по-новият често дава повече FPS (от сайта на {2}).", "si.tip.w11": "За Windows 11 трябват UEFI, Secure Boot и TPM 2.0.",
+  "si.tip.bat": "Батерията държи {0}% от първоначалния си капацитет. С нова ще издържа повече.", "si.r.title": "xKi4o Cleaner — информация за системата", "net.title": "Мрежа",
+  "net.sub": "Кой DNS сървър отваря сайтовете, кой е най-бърз при теб и изчистване на DNS кеша.", "net.flush": "Изчисти DNS кеша", "net.test": "Тествай скоростта",
+  "net.testing": "Тества се…", "net.conn": "Връзки", "net.dns": "DNS сървър",
+  "net.dnsSub": "DNS превръща имената на сайтовете в адреси. С по-бърз сървър сайтовете и игрите се свързват по-бързо, а филтриращите спират и опасни или рекламни сайтове.",
+  "net.restore": "Върни предишните", "net.note": "Сменят се само DNS сървърите на активните връзки (Wi-Fi или кабел). „Автоматично“ връща тези от рутера.", "net.use": "Използвай",
+  "net.cur": "В момента", "net.best": "Най-бърз", "net.auto": "Автоматично (от рутера)", "net.custom": "Свои сървъри", "net.fromRouter": "от рутера — {0}", "net.own": "свои — {0}",
+  "net.noConn": "Няма активна връзка.", "net.ms": "{0} ms", "net.dead": "Не отговаря", "net.lost": "{0} от {1} без отговор",
+  "net.bestT": "Най-бърз при теб е {0} — {1} ms (сегашният: {2}).", "net.useBest": "Използвай {0}", "net.done": "DNS: {0}", "net.failed": "DNS сървърът не можа да се смени",
+  "net.restored": "Предишните DNS сървъри са върнати", "net.flushed": "DNS кешът е изчистен", "net.flushFail": "DNS кешът не можа да се изчисти",
+  "net.testFail": "Тестът не можа да се направи", "net.noadmin": "Смяната на DNS иска администраторски права.", "dns.n.auto": "Каквото дава рутерът или доставчикът",
+  "dns.n.cloudflare": "Бърз, с акцент върху поверителността", "dns.n.google": "Бърз и надежден", "dns.n.quad9": "Спира опасни сайтове",
+  "dns.n.adguard": "Спира реклами и проследяване", "dns.n.opendns": "Стабилен, от Cisco", "dns.n.family": "Спира опасни сайтове и съдържание за възрастни",
+  "cm.title": "Контекстно меню", "cm.sub": "Какво са добавили програмите в менюто с десен бутон. Скритото се връща със същия ключ.", "cm.refresh": "Опресни",
+  "cm.search": "Търси в менюто…", "cm.stat.all": "Всички", "cm.stat.on": "Показани", "cm.stat.off": "Скрити", "cm.stat.missing": "Без програма", "cm.k.verb": "Команда",
+  "cm.k.ext": "Разширение", "cm.shift": "Само с Shift", "cm.missing": "Програмата липсва", "cm.w.files": "Файлове", "cm.w.folders": "Папки", "cm.w.background": "Празно място в папка",
+  "cm.w.drives": "Дискове", "cm.empty": "Няма записи от други програми — менюто е чисто.", "cm.emptyFilter": "Нищо не отговаря на филтъра.",
+  "cm.note": "Показват се само записи на други програми — тези на Windows не се пипат. В Windows 11 повечето са под „Показване на още опции“.",
+  "cm.explorer": "Скритите разширения изчезват от менюто след рестарт на Explorer.", "cm.restartEx": "Рестартирай Explorer", "cm.exDone": "Explorer е рестартиран",
+  "cm.exFail": "Explorer не можа да се рестартира", "cm.noadmin": "Някои записи са за всички потребители и искат администраторски права.", "cm.hidden": "Скрито от менюто: {0}",
+  "cm.shown": "Върнато в менюто: {0}", "cm.hiddenN": "Скрити записи: {0}", "cm.failed": "Не стана: {0}", "cm.missingBtn": "Скрий липсващите ({0})",
+  "cm.missingT": "Да се скрият ли записите без програма?", "cm.missingD": "Програмите им вече ги няма, затова не правят нищо. Връщат се със същия ключ.", "cm.hideAll": "Скрий",
+  "cm.onT": "Показва се в менюто", "cm.offT": "Скрито от менюто", "auto.sec": "Автоматично почистване", "auto.t": "Почиствай автоматично",
+  "auto.d": "Windows пуска почистването по график, без прозорец: кеш и временни файлове. Отворените програми и чувствителните категории се пропускат.", "auto.off": "Изключено",
+  "auto.daily": "Всеки ден", "auto.weekly": "Всяка седмица", "auto.monthly": "Всеки месец", "auto.when.daily": "Всеки ден в 12:00.",
+  "auto.when.weekly": "Всяка седмица ({0}) в 12:00.", "auto.when.monthly": "На 1-во число всеки месец в 12:00.",
+  "auto.missed": "Ако тогава компютърът е изключен, става при следващото пускане.", "auto.last": "Последно: {0} — освободени {1}.",
+  "auto.lastBusy": "Последно: {0} — пропуснато, програмата беше заета.", "auto.never": "Още не е минавало.", "auto.what": "Какво почиства",
+  "auto.whatD": "{0} категории — само кеш и временни файлове, които приложенията създават наново.", "auto.see": "Виж списъка", "auto.now": "Почисти сега",
+  "auto.started": "Автоматичното почистване започна…", "auto.done": "Автоматичното почистване освободи {0}",
+  "auto.doneZero": "Автоматичното почистване приключи — нямаше много за чистене", "auto.moved": "Програмата е преместена",
+  "auto.movedD": "Задачата пуска копие от старото място. Обнови я, за да пуска това.", "auto.fix": "Обнови",
+  "auto.gone": "Задачата я няма в Task Scheduler", "auto.goneD": "Изтрита е извън програмата. Обнови, за да я направиш отново.", "auto.failed": "Графикът не можа да се зададе: {0}",
+  "auto.noadmin": "Иска администраторски права.", "auto.listT": "Какво чисти автоматичното почистване",
+  "auto.listSub": "Само категории, които приложенията създават наново. Никога: кошчето, последните файлове, клипборда, стария Windows, драйверите.",
+  "auto.onT": "Автоматично почистване: {0}", "auto.offT": "Автоматичното почистване е изключено", "pal.a.dnsFlush": "Изчисти DNS кеша", "pal.a.dnsTest": "Тествай скоростта на DNS",
+  "pal.a.siCopy": "Копирай информацията за системата", "pal.a.auto": "Автоматично почистване",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -2910,7 +3131,7 @@ en: {
   "lg.saved": "Saved: {0}", "lg.rTitle": "report", "lg.rApp": "Version {0}", "lg.rAdmin": "Administrator: {0}", "lg.yes": "yes", "lg.no": "no", "lg.rMade": "Created: {0}",
   "lg.rLang": "Language: {0}", "lg.rOp": "Operation: {0} — {1}", "lg.rSum": "Result: {0}", "lg.rSteps": "Steps:", "lg.rOther": "Latest problems elsewhere:", "lg.k.clean": "Cleanup",
   "lg.k.tweak": "Tweaks", "lg.k.startup": "Startup", "lg.k.disk": "Disk Analyzer", "lg.k.files": "Large files", "lg.k.dupes": "Duplicates", "lg.k.process": "Processes",
-  "lg.k.restore": "Restore", "lg.k.memory": "Memory", "lg.k.repair": "Repair", "lg.k.optimize": "Optimize", "lg.k.app": "The app", "lg.k.ui": "Interface", "lg.f.all": "All",
+  "lg.k.restore": "Restore", "lg.k.memory": "Memory", "lg.k.network": "Network", "lg.k.menu": "Right-click menu", "lg.k.schedule": "Schedule", "lg.k.repair": "Repair", "lg.k.optimize": "Optimize", "lg.k.app": "The app", "lg.k.ui": "Interface", "lg.f.all": "All",
   "lg.f.problems": "Problems only", "lg.allKinds": "All kinds", "lg.opFailedT": "Failed: {0}", "lg.rep.full": "full check", "lg.rep.sfc": "SFC", "lg.rep.chkdsk": "CHKDSK",
   "lf.colSize": "Size",
   "lg.clear": "Clear", "lg.clearTitle": "Clear the logs?", "lg.clearText": "All operation records are deleted. The restore backups (tweaks, startup, Recycle Bin) stay.",
@@ -3120,6 +3341,77 @@ en: {
   "sm.241": "Total written", "sm.242": "Total read", "sm.other": "Maker's attribute", "wg.selfList": "Not listed because they update themselves: {0}",
   "wg.h.gone": "The update removed the program instead of updating it. Install it again from its website — its data and games stay where they are.",
   "dh.err.read": "The disk's data could not be read.", "dh.noSmart": "The disk gives no S.M.A.R.T. data through Windows (common for USB enclosures).",
+  "tw.b.new": "New", "tw.cat.new": "New", "tw.newT": "New in version {0}", "tw.appcompat-off.n": "No compatibility telemetry",
+  "tw.appcompat-off.d": "Stops the program inventory and launch tracking that Windows sends to Microsoft. The compatibility assistant and Steps Recorder stop too.",
+  "tw.ceip-off.n": "No improvement program (CEIP)", "tw.ceip-off.d": "Windows stops collecting and sending data about how the PC is used.",
+  "tw.typing-insights-off.n": "No typing insights", "tw.typing-insights-off.d": "Windows stops keeping statistics on your typing — corrected and suggested words.",
+  "tw.spotlight-off.n": "No Windows Spotlight",
+  "tw.spotlight-off.d": "The lock screen and the desktop stop rotating Bing pictures and showing tips. You pick the background as usual.",
+  "tw.shutdown-fast.n": "Faster shutdown",
+  "tw.shutdown-fast.d": "Windows waits 2 seconds instead of 5–20 for programs and services that do not close when it shuts down or restarts. Programs that do answer still close normally.",
+  "tw.search-low-priority.n": "Search at low priority",
+  "tw.search-low-priority.d": "Search indexing runs at low CPU and disk priority and does not get in the way of games and programs. Search works as before.",
+  "tw.ducking-off.n": "No lower volume during calls", "tw.ducking-off.d": "Windows does not turn down your game and music when a call starts in Discord, Teams and similar apps.",
+  "tw.full-path-title.n": "Full path in the title", "tw.full-path-title.d": "The File Explorer title and tab show the whole folder path.", "tw.copy-details.n": "Details when copying",
+  "tw.copy-details.d": "The copy and move window is always expanded — speed, time left and the graph.", "tw.autoplay-off.n": "No AutoPlay",
+  "tw.autoplay-off.d": "Nothing starts by itself when you plug in a USB stick, a disc or a phone. Safer.", "tw.clipboard-history.n": "Clipboard history",
+  "tw.clipboard-history.d": "Win+V shows the last things you copied. Syncing to other devices is not switched on.", "tw.taskbar-labels.n": "Labels on the taskbar",
+  "tw.taskbar-labels.d": "Open windows show on the taskbar with their names and are not grouped.", "tw.logon-blur-off.n": "No blur on the sign-in screen",
+  "tw.logon-blur-off.d": "The sign-in screen background is clear, without the frosted glass effect.", "tw.edge-shortcut-off.n": "No Edge shortcut on updates",
+  "tw.edge-shortcut-off.d": "Microsoft Edge updates stop putting its icon on the desktop. Edge itself is not changed.", "tw.explorer-ads-off.n": "No ads in File Explorer",
+  "tw.explorer-ads-off.d": "File Explorer stops showing OneDrive and Microsoft 365 suggestions.", "tw.store-openwith-off.n": "No “Look in the Microsoft Store”",
+  "tw.store-openwith-off.d": "A file with no program for it no longer offers to look for an app in the Store — you pick what opens it straight away.",
+  "tw.multi-select-menu.n": "Full menu for many files",
+  "tw.multi-select-menu.d": "With more than 15 files selected, the right-click menu still has Open, Print and Edit (up to 100 files).",
+  "tw.printer-manual.n": "Windows keeps your default printer", "tw.printer-manual.d": "The default printer is the one you chose, not the one used last.",
+  "nav.sysinfo": "System info", "nav.network": "Network", "nav.ctxmenu": "Right-click menu", "nav.g.pc": "PC", "si.title": "System information",
+  "si.sub": "What is in this PC — processor, graphics card, memory, motherboard, drives and security.", "si.copy": "Copy", "si.refresh": "Read again",
+  "si.loading": "Reading what is in this PC… (a few seconds)", "si.copied": "System information copied", "si.cpu": "Processor", "si.gpu": "Graphics", "si.ram": "Memory",
+  "si.board": "Motherboard and BIOS", "si.disks": "Drives", "si.mon": "Monitors", "si.net": "Network", "si.audio": "Sound", "si.sec": "Security", "si.bat": "Battery",
+  "si.k.cores": "Cores / threads", "si.k.threads": "Threads", "si.k.clock": "Clock", "si.k.cache": "Cache L2 / L3", "si.k.socket": "Socket", "si.k.virt": "Virtualization",
+  "si.k.vram": "Video memory", "si.k.driver": "Driver", "si.k.mode": "Mode", "si.alsoV": "Also: {0}", "si.k.slots": "Slots", "si.slotsV": "{0} of {1} used", "si.k.board": "Board",
+  "si.k.pc": "PC", "si.k.bios": "BIOS", "si.k.fw": "Firmware", "si.k.sb": "Secure Boot", "si.k.tpm": "TPM", "si.k.vbs": "Virtualization-based security",
+  "si.k.hvci": "Memory integrity", "si.k.av": "Antivirus", "si.k.charge": "Charge", "si.k.health": "Health", "si.k.cap": "Capacity", "si.capV": "{0} of {1} Wh", "si.yes": "On",
+  "si.no": "Off", "si.none": "None", "si.unknown": "Unknown", "si.laptop": "laptop", "si.thisPC": "This PC", "si.wifi": "Wi-Fi", "si.eth": "Cable",
+  "si.noNet": "No connection is active.", "si.up": "Up for {0}", "si.upD": "{0} d {1} h", "si.upH": "{0} h {1} min", "si.upM": "{0} min", "si.installed": "Windows since {0}",
+  "si.build": "build {0}", "si.goDisks": "Drive health", "si.goNet": "DNS and network",
+  "si.tip.xmp": "The memory runs at {0} MT/s but is made for up to {1} MT/s. If that is not on purpose, turn on XMP / EXPO in the BIOS.",
+  "si.tip.single": "One memory stick: with two matching ones (two channels) memory is faster, games especially.",
+  "si.tip.driver": "The {0} driver is from {1} — a newer one often gives more FPS (from {2}'s site).", "si.tip.w11": "Windows 11 needs UEFI, Secure Boot and TPM 2.0.",
+  "si.tip.bat": "The battery holds {0}% of what it held new. A new one will last longer.", "si.r.title": "xKi4o Cleaner — system information", "net.title": "Network",
+  "net.sub": "Which DNS server opens your sites, which one is fastest for you, and flushing the DNS cache.", "net.flush": "Flush DNS cache", "net.test": "Test the speed",
+  "net.testing": "Testing…", "net.conn": "Connections", "net.dns": "DNS server",
+  "net.dnsSub": "DNS turns site names into addresses. A faster server connects sites and games faster, and the filtering ones also stop dangerous or ad sites.",
+  "net.restore": "Put back the previous", "net.note": "Only the DNS servers of the connections in use (Wi-Fi or cable) change. Automatic brings back the router's.", "net.use": "Use",
+  "net.cur": "In use", "net.best": "Fastest", "net.auto": "Automatic (from the router)", "net.custom": "Own servers", "net.fromRouter": "from the router — {0}",
+  "net.own": "own — {0}", "net.noConn": "No connection is active.", "net.ms": "{0} ms", "net.dead": "No answer", "net.lost": "{0} of {1} unanswered",
+  "net.bestT": "The fastest here is {0} — {1} ms (the one in use: {2}).", "net.useBest": "Use {0}", "net.done": "DNS: {0}", "net.failed": "The DNS server could not be changed",
+  "net.restored": "The previous DNS servers are back", "net.flushed": "DNS cache flushed", "net.flushFail": "The DNS cache could not be flushed",
+  "net.testFail": "The test could not run", "net.noadmin": "Changing DNS needs administrator rights.", "dns.n.auto": "Whatever the router or the provider gives",
+  "dns.n.cloudflare": "Fast, privacy-focused", "dns.n.google": "Fast and reliable", "dns.n.quad9": "Stops dangerous sites", "dns.n.adguard": "Stops ads and trackers",
+  "dns.n.opendns": "Stable, run by Cisco", "dns.n.family": "Stops dangerous sites and adult content", "cm.title": "Right-click menu",
+  "cm.sub": "What programs added to the right-click menu. Hidden entries come back with the same switch.", "cm.refresh": "Refresh", "cm.search": "Search the menu…",
+  "cm.stat.all": "All", "cm.stat.on": "Shown", "cm.stat.off": "Hidden", "cm.stat.missing": "Program missing", "cm.k.verb": "Command", "cm.k.ext": "Extension",
+  "cm.shift": "Shift only", "cm.missing": "Program missing", "cm.w.files": "Files", "cm.w.folders": "Folders", "cm.w.background": "Folder background", "cm.w.drives": "Drives",
+  "cm.empty": "No entries from other programs — the menu is clean.", "cm.emptyFilter": "Nothing matches the filter.",
+  "cm.note": "Only entries of other programs are listed — Windows' own are left alone. On Windows 11 most are under “Show more options”.",
+  "cm.explorer": "Hidden extensions leave the menu after Explorer restarts.", "cm.restartEx": "Restart Explorer", "cm.exDone": "Explorer restarted",
+  "cm.exFail": "Explorer could not be restarted", "cm.noadmin": "Some entries are for all users and need administrator rights.", "cm.hidden": "Hidden from the menu: {0}",
+  "cm.shown": "Back in the menu: {0}", "cm.hiddenN": "Entries hidden: {0}", "cm.failed": "Did not work: {0}", "cm.missingBtn": "Hide the missing ({0})",
+  "cm.missingT": "Hide the entries whose program is gone?", "cm.missingD": "Their programs are not there any more, so they do nothing. They come back with the same switch.",
+  "cm.hideAll": "Hide", "cm.onT": "Shown in the menu", "cm.offT": "Hidden from the menu", "auto.sec": "Automatic cleaning", "auto.t": "Clean automatically",
+  "auto.d": "Windows runs the cleaning on a schedule, with no window: caches and temporary files. Open apps and the sensitive categories are left out.", "auto.off": "Off",
+  "auto.daily": "Every day", "auto.weekly": "Every week", "auto.monthly": "Every month", "auto.when.daily": "Every day at 12:00.", "auto.when.weekly": "Every week ({0}) at 12:00.",
+  "auto.when.monthly": "On the 1st of every month at 12:00.", "auto.missed": "If the PC is off then, it runs the next time it is on.", "auto.last": "Last: {0} — {1} freed.",
+  "auto.lastBusy": "Last: {0} — skipped, the app was busy.", "auto.never": "It has not run yet.", "auto.what": "What it cleans",
+  "auto.whatD": "{0} categories — only caches and temporary files the apps make again.", "auto.see": "See the list", "auto.now": "Clean now",
+  "auto.started": "Automatic cleaning started…", "auto.done": "Automatic cleaning freed {0}", "auto.doneZero": "Automatic cleaning finished — there was little to clean",
+  "auto.moved": "The app was moved", "auto.movedD": "The task starts a copy in the old place. Update it to start this one.", "auto.fix": "Update",
+  "auto.gone": "The task is not in Task Scheduler", "auto.goneD": "It was deleted outside the app. Update to make it again.",
+  "auto.failed": "The schedule could not be set: {0}", "auto.noadmin": "Needs administrator rights.", "auto.listT": "What automatic cleaning cleans",
+  "auto.listSub": "Only categories the apps make again. Never: the Recycle Bin, recent files, the clipboard, old Windows, drivers.", "auto.onT": "Automatic cleaning: {0}",
+  "auto.offT": "Automatic cleaning is off", "pal.a.dnsFlush": "Flush DNS cache", "pal.a.dnsTest": "Test DNS speed", "pal.a.siCopy": "Copy system information",
+  "pal.a.auto": "Automatic cleaning",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -3143,6 +3435,12 @@ const ICONS = {
   settings: P('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.8 1.2V21a2 2 0 1 1-4 0v-.1A1.7 1.7 0 0 0 7 19.4a1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 1.2 14H1a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 7a1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 10 1.2V1a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.8 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.7 1.7 0 0 0 22.8 10H23a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" transform="scale(.82) translate(2.6 2.6)"/>'),
   credits: P('<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'),
   refresh: P('<path d="M20 11a8 8 0 0 0-14.7-4.3L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.7 4.3L20 16"/><path d="M20 20v-4h-4"/>'),
+  board: P('<rect x="3" y="3" width="18" height="18" rx="2.5"/><rect x="7" y="7" width="5" height="5" rx="1"/><path d="M15 7.5h2.5M15 10.5h2.5M7 15.5h10.5M7 18h6"/>'),
+  monitor: P('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>'),
+  battery: P('<rect x="2.5" y="7" width="16.5" height="10" rx="2"/><path d="M22 10.5v3"/><path d="M6 10v4M9.5 10v4M13 10v4"/>'),
+  menu: P('<rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h3.5"/>'),
+  calendar: P('<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 14h2M14 14h2M8 17.5h2"/>'),
+  speaker: P('<path d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>'),
   sparkle: P('<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>'),
   bolt: P('<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>'),
   all: P('<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>'),
@@ -3550,6 +3848,39 @@ function toTray() {
 })();
 on("win", paintWin);
 document.querySelectorAll(".cards, .tw-cats, .da-vols").forEach(fadeEdges);
+// the side menu scrolls when the window is short: its edges fade so it shows there is more
+function fadeEdgesY(el) {
+  const upd = () => {
+    const max = el.scrollHeight - el.clientHeight;
+    el.classList.toggle("fade-y", max > 1);
+    el.style.setProperty("--ft", el.scrollTop > 1 ? "28px" : "0px");
+    el.style.setProperty("--fb", el.scrollTop < max - 1 ? "28px" : "0px");
+  };
+  el.addEventListener("scroll", upd, { passive: true });
+  if (window.ResizeObserver) new ResizeObserver(upd).observe(el);
+  upd();
+}
+fadeEdgesY($(".nav"));
+// every section stays in view: when the window is too short for the menu,
+// its buttons get just as much smaller as needed (and the group titles
+// become thin lines) instead of scrolling
+function fitNav() {
+  const n = $(".nav"); if (!n) return;
+  n.classList.remove("fit", "lines"); n.style.removeProperty("--navh");
+  const bs = n.querySelectorAll("button");
+  if (!bs.length || n.scrollHeight <= n.clientHeight + 1) { moveNav(); return; }
+  const h0 = bs[0].offsetHeight;
+  for (const lines of [false, true]) {
+    n.classList.toggle("lines", lines);
+    const over = n.scrollHeight - n.clientHeight;
+    const h = Math.floor(h0 - over / bs.length - .5);
+    if (h >= 25 || lines) { n.style.setProperty("--navh", Math.max(21, Math.min(h0, h)) + "px"); n.classList.add("fit"); break; }
+  }
+  moveNav();
+}
+window.addEventListener("resize", fitNav);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitNav);
+setTimeout(fitNav, 0);
 // Go bindings live in window.__go (see third_party/go-webview2/PATCHES.md): a page
 // function with the same name as a binding would otherwise replace window[name].
 const GO = window.__go || {};
@@ -3616,6 +3947,10 @@ function applyLang() {
   if (S.page === "programs") renderPrograms();
   if (S.page === "game") renderGame();
   if (S.page === "tidy") renderTidy();
+  if (SI.v || SI.loading) { renderSysInfo(); renderHomePC(); }
+  if (NET.st) renderNet();
+  if (CM.loaded) renderCtx();
+  setupAutoSeg(); renderAuto();
   moveNav();
 }
 
@@ -3652,6 +3987,10 @@ function go(page, opt) {
   if (page === "clean") requestAnimationFrame(() => $("#segSort")._place && $("#segSort")._place());
   if (page === "tweaks") { loadTweaks(); requestAnimationFrame(() => $("#twFilter")._place && $("#twFilter")._place()); }
   if (page === "startup") loadStartup();
+  if (page === "sysinfo") loadSysInfo(false);
+  if (page === "network") loadNet(false);
+  if (page === "ctxmenu") loadCtx(false);
+  if (page === "settings") { loadAuto(); requestAnimationFrame(() => $("#segAuto")._place && $("#segAuto")._place()); }
   if (page === "disk") loadDisk();
   if (JOBS.flash && JOBS.flash.page === page) JOBS.flash = null;
   paintDock();
@@ -4589,7 +4928,7 @@ on("tweak-rp", d => {
 });
 
 function twVisible(m) {
-  if (TW.cat !== "all" && m.group !== TW.cat) return false;
+  if (TW.cat === "new" ? !m.new : TW.cat !== "all" && m.group !== TW.cat) return false;
   const st = (TW.state[m.id] || {}).state;
   if (TW.filter === "on" && !(st === "on" || st === "partial")) return false;
   if (TW.filter === "rec" && !m.rec) return false;
@@ -4598,6 +4937,7 @@ function twVisible(m) {
 }
 function twRowHtml(m) {
   const b = [];
+  if (m.new) b.push(["new", t("tw.b.new")]);
   if (m.rec) b.push(["rec", t("tw.b.rec")]);
   if (m.risk === "risky") b.push(["risky", t("tw.b.risky")]); else if (m.risk === "caution") b.push(["caution", t("tw.b.caution")]);
   if (m.oneWay) b.push(["oneway", t("tw.b.oneway")]);
@@ -4613,12 +4953,12 @@ function twRowHtml(m) {
     <div class="tw-ctl"><span class="tw-ok">${ICONS.check}</span><span class="spin" data-spin hidden></span>${ctl}</div></div>`;
 }
 function renderTwCats() {
-  const cats = ["all"].concat(TW_GROUPS);
+  const cats = ["all"].concat(TW.meta.some(m => m.new) ? ["new"] : [], TW_GROUPS);
   $("#twCats").innerHTML = cats.map(c => {
-    const all = c === "all" ? TW.meta : TW.meta.filter(m => m.group === c);
+    const all = c === "all" ? TW.meta : c === "new" ? TW.meta.filter(m => m.new) : TW.meta.filter(m => m.group === c);
     const avail = twAvail(all); // counted like the summary: the tweaks this Windows has
     const on = avail.filter(m => twIsOn(m.id)).length;
-    return `<button class="tw-cat" data-cat="${c}" aria-pressed="${TW.cat === c}">${c === "all" ? ICONS.tweaks : ICONS[TW_ICON[c]]}<span>${esc(t(c === "all" ? "tw.cat.all" : "tw.g." + c))}</span><span class="c">${TW.loaded && avail.length ? on + "/" + avail.length : all.length || ""}</span></button>`;
+    return `<button class="tw-cat${c === "new" ? " new" : ""}" data-cat="${c}" aria-pressed="${TW.cat === c}">${c === "all" ? ICONS.tweaks : c === "new" ? ICONS.sparkle : ICONS[TW_ICON[c]]}<span>${esc(t(c === "all" ? "tw.cat.all" : c === "new" ? "tw.cat.new" : "tw.g." + c))}</span><span class="c">${TW.loaded && avail.length ? on + "/" + avail.length : all.length || ""}</span></button>`;
   }).join("");
   $$("#twCats .tw-cat").forEach(b => b.addEventListener("click", () => { TW.cat = b.dataset.cat; renderTweaks(); $("#twBody").scrollTo({ top: 0, behavior: motionOK() ? "smooth" : "auto" }); }));
 }
@@ -4631,11 +4971,18 @@ function renderTweaks() {
     paintTwSummary(); return;
   }
   let html = "";
-  (TW.cat === "all" ? TW_GROUPS : [TW.cat]).forEach(g => {
-    const all = TW.meta.filter(m => m.group === g), items = all.filter(twVisible);
+  // what came with this version: first, on its own (and not again in its group)
+  const news = TW.meta.filter(m => m.new);
+  if (TW.cat === "all" || TW.cat === "new") {
+    const items = news.filter(twVisible), av = twAvail(news);
+    if (items.length) html += `<div class="tw-sec new"><span>${ICONS.sparkle}${esc(t("tw.newT", ((S.info && S.info.version) || "").split(".").slice(0, 2).join(".")))}</span><span class="c">${TW.loaded ? av.filter(m => twIsOn(m.id)).length + "/" + av.length : ""}</span></div><div class="list">${items.map(twRowHtml).join("")}</div>`;
+  }
+  (TW.cat === "all" ? TW_GROUPS : TW.cat === "new" ? [] : [TW.cat]).forEach(g => {
+    const all = TW.meta.filter(m => m.group === g), items = all.filter(twVisible).filter(m => TW.cat !== "all" || !m.new);
     if (!items.length) return;
-    const on = all.filter(m => twIsOn(m.id)).length;
-    html += `<div class="tw-sec"><span>${esc(t("tw.g." + g))}</span><span class="c">${TW.loaded ? on + "/" + all.length : ""}</span></div><div class="list">${items.map(twRowHtml).join("")}</div>`;
+    items.sort((a, b) => (b.new ? 1 : 0) - (a.new ? 1 : 0)); // in its own group, the new ones first
+    const av = twAvail(all);
+    html += `<div class="tw-sec"><span>${esc(t("tw.g." + g))}</span><span class="c">${TW.loaded ? av.filter(m => twIsOn(m.id)).length + "/" + av.length : ""}</span></div><div class="list">${items.map(twRowHtml).join("")}</div>`;
   });
   list.innerHTML = html || `<div class="list"><div class="tw-empty">${esc(t(TW.filter === "on" && !TW.q ? "tw.emptyOn" : "tw.empty"))}</div></div>`;
   list.querySelectorAll("[data-tw]").forEach(row => {
@@ -4690,7 +5037,7 @@ function paintTwSummary() {
 function twAvail(list) { return TW.loaded ? list.filter(m => { const st = (TW.state[m.id] || {}).state; return st && st !== "na"; }) : list; }
 function renderTwCatsCounts() {
   $$("#twCats .tw-cat").forEach(b => {
-    const c = b.dataset.cat, all = c === "all" ? TW.meta : TW.meta.filter(m => m.group === c), avail = twAvail(all);
+    const c = b.dataset.cat, all = c === "all" ? TW.meta : c === "new" ? TW.meta.filter(m => m.new) : TW.meta.filter(m => m.group === c), avail = twAvail(all);
     b.querySelector(".c").textContent = TW.loaded && avail.length ? avail.filter(m => twIsOn(m.id)).length + "/" + avail.length : (all.length || "");
   });
 }
@@ -5713,7 +6060,7 @@ function setupSwatches() {
 }
 
 /* Keyboard shortcuts */
-const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "optimize", "repair", "restore", "logs", "settings", "credits"];
+const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "ctxmenu", "tweaks", "sysinfo", "optimize", "network", "repair", "restore", "logs", "settings", "credits"];
 document.addEventListener("keydown", e => {
   if ($("#veil").classList.contains("on") || $("#sveil").classList.contains("on")) return;
   if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K" || e.key === "p" || e.key === "P")) { e.preventDefault(); if ($("#palVeil").classList.contains("on")) palClose(); else palOpen(); return; }
@@ -6585,12 +6932,429 @@ async function countUnseenErrors() {
   paintLgBadge();
 }
 
+
+/* =====================================================================
+   SYSTEM INFORMATION (read only)
+===================================================================== */
+const SI = { v: null, loading: false, err: "", wantCopy: false };
+async function loadSysInfo(refresh, quiet) {
+  if (SI.loading) return;
+  if (SI.v && !refresh) { if (!quiet) renderSysInfo(); return; }
+  SI.loading = true; $("#siRefresh").classList.add("spin"); if (!quiet) renderSysInfo();
+  try { SI.v = await api.systemInfo(!!refresh); SI.err = ""; } catch (e) { SI.err = String((e && e.message) || e); }
+  SI.loading = false; $("#siRefresh").classList.remove("spin");
+  renderSysInfo(); renderHomePC();
+  if (SI.wantCopy && SI.v) { SI.wantCopy = false; copySysInfo(); }
+}
+function siCopyWhenReady() { if (SI.v && !SI.loading) copySysInfo(); else SI.wantCopy = true; }
+const siGB = b => { const g = b / 1073741824; return (g >= 10 || Math.abs(g - Math.round(g)) < .05 ? nfi(g) : nf(1).format(g)) + (L === "bg" ? " ГБ" : " GB"); };
+const siClock = mhz => mhz >= 1000 ? nf(2).format(mhz / 1000) + " GHz" : nfi(mhz) + " MHz";
+const siCache = kb => kb >= 1024 ? nfi(kb / 1024) + (L === "bg" ? " МБ" : " MB") : nfi(kb) + (L === "bg" ? " КБ" : " KB");
+const siLink = bps => bps >= 1e9 ? nf(bps % 1e9 ? 1 : 0).format(bps / 1e9) + " Gbps" : nfi(bps / 1e6) + " Mbps";
+const siDate = iso => { const d = iso ? new Date(iso) : null; return d && !isNaN(d) && d.getFullYear() > 1980 ? d.toLocaleDateString(locale()) : ""; };
+function siUptime(sec) {
+  const d = Math.floor(sec / 86400), h = Math.floor(sec % 86400 / 3600), m = Math.floor(sec % 3600 / 60);
+  return d ? t("si.upD", d, h) : h ? t("si.upH", h, m) : t("si.upM", Math.max(1, m));
+}
+function siOnOff(v, good) { return v === "" || v == null ? `<span class="si-dim">${esc(t("si.unknown"))}</span>` : `<span class="${v ? (good ? "si-good" : "") : (good ? "si-warn" : "si-dim")}">${esc(t(v ? "si.yes" : "si.no"))}</span>`; }
+function siMemType(v) {
+  const r = v.ram.filter(m => m.size > 0);
+  const total = r.reduce((a, m) => a + m.size, 0) || v.board.total;
+  const types = [...new Set(r.map(m => m.type).filter(Boolean))].join("/");
+  const sp = Math.max(0, ...r.map(m => m.cfg || m.mhz || 0));
+  return { r, total, types, sp };
+}
+function siPCName(v) {
+  const b = v.board;
+  const pc = [b.pcMaker, b.pcModel].filter(Boolean).join(" ").trim();
+  const mb = [b.maker, b.model].filter(Boolean).join(" ").trim();
+  return pc || mb || v.os.pc || t("si.thisPC");
+}
+function siCard(icon, title, body, link) {
+  return `<div class="si-card"><div class="top"><span class="ic">${ICONS[icon] || ""}</span><h3>${esc(title)}</h3>${link || ""}</div>${body}</div>`;
+}
+const siKV = rows => `<dl class="si-kv">${rows.filter(r => r && r[1] !== "" && r[1] != null).map(r => `<dt>${esc(r[0])}</dt><dd>${r[2] ? r[1] : esc(r[1])}</dd>`).join("")}</dl>`;
+const siTip = (text, kind) => `<div class="si-tip ${kind || ""}">${ICONS[kind === "info" ? "info" : "alert"]}<span>${esc(text)}</span></div>`;
+function siTips(v) {
+  const tips = { ram: [], gpu: [], sec: [], bat: [] };
+  const mt = siMemType(v);
+  const slow = mt.r.find(m => m.cfg > 0 && m.mhz > 0 && m.cfg < m.mhz * .9);
+  if (slow) tips.ram.push(siTip(t("si.tip.xmp", String(slow.cfg), String(slow.mhz))));
+  if (!v.board.laptop && !v.battery && mt.r.length === 1 && v.slots >= 2) tips.ram.push(siTip(t("si.tip.single"), "info"));
+  v.gpu.filter(g => !g.virtual).forEach(g => {
+    const d = g.date ? new Date(g.date) : null, maker = /nvidia|geforce|rtx|gtx/i.test(g.name) ? "NVIDIA" : /amd|radeon/i.test(g.name) ? "AMD" : "";
+    if (maker && d && !isNaN(d) && Date.now() - d.getTime() > 365 * 864e5) tips.gpu.push(siTip(t("si.tip.driver", g.name, siDate(g.date), maker), "info"));
+  });
+  const sc = v.security;
+  if (+v.os.build < 22000 && (sc.firmware && sc.firmware !== "UEFI" || sc.secureBoot === "off" || !sc.tpm || +sc.tpm < 2)) tips.sec.push(siTip(t("si.tip.w11"), "info"));
+  if (v.battery && v.battery.health > 0 && v.battery.health < 70) tips.bat.push(siTip(t("si.tip.bat", v.battery.health)));
+  return tips;
+}
+function renderSysInfo() {
+  const body = $("#siBody"); if (!body) return;
+  $("#siCopy").disabled = !SI.v || SI.loading;
+  if (!SI.v) {
+    body.innerHTML = SI.loading || !SI.err
+      ? `<div class="si-load"><span class="spin"></span>${esc(t("si.loading"))}</div><div class="si-grid">${[0, 1, 2, 3, 4, 5].map(() => `<span class="skel si-skel"></span>`).join("")}</div>`
+      : `<div class="tw-empty">${esc(SI.err)}</div>`;
+    return;
+  }
+  const v = SI.v, os = v.os, tips = siTips(v), mt = siMemType(v);
+  const winParts = [os.name, os.ver, os.build ? t("si.build", os.build + (os.ubr ? "." + os.ubr : "")) : "", os.arch].filter(Boolean);
+  const chips = [];
+  if (os.uptime) chips.push(t("si.up", siUptime(os.uptime)));
+  if (siDate(os.installed)) chips.push(t("si.installed", siDate(os.installed)));
+  if (os.pc && os.pc !== siPCName(v)) chips.push(os.pc);
+  let html = v.error ? `<div class="notice info" style="margin:0 0 12px"><p>${esc(v.error)}</p></div>` : "";
+  html += `<div class="si-hero"><span class="hi">${ICONS.monitor}</span><div class="ht"><h2>${esc(siPCName(v))}</h2><div class="m">${winParts.map(x => `<span class="nw">${esc(x)}</span>`).join(" · ")}</div></div><div class="si-chips">${chips.map(c => `<span class="chip">${esc(c)}</span>`).join("")}</div></div>`;
+  const cards = [];
+  // processor
+  v.cpu.forEach(c => cards.push(siCard("cpu", t("si.cpu"), `<div class="si-big">${esc(c.name || t("si.unknown"))}</div>` + siKV([
+    [c.cores ? t("si.k.cores") : t("si.k.threads"), c.cores ? `${c.cores} / ${c.threads}` : String(c.threads || "")],
+    [t("si.k.clock"), c.mhz ? siClock(c.mhz) : ""],
+    [t("si.k.cache"), c.l2 || c.l3 ? [c.l2 ? siCache(c.l2) : "—", c.l3 ? siCache(c.l3) : "—"].join(" / ") : ""],
+    [t("si.k.socket"), c.socket || ""],
+    [t("si.k.virt"), v.error ? "" : siOnOff(c.virt, false), true],
+  ]))));
+  // graphics
+  const gpus = v.gpu.filter(g => !g.virtual), virt = v.gpu.filter(g => g.virtual);
+  if (gpus.length || virt.length) cards.push(siCard("gpu", t("si.gpu"), gpus.map((g, i) => `<div class="${i ? "si-sep" : ""}"><div class="si-big">${esc(g.name)}</div>${siKV([
+    [t("si.k.vram"), g.ram > 0 ? siGB(g.ram) : ""],
+    [t("si.k.driver"), [g.driver, siDate(g.date) ? "(" + siDate(g.date) + ")" : ""].filter(Boolean).join(" ")],
+    [t("si.k.mode"), g.w && g.h ? `${g.w} × ${g.h}${g.hz > 1 ? " · " + g.hz + " Hz" : ""}` : ""],
+  ])}</div>`).join("") + (virt.length ? `<div class="si-dim" style="font-size:12px">${esc(t("si.alsoV", virt.map(g => g.name).join(", ")))}</div>` : "") + tips.gpu.join("")));
+  // memory
+  cards.push(siCard("memory", t("si.ram"), `<div class="si-big">${esc([mt.total ? siGB(mt.total) : "", mt.types, mt.sp ? mt.sp + " MT/s" : ""].filter(Boolean).join(" · "))}</div>` +
+    (v.slots ? siKV([[t("si.k.slots"), t("si.slotsV", mt.r.length, v.slots)]]) : "") +
+    (mt.r.length ? `<div class="si-mods">${mt.r.map(m => `<div class="si-mod"><span class="s" title="${esc(m.slot)}">${esc(m.slot || "—")}</span><span class="p" title="${esc([m.maker, m.part].filter(Boolean).join(" "))}">${esc([m.maker, m.part].filter(Boolean).join(" ") || "—")}</span><b>${esc(siGB(m.size))}${m.cfg || m.mhz ? " · " + (m.cfg || m.mhz) : ""}</b></div>`).join("")}</div>` : "") + tips.ram.join("")));
+  // board and BIOS
+  const b = v.board;
+  cards.push(siCard("board", t("si.board"), siKV([
+    [t("si.k.board"), [b.maker, b.model].filter(Boolean).join(" ")],
+    [t("si.k.pc"), [b.pcMaker, b.pcModel].filter(Boolean).join(" ") + (b.laptop ? " · " + t("si.laptop") : "")],
+    [t("si.k.bios"), [b.biosMaker, b.bios, siDate(b.biosDate) ? "(" + siDate(b.biosDate) + ")" : ""].filter(Boolean).join(" ")],
+    [t("si.k.fw"), v.security.firmware || ""],
+  ])));
+  // storage
+  if (v.disks.length) cards.push(siCard("disk", t("si.disks"), `<div class="si-mods">${v.disks.map(d => `<div class="si-mod"><span class="s">${esc([d.bus, d.media].filter(x => x && x !== "Unspecified").join(" "))}</span><span class="p" title="${esc(d.name)}">${esc(d.name)}</span><b>${esc(fmt(d.size))}</b></div>`).join("")}</div>`,
+    `<button class="linkbtn" data-sigo="optimize">${esc(t("si.goDisks"))}</button>`));
+  // displays
+  if (v.monitors.length) cards.push(siCard("monitor", t("si.mon"), `<div class="si-mods">${v.monitors.map(m => `<div class="si-mod"><span class="s">${esc(m.maker)}</span><span class="p">${esc(m.name || m.maker)}</span><b>${esc([m.inch ? nf(m.inch % 1 ? 1 : 0).format(m.inch) + "″" : "", m.year > 1990 ? String(m.year) : ""].filter(Boolean).join(" · "))}</b></div>`).join("")}</div>`));
+  // network
+  cards.push(siCard("network", t("si.net"), v.net.length ? `<div class="si-mods">${v.net.map(n => `<div class="si-mod"><span class="s">${esc(n.wifi ? t("si.wifi") : t("si.eth"))}</span><span class="p" title="${esc(n.desc)}">${esc(n.desc || n.name)}</span><b>${esc(n.speed ? siLink(n.speed) : "")}</b></div>`).join("")}</div>` : `<div class="si-dim" style="font-size:12.5px">${esc(t("si.noNet"))}</div>`,
+    `<button class="linkbtn" data-sigo="network">${esc(t("si.goNet"))}</button>`));
+  // sound
+  if (v.audio.length) cards.push(siCard("speaker", t("si.audio"), `<div class="si-mods">${v.audio.map(a => `<div class="si-mod" style="grid-template-columns:minmax(0,1fr)"><span class="p">${esc(a)}</span></div>`).join("")}</div>`));
+  // security
+  const sc = v.security, sb = sc.secureBoot === "on" ? true : sc.secureBoot === "off" ? false : "";
+  if (!v.error) cards.push(siCard("shield", t("si.sec"), siKV([
+    [t("si.k.fw"), sc.firmware ? `<span class="${sc.firmware === "UEFI" ? "si-good" : "si-warn"}">${esc(sc.firmware)}</span>` : `<span class="si-dim">${esc(t("si.unknown"))}</span>`, true],
+    [t("si.k.sb"), siOnOff(sb, true), true],
+    [t("si.k.tpm"), sc.tpm ? `<span class="${+sc.tpm >= 2 ? "si-good" : "si-warn"}">${esc(sc.tpm)}</span>` : `<span class="si-dim">${esc(t("si.none"))}</span>`, true],
+    [t("si.k.vbs"), siOnOff(sc.vbs, false), true],
+    [t("si.k.hvci"), siOnOff(sc.hvci, false), true],
+    [t("si.k.av"), sc.av.length ? sc.av.join(", ") : t("si.none")],
+  ]) + tips.sec.join("")));
+  // battery
+  if (v.battery) {
+    const bt = v.battery;
+    cards.push(siCard("battery", t("si.bat"), siKV([
+      [t("si.k.charge"), bt.charge ? bt.charge + "%" : ""],
+      [t("si.k.health"), bt.health ? bt.health + "%" : t("si.unknown")],
+      [t("si.k.cap"), bt.full && bt.design ? t("si.capV", nf(1).format(bt.full / 1000), nf(1).format(bt.design / 1000)) : ""],
+    ]) + (bt.health ? `<div class="si-bar ${bt.health < 70 ? "warn" : ""}"><i style="width:${bt.health}%"></i></div>` : "") + tips.bat.join("")));
+  }
+  html += `<div class="si-grid">${cards.join("")}</div>`;
+  body.innerHTML = html;
+  body.querySelectorAll("[data-sigo]").forEach(x => x.addEventListener("click", () => go(x.dataset.sigo)));
+}
+// a short line on Home: what this PC is
+function renderHomePC() {
+  const el = $("#hmPC"); if (!el) return;
+  const v = SI.v;
+  if (!v) { el.hidden = true; return; }
+  const mt = siMemType(v), g = v.gpu.find(x => !x.virtual);
+  const parts = [v.cpu[0] && v.cpu[0].name, g && g.name, mt.total ? siGB(mt.total) + (mt.types ? " " + mt.types : "") : "", [v.os.name, v.os.ver].filter(Boolean).join(" ")].filter(Boolean);
+  el.innerHTML = `${ICONS.board}<span>${esc(parts.join("  ·  "))}</span><span class="go">${ICONS.chev}</span>`;
+  el.title = t("si.title");
+  el.hidden = false;
+}
+$("#hmPC").addEventListener("click", () => go("sysinfo"));
+function sysInfoReport() {
+  const v = SI.v; if (!v) return "";
+  const os = v.os, mt = siMemType(v), L2 = [];
+  L2.push(t("si.r.title"), "");
+  L2.push(`Windows: ${[os.name, os.ver, os.build ? os.build + (os.ubr ? "." + os.ubr : "") : "", os.arch].filter(Boolean).join(", ")}`);
+  L2.push(`${t("si.k.pc")}: ${siPCName(v)}`);
+  if (v.board.maker || v.board.model) L2.push(`${t("si.k.board")}: ${[v.board.maker, v.board.model].filter(Boolean).join(" ")}`);
+  if (v.board.bios) L2.push(`BIOS: ${[v.board.biosMaker, v.board.bios, siDate(v.board.biosDate)].filter(Boolean).join(" ")}${v.security.firmware ? " (" + v.security.firmware + ")" : ""}`);
+  v.cpu.forEach(c => L2.push(`${t("si.cpu")}: ${c.name}${c.cores ? ` — ${c.cores}/${c.threads}` : ""}${c.mhz ? ", " + siClock(c.mhz) : ""}`));
+  v.gpu.filter(g => !g.virtual).forEach(g => L2.push(`${t("si.gpu")}: ${g.name}${g.ram > 0 ? ", " + siGB(g.ram) : ""}${g.driver ? ", " + t("si.k.driver").toLowerCase() + " " + g.driver + (siDate(g.date) ? " (" + siDate(g.date) + ")" : "") : ""}${g.w ? `, ${g.w}×${g.h}${g.hz > 1 ? " " + g.hz + " Hz" : ""}` : ""}`));
+  L2.push(`${t("si.ram")}: ${[mt.total ? siGB(mt.total) : "", mt.types, mt.sp ? mt.sp + " MT/s" : "", v.slots ? t("si.slotsV", mt.r.length, v.slots) : ""].filter(Boolean).join(", ")}`);
+  mt.r.forEach(m => L2.push(`  ${m.slot || "—"}: ${siGB(m.size)} ${[m.maker, m.part].filter(Boolean).join(" ")} ${m.cfg || m.mhz || ""}`.trimEnd()));
+  v.disks.forEach(d => L2.push(`${t("si.disks")}: ${d.name} (${[d.bus, d.media].filter(x => x && x !== "Unspecified").join(" ")}, ${fmt(d.size)})`));
+  v.monitors.forEach(m => L2.push(`${t("si.mon")}: ${[m.maker, m.name].filter(Boolean).join(" ")}${m.inch ? " " + m.inch + "″" : ""}`));
+  v.net.forEach(n => L2.push(`${t("si.net")}: ${n.desc || n.name}${n.speed ? ", " + siLink(n.speed) : ""}`));
+  if (v.audio.length) L2.push(`${t("si.audio")}: ${v.audio.join(", ")}`);
+  if (!v.error) { const sc = v.security; L2.push(`${t("si.sec")}: Secure Boot ${sc.secureBoot || "?"}, TPM ${sc.tpm || t("si.none")}, VBS ${sc.vbs ? "on" : "off"}, HVCI ${sc.hvci ? "on" : "off"}${sc.av.length ? ", " + sc.av.join(", ") : ""}`); }
+  if (v.battery) L2.push(`${t("si.bat")}: ${v.battery.charge}%${v.battery.health ? ", " + t("si.k.health").toLowerCase() + " " + v.battery.health + "%" : ""}`);
+  if (os.uptime) L2.push(t("si.up", siUptime(os.uptime)));
+  return L2.join("\n");
+}
+async function copySysInfo() {
+  const txt = sysInfoReport(); if (!txt) return;
+  const ok = await copyToClipboard(txt);
+  toast(t(ok ? "si.copied" : "lg.copyFail"), ok ? "copy" : "alert", ok ? "" : "warn");
+}
+$("#siCopy").addEventListener("click", copySysInfo);
+$("#siRefresh").addEventListener("click", () => loadSysInfo(true));
+
+/* =====================================================================
+   NETWORK: DNS servers, speed test, DNS cache
+===================================================================== */
+const NET = { st: null, loading: false, busy: "", test: null, testing: false };
+const DNS_AV = { cloudflare: ["C", "#f38020"], google: ["G", "#4285f4"], quad9: ["9", "#d4145a"], adguard: ["A", "#47a35a"], opendns: ["O", "#e8a317"], "cloudflare-family": ["F", "#f38020"] };
+async function loadNet(force) {
+  if (NET.loading) return;
+  if (NET.st && !force) { renderNet(); return; }
+  NET.loading = true; renderNet();
+  try { NET.st = await api.netState(); } catch (e) { NET.st = NET.st || { adapters: [], providers: [], current: "", backup: false }; }
+  NET.loading = false; renderNet();
+}
+function dnsName(id) { if (id === "auto") return t("net.auto"); if (id === "custom") return t("net.custom"); const p = ((NET.st && NET.st.providers) || []).find(x => x.id === id); return p ? p.name : id; }
+function netResult(id) {
+  const r = NET.test || [];
+  if (id === "auto" || id === "own") { const own = r.filter(x => !x.id && x.ms >= 0); return own.length ? own.sort((a, b) => a.ms - b.ms)[0] : r.find(x => !x.id) || null; }
+  return r.find(x => x.id === id) || null;
+}
+function renderNet() {
+  const st = NET.st, conns = $("#netConns"), list = $("#dnsList"); if (!conns) return;
+  $("#netTest").disabled = NET.testing || !st;
+  $("#netTestTxt").textContent = t(NET.testing ? "net.testing" : "net.test");
+  if (!st) {
+    conns.innerHTML = `<span class="skel si-skel" style="height:82px"></span>`;
+    list.innerHTML = [0, 1, 2, 3].map(() => `<div class="dns-row"><span class="skel" style="width:38px;height:38px;border-radius:12px"></span><span class="skel" style="width:180px"></span><span></span><span></span></div>`).join("");
+    return;
+  }
+  const use = st.adapters.some(a => a.gateway) ? st.adapters.filter(a => a.gateway) : st.adapters;
+  conns.innerHTML = use.length ? use.map(a => {
+    const dns = a.dns.length ? a.dns.join(", ") : "—";
+    const how = a.static ? (a.provider ? `<b>${esc(dnsName(a.provider))}</b> — ${esc(dns)}` : esc(t("net.own", dns))) : esc(t("net.fromRouter", dns));
+    return `<div class="net-c"><span class="ic">${ICONS[a.wifi ? "wifi" : "network"]}</span><div style="min-width:0"><div class="n">${esc(a.name)}</div><div class="d">${esc([a.desc, a.speed ? siLink(a.speed) : ""].filter(Boolean).join(" · "))}</div><div class="dns">DNS: ${how}</div></div></div>`;
+  }).join("") : `<div class="tw-empty" style="padding:18px">${esc(t("net.noConn"))}</div>`;
+  $("#netRestore").hidden = !st.backup;
+  const rows = [{ id: "auto", name: t("net.auto"), note: "dns.n.auto", v4: [] }].concat(st.providers);
+  const live = (NET.test || []).filter(x => x.ms >= 0), best = live.length ? live.slice().sort((a, b) => a.ms - b.ms)[0] : null;
+  const fastestMs = best ? best.ms : 0, can = !!(S.info && S.info.admin) && use.length > 0;
+  list.innerHTML = rows.map(p => {
+    const cur = st.current === p.id, r = netResult(p.id), av = DNS_AV[p.id];
+    const isBest = best && r && r.server === best.server && r.ms >= 0;
+    let ms = `<div class="dns-ms"></div>`;
+    if (NET.testing && !NET.test) ms = `<div class="dns-ms"><span class="skel" style="width:70px"></span></div>`;
+    else if (r) ms = r.ms < 0 ? `<div class="dns-ms dead"><b>${esc(t("net.dead"))}</b></div>`
+      : `<div class="dns-ms ${r.ms > fastestMs * 2.5 && r.ms - fastestMs > 25 ? "slow" : ""}"><b>${esc(t("net.ms", r.ms))}</b><div class="si-bar"><i style="width:${Math.max(6, Math.round(fastestMs / r.ms * 100))}%"></i></div>${r.lost ? `<span>${esc(t("net.lost", r.lost, r.of))}</span>` : ""}</div>`;
+    const btn = NET.busy === p.id ? `<span class="spin" style="justify-self:end;margin-right:30px"></span>`
+      : `<button class="btn small ${cur ? "" : "primary"}" data-dns="${esc(p.id)}" ${cur || NET.busy || !can ? "disabled" : ""}>${esc(t(cur ? "net.cur" : "net.use"))}</button>`;
+    return `<div class="dns-row ${cur ? "cur" : ""}" data-dnsrow="${esc(p.id)}"><span class="dns-av" ${av ? `style="--av:${av[1]}"` : ""}>${av ? esc(av[0]) : ICONS.network}</span>
+      <div style="min-width:0"><div class="n">${esc(p.name)}${isBest ? `<span class="tw-b best">${esc(t("net.best"))}</span>` : ""}</div><div class="d">${esc(t(p.note))}</div>${p.v4 && p.v4.length ? `<div class="a">${esc(p.v4.join(", "))}</div>` : ""}</div>
+      ${ms}${btn}</div>`;
+  }).join("");
+  list.querySelectorAll("[data-dns]").forEach(b => b.addEventListener("click", () => dnsUse(b.dataset.dns)));
+  // after a test: is another server clearly faster than the one in use?
+  const nb = $("#netBest");
+  const curR = st.current === "custom" || st.current === "auto" ? netResult("own") : netResult(st.current);
+  const bestP = best && best.id ? best : null;
+  if (bestP && can && st.current !== bestP.id && (!curR || curR.ms < 0 || curR.ms - bestP.ms >= 8)) {
+    nb.innerHTML = `<p>${esc(t("net.bestT", dnsName(bestP.id), bestP.ms, curR && curR.ms >= 0 ? t("net.ms", curR.ms) : t("net.dead")))}</p><button class="btn small primary" id="netUseBest">${esc(t("net.useBest", dnsName(bestP.id)))}</button>`;
+    nb.hidden = false;
+    $("#netUseBest").addEventListener("click", () => dnsUse(bestP.id));
+  } else if (!can && st.adapters.length && !(S.info && S.info.admin)) { nb.innerHTML = `<p>${esc(t("net.noadmin"))}</p>`; nb.hidden = false; }
+  else nb.hidden = true;
+}
+async function netTest() {
+  if (NET.testing) return;
+  NET.testing = true; NET.test = null; renderNet();
+  try { NET.test = await api.dnsTest(); } catch (e) { NET.test = []; toast(t("net.testFail"), "alert", "warn"); }
+  NET.testing = false; renderNet();
+}
+async function dnsUse(id) {
+  if (NET.busy) return;
+  NET.busy = id; renderNet();
+  let r; try { r = await api.dnsSet(id); } catch (e) { r = { ok: false, error: String((e && e.message) || e) }; }
+  NET.busy = "";
+  if (r && r.state) NET.st = r.state;
+  if (r && r.ok) toast(t("net.done", dnsName(id)), "check"); else toast(t("net.failed") + (r && r.error ? ": " + r.error : ""), "alert", "warn");
+  if (r && r.warn) toast(r.warn, "info", "warn");
+  renderNet();
+}
+async function netRestore() {
+  if (NET.busy) return;
+  NET.busy = "restore"; $("#netRestore").disabled = true;
+  let r; try { r = await api.dnsRestore(); } catch (e) { r = { ok: false, error: String(e) }; }
+  NET.busy = ""; $("#netRestore").disabled = false;
+  if (r && r.state) NET.st = r.state;
+  toast(r && r.ok ? t("net.restored") : t("net.failed") + (r && r.error ? ": " + r.error : ""), r && r.ok ? "undo" : "alert", r && r.ok ? "" : "warn");
+  renderNet();
+}
+async function netFlush() {
+  let ok = false; try { ok = await api.dnsFlush(); } catch (e) {}
+  toast(t(ok ? "net.flushed" : "net.flushFail"), ok ? "check" : "alert", ok ? "" : "warn");
+}
+$("#netTest").addEventListener("click", netTest);
+$("#netFlush").addEventListener("click", netFlush);
+$("#netRestore").addEventListener("click", netRestore);
+
+/* =====================================================================
+   RIGHT-CLICK MENU: entries of other programs, hidden and shown again
+===================================================================== */
+const CM = { items: [], loaded: false, loading: false, q: "", show: "all", busy: "", err: {}, explorer: false };
+async function loadCtx(force) {
+  if (CM.loading || (CM.loaded && !force)) { renderCtx(); return; }
+  CM.loading = true; $("#cmRefresh").classList.add("spin"); renderCtx();
+  try { CM.items = (await api.ctxMenuList()) || []; CM.loaded = true; } catch (e) { CM.items = []; CM.loaded = true; }
+  CM.loading = false; $("#cmRefresh").classList.remove("spin");
+  renderCtx();
+}
+function cmVisible(e) {
+  if (CM.show === "on" && e.off) return false;
+  if (CM.show === "off" && !e.off) return false;
+  if (CM.show === "missing" && !e.missing) return false;
+  if (CM.q && !(e.name + " " + e.program).toLowerCase().includes(CM.q)) return false;
+  return true;
+}
+function renderCtx() {
+  const list = $("#cmList"); if (!list) return;
+  const all = CM.items;
+  const counts = { all: all.length, on: all.filter(e => !e.off).length, off: all.filter(e => e.off).length, missing: all.filter(e => e.missing).length };
+  $("#cmStats").innerHTML = ["all", "on", "off", "missing"].map(k => `<button class="su-stat" data-cmshow="${k}" aria-pressed="${CM.show === k}"><div class="k">${esc(t("cm.stat." + k))}</div><div class="v">${CM.loaded ? counts[k] : "—"}</div></button>`).join("");
+  $$("#cmStats .su-stat").forEach(b => b.addEventListener("click", () => { CM.show = b.dataset.cmshow; renderCtx(); }));
+  $("#cmAdmin").hidden = !S.info || !!S.info.admin;
+  $("#cmExplorer").hidden = !CM.explorer;
+  const miss = all.filter(e => e.missing && !e.off);
+  $("#cmMissing").hidden = !miss.length; $("#cmMissingTxt").textContent = t("cm.missingBtn", miss.length);
+  if (!CM.loaded) {
+    list.innerHTML = [0, 1, 2, 3].map(() => `<div class="su-row"><span class="skel" style="width:38px;height:38px;border-radius:50%"></span><div><span class="skel" style="width:200px"></span></div><span class="skel" style="width:46px;height:26px;border-radius:99px"></span></div>`).join("");
+    return;
+  }
+  const items = all.filter(cmVisible);
+  if (!items.length) { list.innerHTML = `<div class="tw-empty">${esc(t(all.length ? "cm.emptyFilter" : "cm.empty"))}</div>`; return; }
+  list.innerHTML = items.map(e => {
+    const badges = [`<span class="tw-b">${esc(t(e.kind === "ext" ? "cm.k.ext" : "cm.k.verb"))}</span>`];
+    if (e.missing) badges.push(`<span class="tw-b risky">${esc(t("cm.missing"))}</span>`);
+    if (e.shift) badges.push(`<span class="tw-b">${esc(t("cm.shift"))}</span>`);
+    const c = AV_COLORS[[...e.name].reduce((a, ch) => a + ch.charCodeAt(0), 0) % AV_COLORS.length];
+    const letter = esc((e.name.trim()[0] || "?").toUpperCase());
+    const pic = (e.icon && /\.(exe|ico)$/i.test(e.icon) && /^[a-z]:\\/i.test(e.icon)) ? e.icon : (/\.exe$/i.test(e.program) && /^[a-z]:\\/i.test(e.program) && !e.missing ? e.program : "");
+    const icon = pic ? ico("exe:" + pic, "r-ico av", letter, "--av:" + c) : `<span class="r-ico av" style="--av:${c}">${letter}</span>`;
+    return `<div class="su-row cm-row ${e.off ? "off" : ""}" data-cm="${esc(e.id)}">${icon}
+      <div style="min-width:0"><div class="su-n"><span>${esc(e.name)}</span>${badges.join("")}</div>
+        <div class="su-m"><span class="where">${esc(e.where.map(w => t("cm.w." + w)).join(" · "))}</span><span class="exe"><bdi>${esc(e.program)}</bdi></span></div>
+        ${CM.err[e.id] ? `<div class="su-e">${esc(CM.err[e.id])}</div>` : ""}</div>
+      <div class="su-ctl">${CM.busy === e.id ? '<span class="spin" style="margin:0 15px"></span>' : `<input type="checkbox" class="switch" data-cmsw ${e.off ? "" : "checked"} ${CM.busy ? "disabled" : ""} aria-label="${esc(e.name)}" title="${esc(t(e.off ? "cm.offT" : "cm.onT"))}">`}</div></div>`;
+  }).join("");
+  list.querySelectorAll("[data-cm]").forEach(row => {
+    const sw = row.querySelector("[data-cmsw]");
+    if (sw) sw.addEventListener("change", () => ctxToggle([row.dataset.cm], !sw.checked));
+  });
+}
+async function ctxToggle(ids, off) {
+  if (CM.busy) { renderCtx(); return; }
+  CM.busy = ids.length === 1 ? ids[0] : "*"; ids.forEach(id => delete CM.err[id]); renderCtx();
+  const names = ids.map(id => (CM.items.find(x => x.id === id) || {}).name || id);
+  let r; try { r = await api.ctxMenuSet(ids, off); } catch (e) { r = { done: 0, failed: names, items: CM.items }; }
+  CM.busy = "";
+  if (r && r.items) CM.items = r.items;
+  if (r && r.explorer) CM.explorer = true;
+  const failed = (r && r.failed) || [];
+  if (failed.length) { ids.forEach(id => { const it = CM.items.find(x => x.id === id); if (it && failed.includes(it.name)) CM.err[id] = t("tw.failed"); }); toast(t("cm.failed", failed.join(", ")), "alert", "warn"); }
+  else toast(ids.length === 1 ? t(off ? "cm.hidden" : "cm.shown", names[0]) : t("cm.hiddenN", ids.length), off ? "eyeoff" : "eye");
+  renderCtx();
+}
+$("#cmSearch").addEventListener("input", e => { CM.q = e.target.value.trim().toLowerCase(); renderCtx(); });
+$("#cmRefresh").addEventListener("click", () => loadCtx(true));
+$("#cmMissing").addEventListener("click", () => {
+  const miss = CM.items.filter(e => e.missing && !e.off);
+  if (!miss.length) return;
+  confirmBox({ title: t("cm.missingT"), text: t("cm.missingD"), list: miss.map(e => e.name), okText: t("cm.hideAll"), ok: () => ctxToggle(miss.map(e => e.id), true) });
+});
+$("#cmRestartEx").addEventListener("click", async () => {
+  $("#cmRestartEx").disabled = true;
+  let ok = false; try { ok = await api.restartExplorer(); } catch (e) {}
+  $("#cmRestartEx").disabled = false;
+  if (ok) { CM.explorer = false; toast(t("cm.exDone")); } else toast(t("cm.exFail"), "alert", "warn");
+  renderCtx();
+});
+
+/* =====================================================================
+   AUTOMATIC CLEANING (Settings): a task in Task Scheduler
+===================================================================== */
+const AUTO = { st: null, busy: false };
+async function loadAuto() { try { AUTO.st = await api.autoCleanState(); } catch (e) { AUTO.st = AUTO.st || null; } renderAuto(); }
+function setupAutoSeg() {
+  const el = $("#segAuto"); if (!el) return;
+  makeSeg(el, ["off", "daily", "weekly", "monthly"].map(v => ({ v, label: t("auto." + v) })), (AUTO.st && AUTO.st.freq) || "off", v => autoSet(v));
+}
+function autoWhen(st) {
+  if (!st || st.freq === "off") return "";
+  if (st.freq === "weekly") { const d = new Date(2026, 9, 18 + ((st.day || 0) % 7)); return t("auto.when.weekly", new Intl.DateTimeFormat(locale(), { weekday: "long" }).format(d)); }
+  return t("auto.when." + st.freq);
+}
+function renderAuto() {
+  const st = AUTO.st, el = $("#segAuto"); if (!el) return;
+  if (el._set) el._set((st && st.freq) || "off");
+  const admin = !!(S.info && S.info.admin);
+  el.querySelectorAll("button").forEach(b => { b.disabled = AUTO.busy || !admin; });
+  const parts = [];
+  if (!admin) parts.push(t("auto.noadmin"));
+  if (st && st.freq !== "off") parts.push(autoWhen(st) + " " + t("auto.missed"));
+  if (st && st.last) {
+    const when = new Date(st.last.at * 1000).toLocaleString(locale(), { dateStyle: "medium", timeStyle: "short" });
+    parts.push(st.last.state === "busy" ? t("auto.lastBusy", when) : t("auto.last", when, fmt(st.last.freed)));
+  } else if (st && st.freq !== "off") parts.push(t("auto.never"));
+  $("#autoStatus").textContent = parts.join(" ");
+  // the task was moved away from this copy of the app, or deleted in Task Scheduler
+  const gone = !!(st && admin && st.freq !== "off" && !st.task);
+  $("#autoMovedRow").hidden = !(st && st.freq !== "off" && (st.task && st.moved || gone));
+  $("#autoMovedT").textContent = t(gone ? "auto.gone" : "auto.moved");
+  $("#autoMovedD").textContent = t(gone ? "auto.goneD" : "auto.movedD");
+  $("#autoWhat").textContent = t("auto.whatD", st ? st.ids.length : "…");
+  $("#autoNow").disabled = AUTO.busy || !st || S.busy;
+}
+async function autoSet(freq) {
+  if (AUTO.busy) return;
+  AUTO.busy = true; renderAuto();
+  let st; try { st = await api.autoCleanSet(freq); } catch (e) { st = Object.assign({}, AUTO.st || {}, { error: String((e && e.message) || e) }); }
+  AUTO.busy = false;
+  if (st && st.error) toast(t("auto.failed", st.error), "alert", "warn");
+  else toast(freq === "off" ? t("auto.offT") : t("auto.onT", autoWhen(st)), freq === "off" ? "undo" : "calendar");
+  if (st) AUTO.st = st;
+  renderAuto();
+}
+$("#autoFix").addEventListener("click", () => AUTO.st && autoSet(AUTO.st.freq));
+$("#autoSee").addEventListener("click", () => {
+  const ids = (AUTO.st && AUTO.st.ids) || [];
+  const groups = GROUPS.map(g => ({ g, items: g.items.filter(id => ids.includes(id)) })).filter(x => x.items.length);
+  openSheet({ title: t("auto.listT"), sub: t("auto.listSub"),
+    body: groups.map(x => `<div class="section-t">${esc(t("g." + x.g.id))}</div><div class="list">${x.items.map(id => `<div class="item" style="grid-template-columns:auto 1fr"><div class="i-ico">${itemIcon(id)}</div><div><div class="t">${esc(itemName(id))}</div></div></div>`).join("")}</div>`).join(""),
+    foot: `<span class="grow"></span><button class="btn primary" id="autoSeeOk">${esc(t("modal.ok"))}</button>` });
+  $("#autoSeeOk").addEventListener("click", () => closeSheet(false));
+});
+$("#autoNow").addEventListener("click", async () => {
+  let ok = false; try { ok = await api.autoCleanNow(); } catch (e) {}
+  toast(t(ok ? "auto.started" : "status.busy"), ok ? "calendar" : "alert", ok ? "" : "warn");
+});
+on("auto-clean", d => {
+  toast(d && d.freed > 0 ? t("auto.done", fmt(d.freed)) : t("auto.doneZero"), "sparkle");
+  loadAuto();
+  if (S.analyzed && !S.busy && !S.cleaning && !jobOf("scan")) { S.quietScan = true; analyze(); }
+});
+
 /* =====================================================================
    Command palette (Ctrl+K): every section, action, tweak and category
 ===================================================================== */
 const PAL = { items: [], idx: 0 };
-const PAGE_ICON = { home: "heart", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", tweaks: "tweaks", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
-const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", tweaks: "tw.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
+const PAGE_ICON = { home: "heart", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", ctxmenu: "menu", sysinfo: "board", network: "network", tweaks: "tweaks", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
+const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", ctxmenu: "cm.sub", sysinfo: "si.sub", network: "net.sub", tweaks: "tw.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
 function palSources() {
   const items = [];
   PAGES.forEach((p, i) => items.push({ g: "pal.g.pages", icon: PAGE_ICON[p], title: t("nav." + p), sub: t(PAGE_SUB[p]), hint: i < 9 ? "Ctrl " + (i + 1) : "", kw: p, run: () => go(p) }));
@@ -6606,6 +7370,10 @@ function palSources() {
   act("trash", "pal.a.bin", () => api.openRecycleBin(), "recycle bin");
   act("clipboard", "pal.a.report", async () => { const v = await api.logOps({ state: "problems", limit: 1 }); const o = v && v.ops && v.ops[0]; if (o) copyOpReport(o.id); else toast(t("pal.noProblems")); }, "report error copy");
   act("folder", "pal.a.logs", () => api.logOpenFolder(), "log folder");
+  act("network", "pal.a.dnsFlush", () => netFlush(), "dns flush cache");
+  act("bolt", "pal.a.dnsTest", () => { go("network"); setTimeout(netTest, 80); }, "dns speed test benchmark");
+  act("board", "pal.a.siCopy", () => { go("sysinfo"); siCopyWhenReady(); }, "system information specs copy report");
+  act("calendar", "pal.a.auto", () => go("settings"), "automatic cleaning schedule");
   act("history", "pal.a.twHist", () => { go("tweaks"); setTimeout(() => $("#twHist").click(), 120); }, "tweak history");
   if (TW.meta.length) TW.meta.forEach(m => items.push({ g: "pal.g.tweaks", icon: TW_ICON[m.group] || "tweaks", title: twName(m.id), sub: t("tw.g." + m.group), hint: (TW.state[m.id] || {}).state === "on" ? t("tw.st.on") : "", kw: m.id, run: () => palTweak(m.id) }));
   GROUPS.forEach(g => g.items.forEach(id => { if (visible(id)) items.push({ g: "pal.g.clean", icon: ITEM_ICON[id] || ITEM_GROUP[id] || "clean", title: itemName(id), sub: S.data[id] && S.data[id].size > 0 ? fmt(S.data[id].size) : "", kw: id, run: () => palCategory(id) }); }));
@@ -6892,6 +7660,8 @@ function homeScore() { return Math.max(0, 100 - homeIssues().reduce((s, x) => s 
 function homeReady() { return S.analyzed && !!S.mem && !HM.loading.drives && !HM.loading.dh; }
 function renderHome() {
   const body = $("#hmBody"); if (!body) return;
+  if (!SI.v && !SI.loading && !SI.homeAsked) { SI.homeAsked = true; setTimeout(() => loadSysInfo(false, true), 6000); }
+  renderHomePC();
   const issues = homeIssues(), sev = id => (issues.find(x => x.id === id) || {}).sev || "ok", score = homeScore(), ready = homeReady();
   const ring = 289.03, col = score >= 85 ? "var(--mint)" : score >= 60 ? "var(--amber)" : "var(--red)";
   const verdict = !ready ? t("hm.checking") : score >= 85 ? t("hm.good") : score >= 60 ? t("hm.fair") : t("hm.poor");
@@ -7680,6 +8450,28 @@ setTimeout(hideSplash, 6000); // never stay stuck on the splash
 ===================================================================== */
 const MOCKWIN = { max: false, own: new URLSearchParams(location.search).get("frame") !== "classic" };
 const Mock = (() => {
+  const DNSP = [
+    { id: "cloudflare", name: "Cloudflare", v4: ["1.1.1.1", "1.0.0.1"], v6: ["2606:4700:4700::1111", "2606:4700:4700::1001"], note: "dns.n.cloudflare" },
+    { id: "google", name: "Google", v4: ["8.8.8.8", "8.8.4.4"], v6: ["2001:4860:4860::8888", "2001:4860:4860::8844"], note: "dns.n.google" },
+    { id: "quad9", name: "Quad9", v4: ["9.9.9.9", "149.112.112.112"], v6: ["2620:fe::fe", "2620:fe::9"], note: "dns.n.quad9" },
+    { id: "adguard", name: "AdGuard", v4: ["94.140.14.14", "94.140.15.15"], v6: ["2a10:50c0::ad1:ff", "2a10:50c0::ad2:ff"], note: "dns.n.adguard" },
+    { id: "opendns", name: "OpenDNS", v4: ["208.67.222.222", "208.67.220.220"], v6: ["2620:119:35::35", "2620:119:53::53"], note: "dns.n.opendns" },
+    { id: "cloudflare-family", name: "Cloudflare Family", v4: ["1.1.1.3", "1.0.0.3"], v6: ["2606:4700:4700::1113", "2606:4700:4700::1003"], note: "dns.n.family" },
+  ];
+  const mockNet = { current: "auto", backup: false, providers: DNSP, adapters: [
+    { index: 12, guid: "{6B1E2A10-0000-4000-8000-000000000012}", name: "Ethernet", desc: "Realtek PCIe 2.5GbE Family Controller", wifi: false, speed: 1e9, dns: ["192.168.1.1"], static: false, provider: "", gateway: true },
+  ] };
+  const mockCtx = [
+    { id: "a1", kind: "verb", name: "Add to VLC media player's Playlist", where: ["folders"], program: "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", icon: "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", missing: false, shift: false, off: false },
+    { id: "a2", kind: "verb", name: "Play with VLC media player", where: ["folders"], program: "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", icon: "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", missing: false, shift: false, off: false },
+    { id: "a3", kind: "ext", name: "7-Zip", where: ["files", "folders", "background", "drives"], program: "C:\\Program Files\\7-Zip\\7-zip.dll", missing: false, shift: false, off: false, clsid: "{23170F69-40C1-278A-1000-000100020000}" },
+    { id: "a4", kind: "verb", name: "Open with Code", where: ["files", "folders", "background"], program: "C:\\Users\\demo\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe", icon: "C:\\Users\\demo\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe", missing: false, shift: false, off: false },
+    { id: "a5", kind: "ext", name: "WinRAR", where: ["files", "folders"], program: "C:\\Program Files\\WinRAR\\rarext.dll", missing: true, shift: false, off: false, clsid: "{B41DB860-64E4-11D2-9906-E49FADC173CA}" },
+    { id: "a6", kind: "verb", name: "Scan with Old Antivirus", where: ["files"], program: "C:\\Program Files\\OldAV\\scan.exe", missing: true, shift: false, off: false },
+    { id: "a7", kind: "ext", name: "NVIDIA CPL Context Menu Extension", where: ["background"], program: "C:\\Program Files\\NVIDIA Corporation\\Display.NvContainer\\NvCplDesktopContext.dll", missing: false, shift: false, off: true, clsid: "{3D1975AF-48C6-4F8E-A182-BE0E08FA86A9}" },
+    { id: "a8", kind: "verb", name: "Open Git Bash here", where: ["folders", "background"], program: "C:\\Program Files\\Git\\git-bash.exe", missing: false, shift: true, off: false },
+  ];
+  const mockAuto = { freq: "off", task: false, moved: false, day: 0, ids: ["temp", "inetcache", "storeapps", "msstore", "dumps", "thumbs", "dns", "chrome", "edge", "brave", "vivaldi", "opera", "firefox", "discord", "vscode", "slack", "teams", "notion", "telegram", "steam", "epic", "ubisoft", "battlenet", "eaapp", "gog", "riot", "obs", "devcache", "nvinstallers", "nvapp", "amdinstallers", "winlogs"] };
   const GB = 1024 ** 3, MB = 1024 ** 2;
   const q = new URLSearchParams(location.search), scen = q.get("s") || "";
   let drive = { letter: "C", total: 953 * GB, free: 214.6 * GB };
@@ -7766,6 +8558,11 @@ const Mock = (() => {
     ["auto-reboot-off", "system", "s"], ["detailed-bsod", "system", "s"], ["verbose-status", "system", "s"], ["long-paths", "system", "s"], ["utc-time", "system", "cbs"], ["ps7-default", "system", ""], ["bitlocker-off", "system", "!os"],
     ["net-throttle-off", "network", "sb"], ["net-opt", "network", "cbs"], ["do-off", "network", "rs"], ["wifi-sense-off", "network", "s"],
     ["edge-bg-off", "apps", "s"], ["debloat", "apps", "cos"], ["gaming-apps-off", "apps", "cos"], ["edge-remove", "apps", "cs"], ["onedrive-remove", "apps", "cs"],
+    // n: new in this version
+    ["appcompat-off", "privacy", "rsn"], ["ceip-off", "privacy", "rsn"], ["typing-insights-off", "privacy", "n"], ["spotlight-off", "privacy", "en"],
+    ["shutdown-fast", "perf", "rsn"], ["search-low-priority", "perf", "sbn"], ["ducking-off", "gaming", "rn"], ["full-path-title", "explorer", "en"],
+    ["copy-details", "explorer", "rn"], ["autoplay-off", "explorer", "rn"], ["clipboard-history", "explorer", "n"], ["taskbar-labels", "look", "en"], ["logon-blur-off", "look", "sn"], ["edge-shortcut-off", "apps", "sn"],
+    ["explorer-ads-off", "privacy", "ren"], ["store-openwith-off", "explorer", "sn"], ["multi-select-menu", "explorer", "n"], ["printer-manual", "system", "n"],
   ];
   const twOn = { "game-mode": true, "clock-24h": true, "dark-mode": true, "file-ext": true, "telemetry-off": true, "hags": true, "end-task": true, "nvidia-opt": true, "net-opt": false };
   const twState = id => {
@@ -7833,7 +8630,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "2.10.0", author: "xKi4o", admin: scen !== "noadmin", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "3.0.0", author: "xKi4o", admin: scen !== "noadmin", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -7973,7 +8770,7 @@ const Mock = (() => {
     },
     createRestorePoint: async () => { later(900, () => window.__ev("rp-done", { ok: true })); return true; },
     openSystemRestore: async () => true, openLink: async () => true,
-    tweakList: async () => TWM.map(([id, group, f]) => ({ id, group, rec: f.includes("r"), risk: f.includes("!") ? "risky" : f.includes("c") ? "caution" : "",
+    tweakList: async () => TWM.map(([id, group, f]) => ({ id, group, new: f.includes("n"), rec: f.includes("r"), risk: f.includes("!") ? "risky" : f.includes("c") ? "caution" : "",
       reboot: f.includes("b"), explorer: f.includes("e"), oneWay: f.includes("o"), sys: f.includes("s") })),
     tweakStates: async () => {
       const slow = new Set(["defender-rtp-off", "copilot-off", "bitlocker-off", "net-opt", "debloat", "gaming-apps-off"]);
@@ -8041,6 +8838,57 @@ const Mock = (() => {
     diskRefresh: async p => { setTimeout(() => window.__ev("disk-done", { ok: true, refresh: true, path: p, progress: { files: 1200, dirs: 80, bytes: 3 * GB, denied: 0, ms: 300 } }), 500); return true; },
     diskDelete: async paths => paths.map(p => ({ path: p, ok: !p.includes("Windows"), error: p.includes("Windows") ? "Protected system item — the app does not delete it." : "" })),
     restartExplorer: async () => { await new Promise(r => setTimeout(r, 800)); return true; },
+    // ---- 3.0: system information, network, right-click menu, automatic cleaning
+    systemInfo: async () => {
+      await new Promise(r => setTimeout(r, scen === "slowinfo" ? 4000 : 700));
+      const GB = 1073741824;
+      return {
+        os: { name: "Windows 11 Pro", ver: "24H2", build: "26100", ubr: 4652, arch: "64-bit", installed: "2025-01-10T09:00:00Z", boot: new Date(Date.now() - 2 * 86400e3 - 3 * 3600e3).toISOString(), pc: "DESKTOP-XKI4O", uptime: 2 * 86400 + 3 * 3600 + 120 },
+        cpu: [{ name: "AMD Ryzen 7 5800X", cores: 8, threads: 16, mhz: 3801, l2: 4096, l3: 32768, socket: "AM4", virt: true }],
+        gpu: [{ name: "NVIDIA GeForce RTX 3070", driver: "32.0.15.6094", date: "2024-08-14T00:00:00Z", ram: 8 * GB, w: 2560, h: 1440, hz: 165, virtual: false },
+              { name: "Parsec Virtual Display Adapter", driver: "0.45.0.0", date: "", ram: 0, w: 0, h: 0, hz: 0, virtual: true }],
+        ram: [{ size: 16 * GB, mhz: 3600, cfg: 2133, maker: "G.Skill", part: "F4-3600C16-16GVKC", slot: "DIMM_A2", type: "DDR4", typeN: 26 },
+              { size: 16 * GB, mhz: 3600, cfg: 2133, maker: "G.Skill", part: "F4-3600C16-16GVKC", slot: "DIMM_B2", type: "DDR4", typeN: 26 }],
+        slots: 4,
+        board: { maker: "ASUS", model: "ROG STRIX B550-F GAMING", pcMaker: "", pcModel: "", laptop: false, total: 34272509952, bios: "3607", biosMaker: "American Megatrends Inc.", biosDate: "2024-03-04T00:00:00Z" },
+        security: { firmware: "UEFI", secureBoot: "on", tpm: "2.0", vbs: true, hvci: false, av: ["Windows Defender"] },
+        monitors: [{ name: "VG27AQ", maker: "ASUS", inch: 27, year: 2021 }, { name: "24G2W1G4", maker: "AOC", inch: 23.8, year: 2022 }],
+        audio: ["NVIDIA High Definition Audio", "Realtek(R) Audio"],
+        net: [{ name: "Ethernet", desc: "Realtek PCIe 2.5GbE Family Controller", speed: 1e9, wifi: false }],
+        disks: [{ name: "Samsung SSD 970 EVO Plus 1TB", media: "SSD", bus: "NVMe", size: 1000204886016 }, { name: "WDC WD20EZRZ-00Z5HB0", media: "HDD", bus: "SATA", size: 2000398934016 }],
+        battery: scen === "laptop" ? { name: "DELL 7FHHV", charge: 81, full: 37210, design: 56000, health: 66 } : undefined,
+        took: 2400,
+      };
+    },
+    netState: async () => JSON.parse(JSON.stringify(mockNet)),
+    dnsSet: async id => {
+      await new Promise(r => setTimeout(r, 900));
+      const p = DNSP.find(x => x.id === id);
+      if (id !== "auto" && !p) return { ok: false, error: "Unknown DNS server", state: JSON.parse(JSON.stringify(mockNet)) };
+      if (id !== "auto" && !mockNet.backup) mockNet.backup = true;
+      mockNet.current = id;
+      mockNet.adapters.forEach(a => { if (a.gateway) { a.static = id !== "auto"; a.provider = id === "auto" ? "" : id; a.dns = id === "auto" ? ["192.168.1.1"] : p.v4.concat(p.v6); } });
+      if (id === "auto") mockNet.backup = false;
+      return { ok: true, state: JSON.parse(JSON.stringify(mockNet)) };
+    },
+    dnsRestore: async () => { await new Promise(r => setTimeout(r, 700)); mockNet.current = "auto"; mockNet.backup = false; mockNet.adapters.forEach(a => { a.static = false; a.provider = ""; a.dns = ["192.168.1.1"]; }); return { ok: true, state: JSON.parse(JSON.stringify(mockNet)) }; },
+    dnsTest: async () => {
+      await new Promise(r => setTimeout(r, 1600));
+      const ms = { "": 24, cloudflare: 9, google: 14, quad9: 31, adguard: 38, opendns: 22, "cloudflare-family": 11 };
+      const res = [{ server: "192.168.1.1", id: "", ms: ms[""], lost: 0, of: 7 }].concat(DNSP.map(p => ({ server: p.v4[0], id: p.id, ms: p.id === "adguard" && scen === "dnsloss" ? -1 : ms[p.id], lost: p.id === "adguard" && scen === "dnsloss" ? 7 : p.id === "quad9" ? 1 : 0, of: 7 })));
+      return res.sort((a, b) => (a.ms < 0) - (b.ms < 0) || a.ms - b.ms);
+    },
+    dnsFlush: async () => { await new Promise(r => setTimeout(r, 300)); return true; },
+    ctxMenuList: async () => { await new Promise(r => setTimeout(r, 500)); return JSON.parse(JSON.stringify(mockCtx)); },
+    ctxMenuSet: async (ids, off) => {
+      await new Promise(r => setTimeout(r, 500));
+      let done = 0, explorer = false;
+      ids.forEach(id => { const it = mockCtx.find(x => x.id === id); if (it) { it.off = off; done++; explorer = explorer || it.kind === "ext"; } });
+      return { done, failed: [], explorer, items: JSON.parse(JSON.stringify(mockCtx)) };
+    },
+    autoCleanState: async () => JSON.parse(JSON.stringify(mockAuto)),
+    autoCleanSet: async freq => { await new Promise(r => setTimeout(r, 500)); if (!["off", "daily", "weekly", "monthly"].includes(freq)) return Object.assign({}, mockAuto, { error: "Unknown schedule" }); mockAuto.freq = freq; mockAuto.task = freq !== "off"; mockAuto.day = freq === "weekly" ? 0 : 1; return JSON.parse(JSON.stringify(mockAuto)); },
+    autoCleanNow: async () => { setTimeout(() => { mockAuto.last = { at: Math.floor(Date.now() / 1000), freed: 412 * MB, files: 1830, skipped: 3, state: "ok" }; window.__ev("auto-clean", { freed: 412 * MB, files: 1830 }); }, 900); return true; },
     // ---- 2.5: logs, processes, finders, restore center (demo data)
     logOps: async f => {
       f = f || {}; const q = (f.query || "").toLowerCase();
@@ -8124,11 +8972,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "2.10.0", latest: nw ? "3.0.0" : "2.10.0", newer: nw, name: "xKi4o Cleaner 3.0.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.0.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "3.0.0", latest: nw ? "3.1.0" : "3.0.0", newer: nw, name: "xKi4o Cleaner 3.1.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.1.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders

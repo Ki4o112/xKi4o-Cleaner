@@ -428,15 +428,6 @@ func containsPID(s []uint32, v uint32) bool {
 	return false
 }
 
-func containsStr(s []string, v string) bool {
-	for _, x := range s {
-		if x == v {
-			return true
-		}
-	}
-	return false
-}
-
 // probeLocked walks the planned files and returns those another program has
 // open. It stops at max files or at the deadline (full = false).
 func probeLocked(ts []target, max int, deadline time.Time) (locked []lockedFile, probed int, full bool) {
