@@ -1,10 +1,12 @@
 <div align="center">
 
-<img src="res/icon.png" width="112" alt="xKi4o Cleaner logo">
+<img src="src/res/icon.png" width="112" alt="xKi4o Cleaner logo">
 
 # xKi4o Cleaner
 
-**A careful cleaner and toolbox for Windows — one portable exe, in English and Bulgarian.**
+**The all-in-one Windows 10 / 11 cleaner, optimizer and tweaker — one portable exe, no telemetry, in English and Bulgarian.**
+
+Clean junk safely, apply 90 reversible tweaks, boost games, update Windows and drivers, check your disks, GPU and network — and undo anything in one click.
 
 [![Release](https://img.shields.io/github/v/release/Ki4o112/xKi4o-Cleaner?label=version&color=2a9dff)](../../releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/Ki4o112/xKi4o-Cleaner/total?color=3ee8b0)](../../releases)
@@ -81,22 +83,22 @@ You need [Go 1.24 or newer](https://go.dev/dl/).
 ```sh
 git clone https://github.com/Ki4o112/xKi4o-Cleaner.git
 cd xKi4o-Cleaner
-GOOS=windows GOARCH=amd64 go build -trimpath -ldflags "-s -w -H windowsgui" -o xKi4oCleaner.exe .
+GOOS=windows GOARCH=amd64 go build -trimpath -ldflags "-s -w -H windowsgui" -o xKi4oCleaner.exe ./src
 ```
 
 <details>
 <summary>Tests, the interface, releases</summary>
 
-- `go test ./...` runs everywhere; the Windows tests run on Windows or under Wine (`GOOS=windows go test -c -o wtests.exe .`). On a real PC they only read the system.
-- The interface is `ui/app.html`; after changing it run `python ui/build_ui.py`. `tests/ui_flows.py` checks it in Chromium with its demo backend.
-- The icon and version info are in `res/` (`windres -i app.rc -O coff -o ../rsrc_windows_amd64.syso`).
-- A release: set the version in `version.go` and `res/app.rc`, add it to `CHANGELOG.md` (English and Bulgarian), push, then run **Actions → Build and release**.
+- `go test ./...` runs everywhere; the Windows tests run on Windows or under Wine (`GOOS=windows go test -c -o wtests.exe ./src`). On a real PC they only read the system.
+- The app is in `src/`. The interface is `src/ui/app.html`; after changing it run `python src/ui/build_ui.py`. `src/tests/ui_flows.py` checks it in Chromium with its demo backend.
+- The icon and version info are in `src/res/` (`windres -i app.rc -O coff -o ../rsrc_windows_amd64.syso`).
+- A release: set the version in `src/version.go` and `src/res/app.rc`, add it to `CHANGELOG.md` (English and Bulgarian), push, then run **Actions → Build and release**.
 
 </details>
 
 ## Credits
 
-Made by **xKi4o**. Built with [go-webview2](https://github.com/jchv/go-webview2), [Go](https://go.dev) and the [Inter](https://github.com/rsms/inter) font. The cleaning rules were checked against [BleachBit](https://www.bleachbit.org) and [Winapp2](https://github.com/MoscaDotTo/Winapp2), RAM cleaning follows [Mem Reduct](https://github.com/henrypp/memreduct), and the Tweaker follows the lists of [Sparkle](https://github.com/Parcoil/Sparkle), [WinUtil](https://github.com/ChrisTitusTech/winutil) and the [ReviOS playbook](https://github.com/meetrevision/playbook) — everything was written anew. Licenses of the components are in `third_party/` and on the app's Credits page.
+Made by **xKi4o**. Built with [go-webview2](https://github.com/jchv/go-webview2), [Go](https://go.dev) and the [Inter](https://github.com/rsms/inter) font. The cleaning rules were checked against [BleachBit](https://www.bleachbit.org) and [Winapp2](https://github.com/MoscaDotTo/Winapp2), RAM cleaning follows [Mem Reduct](https://github.com/henrypp/memreduct), and the Tweaker follows the lists of [Sparkle](https://github.com/Parcoil/Sparkle), [WinUtil](https://github.com/ChrisTitusTech/winutil) and the [ReviOS playbook](https://github.com/meetrevision/playbook) — everything was written anew. Licenses of the components are in `src/third_party/` and on the app's Credits page.
 
 ## License
 

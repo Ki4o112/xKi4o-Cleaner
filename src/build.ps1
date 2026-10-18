@@ -1,4 +1,4 @@
-# Builds xKi4oCleaner.exe next to this script.
+# Builds xKi4oCleaner.exe next to this script (in src\).
 # Needs Go 1.24+ (https://go.dev/dl/). Run:  .\build.ps1
 # Add -UI to regenerate ui\index.html from ui\app.html first (needs Python 3).
 param([switch]$UI)

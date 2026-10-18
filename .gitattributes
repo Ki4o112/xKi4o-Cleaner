@@ -6,5 +6,5 @@
 *.woff2 binary
 
 # Keep GitHub's language bar about the project itself
-ui/index.html linguist-generated=true
-third_party/** linguist-vendored
+src/ui/index.html linguist-generated=true
+src/third_party/** linguist-vendored

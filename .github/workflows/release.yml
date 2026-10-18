@@ -4,7 +4,7 @@ name: Build and release
 # that version's notes from CHANGELOG.md is published when
 #   - a tag "vX.Y.Z" is pushed, or
 #   - the workflow is run by hand (Actions → Build and release → Run workflow)
-#     with "publish" ticked: it releases the version written in version.go.
+#     with "publish" ticked: it releases the version written in src/version.go.
 # Every copy of the app then finds the release and offers the update.
 on:
   push:
@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       publish:
-        description: "Publish a release for the version in version.go"
+        description: "Publish a release for the version in src/version.go"
         type: boolean
         default: false
 
@@ -32,13 +32,13 @@ jobs:
           go-version-file: go.mod
 
       - name: Test
-        run: go test -count=1 .
+        run: go test -count=1 ./src .
 
       - name: Vet (Windows)
-        run: GOOS=windows GOARCH=amd64 go vet .
+        run: GOOS=windows GOARCH=amd64 go vet ./src
 
       - name: Build
-        run: CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -trimpath -ldflags "-s -w -H windowsgui" -o xKi4oCleaner.exe .
+        run: CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -trimpath -ldflags "-s -w -H windowsgui" -o xKi4oCleaner.exe ./src
 
       - uses: actions/upload-artifact@v4
         with:
@@ -50,11 +50,11 @@ jobs:
         env:
           PUBLISH: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
         run: |
-          VER=$(sed -n 's/^const appVersion = "\(.*\)"$/\1/p' version.go)
-          [ -n "$VER" ] || { echo "::error::no appVersion in version.go"; exit 1; }
+          VER=$(sed -n 's/^const appVersion = "\(.*\)"$/\1/p' src/version.go)
+          [ -n "$VER" ] || { echo "::error::no appVersion in src/version.go"; exit 1; }
           echo "ver=$VER" >> "$GITHUB_OUTPUT"
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
-            [ "${GITHUB_REF_NAME#v}" = "$VER" ] || { echo "::error::the tag $GITHUB_REF_NAME does not match appVersion $VER in version.go"; exit 1; }
+            [ "${GITHUB_REF_NAME#v}" = "$VER" ] || { echo "::error::the tag $GITHUB_REF_NAME does not match appVersion $VER in src/version.go"; exit 1; }
             echo "publish=true" >> "$GITHUB_OUTPUT"
           elif [ "$PUBLISH" = "true" ]; then
             echo "publish=true" >> "$GITHUB_OUTPUT"
