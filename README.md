@@ -74,6 +74,11 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 
 **Can I have the old blue look back?** Yes — Settings → Theme → Ocean. The accent colour is chosen right below it.
 
+**Windows Defender says "Trojan:Win32/Bearfoos" — is it a virus?** No — it is a false positive. The `!ml` at the end means Defender's machine-learning guess, not a known virus: an unsigned exe that cleans files, reads processes and changes settings looks suspicious to it. What you can do:
+1. Check that your file is the real one: its SHA-256 must match the one under the [release](../../releases/latest) (PowerShell: `Get-FileHash .\xKi4oCleaner.exe`). Download it only from this page.
+2. Report the false positive to Microsoft — [submit the file here](https://www.microsoft.com/en-us/wdsi/filesubmission) ("Software developer" or "Home customer", "Incorrectly detected"). Once Microsoft clears it, the warning goes away for everyone.
+3. If you trust the file, you can restore it yourself in Windows Security → Protection history. The app never turns Defender off and never adds exceptions by itself.
+
 **How do I undo something?** Switch the tweak off, or open the Restore Center: tweaks, startup changes, deleted files and registry backups are all there.
 
 ## Build from source
@@ -116,6 +121,8 @@ Made by **xKi4o**. Built with [go-webview2](https://github.com/jchv/go-webview2)
 **Какво може:** здраве на компютъра с една оценка, почистване на кеш и временни файлове (и автоматично по график), деинсталиране с остатъци, обновяване на програми, около 80 туийка с връщане назад и пресети (Игри, Поверителност…), освобождаване на RAM, режим „Игри“, анализ и здраве на дисковете, дубликати, празни папки, информация за системата, смяна на DNS с тест на скоростта, контекстното меню, процеси, стартиращи програми, поправка на Windows и център за възстановяване.
 
 **Безопасно ли е:** трие само кеш и временни данни. Лични файлове, история, пароли и запазени игри не се пипат. Избраните от теб файлове отиват в кошчето. Windows Update, Defender, хибернацията, плановете за захранване и стартиращите програми се променят само ако ти ги превключиш.
+
+**Windows Defender казва „Trojan:Win32/Bearfoos“:** това е фалшива тревога. `!ml` значи предположение на машинното обучение на Defender, не познат вирус — неподписан exe, който трие файлове и сменя настройки, му изглежда подозрителен. Провери, че SHA-256 на файла съвпада с този под [версията](../../releases/latest), и докладвай грешката на Microsoft [тук](https://www.microsoft.com/en-us/wdsi/filesubmission). Ако вярваш на файла, можеш сам да го върнеш от Windows Security → История на защитата. Програмата никога не изключва Defender и не добавя изключения сама.
 
 **Във фона:** бутонът до „минимизирай“ скрива програмата в трея, до часовника — тя продължава да работи.
 
