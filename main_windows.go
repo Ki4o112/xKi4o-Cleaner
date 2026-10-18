@@ -141,6 +141,8 @@ func main() {
 		"dnsSet":         dnsSet,
 		"dnsRestore":     dnsRestore,
 		"dnsTest":        dnsTest,
+		"netPing":        netPing,
+		"quickFix":       quickFix,
 		"dnsFlush":       dnsFlush,
 		"ctxMenuList":    ctxMenuList,
 		"ctxMenuSet":     ctxMenuSet,

@@ -3,6 +3,24 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 3.4.0 — 2026-10-18
+
+### English
+- Updates: a "Select all" button for each category (Windows, drivers)
+- Added Quick fixes on the Repair page: restart Explorer, fix icons, reset the Store, reset Winsock
+- Added a connection check on the Network page: ping, jitter and lost packets
+- Added "Copy list" on the Programs page
+- 7 new speed tweaks in the Tweaker
+- The Repair page scrolls in a small window
+
+### Български
+- Обновления: бутон „Избери всички“ за всяка категория (Windows, драйвери)
+- Добавени „Бързи поправки“ в раздел „Поправка“: рестарт на Explorer, поправка на иконите, нулиране на Store и на Winsock
+- Добавена проверка на връзката в раздел „Мрежа“: ping, колебание и изгубени пакети
+- Добавено „Копирай списъка“ в раздел „Програми“
+- 7 нови tweak-а за производителност в Tweaker
+- Раздел „Поправка“ вече се скролва в малък прозорец
+
 ## 3.3.0 — 2026-10-18
 
 ### English

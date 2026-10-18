@@ -1757,7 +1757,7 @@ body.app-in .shell, body.app-in .winbar { animation: appIn .95s var(--expo) both
 .page.enter :nth-child(10) { --k: 9; } .page.enter :nth-child(11) { --k: 10; } .page.enter :nth-child(n+12) { --k: 11; }
 /* cards lift under the pointer */
 :is(.si-card, .gl, .hm-card, .hm-x, .tw-pc, .da-vol, .dh-card) { transition: transform .35s var(--expo), border-color .25s, box-shadow .35s var(--expo); }
-:is(.gl, .hm-card, .hm-x, .da-vol):hover { transform: translateY(-2px); border-color: rgba(var(--blue-rgb), .28); box-shadow: 0 16px 34px -24px rgba(var(--blue-rgb), .8); }
+:is(.hm-card, .hm-x, .da-vol):hover { transform: translateY(-2px); border-color: rgba(var(--blue-rgb), .28); box-shadow: 0 16px 34px -24px rgba(var(--blue-rgb), .8); }
 /* primary buttons: a light sweep on hover, a soft press */
 .btn.primary::after { content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 45%; pointer-events: none;
   background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .28), transparent); transform: skewX(-18deg); opacity: 0; }
@@ -1823,12 +1823,49 @@ body.app-in .shell, body.app-in .winbar { animation: appIn .95s var(--expo) both
 .wu-st svg { width: 14px; height: 14px; }
 .wu-st.ok { color: var(--mint); } .wu-st.bad { color: #ffb3bc; }
 .wu-hist { margin-top: 14px; }
+.wu-list + .wu-list { margin-top: 12px; }
+.wu-gh { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 16px; background: rgba(255, 255, 255, .025); border-bottom: 1px solid var(--line-soft); }
+.wu-gt { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.wu-gt b { font-size: 13.5px; }
+.wu-gt span { font-size: 12px; color: var(--muted); }
+.cb:indeterminate::after { content: ""; width: 9px; height: 2px; border-radius: 1px; background: #fff; }
 .wu-h { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 12.5px; padding: 6px 0; border-top: 1px solid var(--line-soft); }
 .wu-h:first-of-type { border-top: 0; }
 .wu-h .hm-dot { width: 7px; height: 7px; }
 .wu-h .tt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .wu-h .dd { color: var(--faint); font-size: 11.5px; white-space: nowrap; }
 .rc-ctx { margin: 0 0 12px; }
+
+/* ================= 3.4: connection check, quick fixes */
+.np-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 10px 0 6px; }
+.np-card { background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-l); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.np-top { display: flex; align-items: center; gap: 8px; font-size: 13px; min-width: 0; }
+.np-host { margin-left: auto; color: var(--faint); font-size: 11.5px; font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.np-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--faint); flex: none; }
+.np-card.ok .np-dot { background: var(--mint); box-shadow: 0 0 10px var(--mint); }
+.np-card.warn .np-dot { background: var(--amber); } .np-card.bad .np-dot { background: var(--red); }
+.np-card.bad { border-color: rgba(255, 92, 110, .3); }
+.np-v { font-size: 13px; color: var(--muted); min-height: 34px; display: flex; align-items: baseline; gap: 4px; }
+.np-v b { font-size: 28px; font-weight: 800; color: var(--text); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.np-v small { color: var(--muted); font-size: 13px; }
+.np-v.dim { font-size: 28px; color: var(--faint); }
+.np-m { font-size: 12px; color: var(--muted); }
+.np-stats { display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: 8px; font-size: 11.5px; color: var(--faint); }
+.np-stats span { display: flex; flex-direction: column; gap: 1px; }
+.np-stats b { color: var(--text); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.np-say { font-size: 12px; color: var(--muted); border-top: 1px solid var(--line-soft); padding-top: 8px; }
+.qf-h { margin-top: 22px; }
+.qf-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 10px; }
+.qf-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 14px 16px; background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-l); }
+.qf-ic { width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; background: var(--card-2); color: var(--blue-2); }
+.qf-ic svg { width: 18px; height: 18px; }
+.qf-t { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.qf-t b { font-size: 13.5px; } .qf-t span { font-size: 12px; color: var(--muted); line-height: 1.4; }
+#page-repair { overflow-y: auto; }
+#page-repair > * { flex-shrink: 0; }
+#page-repair .console { flex: 1 0 220px; }
+#page-repair .console:empty { flex: 0 0 110px; min-height: 110px; }
+@media (max-width: 900px) { .np-grid, .qf-grid { grid-template-columns: 1fr; } }
 
 /* ================= 3.0: tweak presets */
 .tw-pre { margin-top: 16px; }
@@ -2399,6 +2436,9 @@ body.app-in .shell, body.app-in .winbar { animation: appIn .95s var(--expo) both
           <div class="item"><div class="i-ico" data-icon="file"></div><div><div class="t" data-i="rep.sfc.t"></div><div class="d" data-i="rep.sfc.d"></div><div class="w" data-i="rep.sfc.w"></div></div><button class="btn small" data-repair="sfc" data-i="rep.start"></button></div>
           <div class="item"><div class="i-ico" data-icon="disk"></div><div><div class="t" data-i="rep.chk.t"></div><div class="d" data-i="rep.chk.d"></div><div class="w" data-i="rep.chk.w"></div></div><button class="btn small" data-repair="chkdsk" data-i="rep.start"></button></div>
         </div>
+        <div class="dh-head qf-h"><h3 data-i="qf.title"></h3></div>
+        <div class="dh-sub" data-i="qf.sub"></div>
+        <div class="qf-grid" id="qfGrid"></div>
         <div class="progress" id="repairProg" hidden style="margin-top:14px"><i></i></div>
         <div class="status" id="repairStatus"></div>
       </div>
@@ -2445,6 +2485,9 @@ body.app-in .shell, body.app-in .winbar { animation: appIn .95s var(--expo) both
       <div class="scroll pad" id="netBody">
         <div class="dh-head"><h3 data-i="net.conn"></h3></div>
         <div class="net-conns" id="netConns"></div>
+        <div class="dh-head net-h2"><h3 data-i="np.title"></h3><button class="btn small" id="npRun"><span data-icon="bolt"></span><span id="npRunTxt" data-i="np.run"></span></button></div>
+        <div class="dh-sub" data-i="np.sub"></div>
+        <div class="np-grid" id="npGrid"></div>
         <div class="dh-head net-h2"><h3 data-i="net.dns"></h3><button class="btn small" id="netRestore" hidden><span data-icon="undo"></span><span data-i="net.restore"></span></button></div>
         <div class="dh-sub" data-i="net.dnsSub"></div>
         <div class="notice info net-best" id="netBest" hidden></div>
@@ -2592,7 +2635,7 @@ body.app-in .shell, body.app-in .winbar { animation: appIn .95s var(--expo) both
       <div class="head">
         <div class="head-ico" data-icon="package"></div>
         <div><h1 data-i="pr.title"></h1><div class="sub" data-i="pr.sub"></div></div>
-        <div class="head-r"><button class="btn icon-btn" id="prRefresh" data-i-title="pr.refresh"><span data-icon="refresh"></span></button></div>
+        <div class="head-r"><button class="btn small" id="prCopy"><span data-icon="copy"></span><span data-i="pr.copy"></span></button><button class="btn icon-btn" id="prRefresh" data-i-title="pr.refresh"><span data-icon="refresh"></span></button></div>
       </div>
       <div class="tw-body" id="prBody">
         <div class="pr-top"><div class="seg" id="prTab"></div><span class="pr-sum" id="prSum"></span></div>
@@ -3438,7 +3481,7 @@ bg: {
   "wu.rebootD": "Windows чака рестарт, за да довърши инсталирани обновления. Следващите обновления може да не тръгнат, докато не рестартираш.",
   "wu.noadmin": "Инсталирането иска права на администратор. Пусни програмата като администратор (търсенето работи и без тях).", "wu.p.download": "Изтегляне {0} от {1}: {2}",
   "wu.p.install": "Инсталиране {0} от {1}: {2}", "wu.p.start": "Подготовка…", "wu.p.note": "Не изключвай компютъра. Големите обновления може да отнемат дълго.",
-  "wu.k.all": "Всички · {0}", "wu.k.win": "Windows · {0}", "wu.k.drv": "Драйвери · {0}", "wu.all": "Избери всички", "wu.none": "Махни избора",
+  "wu.k.all": "Всички · {0}", "wu.k.win": "Windows · {0}", "wu.k.drv": "Драйвери · {0}",
   "wu.install": "Инсталирай избраните ({0} · {1})", "wu.pick": "Избери обновления", "wu.sev.critical": "Критично", "wu.sev.important": "Важно", "wu.driver": "Драйвер",
   "wu.optional": "По избор", "wu.reboot": "Може да иска рестарт",
   "wu.gpuTip": "Драйверите за видеокарта от Windows Update често са по-стари от тези на производителя. Виж страница „Видеокарта“.", "wu.s.download": "Изтегляне…",
@@ -3451,6 +3494,39 @@ bg: {
   "wu.doneFailed": "Не успяха:", "wu.doneRebootD": "Рестартирай, за да довърши Windows инсталирането.", "wu.doneNoReboot": "Не е нужен рестарт.",
   "rc.ctxT": "Скрити записи в контекстното меню: {0}.", "rc.ctxD": "Скрити са от по-стара версия на програмата ({0}).", "rc.ctxBtn": "Покажи ги отново",
   "rc.ctxDone": "Записите са видими отново", "rc.ctxDoneEx": "Записите са видими отново — рестартирай Explorer, за да се видят",
+  "wu.allK.all": "Избери всички ({0})", "wu.allK.win": "Избери всички за Windows ({0})", "wu.allK.drv": "Избери всички драйвери ({0})", "wu.noneK.all": "Махни избора ({0})",
+  "wu.noneK.win": "Махни избора за Windows", "wu.noneK.drv": "Махни избора на драйверите", "wu.g.win": "Обновления на Windows", "wu.g.drv": "Драйвери",
+  "wu.g.sub": "Избрани {0} от {1} · до {2}",
+  "tw.paging-exec-off.n": "Ядрото на Windows остава в RAM",
+  "tw.paging-exec-off.d": "Драйверите и ядрото не се изнасят във файла за виртуална памет, така системата отговаря по-бързо след натоварване. Полезно при 16 ГБ RAM и повече.",
+  "tw.ntfs-lastaccess-off.n": "Без запис на „последно отваряне“",
+  "tw.ntfs-lastaccess-off.d": "NTFS спира да записва часа на всяко отваряне на файл, затова има по-малко писане по диска. Датата на промяна си остава.",
+  "tw.icon-cache-large.n": "По-голям кеш за иконите",
+  "tw.icon-cache-large.d": "Explorer пази до 4096 икони в паметта вместо 500. Иконите в папки с много файлове не се зареждат наново.",
+  "tw.hover-fast.n": "По-бързи подсказки при посочване", "tw.hover-fast.d": "Подсказките и прегледите на лентата на задачите се показват след 0,1 с вместо след 0,4 с.",
+  "tw.keyboard-fast.n": "По-бързо повтаряне на клавиш", "tw.keyboard-fast.d": "Задържан клавиш започва да се повтаря веднага, без обичайното чакане. Удобно в игри и при писане.",
+  "tw.gpu-tdr-longer.n": "Повече време на видеокартата преди рестарт на драйвера",
+  "tw.gpu-tdr-longer.d": "Windows чака 8 секунди вместо 2, преди да рестартира забил драйвер. Тежки игри и рендъри се сриват по-рядко с „Display driver stopped responding“.",
+  "tw.timer-res-global.n": "Точният таймер на игрите важи винаги",
+  "tw.timer-res-global.d": "Windows 11 пак уважава по-точния таймер, който игрите искат, дори когато прозорецът им е минимизиран или на друг екран. Помага за по-равномерни кадри.",
+  "pr.copy": "Копирай списъка", "pr.copyNone": "Няма програми за копиране", "pr.copied": "Списъкът е копиран ({0} програми)", "pr.copyHead": "Програми на {1} ({0}) · {2}",
+  "pr.copyHeadStore": "Store приложения на {1} ({0}) · {2}", "pr.copyCols": "Име\tВерсия\tИздател\tРазмер\tИнсталирана", "np.title": "Проверка на връзката",
+  "np.sub": "12 ping-а до рутера и до два големи сървъра: колко бързо отговарят, колко равномерно и дали се губят пакети. Нищо не се променя.", "np.run": "Провери връзката",
+  "np.again": "Провери отново", "np.running": "Проверявам…", "np.wait": "Няколко секунди…", "np.notYet": "Още не е проверено", "np.t.router": "Рутер", "np.t.cloudflare": "Cloudflare",
+  "np.t.google": "Google", "np.jitter": "Колебание", "np.loss": "Загуба", "np.range": "Мин–макс", "np.noAnswer": "Няма отговор",
+  "np.allLost": "Не отговори на нито един от {0} ping-а.", "np.say.ok": "Бърза и стабилна връзка.", "np.say.warn": "Работи, но има забавяне или колебания — в игри може да се усеща.",
+  "np.say.bad": "Проблем: много забавяне или изгубени пакети.", "qf.title": "Бързи поправки", "qf.sub": "Малки поправки на Windows за честите проблеми. Всяка пита преди да започне.",
+  "qf.run": "Поправи", "qf.running": "Работя…", "qf.explorer.t": "Рестартирай Explorer", "qf.explorer.d": "Когато лентата на задачите, менюто Старт или работният плот са забили.",
+  "qf.explorer.ask": "Лентата на задачите и отворените папки ще изчезнат за секунда и ще се върнат. Програмите остават отворени.", "qf.explorer.done": "Explorer е рестартиран",
+  "qf.icons.t": "Поправи иконите", "qf.icons.d": "Когато иконите са бели, сбъркани или стари. Изтрива кеша на иконите и Windows го прави наново.",
+  "qf.icons.ask": "Explorer ще се рестартира и кешът на иконите ще се изтрие (само кешът — файловете и програмите не се пипат). Иконите ще се заредят наново.",
+  "qf.icons.done": "Кешът на иконите е нов (изтрити файлове: {0})", "qf.store.t": "Нулирай Microsoft Store",
+  "qf.store.d": "Когато Store не тегли, не се отваря или показва грешка. Изчиства само кеша му.",
+  "qf.store.ask": "Пуска WSReset на Windows: кешът на Store се изчиства и Store се отваря. Инсталираните приложения и акаунтът остават.",
+  "qf.store.done": "Кешът на Microsoft Store е изчистен", "qf.winsock.t": "Нулирай мрежата (Winsock)",
+  "qf.winsock.d": "Когато има интернет, но сайтове и игри не се свързват. Връща Winsock по подразбиране и изчиства DNS кеша.",
+  "qf.winsock.ask": "Winsock се връща по подразбиране и DNS кешът се изчиства. Програми, които добавят мрежови слоеве (някои VPN-и и антивируси), може да трябва да се преинсталират. Нужен е рестарт.",
+  "qf.doneReboot": "Готово — рестартирай компютъра, за да важи", "qf.winsock.done": "Готово",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -4177,7 +4253,7 @@ en: {
   "wu.rebootD": "Windows is waiting for a restart to finish installed updates. New updates may not install until you restart.",
   "wu.noadmin": "Installing needs administrator rights. Run the app as administrator (checking works without).", "wu.p.download": "Downloading {0} of {1}: {2}",
   "wu.p.install": "Installing {0} of {1}: {2}", "wu.p.start": "Getting ready…", "wu.p.note": "Don't turn the PC off. Big updates can take a while.", "wu.k.all": "All · {0}",
-  "wu.k.win": "Windows · {0}", "wu.k.drv": "Drivers · {0}", "wu.all": "Select all", "wu.none": "Clear selection", "wu.install": "Install selected ({0} · {1})",
+  "wu.k.win": "Windows · {0}", "wu.k.drv": "Drivers · {0}", "wu.install": "Install selected ({0} · {1})",
   "wu.pick": "Pick updates", "wu.sev.critical": "Critical", "wu.sev.important": "Important", "wu.driver": "Driver", "wu.optional": "Optional", "wu.reboot": "May need a restart",
   "wu.gpuTip": "Graphics drivers from Windows Update are often older than the maker's own. See the Graphics card page.", "wu.s.download": "Downloading…",
   "wu.s.install": "Installing…", "wu.s.ok": "Installed", "wu.s.fail": "Failed", "wu.s.wait": "Waiting", "wu.emptyKind": "No updates of this kind.", "wu.history": "Recent installs",
@@ -4188,6 +4264,38 @@ en: {
   "wu.doneRebootD": "Restart so Windows can finish installing.", "wu.doneNoReboot": "No restart needed.", "rc.ctxT": "Hidden right-click menu entries: {0}.",
   "rc.ctxD": "Hidden by an older version of the app ({0}).", "rc.ctxBtn": "Show them again", "rc.ctxDone": "The entries are visible again",
   "rc.ctxDoneEx": "The entries are visible again — restart Explorer to see them",
+  "wu.allK.all": "Select all ({0})", "wu.allK.win": "Select all Windows updates ({0})", "wu.allK.drv": "Select all drivers ({0})", "wu.noneK.all": "Clear selection ({0})",
+  "wu.noneK.win": "Clear Windows updates", "wu.noneK.drv": "Clear drivers", "wu.g.win": "Windows updates", "wu.g.drv": "Drivers", "wu.g.sub": "{0} of {1} selected · up to {2}",
+  "tw.paging-exec-off.n": "Keep the Windows kernel in RAM",
+  "tw.paging-exec-off.d": "Drivers and the kernel are not moved to the page file, so the system answers faster after heavy use. Useful with 16 GB of RAM or more.",
+  "tw.ntfs-lastaccess-off.n": "No “last opened” time on files",
+  "tw.ntfs-lastaccess-off.d": "NTFS stops writing the time of every file opening, so there is less writing to the disk. The modified date stays.",
+  "tw.icon-cache-large.n": "Bigger icon cache",
+  "tw.icon-cache-large.d": "Explorer keeps up to 4096 icons in memory instead of 500, so icons in folders with many files are not loaded again.",
+  "tw.hover-fast.n": "Faster tooltips on hover", "tw.hover-fast.d": "Tooltips and taskbar previews appear after 0.1 s instead of 0.4 s.", "tw.keyboard-fast.n": "Faster key repeat",
+  "tw.keyboard-fast.d": "A held key starts repeating right away, without the usual wait. Handy in games and when typing.",
+  "tw.gpu-tdr-longer.n": "More time for the graphics card before a driver reset",
+  "tw.gpu-tdr-longer.d": "Windows waits 8 seconds instead of 2 before it resets a hung graphics driver. Heavy games and renders crash less often with “Display driver stopped responding”.",
+  "tw.timer-res-global.n": "Games' precise timer always applies",
+  "tw.timer-res-global.d": "Windows 11 keeps the more precise timer games ask for even when their window is minimized or on another screen. Helps for smoother frames.",
+  "pr.copy": "Copy list", "pr.copyNone": "No programs to copy", "pr.copied": "List copied ({0} programs)", "pr.copyHead": "Programs on {1} ({0}) · {2}",
+  "pr.copyHeadStore": "Store apps on {1} ({0}) · {2}", "pr.copyCols": "Name\tVersion\tPublisher\tSize\tInstalled", "np.title": "Connection check",
+  "np.sub": "12 pings to your router and to two big servers: how fast they answer, how steady, and whether packets get lost. Nothing is changed.", "np.run": "Check connection",
+  "np.again": "Check again", "np.running": "Checking…", "np.wait": "A few seconds…", "np.notYet": "Not checked yet", "np.t.router": "Router", "np.t.cloudflare": "Cloudflare",
+  "np.t.google": "Google", "np.jitter": "Jitter", "np.loss": "Loss", "np.range": "Min–max", "np.noAnswer": "No answer", "np.allLost": "Did not answer any of {0} pings.",
+  "np.say.ok": "Fast and steady.", "np.say.warn": "Works, but with delay or jitter — you may feel it in games.", "np.say.bad": "A problem: high delay or lost packets.",
+  "qf.title": "Quick fixes", "qf.sub": "Small Windows repairs for common problems. Each one asks before it starts.", "qf.run": "Fix", "qf.running": "Working…",
+  "qf.explorer.t": "Restart Explorer", "qf.explorer.d": "When the taskbar, Start menu or desktop is stuck.",
+  "qf.explorer.ask": "The taskbar and open folders disappear for a second and come back. Programs stay open.", "qf.explorer.done": "Explorer restarted", "qf.icons.t": "Fix icons",
+  "qf.icons.d": "When icons are blank, wrong or old. Deletes the icon cache and Windows builds it again.",
+  "qf.icons.ask": "Explorer restarts and the icon cache is deleted (only the cache — files and programs are not touched). Icons load again.",
+  "qf.icons.done": "The icon cache is new ({0} files deleted)", "qf.store.t": "Reset Microsoft Store",
+  "qf.store.d": "When the Store does not download, open or shows an error. Clears only its cache.",
+  "qf.store.ask": "Runs Windows' WSReset: the Store cache is cleared and the Store opens. Installed apps and your account stay.",
+  "qf.store.done": "The Microsoft Store cache is cleared", "qf.winsock.t": "Reset the network (Winsock)",
+  "qf.winsock.d": "When there is internet but sites and games do not connect. Resets Winsock and clears the DNS cache.",
+  "qf.winsock.ask": "Winsock goes back to default and the DNS cache is cleared. Programs that add network layers (some VPNs and antivirus) may need reinstalling. A restart is needed.",
+  "qf.doneReboot": "Done — restart the PC for it to apply", "qf.winsock.done": "Done",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -4727,6 +4835,7 @@ function applyLang() {
   if (SI.v || SI.loading) { renderSysInfo(); renderHomePC(); }
   if (NET.st) renderNet();
   if (S.page === "wupd") renderWu();
+  paintNp(); paintQf();
   setupAutoSeg(); renderAuto();
   moveNav();
 }
@@ -4770,6 +4879,8 @@ function go(page, opt) {
   if (page === "gpu") loadGpu(false);
   if (page === "network") loadNet(false);
   if (page === "wupd") loadWu();
+  if (page === "network") paintNp();
+  if (page === "repair") paintQf();
   if (page === "settings") { loadAuto(); requestAnimationFrame(() => $("#segAuto")._place && $("#segAuto")._place()); }
   if (page === "disk") loadDisk();
   if (JOBS.flash && JOBS.flash.page === page) JOBS.flash = null;
@@ -6856,6 +6967,7 @@ function runRepairKind(what, name) {
     onWait: () => { $$("[data-repair]").forEach(x => x.disabled = true); $("#repairStatus").textContent = t("job.waitFor", JOBS.cur ? JOBS.cur.title : ""); },
     onDrop: () => { $$("[data-repair]").forEach(x => x.disabled = S.busy); $("#repairStatus").textContent = ""; },
     run: job => new Promise(res => {
+      requestAnimationFrame(() => { const c = $("#console"); if (c && c.scrollIntoView) c.scrollIntoView({ block: "nearest", behavior: motionOK() ? "smooth" : "auto" }); });
       job.done = res;
       setBusy(true); con.textContent = ""; lastReplace = false;
       const pr = $("#repairProg"); pr.hidden = false; pr.className = "progress indet";
@@ -7371,16 +7483,27 @@ function renderWu() {
   }
   if (ups.length) {
     const list = wuList(), selN = ups.filter(u => WU.sel.has(u.id)), selSize = selN.reduce((a, u) => a + (u.size || 0), 0);
-    html += `<div class="gp-tools wu-tools"><div class="seg blue" id="wuKind"></div><button class="linkbtn" id="wuAll">${esc(t(list.every(u => WU.sel.has(u.id)) ? "wu.none" : "wu.all"))}</button><span class="grow"></span>
-      <button class="btn primary" id="wuInstall" ${selN.length && !run && !(st && st.admin === false) ? "" : "disabled"}>${ICONS.download}<span>${esc(selN.length ? t("wu.install", selN.length, fmt(selSize)) : t("wu.pick"))}</span></button></div>
-      <div class="gp-list wu-list">${list.map(u => {
+    const every = l => l.length && l.every(u => WU.sel.has(u.id)), kk = { all: "all", windows: "win", drivers: "drv" }[WU.kind];
+    html += `<div class="gp-tools wu-tools"><div class="seg blue" id="wuKind"></div>
+      <button class="btn small wu-allbtn" id="wuAll" ${list.length && !run ? "" : "disabled"}>${every(list) ? ICONS.x : ICONS.check}<span>${esc(t((every(list) ? "wu.noneK." : "wu.allK.") + kk, list.length))}</span></button><span class="grow"></span>
+      <button class="btn primary" id="wuInstall" ${selN.length && !run && !(st && st.admin === false) ? "" : "disabled"}>${ICONS.download}<span>${esc(selN.length ? t("wu.install", selN.length, fmt(selSize)) : t("wu.pick"))}</span></button></div>`;
+    const row = u => {
         const r = run && run.state[u.id];
         const st2 = r ? (r.state === "busy" ? `<span class="wu-st"><span class="spin"></span>${esc(t(r.phase === "download" ? "wu.s.download" : "wu.s.install"))}</span>` : r.state === "ok" ? `<span class="wu-st ok">${ICONS.check}${esc(t("wu.s.ok"))}</span>` : r.state === "fail" ? `<span class="wu-st bad" title="${esc(r.error || "")}">${ICONS.alert}${esc(t("wu.s.fail"))}</span>` : `<span class="wu-st">${esc(t("wu.s.wait"))}</span>`) : "";
         return `<label class="gp-row wu-row ${WU.sel.has(u.id) ? "on" : ""}"><input type="checkbox" class="cb" data-wu="${esc(u.id)}" ${WU.sel.has(u.id) ? "checked" : ""} ${run ? "disabled" : ""}>
           <div class="wu-main"><div class="v"><b>${esc(u.title)}</b>${wuTags(u)}</div>
           <div class="m">${esc([u.kb, u.size ? fmt(u.size) : "", u.date ? siDate(u.date) : "", (u.cats || []).slice(0, 2).join(", ")].filter(Boolean).join(" · "))}</div>
           ${u.display ? `<div class="wu-tip">${ICONS.info}<span>${esc(t("wu.gpuTip"))}</span></div>` : ""}</div><div class="a">${st2}</div></label>`;
-      }).join("") || `<div class="gp-empty">${esc(t("wu.emptyKind"))}</div>`}</div>`;
+    };
+    // one group per category, each with its own "select all"
+    const groups = [["windows", list.filter(u => u.kind !== "driver")], ["drivers", list.filter(u => u.kind === "driver")]].filter(g => g[1].length);
+    html += groups.map(([g, l]) => {
+      const n = l.filter(u => WU.sel.has(u.id)).length, gs = l.reduce((a, u) => a + (u.size || 0), 0);
+      return `<div class="gp-list wu-list" data-wugroup="${g}"><div class="wu-gh"><input type="checkbox" class="cb" data-wug="${g}" ${n === l.length ? "checked" : ""} ${run ? "disabled" : ""} aria-label="${esc(t("wu.allK." + (g === "drivers" ? "drv" : "win"), l.length))}">
+        <div class="wu-gt"><b>${esc(t(g === "drivers" ? "wu.g.drv" : "wu.g.win"))}</b><span>${esc(t("wu.g.sub", n, l.length, fmt(gs)))}</span></div>
+        <button class="btn small" data-wugb="${g}" ${run ? "disabled" : ""}>${esc(t((n === l.length ? "wu.noneK." : "wu.allK.") + (g === "drivers" ? "drv" : "win"), l.length))}</button></div>
+        ${l.map(row).join("")}</div>`;
+    }).join("") || `<div class="gp-list wu-list"><div class="gp-empty">${esc(t("wu.emptyKind"))}</div></div>`;
   }
   const hist = (st && st.history) || [];
   if (hist.length) html += `<div class="si-card wu-hist"><div class="top"><span class="ic">${ICONS.history}</span><h3>${esc(t("wu.history"))}</h3></div>
@@ -7390,7 +7513,15 @@ function renderWu() {
   const kind = $("#wuKind");
   if (kind) makeSeg(kind, [{ v: "all", label: t("wu.k.all", ups.length) }, { v: "windows", label: t("wu.k.win", nw) }, { v: "drivers", label: t("wu.k.drv", nd) }], WU.kind, v => { WU.kind = v; renderWu(); });
   body.querySelectorAll("[data-wu]").forEach(cb => cb.addEventListener("change", () => { cb.checked ? WU.sel.add(cb.dataset.wu) : WU.sel.delete(cb.dataset.wu); renderWu(); }));
-  const all = $("#wuAll"); if (all) all.addEventListener("click", () => { const l = wuList(), every = l.every(u => WU.sel.has(u.id)); l.forEach(u => every ? WU.sel.delete(u.id) : WU.sel.add(u.id)); renderWu(); });
+  const toggle = l => { const every = l.every(u => WU.sel.has(u.id)); l.forEach(u => every ? WU.sel.delete(u.id) : WU.sel.add(u.id)); renderWu(); };
+  const ofGroup = g => wuList().filter(u => (g === "drivers") === (u.kind === "driver"));
+  const all = $("#wuAll"); if (all) all.addEventListener("click", () => toggle(wuList()));
+  body.querySelectorAll("[data-wugb]").forEach(b => b.addEventListener("click", () => toggle(ofGroup(b.dataset.wugb))));
+  body.querySelectorAll("[data-wug]").forEach(cb => {
+    const l = ofGroup(cb.dataset.wug), n = l.filter(u => WU.sel.has(u.id)).length;
+    cb.indeterminate = n > 0 && n < l.length;
+    cb.addEventListener("change", () => { l.forEach(u => cb.checked ? WU.sel.add(u.id) : WU.sel.delete(u.id)); renderWu(); });
+  });
   const ins = $("#wuInstall"); if (ins) ins.addEventListener("click", wuAsk);
   const rb = $("#wuReboot"); if (rb) rb.addEventListener("click", () => confirmBox({ title: t("gp.rebootT"), text: t("gp.rebootD"), okText: t("gp.rebootNow"), ok: async () => { let ok = false; try { ok = await api.restartPC(); } catch (e) {} if (!ok) toast(t("tw.failed"), "alert", "warn"); } }));
   requestAnimationFrame(() => { const k = $("#wuKind"); if (k && k._place) k._place(); });
@@ -7429,6 +7560,73 @@ on("wu-progress", d => {
 });
 $("#wuSearchBtn").addEventListener("click", wuDoSearch);
 $("#wuSettings").addEventListener("click", () => api.wuOpenSettings());
+
+
+// 3.4: the list of programs as text (for a new PC, a forum post or a support chat)
+$("#prCopy").addEventListener("click", async () => {
+  const tab = PR.tab === "store" ? "store" : "apps", all = prSorted(((tab === "apps" ? PR.apps : PR.store) || []).slice());
+  if (!all.length) { toast(t("pr.copyNone"), "info"); return; }
+  const lines = all.map(a => [a.name, a.version || "", a.publisher || "", a.size ? fmt(a.size) : "", a.installed ? dateS(a.installed) : ""].join("\t").replace(/\t+$/, ""));
+  const head = t(tab === "store" ? "pr.copyHeadStore" : "pr.copyHead", all.length, (S.info && S.info.pc) || "", new Date().toLocaleDateString(locale()));
+  let ok = false; try { ok = await api.copyText(head + "\n\n" + [t("pr.copyCols")].concat(lines).join("\n")); } catch (e) {}
+  toast(ok ? t("pr.copied", all.length) : t("tw.failed"), ok ? "copy" : "alert", ok ? "" : "warn");
+});
+
+// 3.4: the connection check — pings to the router and two public servers: ms, jitter, lost packets
+const NP = { res: null, running: false };
+function npVerdict(r) {
+  if (r.error || r.sent && r.lost === r.sent) return "bad";
+  if (r.loss > 5 || r.avg > 120 || r.jitter > 30) return "bad";
+  if (r.loss > 0 || r.avg > 60 || r.jitter > 12) return "warn";
+  return "ok";
+}
+function paintNp() {
+  const g = $("#npGrid"); if (!g) return;
+  $("#npRun").disabled = NP.running;
+  $("#npRunTxt").textContent = t(NP.running ? "np.running" : NP.res ? "np.again" : "np.run");
+  const ids = ["router", "cloudflare", "google"];
+  g.innerHTML = ids.map(id => {
+    const r = NP.res && NP.res.find(x => x.id === id);
+    const v = r ? npVerdict(r) : "";
+    const body = NP.running ? `<div class="np-v"><span class="spin"></span></div><div class="np-m">${esc(t("np.wait"))}</div>`
+      : !r ? `<div class="np-v dim">—</div><div class="np-m">${esc(t("np.notYet"))}</div>`
+      : r.error || r.lost === r.sent ? `<div class="np-v">${esc(t("np.noAnswer"))}</div><div class="np-m">${esc(r.error || t("np.allLost", r.sent))}</div>`
+      : `<div class="np-v"><b>${esc(nf(0).format(r.avg))}</b><small>ms</small></div>
+         <div class="np-stats"><span>${esc(t("np.jitter"))}<b>${esc(nf(1).format(r.jitter))} ms</b></span><span>${esc(t("np.loss"))}<b>${esc(nf(0).format(r.loss))}%</b></span><span>${esc(t("np.range"))}<b>${esc(nf(0).format(r.min))}–${esc(nf(0).format(r.max))}</b></span></div>`;
+    return `<div class="np-card ${v}" data-np="${id}"><div class="np-top"><span class="np-dot"></span><b>${esc(t("np.t." + id))}</b><span class="np-host">${esc((r && r.host) || (id === "cloudflare" ? "1.1.1.1" : id === "google" ? "8.8.8.8" : ""))}</span></div>${body}
+      ${r && !NP.running ? `<div class="np-say">${esc(t("np.say." + v))}</div>` : ""}</div>`;
+  }).join("");
+}
+$("#npRun").addEventListener("click", async () => {
+  if (NP.running) return;
+  NP.running = true; paintNp();
+  let r = null; try { r = await api.netPing(); } catch (e) {}
+  NP.running = false; NP.res = r || [];
+  paintNp();
+});
+
+// 3.4: quick fixes — small repairs Windows has itself, each after a question
+const QF = [
+  { id: "explorer", icon: "folder" }, { id: "icons", icon: "image" }, { id: "store", icon: "package" }, { id: "winsock", icon: "network", admin: true, reboot: true },
+];
+const QFS = { busy: "" };
+function paintQf() {
+  const g = $("#qfGrid"); if (!g) return;
+  g.innerHTML = QF.map(f => `<div class="qf-card" data-qfc="${f.id}"><span class="qf-ic">${ICONS[f.icon]}</span><div class="qf-t"><b>${esc(t("qf." + f.id + ".t"))}</b><span>${esc(t("qf." + f.id + ".d"))}</span></div>
+    <button class="btn small" data-qf="${f.id}" ${QFS.busy || (f.admin && S.info && S.info.admin === false) ? "disabled" : ""}>${QFS.busy === f.id ? '<span class="spin"></span>' : ""}<span>${esc(t(QFS.busy === f.id ? "qf.running" : "qf.run"))}</span></button></div>`).join("");
+  g.querySelectorAll("[data-qf]").forEach(b => b.addEventListener("click", () => qfAsk(QF.find(f => f.id === b.dataset.qf))));
+}
+function qfAsk(f) {
+  confirmBox({ title: t("qf." + f.id + ".t"), text: t("qf." + f.id + ".ask"), okText: t("qf.run"), ok: async () => {
+    QFS.busy = f.id; paintQf();
+    let r = null; try { r = await api.quickFix(f.id); } catch (e) { r = { error: String((e && e.message) || e) }; }
+    QFS.busy = ""; paintQf();
+    if (!r || !r.ok) { toast((r && r.error) || t("tw.failed"), "alert", "warn"); return; }
+    if (r.reboot) toast(t("qf.doneReboot"), "check", "", { label: t("gp.rebootNow"), run: () => confirmBox({ title: t("gp.rebootT"), text: t("gp.rebootD"), okText: t("gp.rebootNow"), ok: async () => { let ok = false; try { ok = await api.restartPC(); } catch (e) {} if (!ok) toast(t("tw.failed"), "alert", "warn"); } }) });
+    else toast(t("qf." + f.id + ".done", r.removed || 0), "check");
+  } });
+}
+paintQf();
 
 /* Accent colours */
 const ACCENTS = {
@@ -9464,6 +9662,7 @@ function renderPrograms() {
   $("#prTools").hidden = tab === "updates";
   $("#prUpdBar").hidden = tab !== "updates";
   $("#prNote").hidden = tab === "updates";
+  $("#prCopy").hidden = tab === "updates";
   const un = UN.app && ["queued", "rp", "run", "scan"].includes(UN.phase) && !unShown();
   $("#prUnNote").hidden = !un;
   if (un) { $("#prUnText").textContent = t("un.bg", UN.app.name); }
@@ -10116,11 +10315,14 @@ const Mock = (() => {
     ["auto-reboot-off", "system", "s"], ["detailed-bsod", "system", "s"], ["verbose-status", "system", "s"], ["long-paths", "system", "s"], ["utc-time", "system", "cbs"], ["ps7-default", "system", ""], ["bitlocker-off", "system", "!os"],
     ["net-throttle-off", "network", "sb"], ["net-opt", "network", "cbs"], ["do-off", "network", "rs"], ["wifi-sense-off", "network", "s"],
     ["edge-bg-off", "apps", "s"], ["debloat", "apps", "cos"], ["gaming-apps-off", "apps", "cos"], ["edge-remove", "apps", "cs"], ["onedrive-remove", "apps", "cs"],
-    // n: new in this version
-    ["appcompat-off", "privacy", "rsn"], ["ceip-off", "privacy", "rsn"], ["typing-insights-off", "privacy", "n"], ["spotlight-off", "privacy", "en"],
-    ["shutdown-fast", "perf", "rsn"], ["search-low-priority", "perf", "sbn"], ["ducking-off", "gaming", "rn"], ["full-path-title", "explorer", "en"],
-    ["copy-details", "explorer", "rn"], ["autoplay-off", "explorer", "rn"], ["clipboard-history", "explorer", "n"], ["taskbar-labels", "look", "en"], ["logon-blur-off", "look", "sn"], ["edge-shortcut-off", "apps", "sn"],
-    ["explorer-ads-off", "privacy", "ren"], ["store-openwith-off", "explorer", "sn"], ["multi-select-menu", "explorer", "n"], ["printer-manual", "system", "n"],
+    // 3.0
+    ["appcompat-off", "privacy", "rs"], ["ceip-off", "privacy", "rs"], ["typing-insights-off", "privacy", ""], ["spotlight-off", "privacy", "e"],
+    ["shutdown-fast", "perf", "rs"], ["search-low-priority", "perf", "sb"], ["ducking-off", "gaming", "r"], ["full-path-title", "explorer", "e"],
+    ["copy-details", "explorer", "r"], ["autoplay-off", "explorer", "r"], ["clipboard-history", "explorer", ""], ["taskbar-labels", "look", "e"], ["logon-blur-off", "look", "s"], ["edge-shortcut-off", "apps", "s"],
+    ["explorer-ads-off", "privacy", "re"], ["store-openwith-off", "explorer", "s"], ["multi-select-menu", "explorer", ""], ["printer-manual", "system", ""],
+    // n: new in this version (3.4)
+    ["paging-exec-off", "perf", "sbn"], ["ntfs-lastaccess-off", "perf", "sbn"], ["icon-cache-large", "perf", "sen"], ["hover-fast", "perf", "n"], ["keyboard-fast", "perf", "n"],
+    ["gpu-tdr-longer", "perf", "csbn"], ["timer-res-global", "perf", "sbn"],
   ];
   const twOn = { "game-mode": true, "clock-24h": true, "dark-mode": true, "file-ext": true, "telemetry-off": true, "hags": true, "end-task": true, "nvidia-opt": true, "net-opt": false };
   const twState = id => {
@@ -10213,7 +10415,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "3.3.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "3.4.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -10359,7 +10561,7 @@ const Mock = (() => {
       { id: "privacy", icon: "lock", ids: ["telemetry-off", "activity-off", "consumer-off", "location-off", "copilot-off", "recall-off", "start-recs-off", "settings-ads-off", "bing-off", "lockscreen-tips-off", "appcompat-off", "ceip-off", "typing-insights-off", "spotlight-off", "explorer-ads-off", "wifi-sense-off", "recent-files-off", "edge-shortcut-off", "edge-bg-off"] },
       { id: "ultimate", icon: "bolt", ids: ["telemetry-off", "activity-off", "consumer-off", "start-recs-off", "settings-ads-off", "bing-off", "lockscreen-tips-off", "appcompat-off", "ceip-off", "explorer-ads-off", "edge-shortcut-off", "file-ext", "end-task", "sticky-keys-off", "autoplay-off", "copy-details", "menu-delay", "shutdown-fast", "game-mode", "gamebar-off", "hags", "windowed-opt", "games-priority", "mouse-accel-off", "nvidia-opt", "ducking-off", "win32-priority", "bg-apps-off", "startup-delay-off", "search-low-priority", "net-throttle-off", "edge-bg-off", "location-off", "copilot-off", "recall-off", "typing-insights-off", "spotlight-off", "wifi-sense-off", "recent-files-off", "animations-off", "transparency-off", "folder-discovery-off", "home-gallery-off", "store-openwith-off", "multi-select-menu", "full-path-title", "logon-blur-off", "detailed-bsod", "verbose-status", "long-paths", "shortcut-suffix-off"] },
     ],
-    tweakList: async () => TWM.map(([id, group, f]) => ({ id, group, new: f.includes("n"), newIn: f.includes("n") ? "3.0" : undefined, rec: f.includes("r"), risk: f.includes("!") ? "risky" : f.includes("c") ? "caution" : "",
+    tweakList: async () => TWM.map(([id, group, f]) => ({ id, group, new: f.includes("n"), newIn: f.includes("n") ? "3.4" : undefined, rec: f.includes("r"), risk: f.includes("!") ? "risky" : f.includes("c") ? "caution" : "",
       reboot: f.includes("b"), explorer: f.includes("e"), oneWay: f.includes("o"), sys: f.includes("s") })),
     tweakStates: async () => {
       const slow = new Set(["defender-rtp-off", "copilot-off", "bitlocker-off", "net-opt", "debloat", "gaming-apps-off"]);
@@ -10429,6 +10631,17 @@ const Mock = (() => {
     restartExplorer: async () => { await new Promise(r => setTimeout(r, 800)); return true; },
 
 
+
+    // ---- 3.4: connection check, quick fixes
+    netPing: async () => {
+      await new Promise(r => setTimeout(r, q.get("fast") ? 250 : 2600));
+      if (scen === "offline") return [{ id: "router", host: "192.168.1.1", sent: 12, lost: 0, loss: 0, min: 1, avg: 1.4, max: 3, jitter: 0.6 },
+        { id: "cloudflare", host: "1.1.1.1", sent: 12, lost: 12, loss: 100, min: 0, avg: 0, max: 0, jitter: 0 }, { id: "google", host: "8.8.8.8", sent: 12, lost: 12, loss: 100, min: 0, avg: 0, max: 0, jitter: 0 }];
+      return [{ id: "router", host: "192.168.1.1", sent: 12, lost: 0, loss: 0, min: 1, avg: 1.3, max: 3, jitter: 0.5 },
+        { id: "cloudflare", host: "1.1.1.1", sent: 12, lost: 0, loss: 0, min: 11, avg: 12.4, max: 16, jitter: 1.6 },
+        { id: "google", host: "8.8.8.8", sent: 12, lost: 1, loss: 8.3, min: 18, avg: 24.7, max: 61, jitter: 9.8 }];
+    },
+    quickFix: async id => { (window.__qf = window.__qf || []).push(id); await new Promise(r => setTimeout(r, q.get("fast") ? 150 : 1200)); return id === "winsock" ? { ok: true, reboot: true } : { ok: true, removed: id === "icons" ? 5 : 0 }; },
     // ---- 3.3: Windows Update
     wuStatus: async () => JSON.parse(JSON.stringify(mockWu)),
     wuSearch: async () => {
@@ -10686,11 +10899,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "3.3.0", latest: nw ? "3.4.0" : "3.3.0", newer: nw, name: "xKi4o Cleaner 3.4.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.4.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "3.4.0", latest: nw ? "3.5.0" : "3.4.0", newer: nw, name: "xKi4o Cleaner 3.5.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.5.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders

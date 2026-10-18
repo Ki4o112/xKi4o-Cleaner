@@ -32,14 +32,14 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 | **PC health** | A live dashboard — processor, graphics card (temperature and video memory on NVIDIA), memory, system drive and network — with one score, what lowers it, and one button for what is recommended |
 | **Cleanup** | Caches and temporary files of Windows, browsers, games and apps — the size of each before you clean |
 | **Programs** | Uninstall with a scan for leftovers (like Revo), remove Store apps, update programs with winget |
-| **Tweaker** | About 80 Windows tweaks and one-click presets (Essential, Gaming, Privacy, Ultimate); switching one off brings back exactly what you had |
+| **Tweaker** | About 90 Windows tweaks and one-click presets (Essential, Gaming, Privacy, Ultimate); switching one off brings back exactly what you had |
 | **Memory and game mode** | Free RAM; close the programs you choose while you play and start them again after |
 | **Disks** | Disk Analyzer, disk health (S.M.A.R.T., what the errors mean and what helps), TRIM and defragmentation, duplicates, empty folders, broken shortcuts |
 | **Graphics card** | Live sensors (temperature, power, fans, clocks on NVIDIA), checks (refresh rate, PCIe lanes, Resizable BAR, HAGS), go back to an older driver or download one from NVIDIA, and remove the driver like DDU — with a copy to put it back |
 | **Updates** | Search for Windows and driver updates and install the ones you tick, with a restore point and a log — through Windows Update itself |
 | **System info** | Processor, graphics card, memory sticks, motherboard, drives, monitors, security and battery — with tips (XMP, old drivers) and a report to copy |
-| **Network** | Switch DNS (Cloudflare recommended, Google, AdGuard…) after a speed test that shows the fastest for you; flush the DNS cache |
-| **System** | Processes, startup apps, Windows repair (DISM, SFC, disk check) |
+| **Network** | Switch DNS (Cloudflare recommended, Google, AdGuard…) after a speed test that shows the fastest for you; a connection check (ping, jitter, lost packets); flush the DNS cache |
+| **System** | Processes, startup apps, Windows repair (DISM, SFC, disk check) and quick fixes (Explorer, icons, Store, Winsock) |
 | **Automatic cleaning** | Daily, weekly or monthly, with no window; open apps and sensitive categories are left out |
 | **Restore Center** | Puts back what the app changed; every operation has a step-by-step log |
 

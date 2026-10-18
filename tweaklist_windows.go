@@ -285,6 +285,24 @@ func liveMenuDelay() {
 	spi(0x006B, uint32(v), nil) // SPI_SETMENUSHOWDELAY
 }
 
+func liveHoverTime() {
+	s, _ := regStr(hkcu, `Control Panel\Mouse`, "MouseHoverTime")
+	v, err := strconv.Atoi(s)
+	if err != nil {
+		v = 400
+	}
+	spi(0x0067, uint32(v), nil) // SPI_SETMOUSEHOVERTIME
+}
+
+func liveKeyboardDelay() {
+	s, _ := regStr(hkcu, `Control Panel\Keyboard`, "KeyboardDelay")
+	v, err := strconv.Atoi(s)
+	if err != nil || v < 0 || v > 3 {
+		v = 1
+	}
+	spi(0x0017, uint32(v), nil) // SPI_SETKEYBOARDDELAY
+}
+
 func liveStickyKeys() {
 	s, _ := regStr(hkcu, `Control Panel\Accessibility\StickyKeys`, "Flags")
 	v, err := strconv.Atoi(s)
@@ -1003,6 +1021,29 @@ func buildTweaks() {
 				{root: hklm, path: ifeoKey + `\SearchIndexer.exe\PerfOptions`, name: "CpuPriorityClass", kind: registry.DWORD, on: uint32(5), keys: []string{ifeoKey + `\SearchIndexer.exe\PerfOptions`, ifeoKey + `\SearchIndexer.exe`}},
 				{root: hklm, path: ifeoKey + `\SearchIndexer.exe\PerfOptions`, name: "IoPriority", kind: registry.DWORD, on: uint32(1), keys: []string{ifeoKey + `\SearchIndexer.exe\PerfOptions`, ifeoKey + `\SearchIndexer.exe`}},
 			}},
+		// 3.4: more for speed — all registry values Windows itself has, each put back exactly
+		{id: "paging-exec-off", group: "perf", sys: true, reboot: true, since: "3.4.0",
+			reg: []rv{dw(hklm, `SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management`, "DisablePagingExecutive", 1, uint32(0))}},
+		{id: "ntfs-lastaccess-off", group: "perf", sys: true, reboot: true, since: "3.4.0",
+			reg: []rv{dw(hklm, `SYSTEM\CurrentControlSet\Control\FileSystem`, "NtfsDisableLastAccessUpdate", 0x80000001, uint32(0x80000002))}},
+		{id: "icon-cache-large", group: "perf", sys: true, explorer: true, since: "3.4.0",
+			reg: []rv{sz(hklm, `SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer`, "Max Cached Icons", "4096", nil)}},
+		{id: "hover-fast", group: "perf", since: "3.4.0",
+			reg:  []rv{sz(hkcu, `Control Panel\Mouse`, "MouseHoverTime", "100", "400")},
+			live: liveHoverTime},
+		{id: "keyboard-fast", group: "perf", since: "3.4.0",
+			reg:  []rv{sz(hkcu, `Control Panel\Keyboard`, "KeyboardDelay", "0", "1")},
+			live: liveKeyboardDelay},
+		{id: "gpu-tdr-longer", group: "perf", risk: "caution", sys: true, reboot: true, since: "3.4.0",
+			reg: []rv{dw(hklm, `SYSTEM\CurrentControlSet\Control\GraphicsDrivers`, "TdrDelay", 8, nil)}},
+		{id: "timer-res-global", group: "perf", sys: true, reboot: true, since: "3.4.0",
+			avail: func(p *probe) string {
+				if !p.win11() {
+					return T("tw.na.win11")
+				}
+				return ""
+			},
+			reg: []rv{dw(hklm, `SYSTEM\CurrentControlSet\Control\Session Manager\kernel`, "GlobalTimerResolutionRequests", 1, nil)}},
 		{id: "ducking-off", group: "gaming", rec: true, since: "3.0.0",
 			reg: []rv{dw(hkcu, `Software\Microsoft\Multimedia\Audio`, "UserDuckingPreference", 3, nil)}},
 		{id: "full-path-title", group: "explorer", explorer: true, since: "3.0.0",
