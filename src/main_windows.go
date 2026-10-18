@@ -215,6 +215,7 @@ func main() {
 		"nmState":             nmState,
 		"nmSet":               nmSet,
 		"nmInstall":           nmInstall,
+		"nmSetBalance":        nmSetBalance,
 		"nmOpenSite":          nmOpenSite,
 		"defenderHelp":        defenderHelp,
 		"openWindowsSecurity": openWindowsSecurity,

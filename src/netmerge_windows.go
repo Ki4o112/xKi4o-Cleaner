@@ -54,6 +54,13 @@ type nmAdapter struct {
 	RxMbps  float64 `json:"rx"` // through net-merge
 	TxMbps  float64 `json:"tx"`
 	Present bool    `json:"present"`
+	// Share is about how much of the new connections net-merge gives this
+	// adapter (0-100, from its weights); Peak is the most it has measured
+	// through it (Mbit/s); LinkRx/LinkTx is the adapter's traffic from all apps.
+	Share  float64 `json:"share"`
+	Peak   float64 `json:"peak"`
+	LinkRx float64 `json:"linkRx"`
+	LinkTx float64 `json:"linkTx"`
 }
 
 type nmStatus struct {
@@ -67,7 +74,12 @@ type nmStatus struct {
 	RxMbps    float64     `json:"rx"`
 	TxMbps    float64     `json:"tx"`
 	Busy      bool        `json:"busy"`
-	Error     string      `json:"error,omitempty"`
+	// Balance is how the user wants connections shared ("auto": by measured
+	// speed, net-merge's default; "even": the same for every adapter).
+	// RunBalance is what the running net-merge actually uses ("" = not running).
+	Balance    string `json:"balance"`
+	RunBalance string `json:"runBalance,omitempty"`
+	Error      string `json:"error,omitempty"`
 }
 
 // nmExe finds net-merge.exe: the app's own folder first (where it unpacks it),
@@ -290,14 +302,20 @@ type nmFile struct {
 	V6      string
 	Since   time.Time
 	Updated time.Time
-	NICs    []struct {
-		Name            string
-		IP, IP6         string
-		State, State6   string
-		Present         bool
-		Active, Total   int64
-		RateIn, RateOut float64 // bytes/s through net-merge
-	}
+	NICs    []nmNIC
+}
+
+// nmNIC is one adapter in status.json (engine.SlotStats).
+type nmNIC struct {
+	Name            string
+	IP, IP6         string
+	State, State6   string
+	Present         bool
+	Active, Total   int64
+	RateIn, RateOut float64 // bytes/s through net-merge
+	LinkIn, LinkOut float64 // bytes/s through the adapter, all apps
+	Weight, Weight6 float64
+	Peak            float64 // bytes/s, the most measured through it
 }
 
 func nmState() nmStatus {
@@ -313,14 +331,212 @@ func nmState() nmStatus {
 			s.UpSecs = int64(time.Since(f.Since).Seconds())
 			for _, n := range f.NICs {
 				a := nmAdapter{Name: n.Name, IP: n.IP, State: n.State, Active: n.Active, Total: n.Total,
-					RxMbps: n.RateIn * 8 / 1e6, TxMbps: n.RateOut * 8 / 1e6, Present: n.Present}
+					RxMbps: n.RateIn * 8 / 1e6, TxMbps: n.RateOut * 8 / 1e6, Present: n.Present,
+					Peak: n.Peak * 8 / 1e6, LinkRx: n.LinkIn * 8 / 1e6, LinkTx: n.LinkOut * 8 / 1e6}
 				s.RxMbps += a.RxMbps
 				s.TxMbps += a.TxMbps
 				s.Adapters = append(s.Adapters, a)
 			}
+			nmShares(s.Adapters, f.NICs)
 		}
 	}
+	s.Balance = nmBalance()
+	if s.Running {
+		s.RunBalance = nmRunBalance()
+	}
 	return s
+}
+
+// nmShares fills in each adapter's share of new connections. net-merge gives a
+// new connection to the adapter with the lowest (active+1)/weight among the
+// ones whose internet check passed (if none passed yet, among all), so over
+// time each gets about weight/sum of the connections.
+func nmShares(ads []nmAdapter, nics []nmNIC) {
+	up := func(i int) bool { return nics[i].State == "up" || nics[i].State6 == "up" }
+	anyUp := false
+	for i := range nics {
+		if nics[i].Present && up(i) {
+			anyUp = true
+		}
+	}
+	var sum float64
+	w := make([]float64, len(nics))
+	for i := range nics {
+		if !nics[i].Present || (anyUp && !up(i)) || nics[i].IP == "" {
+			continue
+		}
+		w[i] = nics[i].Weight
+		if w[i] <= 0 {
+			w[i] = 1
+		}
+		sum += w[i]
+	}
+	for i := range ads {
+		if sum > 0 {
+			ads[i].Share = w[i] / sum * 100
+		}
+	}
+}
+
+// nmBalance is the saved choice ("auto" unless the user picked "even").
+func nmBalance() string {
+	if v, _ := getSettings()["nmBalance"].(string); v == "even" {
+		return "even"
+	}
+	return "auto"
+}
+
+// nmRunBalance reads how the running net-merge was started: "even" when it
+// was given -auto-weight=false, "auto" otherwise, "" when it is not running.
+func nmRunBalance() string {
+	pids := procPIDs(map[string]bool{"net-merge.exe": true, "net-merge-tray.exe": true})
+	if len(pids) == 0 {
+		return ""
+	}
+	for pid := range pids {
+		if nmEvenArgs(processCommandLine(pid)) {
+			return "even"
+		}
+	}
+	return "auto"
+}
+
+// nmEvenArgs reports whether a net-merge command line turns auto weights off.
+func nmEvenArgs(cl string) bool {
+	cl = strings.ToLower(cl)
+	return strings.Contains(cl, "-auto-weight=false") || strings.Contains(cl, "-auto-weight=0")
+}
+
+// nmTrayArgs are the arguments the app starts net-merge's tray with.
+func nmTrayArgs(balance string, off bool) []string {
+	a := []string{"tray"}
+	if balance == "even" {
+		a = append(a, "-auto-weight=false")
+	}
+	if off {
+		a = append(a, "-off")
+	}
+	return a
+}
+
+func nmRunning() bool {
+	return len(procPIDs(map[string]bool{"net-merge.exe": true, "net-merge-tray.exe": true})) > 0
+}
+
+// nmStartTray starts net-merge's tray and waits until it is up. It reports an
+// error when the tray exits at once (for example an older net-merge that does
+// not know a flag).
+func nmStartTray(exe string, args []string) error {
+	start := exe
+	if t := nmTrayExe(exe); t != "" {
+		start = t // the GUI build: no console window flashes
+	}
+	cmd := exec.CommandContext(context.Background(), start, args...)
+	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+	if err := cmd.Start(); err != nil {
+		return err
+	}
+	done := make(chan error, 1)
+	go func() { done <- cmd.Wait() }()
+	deadline := time.Now().Add(8 * time.Second)
+	var upSince time.Time
+	for time.Now().Before(deadline) {
+		// up for a moment and still running: it took the arguments
+		if nmRunning() {
+			if upSince.IsZero() {
+				upSince = time.Now()
+			} else if time.Since(upSince) >= 1500*time.Millisecond {
+				return nil
+			}
+		}
+		select {
+		case err := <-done:
+			// it ended: fine only if it handed over to an elevated copy (not
+			// elevated) or found one already running, and that one is up
+			time.Sleep(600 * time.Millisecond)
+			if nmRunning() {
+				return nil
+			}
+			if err == nil {
+				err = errors.New("exited")
+			}
+			return err
+		case <-time.After(150 * time.Millisecond):
+		}
+		if fresh, _ := nmFresh(); fresh {
+			return nil
+		}
+	}
+	if nmRunning() {
+		return nil
+	}
+	return errors.New("did not start")
+}
+
+// nmFresh reports whether net-merge's status file is being written (merging on).
+func nmFresh() (bool, nmFile) {
+	var f nmFile
+	b, err := os.ReadFile(nmStateFile())
+	if err != nil || json.Unmarshal(b, &f) != nil {
+		return false, f
+	}
+	return time.Since(f.Updated) <= 3*time.Second, f
+}
+
+// nmSetBalance saves how connections are shared and, when net-merge is
+// running with the other setting, restarts it with the new one (a restart
+// cuts the connections open at that moment; they reconnect by themselves).
+// It keeps merging on or off as it was.
+func nmSetBalance(mode string) nmStatus {
+	if mode != "even" {
+		mode = "auto"
+	}
+	updateSettings(func(m map[string]any) { m["nmBalance"] = mode })
+	exe := nmExe()
+	if exe == "" || !nmRunning() || nmRunBalance() == mode {
+		return nmState()
+	}
+	if !nmBusy.CompareAndSwap(false, true) {
+		return nmState()
+	}
+	defer nmBusy.Store(false)
+	op := beginOp("netmerge", "", T("log.nmBalance", mode), nil)
+	wasOn, _ := nmFresh()
+	_, _, _ = runQuiet(15*time.Second, exe, "quit")
+	for i := 0; i < 70 && nmRunning(); i++ {
+		time.Sleep(150 * time.Millisecond)
+	}
+	if nmRunning() {
+		op.fail("", "still running", nil)
+		op.end("", nil)
+		st := nmState()
+		st.Error = T("nm.err.restart")
+		return st
+	}
+	err := nmStartTray(exe, nmTrayArgs(mode, !wasOn))
+	if err != nil && mode == "even" {
+		// an older net-merge without the flag: go back to how it was
+		op.fail("", err.Error(), nil)
+		_ = nmStartTray(exe, nmTrayArgs("auto", !wasOn))
+		updateSettings(func(m map[string]any) { m["nmBalance"] = "auto" })
+		if wasOn {
+			_, _, _ = runQuiet(20*time.Second, exe, "on")
+		}
+		op.end("", nil)
+		st := nmState()
+		st.Error = T("nm.err.even")
+		return st
+	}
+	if err != nil {
+		op.fail("", err.Error(), nil)
+	} else if wasOn {
+		if _, _, e := runQuiet(20*time.Second, exe, "on"); e != nil {
+			op.fail("", e.Error(), nil)
+		}
+	}
+	op.end("", map[string]any{"balance": mode})
+	time.Sleep(400 * time.Millisecond)
+	return nmState()
 }
 
 var nmBusy atomic.Bool
@@ -339,25 +555,13 @@ func nmSet(on bool) nmStatus {
 	defer nmBusy.Store(false)
 	op := beginOp("netmerge", "", T("log.nmSet", map[bool]string{true: "on", false: "off"}[on]), nil)
 	if on {
-		if len(procPIDs(map[string]bool{"net-merge.exe": true, "net-merge-tray.exe": true})) == 0 {
-			// start net-merge's tray; it self-elevates with Windows' own UAC
-			// prompt and turns merging on by itself. Prefer the GUI build so
-			// no console window flashes.
-			start := exe
-			if t := nmTrayExe(exe); t != "" {
-				start = t
-			}
-			cmd := exec.CommandContext(context.Background(), start, "tray")
-			cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
-			if err := cmd.Start(); err != nil {
+		if !nmRunning() {
+			// start net-merge's tray with the saved sharing choice; it
+			// self-elevates with Windows' own UAC prompt when needed
+			if err := nmStartTray(exe, nmTrayArgs(nmBalance(), false)); err != nil {
 				op.fail("", err.Error(), nil)
-			} else {
-				_ = cmd.Process.Release()
-			}
-			for i := 0; i < 50; i++ {
-				time.Sleep(150 * time.Millisecond)
-				if len(procPIDs(map[string]bool{"net-merge.exe": true, "net-merge-tray.exe": true})) > 0 {
-					break
+				if nmBalance() == "even" && !nmRunning() {
+					_ = nmStartTray(exe, nmTrayArgs("auto", false))
 				}
 			}
 		}

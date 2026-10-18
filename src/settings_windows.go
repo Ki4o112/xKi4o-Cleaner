@@ -26,7 +26,7 @@ func getSettings() map[string]any {
 
 // Keys the backend owns: the page has a copy of the settings and saves it
 // whole, so these are always taken from the file, never from the page.
-var backendKeys = []string{"dnsBackup", "autoClean", "autoCleanDay", "autoCleanLast", "gpuWUPrev"}
+var backendKeys = []string{"dnsBackup", "autoClean", "autoCleanDay", "autoCleanLast", "gpuWUPrev", "nmBalance"}
 
 func readSettingsLocked() map[string]any {
 	m := map[string]any{}

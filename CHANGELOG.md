@@ -3,6 +3,20 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 3.9.0 — 2026-10-18
+
+### English
+- Merge connections: each network shows its share of new connections and its measured speed
+- Merge connections: when one network gets few connections (net-merge measured it much slower), the page says why
+- Merge connections: new "Evenly" sharing choice, so a phone gets the same number of connections as the cable (restarts net-merge with the setting)
+- Game mode never offers to close net-merge (closing it would cut the connections)
+
+### Български
+- Обединяване на мрежи: всяка мрежа показва какъв дял от новите връзки получава и до каква скорост е мерена
+- Обединяване на мрежи: когато една мрежа получава малко връзки (net-merge я е измерил много по-бавна), страницата обяснява защо
+- Обединяване на мрежи: нов избор „Поравно“, така телефонът получава толкова връзки, колкото и кабелът (рестартира net-merge с настройката)
+- Режимът за игри никога не предлага да затвори net-merge (това би прекъснало връзките)
+
 ## 3.8.0 — 2026-10-18
 
 ### English

@@ -4,10 +4,12 @@ package main
 
 import (
 	"archive/zip"
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 )
 
 // The connection check only sends pings (read only, also on a real PC).
@@ -104,5 +106,81 @@ func TestNMUnzipSafe(t *testing.T) {
 	// nothing escaped the output folder
 	if _, err := os.Stat(filepath.Join(filepath.Dir(out), "escape.exe")); err == nil {
 		t.Error("a file escaped the output folder")
+	}
+}
+
+// How connections are shared: the flag the app passes and how it is read back.
+func TestNMBalanceHelpers(t *testing.T) {
+	if got := strings.Join(nmTrayArgs("auto", false), " "); got != "tray" {
+		t.Fatalf("auto: %q", got)
+	}
+	if got := strings.Join(nmTrayArgs("even", true), " "); got != "tray -auto-weight=false -off" {
+		t.Fatalf("even off: %q", got)
+	}
+	for cl, want := range map[string]bool{
+		`"C:\x\net-merge-tray.exe" tray`:                    false,
+		`"C:\x\net-merge-tray.exe" tray -auto-weight=false`: true,
+		`net-merge.exe tray --auto-weight=false -off`:       true,
+		`net-merge.exe tray -Auto-Weight=FALSE`:             true,
+		`net-merge.exe tray -auto-weight=true`:              false,
+	} {
+		if nmEvenArgs(cl) != want {
+			t.Errorf("%s: want %v", cl, want)
+		}
+	}
+	// Ethernet measured about 20x faster: it gets ~95% of new connections; an
+	// adapter whose check has not passed gets none while another one is up.
+	nics := []nmNIC{
+		{Name: "Ethernet", IP: "192.168.1.81", State: "up", Present: true, Weight: 1},
+		{Name: "Wi-Fi", IP: "172.20.10.10", State: "up", Present: true, Weight: 0.05},
+		{Name: "USB", IP: "192.168.42.6", State: "checking", Present: true, Weight: 1},
+	}
+	ads := make([]nmAdapter, len(nics))
+	nmShares(ads, nics)
+	if ads[0].Share < 95 || ads[0].Share > 95.3 || ads[1].Share < 4.7 || ads[1].Share > 5 || ads[2].Share != 0 {
+		t.Fatalf("shares: %.2f %.2f %.2f", ads[0].Share, ads[1].Share, ads[2].Share)
+	}
+	// nothing checked yet: everyone shares by weight
+	nics[0].State, nics[1].State = "checking", "checking"
+	nmShares(ads, nics)
+	if ads[2].Share == 0 {
+		t.Fatalf("unchecked adapter got no share: %+v", ads)
+	}
+	// net-merge is never closed by game mode
+	for _, e := range []string{"net-merge.exe", "net-merge-tray.exe"} {
+		if !gmSkip(e, `C:\Users\x\AppData\Local\xKi4oCleaner\net-merge\`+e) {
+			t.Errorf("%s can be closed by game mode", e)
+		}
+	}
+}
+
+// What net-merge reports on this PC right now (read only: nothing is started,
+// stopped or changed). Shows each adapter's share, measured speed and traffic.
+func TestNMLiveStatus(t *testing.T) {
+	st := nmState()
+	t.Logf("installed=%v path=%q running=%v on=%v balance(saved)=%s running-with=%q", st.Installed, st.Path, st.Running, st.On, st.Balance, st.RunBalance)
+	for pid := range procPIDs(map[string]bool{"net-merge.exe": true, "net-merge-tray.exe": true}) {
+		t.Logf("  process %d: %s", pid, processCommandLine(pid))
+	}
+	if b, err := os.ReadFile(nmStateFile()); err == nil {
+		var f nmFile
+		_ = json.Unmarshal(b, &f)
+		t.Logf("status.json: updated %s ago, mode %q, ipv6 %q", time.Since(f.Updated).Round(time.Millisecond), f.Mode, f.V6)
+		for _, n := range f.NICs {
+			t.Logf("  %-12s %-15s state=%-11s present=%v weight=%.3f peak=%.1f Mbit/s flows %d/%d via-nm ↓%.1f ↑%.1f all-apps ↓%.1f ↑%.1f Mbit/s",
+				n.Name, n.IP, n.State, n.Present, n.Weight, n.Peak*8/1e6, n.Active, n.Total, n.RateIn*8/1e6, n.RateOut*8/1e6, n.LinkIn*8/1e6, n.LinkOut*8/1e6)
+		}
+	} else {
+		t.Logf("status.json: %v (merging is off or net-merge is not running)", err)
+	}
+	for _, a := range st.Adapters {
+		t.Logf("  share %-12s %.1f%%", a.Name, a.Share)
+	}
+	if b, err := os.ReadFile(filepath.Join(filepath.Dir(nmStateFile()), "net-merge.log")); err == nil {
+		lines := strings.Split(strings.TrimSpace(string(b)), "\n")
+		if len(lines) > 40 {
+			lines = lines[len(lines)-40:]
+		}
+		t.Logf("net-merge.log (last %d lines):\n%s", len(lines), strings.Join(lines, "\n"))
 	}
 }

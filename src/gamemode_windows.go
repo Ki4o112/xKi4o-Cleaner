@@ -140,8 +140,12 @@ func startPlain(exe, cmdline string, flags uint32) (windows.Handle, error) {
 }
 
 // gmSkip: never offered for closing in game mode: this app (any copy of
-// it), setups running from Temp and other non-programs (.tmp).
+// it), net-merge, setups running from Temp and other non-programs (.tmp).
 func gmSkip(exe, path string) bool {
+	// net-merge carries the network: closing it would cut every connection
+	if exe == "net-merge.exe" || exe == "net-merge-tray.exe" {
+		return true
+	}
 	if strings.Contains(exe, "xki4ocleaner") || !strings.HasSuffix(exe, ".exe") {
 		return true
 	}

@@ -41,7 +41,7 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 | **Updates** | Search for Windows and driver updates and install the ones you tick, with a restore point and a log — through Windows Update itself |
 | **System info** | Processor, graphics card, memory sticks, motherboard, drives, monitors, security and battery — with tips (XMP, old drivers) and a report to copy |
 | **Network** | Switch DNS (Cloudflare recommended, Google, AdGuard…) after a speed test that shows the fastest for you; a connection check (ping, jitter, lost packets); flush the DNS cache |
-| **Merge connections** | Use several internet connections at once (Wi-Fi + Ethernet + phone) for more speed, through [net-merge](https://github.com/rohit267/net-merge) — detected and controlled from here, with live per-adapter speeds (net-merge installs separately; nothing is bundled) |
+| **Merge connections** | Use several internet connections at once (Wi-Fi + Ethernet + phone) for more speed, through [net-merge](https://github.com/rohit267/net-merge) — downloaded and controlled from here, with live per-adapter speeds, each adapter's share of connections and an "Evenly" sharing choice (net-merge stays a separate program; nothing is bundled) |
 | **System** | Processes, startup apps, Windows repair (DISM, SFC, disk check) and quick fixes (Explorer, icons, Store, Winsock) |
 | **Automatic cleaning** | Daily, weekly or monthly, with no window; open apps and sensitive categories are left out |
 | **Restore Center** | Puts back what the app changed; every operation has a step-by-step log |
