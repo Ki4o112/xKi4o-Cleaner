@@ -3,6 +3,18 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 3.7.0 — 2026-10-18
+
+### English
+- New "Merge connections" page: use several internet connections at once for more speed, through net-merge (a separate open-source tool — it detects, controls and shows live speeds; it is not bundled)
+- Help for the Windows Defender false positive, where installing a network tool may trigger it: it explains the `!ml` detection, shows the exe's SHA-256, and has buttons that OPEN Windows Security and Microsoft's report page — the app never turns Defender off or adds an exclusion itself
+- README: what to do when Defender flags the exe
+
+### Български
+- Нов раздел „Обединяване на мрежи“: използвай няколко връзки наведнъж за повече скорост, чрез net-merge (отделна програма с отворен код — засича я, управлява я и показва скоростта на живо; не е вградена)
+- Помощ при фалшива тревога на Windows Defender, където инсталирането на мрежов инструмент може да я задейства: обяснява `!ml` детекцията, показва SHA-256 на файла и има бутони, които ОТВАРЯТ Windows Security и страницата за доклад на Microsoft — програмата никога не изключва Defender и не добавя изключение сама
+- README: какво да направиш, когато Defender маркира файла
+
 ## 3.6.0 — 2026-10-18
 
 ### English

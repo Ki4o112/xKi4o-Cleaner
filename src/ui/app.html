@@ -1699,6 +1699,38 @@ h1 { font-size: 25px; letter-spacing: -.025em; }
 .wu-h .dd { color: var(--faint); font-size: 11.5px; white-space: nowrap; }
 .rc-ctx { margin: 0 0 12px; }
 
+/* ================= 3.7: Merge connections (net-merge) + Defender help */
+.nm-what { display: flex; flex-direction: column; gap: 8px; margin: 14px 2px 16px; }
+.nm-w { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--muted); }
+.nm-w .d { width: 6px; height: 6px; margin-top: 6px; border-radius: 50%; background: var(--mint); flex: none; box-shadow: 0 0 8px var(--mint); }
+.nm-cta { margin-top: 4px; }
+.nm-tot { display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 26px; margin: 14px 0; padding: 16px 20px; background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-l); }
+.nm-big { display: flex; flex-direction: column; }
+.nm-big .l { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+.nm-big b { font-size: 30px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.nm-big small { font-size: 12px; color: var(--faint); }
+.nm-offbtn { justify-self: end; }
+.nm-list { margin-top: 4px; }
+.nm-row { grid-template-columns: minmax(0, 1fr) auto; }
+.nm-main { min-width: 0; }
+.nm-main .v b { font-weight: 700; }
+.nm-sp { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.nm-sp small { color: var(--faint); font-weight: 500; }
+.df-card { margin-top: 18px; padding: 16px 18px; border: 1px solid rgba(255, 181, 71, .28); border-radius: var(--r-l); background: linear-gradient(180deg, rgba(255, 181, 71, .06), transparent 60%); }
+.df-top { display: flex; gap: 12px; align-items: flex-start; }
+.df-ic { width: 34px; height: 34px; border-radius: 10px; flex: none; display: grid; place-items: center; background: var(--amber-soft); color: #ffcf8a; }
+.df-ic svg { width: 18px; height: 18px; }
+.df-top b { font-size: 14px; }
+.df-top p { margin: 3px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.df-steps { margin: 14px 0 12px; display: flex; flex-direction: column; gap: 10px; }
+.df-step { display: flex; gap: 10px; align-items: flex-start; }
+.df-step .df-n { width: 20px; height: 20px; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: 11px; font-weight: 700; background: var(--card-2); color: var(--blue-2); }
+.df-step b { font-size: 12.5px; }
+.df-step > div span { display: block; font-size: 12px; color: var(--muted); margin-top: 1px; }
+.df-hash { word-break: break-all; }
+.df-hash.mono { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+.df-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+
 /* ================= 3.4: connection check, quick fixes */
 .np-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 10px 0 6px; }
 .np-card { background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-l); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
@@ -2034,6 +2066,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
       <button data-page="wupd"><span class="ico" data-icon="wupd"></span><span class="label" data-i="nav.wupd"></span><span class="badge" id="wuBadge" hidden></span></button>
       <button data-page="optimize"><span class="ico" data-icon="optimize"></span><span class="label" data-i="nav.optimize"></span></button>
       <button data-page="network"><span class="ico" data-icon="network"></span><span class="label" data-i="nav.network"></span></button>
+      <button data-page="nmerge"><span class="ico" data-icon="merge"></span><span class="label" data-i="nav.nmerge"></span></button>
       <button data-page="repair"><span class="ico" data-icon="repair"></span><span class="label" data-i="nav.repair"></span></button>
       <div class="nav-g" data-i="nav.g.safety"></div>
       <button data-page="restore"><span class="ico" data-icon="lifebuoy"></span><span class="label" data-i="nav.restore"></span></button>
@@ -2348,6 +2381,16 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
         <div class="status" id="trimStatus" style="margin:0 0 10px"></div>
         <div class="list" id="driveList"></div>
       </div>
+    </section>
+
+    <!-- =============== MERGE CONNECTIONS (net-merge) =============== -->
+    <section class="page" id="page-nmerge">
+      <div class="head">
+        <div class="head-ico" data-icon="merge"></div>
+        <div><h1 data-i="nm.title"></h1><div class="sub" data-i="nm.sub"></div></div>
+        <div class="head-r"><button class="btn small" id="nmSite"><span data-icon="open"></span><span data-i="nm.site"></span></button><button class="btn icon-btn" id="nmRefresh" data-i-title="si.refresh"><span data-icon="refresh"></span></button></div>
+      </div>
+      <div class="scroll pad" id="nmBody"></div>
     </section>
 
     <!-- =============== REPAIR =============== -->
@@ -2752,7 +2795,7 @@ bg: {
   "set.never": "Какво почистването никога не пипа",
   "never": ["Изтегляния, документи, работен плот", "История, бисквитки, пароли и входове в браузърите", "Данни на сайтове и известия", "Свалени песни в Spotify, запазени игри и модове", "Захранване, хибернация и програми при стартиране — само ако сам ги промениш в Tweaker или „Стартиране“", "Event логове, Prefetch и настройките на услугите", "Съществуващи точки за възстановяване", "Драйвера, който видеокартата ползва в момента"],
   "cr.made": "Създадено от", "cr.role": "Идея, дизайн и разработка", "cr.version": "Версия {0}", "cr.copy": "© {0} xKi4o",
-  "cr.thanks": "Благодарности", "cr.thanksD": "Правилата за почистване са сверени с BleachBit и общностната база Winapp2, а почистването на RAM следва поведението на Mem Reduct. Туийкърът следва списъка с туийкове на Sparkle и WinUtil на Chris Titus Tech. Всичко е написано наново за тази програма — не е копиран код.",
+  "cr.thanks": "Благодарности", "cr.thanksD": "Правилата за почистване са сверени с BleachBit и общностната база Winapp2, а почистването на RAM следва поведението на Mem Reduct. Туийкърът следва списъка с туийкове на Sparkle и WinUtil на Chris Titus Tech. Обединяването на мрежи става чрез net-merge на Rohit (MIT) — отделна програма, която не е вградена тук. Всичко останало е написано наново за тази програма — не е копиран код.",
   "cr.oss": "Компоненти с отворен код", "cr.license": "Лиценз: {0}", "cr.showLicense": "Покажи лиценза",
   "oss.webview": "Прозорецът и връзката с WebView2", "oss.winloader": "Зареждане на WebView2 без допълнителни файлове", "oss.wv2sdk": "Стартира WebView2 — вграден в програмата", "oss.go": "Езикът Go и системните библиотеки за Windows", "oss.font": "Шрифтът на интерфейса",
   "sel.none": "Нищо не е избрано",
@@ -3457,6 +3500,24 @@ bg: {
   "set.rpKeep": "Пази само последните 3 точки на програмата",
   "set.rpKeepD": "Когато програмата създаде нова точка, най-старата нейна се изтрива, за да не се трупат. Точките на Windows и драйверите не се пипат.", "wu.shutdown": "Изключи",
   "wu.shutdownT": "Да изключа ли компютъра?", "wu.shutdownD": "Windows ще довърши обновленията, докато се изключва. Запази отворените файлове преди това.",
+  "nav.nmerge": "Обединяване", "nm.title": "Обединяване на мрежи", "nm.sub": "Използвай няколко връзки наведнъж за повече скорост (чрез net-merge)", "nm.site": "Сайт на net-merge",
+  "nm.h.need": "net-merge не е инсталиран",
+  "nm.h.needD": "net-merge обединява всичките ти връзки (Wi-Fi, кабел, телефон), за да се събира скоростта им. Отделна безплатна програма с отворен код — инсталира се веднъж.",
+  "nm.what.good": "Полезно за: Steam и игри, браузъри, облак, торенти, менажери за сваляне — всичко с много връзки наведнъж.",
+  "nm.what.no": "Не ускорява едно единствено сваляне от един сървър — то винаги минава през една връзка.",
+  "nm.what.safe": "Ако net-merge спре, интернетът ти продължава да работи нормално.", "nm.install": "Изтегли net-merge", "nm.h.off": "Готово за включване",
+  "nm.h.offD": "net-merge е инсталиран. Натисни, за да обединиш връзките си.", "nm.h.offRun": "net-merge работи, но обединяването е спряно. Натисни, за да го включиш.",
+  "nm.installed": "Инсталиран", "nm.turnOn": "Включи обединяването",
+  "nm.note": "При включване Windows може да поиска администраторски права веднъж (от самия net-merge). Нищо друго не се пипа.", "nm.h.on": "Обединени — {0} връзки",
+  "nm.h.onD": "Общо през net-merge: ↓ {0} · ↑ {1} Mbit/s", "nm.up": "Включено от {0}", "nm.down": "Сваляне", "nm.up2": "Качване", "nm.turnOff": "Изключи",
+  "nm.flows": "{0} активни · {1} общо", "nm.none": "Няма използваеми връзки в момента.",
+  "nm.noteOn": "Скоростта се събира само когато приложението отваря много връзки наведнъж. Данните идват от net-merge на живо.", "nm.hint.start": "Стартирай net-merge и пробвай пак.",
+  "nm.h.err": "Грешка", "df.title": "Windows Defender може да ни маркира — ето защо",
+  "df.body": "Инсталирането на мрежов инструмент като net-merge (и понякога самата ни програма) може да задейства Windows Defender. Това е фалшива тревога: неподписана програма, която пипа мрежата и системата, му изглежда подозрителна, макар да не прави нищо лошо. Ти решаваш как да постъпиш.",
+  "df.s1": "Провери, че файлът е оригиналният", "df.hashWait": "Смятам SHA-256…", "df.hashNo": "—", "df.s2": "Докладвай фалшивата тревога на Microsoft",
+  "df.s2d": "След преглед тревогата изчезва за всички.", "df.s3": "Или сам добави изключение",
+  "df.s3d": "В Windows Security → Защита от вируси → Изключения. Програмата не го прави вместо теб.", "df.openSec": "Отвори Windows Security", "df.report": "Докладвай на Microsoft",
+  "df.opened": "Отворена е защитата на Windows", "df.note": "Програмата никога не изключва Defender и не добавя изключения сама — това решаваш и правиш ти.",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -3548,7 +3609,7 @@ en: {
   "set.never": "What cleaning never touches",
   "never": ["Downloads, documents, desktop", "Browser history, cookies, passwords and logins", "Site data and notifications", "Downloaded Spotify songs, game saves and mods", "Power plan, hibernation and startup apps — only if you change them yourself in Tweaker or Startup", "Event logs, Prefetch and service settings", "Existing restore points", "The driver your graphics card uses right now"],
   "cr.made": "Made by", "cr.role": "Idea, design and development", "cr.version": "Version {0}", "cr.copy": "© {0} xKi4o",
-  "cr.thanks": "Thanks", "cr.thanksD": "The cleaning rules were cross-checked against BleachBit and the community Winapp2 database, and RAM cleaning follows Mem Reduct's behaviour. The Tweaker follows the tweak lists of Sparkle and Chris Titus Tech's WinUtil. Everything was written anew for this app — no code was copied.",
+  "cr.thanks": "Thanks", "cr.thanksD": "The cleaning rules were cross-checked against BleachBit and the community Winapp2 database, and RAM cleaning follows Mem Reduct's behaviour. The Tweaker follows the tweak lists of Sparkle and Chris Titus Tech's WinUtil. Merging connections is done through Rohit's net-merge (MIT), a separate tool that is not bundled here. Everything else was written anew for this app — no code was copied.",
   "cr.oss": "Open-source components", "cr.license": "License: {0}", "cr.showLicense": "Show license",
   "oss.webview": "The window and the WebView2 bridge", "oss.winloader": "Loads WebView2 without extra files", "oss.wv2sdk": "Starts WebView2 — embedded in the app", "oss.go": "The Go language and Windows system libraries", "oss.font": "The interface font",
   "sel.none": "Nothing selected",
@@ -4229,6 +4290,24 @@ en: {
   "set.rpKeep": "Keep only the app's newest 3 restore points",
   "set.rpKeepD": "When the app makes a new point, its oldest one is deleted so they do not pile up. Points made by Windows and drivers are never touched.", "wu.shutdown": "Shut down",
   "wu.shutdownT": "Shut the PC down?", "wu.shutdownD": "Windows finishes the updates while it shuts down. Save open files first.",
+  "nav.nmerge": "Merge", "nm.title": "Merge connections", "nm.sub": "Use several connections at once for more speed (through net-merge)", "nm.site": "net-merge site",
+  "nm.h.need": "net-merge is not installed",
+  "nm.h.needD": "net-merge uses all your connections together (Wi-Fi, Ethernet, phone) so their speed adds up. A separate free, open-source tool — installed once.",
+  "nm.what.good": "Good for: Steam and games, browsers, cloud, torrents, download managers — anything with many connections at once.",
+  "nm.what.no": "It does not speed up a single download from one server — that always uses one connection.",
+  "nm.what.safe": "If net-merge stops, your internet keeps working normally.", "nm.install": "Download net-merge", "nm.h.off": "Ready to turn on",
+  "nm.h.offD": "net-merge is installed. Press to merge your connections.", "nm.h.offRun": "net-merge is running, but merging is paused. Press to turn it on.",
+  "nm.installed": "Installed", "nm.turnOn": "Turn merging on",
+  "nm.note": "When turning on, Windows may ask for administrator rights once (from net-merge itself). Nothing else is touched.", "nm.h.on": "Merged — {0} connections",
+  "nm.h.onD": "Total through net-merge: ↓ {0} · ↑ {1} Mbit/s", "nm.up": "On for {0}", "nm.down": "Download", "nm.up2": "Upload", "nm.turnOff": "Turn off",
+  "nm.flows": "{0} active · {1} total", "nm.none": "No usable connections right now.",
+  "nm.noteOn": "The speed only adds up when an app opens many connections at once. The numbers come live from net-merge.", "nm.hint.start": "Start net-merge and try again.",
+  "nm.h.err": "Error", "df.title": "Windows Defender may flag us — here's why",
+  "df.body": "Installing a network tool like net-merge (and sometimes our own app) can trip Windows Defender. It's a false positive: an unsigned program that touches the network and the system looks suspicious to it, even though it does nothing bad. It's your call what to do.",
+  "df.s1": "Check the file is the real one", "df.hashWait": "Computing SHA-256…", "df.hashNo": "—", "df.s2": "Report the false positive to Microsoft",
+  "df.s2d": "After review the warning goes away for everyone.", "df.s3": "Or add an exclusion yourself",
+  "df.s3d": "In Windows Security → Virus & threat protection → Exclusions. The app does not do it for you.", "df.openSec": "Open Windows Security", "df.report": "Report to Microsoft",
+  "df.opened": "Opened Windows Security", "df.note": "The app never turns Defender off and never adds exclusions itself — you decide and do that.",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -4260,6 +4339,8 @@ const ICONS = {
   speaker: P('<path d="M4 9.5h3.5L12 5v14l-4.5-4.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>'),
   sparkle: P('<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>'),
   bolt: P('<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>'),
+  merge: P('<path d="M6 3v5a4 4 0 0 0 4 4h8"/><path d="M6 21v-5a4 4 0 0 1 4-4"/><path d="M15 9l3 3-3 3"/>'),
+  shieldq: P('<path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M12 10v.01M12 13v3"/>'),
   all: P('<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>'),
   system: P('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>'),
   browsers: P('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'),
@@ -4817,6 +4898,7 @@ function go(page, opt) {
   if (page === "gpu") loadGpu(false);
   if (page === "network") loadNet(false);
   if (page === "wupd") loadWu();
+  if (page === "nmerge") loadNm(true);
   if (page === "network") paintNp();
   if (page === "repair") paintQf();
   if (page === "settings") { loadAuto(); requestAnimationFrame(() => $("#segAuto")._place && $("#segAuto")._place()); }
@@ -7602,6 +7684,101 @@ function qfAsk(f) {
 }
 paintQf();
 
+/* =====================================================================
+   3.7 — Merge connections (net-merge) + the Windows Defender false-positive
+   help. The app never turns Defender off and never adds an exclusion itself;
+   the card only OPENS Windows Security so the user adds it there, and opens
+   Microsoft's report page. net-merge is a separate tool: this page detects it,
+   reads its live status and turns it on/off, but does not bundle it.
+===================================================================== */
+// ---- Windows Defender help card (shown where a tool may trip Defender) ----
+function defenderCardHtml() {
+  return `<div class="df-card" id="dfCard">
+    <div class="df-top"><span class="df-ic">${ICONS.shieldq}</span><div><b>${esc(t("df.title"))}</b><p>${esc(t("df.body"))}</p></div></div>
+    <div class="df-steps">
+      <div class="df-step"><span class="df-n">1</span><div><b>${esc(t("df.s1"))}</b><span class="df-hash" id="dfHash">${esc(t("df.hashWait"))}</span></div></div>
+      <div class="df-step"><span class="df-n">2</span><div><b>${esc(t("df.s2"))}</b><span>${esc(t("df.s2d"))}</span></div></div>
+      <div class="df-step"><span class="df-n">3</span><div><b>${esc(t("df.s3"))}</b><span>${esc(t("df.s3d"))}</span></div></div>
+    </div>
+    <div class="df-btns"><button class="btn small" id="dfSec">${ICONS.shieldq}<span>${esc(t("df.openSec"))}</span></button>
+      <button class="btn small" id="dfReport">${ICONS.open}<span>${esc(t("df.report"))}</span></button></div>
+    <div class="note-line">${esc(t("df.note"))}</div></div>`;
+}
+async function wireDefenderCard(root) {
+  const sec = root.querySelector("#dfSec"), rep = root.querySelector("#dfReport"), hash = root.querySelector("#dfHash");
+  if (sec) sec.addEventListener("click", async () => { try { await api.openWindowsSecurity(); } catch (e) {} toast(t("df.opened"), "shieldq"); });
+  if (rep) rep.addEventListener("click", async () => { try { await api.reportFalsePositive(); } catch (e) {} });
+  if (hash) { try { const d = await api.defenderHelp(); hash.textContent = d && d.sha256 ? d.sha256 : t("df.hashNo"); hash.classList.add("mono"); } catch (e) { hash.textContent = t("df.hashNo"); } }
+}
+
+// ---- net-merge page ----
+const NM = { st: null, loading: false, busy: false, timer: 0 };
+async function loadNm(first) {
+  clearTimeout(NM.timer); NM.timer = 0;
+  if (!NM.loading) {
+    NM.loading = true;
+    try { NM.st = await api.nmState(); } catch (e) { NM.st = { error: String((e && e.message) || e) }; }
+    NM.loading = false;
+    renderNm();
+  }
+  if (S.page === "nmerge" && document.visibilityState !== "hidden") NM.timer = setTimeout(loadNm, NM.st && NM.st.on ? 1500 : 4000);
+}
+async function nmToggle(on) {
+  if (NM.busy) return;
+  NM.busy = true; renderNm();
+  let r = null; try { r = await api.nmSet(on); } catch (e) { r = { error: String((e && e.message) || e) }; }
+  NM.busy = false;
+  if (r && !r.error) NM.st = r;
+  renderNm();
+  if (r && r.error) toast(r.error, "alert", "warn");
+  else if (on && r && !r.on) toast(t("nm.hint.start"), "info");
+}
+function nmSpeed(mbps) { return mbps >= 100 ? nf(0).format(mbps) : nf(1).format(mbps); }
+function renderNm() {
+  const body = $("#nmBody"); if (!body) return;
+  const s = NM.st;
+  if (!s) { body.innerHTML = `<div class="tw-empty"><span class="spin"></span></div>`; return; }
+  let html = "";
+  const busyBtn = NM.busy ? `<span class="spin"></span>` : "";
+  if (s.error) {
+    html += `<div class="si-hero bad"><div class="hi">${ICONS.alert}</div><div class="ht"><h2>${esc(t("nm.h.err"))}</h2><div class="m">${esc(s.error)}</div></div></div>`;
+  } else if (!s.installed) {
+    html += `<div class="si-hero"><div class="hi">${ICONS.merge}</div><div class="ht"><h2>${esc(t("nm.h.need"))}</h2><div class="m">${esc(t("nm.h.needD"))}</div></div></div>
+      <div class="nm-what">${["good", "no", "safe"].map(k => `<div class="nm-w"><span class="d"></span><span>${esc(t("nm.what." + k))}</span></div>`).join("")}</div>
+      <button class="btn primary nm-cta" id="nmInstall">${ICONS.open}<span>${esc(t("nm.install"))}</span></button>
+      ${defenderCardHtml()}`;
+  } else if (!s.on) {
+    html += `<div class="si-hero"><div class="hi">${ICONS.merge}</div><div class="ht"><h2>${esc(t("nm.h.off"))}</h2><div class="m">${esc(t(s.running ? "nm.h.offRun" : "nm.h.offD"))}</div></div>
+      <div class="si-chips"><span class="chip">${esc(t("nm.installed"))}</span></div></div>
+      <button class="btn primary nm-cta" id="nmOn" ${NM.busy ? "disabled" : ""}>${busyBtn || ICONS.bolt}<span>${esc(t("nm.turnOn"))}</span></button>
+      <div class="note-line">${esc(t("nm.note"))}</div>
+      ${defenderCardHtml()}`;
+  } else {
+    const list = (s.adapters || []).filter(a => a.present);
+    html += `<div class="si-hero ok"><div class="hi">${ICONS.merge}</div><div class="ht"><h2>${esc(t("nm.h.on", list.length))}</h2>
+      <div class="m">${esc(t("nm.h.onD", nmSpeed(s.rx || 0), nmSpeed(s.tx || 0)))}</div></div>
+      <div class="si-chips">${s.upSecs ? `<span class="chip">${esc(t("nm.up", secs(s.upSecs)))}</span>` : ""}${s.v6 ? `<span class="chip">IPv6: ${esc(s.v6)}</span>` : ""}</div></div>
+      <div class="nm-tot"><div class="nm-big"><span class="l">${ICONS.down || ""}${esc(t("nm.down"))}</span><b>${esc(nmSpeed(s.rx || 0))}</b><small>Mbit/s</small></div>
+        <div class="nm-big"><span class="l">${esc(t("nm.up2"))}</span><b>${esc(nmSpeed(s.tx || 0))}</b><small>Mbit/s</small></div>
+        <button class="btn nm-offbtn" id="nmOff" ${NM.busy ? "disabled" : ""}>${busyBtn}<span>${esc(t("nm.turnOff"))}</span></button></div>
+      <div class="gp-list nm-list">${list.map(a => {
+        const bad = a.state && a.state !== "ok" && a.state !== "up" && a.state !== "-";
+        return `<div class="gp-row nm-row"><div class="nm-main"><div class="v"><b>${esc(a.name)}</b>${bad ? `<span class="tag">${esc(a.state)}</span>` : ""}</div>
+          <div class="m">${esc([a.ip, t("nm.flows", a.active, a.total)].filter(Boolean).join(" · "))}</div></div>
+          <div class="nm-sp">↓ ${esc(nmSpeed(a.rx || 0))} · ↑ ${esc(nmSpeed(a.tx || 0))} <small>Mbit/s</small></div></div>`;
+      }).join("") || `<div class="gp-empty">${esc(t("nm.none"))}</div>`}</div>
+      <div class="note-line">${esc(t("nm.noteOn"))}</div>`;
+  }
+  body.innerHTML = html;
+  const ins = $("#nmInstall"); if (ins) ins.addEventListener("click", () => api.nmOpenSite());
+  const on = $("#nmOn"); if (on) on.addEventListener("click", () => nmToggle(true));
+  const off = $("#nmOff"); if (off) off.addEventListener("click", () => nmToggle(false));
+  if ($("#dfCard")) wireDefenderCard(body);
+}
+$("#nmSite").addEventListener("click", () => api.nmOpenSite());
+$("#nmRefresh").addEventListener("click", () => loadNm(true));
+document.addEventListener("visibilitychange", () => { if (document.visibilityState !== "hidden" && S.page === "nmerge" && !NM.timer) loadNm(); });
+
 /* Accent colours */
 const ACCENTS = {
   emerald: ["#0c9364", "#34d399", "#13a873", "#a7f3d0", "#06734d"],
@@ -7637,7 +7814,7 @@ function setupSwatches() {
 }
 
 /* Keyboard shortcuts */
-const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "sysinfo", "gpu", "wupd", "optimize", "network", "repair", "restore", "logs", "settings", "credits"];
+const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "sysinfo", "gpu", "wupd", "optimize", "network", "nmerge", "repair", "restore", "logs", "settings", "credits"];
 document.addEventListener("keydown", e => {
   if ($("#veil").classList.contains("on") || $("#sveil").classList.contains("on")) return;
   if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K" || e.key === "p" || e.key === "P")) { e.preventDefault(); if ($("#palVeil").classList.contains("on")) palClose(); else palOpen(); return; }
@@ -8891,8 +9068,8 @@ on("auto-clean", d => {
    Command palette (Ctrl+K): every section, action, tweak and category
 ===================================================================== */
 const PAL = { items: [], idx: 0 };
-const PAGE_ICON = { home: "heart", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", sysinfo: "board", gpu: "gpu", wupd: "wupd", network: "network", tweaks: "tweaks", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
-const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", sysinfo: "si.sub", gpu: "gp.sub", wupd: "wu.sub", network: "net.sub", tweaks: "tw.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
+const PAGE_ICON = { home: "heart", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", sysinfo: "board", gpu: "gpu", wupd: "wupd", network: "network", nmerge: "merge", tweaks: "tweaks", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
+const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", sysinfo: "si.sub", gpu: "gp.sub", wupd: "wu.sub", network: "net.sub", nmerge: "nm.sub", tweaks: "tw.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
 function palSources() {
   const items = [];
   PAGES.forEach((p, i) => items.push({ g: "pal.g.pages", icon: PAGE_ICON[p], title: t("nav." + p), sub: t(PAGE_SUB[p]), hint: i < 9 ? "Ctrl " + (i + 1) : "", kw: p, run: () => go(p) }));
@@ -10458,7 +10635,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "3.6.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "3.7.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -10675,6 +10852,28 @@ const Mock = (() => {
 
 
 
+
+    // ---- 3.7: net-merge + Defender help
+    nmState: async () => {
+      await new Promise(r => setTimeout(r, q.get("fast") ? 60 : 350));
+      const kind = q.get("nm") || "need"; // need | off | on
+      if (kind === "need") return { installed: false, running: false, on: false, adapters: [], rx: 0, tx: 0 };
+      if (window.__nmOn === undefined) window.__nmOn = kind === "on";
+      if (!window.__nmOn) return { installed: true, path: "C:\\Program Files\\net-merge\\net-merge.exe", running: q.get("nm") === "on", on: false, adapters: [], rx: 0, tx: 0 };
+      const jit = () => 0.9 + Math.random() * 0.2;
+      const ad = [
+        { name: "Ethernet", ip: "192.168.1.40", state: "ok", active: 7, total: 820, rx: 212 * jit(), tx: 14 * jit(), present: true },
+        { name: "Wi-Fi", ip: "192.168.1.51", state: "ok", active: 5, total: 540, rx: 96 * jit(), tx: 8 * jit(), present: true },
+        { name: "Телефон USB", ip: "192.168.42.6", state: "ok", active: 3, total: 210, rx: 58 * jit(), tx: 5 * jit(), present: true },
+      ];
+      return { installed: true, path: "C:\\Program Files\\net-merge\\net-merge.exe", running: true, on: true, upSecs: 372, v6: "auto",
+        adapters: ad, rx: ad.reduce((a, x) => a + x.rx, 0), tx: ad.reduce((a, x) => a + x.tx, 0) };
+    },
+    nmSet: async on => { window.__nm = (window.__nm || []).concat(on ? "on" : "off"); window.__nmOn = on; await new Promise(r => setTimeout(r, q.get("fast") ? 80 : 700)); return Mock.nmState(); },
+    nmOpenSite: async () => { window.__nmSite = true; return true; },
+    defenderHelp: async () => ({ exe: "C:\\Users\\demo\\Downloads\\xKi4oCleaner.exe", sha256: "9f2c4b1e7a8d0356e1c9b4a2f6d80e3c5172a9bd4e0f8c1a3b6d2e5f70c9a1b4" }),
+    openWindowsSecurity: async () => { window.__defSec = true; return true; },
+    reportFalsePositive: async () => { window.__defReport = true; return true; },
     // ---- 3.4: connection check, quick fixes
     netPing: async () => {
       await new Promise(r => setTimeout(r, q.get("fast") ? 250 : 2600));
@@ -10943,11 +11142,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "3.6.0", latest: nw ? "3.7.0" : "3.6.0", newer: nw, name: "xKi4o Cleaner 3.7.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.7.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "3.7.0", latest: nw ? "3.8.0" : "3.7.0", newer: nw, name: "xKi4o Cleaner 3.8.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.8.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders
