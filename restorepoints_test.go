@@ -26,6 +26,24 @@ func TestRestorePointDeletePlan(t *testing.T) {
 	}
 }
 
+// Only the app's own points beyond the newest three are planned for removal.
+func TestRestorePointTrimPlan(t *testing.T) {
+	pts := []restorePoint{{Seq: 10, Desc: "xKi4o Cleaner"}, {Seq: 11, Desc: "Windows Update"}, {Seq: 12, Desc: "xKi4o Cleaner"},
+		{Seq: 13, Desc: "Installed NVIDIA Graphics Driver"}, {Seq: 14, Desc: "xKi4o Cleaner"}, {Seq: 15, Desc: "xKi4o Cleaner"}, {Seq: 16, Desc: "xKi4o Cleaner"}}
+	plan := rpTrimPlan(pts, 3)
+	if len(plan) != 2 || plan[0].Seq != 12 || plan[1].Seq != 10 {
+		t.Fatalf("plan %+v", plan)
+	}
+	if len(rpTrimPlan(pts[:3], 3)) != 0 || len(rpTrimPlan(pts, 0)) != 0 || len(rpTrimPlan(nil, 3)) != 0 {
+		t.Error("nothing to remove")
+	}
+	for _, p := range rpTrimPlan(pts, 1) {
+		if p.Desc != "xKi4o Cleaner" {
+			t.Errorf("not the app's: %+v", p)
+		}
+	}
+}
+
 func TestRemoveRestorePointsReportsEach(t *testing.T) {
 	logInit(t.TempDir())
 	defer logInit(t.TempDir())

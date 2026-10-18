@@ -115,6 +115,34 @@ func deleteRestorePoints(keepNewest bool) rpDelResult {
 	return res
 }
 
+// trimOwnRestorePoints: after the app makes a restore point, only its newest
+// three stay (unless switched off in Settings). Points Windows, drivers or
+// other programs made are never touched.
+func trimOwnRestorePoints() {
+	if v, ok := getSettings()["rpKeep"].(bool); ok && !v {
+		return
+	}
+	l := restorePointList()
+	if l.Error != "" {
+		return
+	}
+	plan := rpTrimPlan(l.Points, 3)
+	if len(plan) == 0 {
+		return
+	}
+	op := beginOp("restore", "", T("log.rpTrim"), map[string]any{"keep": 3, "remove": len(plan)})
+	n := 0
+	for _, p := range plan {
+		if err := srRemove(p.Seq); err != nil {
+			op.fail(rpLabel(p), err.Error(), map[string]any{"seq": p.Seq})
+			continue
+		}
+		n++
+		op.info(rpLabel(p), T("log.rpDeleted"), map[string]any{"seq": p.Seq})
+	}
+	op.end(T("log.rpTrimSum", n), map[string]any{"removed": n})
+}
+
 type rcResult struct {
 	ID    int64  `json:"id"`
 	OK    bool   `json:"ok"`

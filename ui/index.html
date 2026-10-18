@@ -97,10 +97,6 @@ button { -webkit-tap-highlight-color: transparent; }
 .mini-ram { background: var(--card); border-radius: 16px; padding: 12px 12px 11px; cursor: pointer; transition: transform .2s var(--spring), background .2s; }
 .mini-ram:hover { background: var(--card-2); }
 .mini-ram:active { transform: scale(.97); }
-.mini-top { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
-.mini-top b { color: var(--text); font-weight: 700; }
-.mini-bar { height: 6px; border-radius: 4px; background: var(--well); margin-top: 8px; overflow: hidden; }
-.mini-bar i { display: block; height: 100%; width: 0; border-radius: 4px; background: linear-gradient(90deg, var(--blue), var(--blue-2)); transition: width .8s var(--ease), background .4s; }
 .who { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 4px var(--mint-soft); flex: none; }
 .dot.warn { background: var(--red); box-shadow: 0 0 0 4px var(--red-soft); }
@@ -429,21 +425,6 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 @keyframes burst { to { transform: translate(var(--dx), var(--dy)) scale(.2); opacity: 0; } }
 
 /* ================= Splash ================= */
-.splash { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
-  background: radial-gradient(600px 400px at 50% 38%, rgba(var(--blue-rgb),.22), transparent 70%), var(--bg); transition: opacity .5s var(--ease), transform .6s var(--ease); }
-.splash.out { opacity: 0; transform: scale(1.04); pointer-events: none; }
-.splash-logo { width: 96px; height: 96px; border-radius: 30px; background: linear-gradient(160deg, var(--blue-hi), var(--blue-deep)); box-shadow: 0 24px 60px -18px var(--blue-glow), inset 0 1px 0 rgba(255,255,255,.25);
-  display: grid; place-items: center; animation: splashIn .8s var(--spring) both; }
-.splash-pill { position: relative; width: 60px; height: 22px; border-radius: 11px; background: rgba(255,255,255,.3); overflow: hidden; }
-.splash-pill i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 11px; background: #fff; animation: fillPill 1.4s var(--ease) .25s infinite; }
-.splash-pill b { position: absolute; right: 7px; top: 7px; width: 8px; height: 8px; border-radius: 50%; background: #fff; }
-.splash-name { font-size: 22px; font-weight: 700; letter-spacing: -.02em; margin-top: 10px; animation: rise .7s var(--ease) .15s both; }
-.splash-by { color: var(--muted); font-size: 12.5px; font-weight: 600; animation: rise .7s var(--ease) .25s both; }
-.splash-bar { width: 160px; height: 3px; border-radius: 2px; background: rgba(255,255,255,.06); overflow: hidden; margin-top: 10px; animation: rise .7s var(--ease) .35s both; }
-.splash-bar i { display: block; height: 100%; width: 35%; border-radius: 2px; background: linear-gradient(90deg, var(--blue), var(--blue-light)); animation: slide 1.1s ease-in-out infinite; }
-@keyframes splashIn { from { opacity: 0; transform: scale(.7) rotate(-8deg); } }
-@keyframes rise { from { opacity: 0; transform: translateY(10px); } }
-@keyframes fillPill { 0% { width: 0; } 55%, 70% { width: 62%; } 100% { width: 62%; opacity: .0; } }
 
 .nomotion *, .nomotion *::before, .nomotion *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
 
@@ -507,7 +488,6 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .tw-empty { padding: 34px 20px; text-align: center; color: var(--muted); font-size: 13px; }
 .tw-body .notice { margin: 12px 0 0; }
 .modal .extras.scrolly { max-height: min(46vh, 380px); overflow-y: auto; padding-right: 4px; }
-
 
 /* ================= Sheet (large dialog) ================= */
 .sveil { position: fixed; inset: 0; background: var(--veil); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 18; }
@@ -588,7 +568,6 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .hero-links { display: flex; gap: 14px; justify-content: flex-end; position: relative; z-index: 1; }
 .hero-links:empty { display: none; }
 
-
 /* ================= compact nav for 9 sections ================= */
 .brand { padding-bottom: 16px; }
 .nav { gap: 2px; }
@@ -668,21 +647,11 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .da-prog .nums b { display: block; font-size: 18px; font-weight: 800; }
 .da-prog .nums span { color: var(--muted); font-size: 11.5px; }
 .da-prog .cur { margin-top: 10px; color: var(--faint); font: 11.5px var(--mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; direction: rtl; text-align: left; }
-.da-crumbs { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin: 16px 0 10px; font-weight: 600; font-size: 13px; }
-.da-crumbs .linkbtn { font-size: 13px; }
-.da-crumbs .sep { color: var(--faint); }
-.da-crumbs .cur { color: var(--text); }
-.da-crumbs .acts { margin-left: auto; display: flex; gap: 8px; }
-.da-sum { display: flex; gap: 18px; flex-wrap: wrap; color: var(--muted); font-size: 12.5px; margin-bottom: 12px; }
-.da-sum b { color: var(--text); }
-.da-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr); gap: 14px; }
-.tmap { position: relative; height: 300px; border-radius: 14px; overflow: hidden; background: var(--well); }
 .tm { position: absolute; border-radius: 6px; overflow: hidden; cursor: pointer; transition: filter .15s; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
 .tm:hover { filter: brightness(1.25); }
 .tm.file { cursor: default; }
 .tm .lb { position: absolute; left: 8px; top: 6px; right: 6px; font-size: 11.5px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 2px rgba(0,0,0,.5); pointer-events: none; }
 .tm .lb small { display: block; font-weight: 600; opacity: .8; font-size: 10.5px; }
-.tm-sub { position: absolute; border-radius: 4px; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.05); }
 .tm-tip { position: fixed; z-index: 25; pointer-events: none; background: var(--card-2); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; font-size: 12px; box-shadow: 0 16px 34px -14px rgba(0,0,0,.9); max-width: 360px; }
 .tm-tip b { display: block; font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tm-tip span { color: var(--muted); }
@@ -693,7 +662,6 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .ty-row .bar i { display: block; height: 100%; border-radius: 4px; background: var(--blue-2); }
 .ty-row .v { text-align: right; font-weight: 700; }
 .ty-row .n { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.da-tabs { margin: 16px 0 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .da-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 10px 12px; border-bottom: 1px solid var(--line-soft); }
 .da-tools .search { margin-left: 0; flex: 1 1 200px; max-width: 280px; }
 .da-tools .grow { margin-left: auto; }
@@ -708,7 +676,6 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .dt-row .nm > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dt-row .nm .linkbtn { color: var(--text); font-size: 12.5px; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 .dt-row .nm svg { width: 15px; height: 15px; flex: none; color: var(--blue-2); }
-.dt-row .nm .fi { color: var(--faint); }
 .dt-row .sz { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
 .dt-row .sz .bar { height: 6px; border-radius: 3px; background: var(--well); overflow: hidden; }
 .dt-row .sz .bar i { display: block; height: 100%; background: var(--blue-2); border-radius: 3px; }
@@ -720,15 +687,11 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .badge-s.den { background: var(--red-soft); color: #ffb3bc; }
 @media (max-width: 1080px) {
   .su-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .da-grid { grid-template-columns: 1fr; }
   .dt-head, .dt-row { grid-template-columns: 26px minmax(0, 1fr) 120px 80px 0 0 34px; }
   .dt-head > :nth-child(5), .dt-head > :nth-child(6), .dt-row > :nth-child(5), .dt-row > :nth-child(6) { visibility: hidden; }
 }
 
 /* ================= Splash progress ================= */
-.splash-step { color: var(--muted); font-size: 12px; font-weight: 600; min-height: 18px; margin-top: 4px; animation: rise .7s var(--ease) .35s both; text-align: center; max-width: 80vw; }
-.splash-bar.det i { width: 0; animation: none; transition: width .35s var(--ease); }
-.splash-pct { color: var(--faint); font-size: 11px; font-weight: 700; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
@@ -738,11 +701,10 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   .oss { grid-template-columns: 1fr; }
   .shell { grid-template-columns: 76px 1fr; }
-  .side .label, .brand-txt, .mini-top span:first-child, .who span:last-child, .os { display: none; }
+  .side .label, .brand-txt, .who span:last-child, .os { display: none; }
   .nav button { justify-content: center; padding: 0; }
   .brand { padding-left: 4px; }
   .mini-ram { padding: 10px 6px; }
-  .mini-top { justify-content: center; }
   .nav .badge, .nav .live { display: none; }
   .row { grid-template-columns: 30px 40px minmax(0, 1fr) auto 0 32px 96px; }
   .hero-actions #btnCleanSel { display: none; }
@@ -1127,9 +1089,9 @@ body.dock-on .toasts { bottom: 84px; }
 .tr.more { color: var(--blue-light); cursor: pointer; font-weight: 600; }
 .tr.more:hover { background: var(--blue-soft); }
 .tr.load .nm { color: var(--muted); }
-.tr .fic, .aico { width: 18px; height: 18px; flex: none; display: inline-grid; place-items: center; color: var(--blue-2); }
+.tr .fic { width: 18px; height: 18px; flex: none; display: inline-grid; place-items: center; color: var(--blue-2); }
 .tr.file .fic { color: var(--faint); }
-.aico img, .fic img { width: 100%; height: 100%; object-fit: contain; image-rendering: auto; }
+.fic img { width: 100%; height: 100%; object-fit: contain; image-rendering: auto; }
 .tr .fic svg { width: 16px; height: 16px; }
 .da-side { position: sticky; top: 0; display: flex; flex-direction: column; gap: 12px; }
 .ds-top { display: flex; gap: 12px; align-items: center; min-width: 0; }
@@ -1391,57 +1353,6 @@ body.dock-on .toasts { bottom: 84px; }
 .classic-frame .shell { height: 100vh; padding-top: 12px; }
 .classic-frame #sideTray { display: grid; }
 .side > .brand .logo { width: 36px; height: 36px; border-radius: 11px; }
-/* the splash and the credits wear the logo */
-/* 3.2: the splash in the Graphite look — the mark comes together from its three pieces */
-.splash { gap: 12px; background:
-    radial-gradient(420px 300px at 50% 36%, rgba(70, 190, 154, .16), transparent 70%),
-    radial-gradient(900px 600px at 50% 120%, rgba(255, 255, 255, .035), transparent 70%), var(--bg); }
-.splash::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
-  background-image: radial-gradient(circle, rgba(255,255,255,.07) 1px, transparent 1.6px); background-size: 22px 22px;
-  -webkit-mask-image: radial-gradient(420px 320px at 50% 42%, #000, transparent 75%); mask-image: radial-gradient(420px 320px at 50% 42%, #000, transparent 75%); }
-.splash > * { position: relative; }
-.sp-stage { position: relative; width: 200px; height: 200px; display: grid; place-items: center; margin-bottom: -26px; }
-.sp-stage > * { grid-area: 1 / 1; }
-.sp-glow { width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(closest-side, rgba(70, 190, 154, .34), rgba(70, 190, 154, .08) 55%, transparent 72%);
-  filter: blur(6px); animation: spGlowIn .9s var(--ease) .1s both, spBreathe 3.2s ease-in-out 1s infinite; }
-.sp-ring { width: 120px; height: 120px; border-radius: 50%; border: 1.5px solid rgba(70, 190, 154, .55); opacity: 0; animation: spRing 2.6s cubic-bezier(.2, .6, .3, 1) .85s infinite; }
-.sp-ring.r2 { animation-delay: 1.7s; } .sp-ring.r3 { animation-delay: 2.55s; }
-.sp-orbit { position: relative; width: 176px; height: 176px; border-radius: 50%; border: 1px dashed rgba(255, 255, 255, .07); animation: spFade .8s var(--ease) .9s both, spSpin 7s linear infinite; }
-.sp-orbit i { position: absolute; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #a7f3d0; box-shadow: 0 0 10px #46be9a, 0 0 2px #fff; left: 50%; top: 0; }
-.sp-orbit i:nth-child(2) { left: 6.7%; top: 75%; width: 4px; height: 4px; margin: -2px 0 0 -2px; opacity: .7; }
-.sp-orbit i:nth-child(3) { left: 93.3%; top: 75%; width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; opacity: .5; }
-.splash-mark { width: 116px; height: 116px; overflow: visible; filter: drop-shadow(0 18px 34px rgba(70, 190, 154, .32)); }
-.sp-shine { transform-box: view-box; animation: spShine 1.1s cubic-bezier(.5, 0, .3, 1) 1.05s both, spShineAgain 4.5s cubic-bezier(.5, 0, .3, 1) 3.2s infinite; }
-@keyframes spGlowIn { from { opacity: 0; transform: scale(.4); } }
-@keyframes spBreathe { 50% { transform: scale(1.12); opacity: .8; } }
-@keyframes spRing { 0% { opacity: .75; transform: scale(.75); } 100% { opacity: 0; transform: scale(1.75); } }
-@keyframes spFade { from { opacity: 0; transform: scale(.85); } }
-@keyframes spSpin { to { rotate: 360deg; } }
-@keyframes spShine { from { transform: translateX(0) skewX(-18deg); } to { transform: translateX(520px) skewX(-18deg); } }
-@keyframes spShineAgain { 0% { transform: translateX(0) skewX(-18deg); } 28%, 100% { transform: translateX(520px) skewX(-18deg); } }
-.splash-mark path { transform-box: fill-box; transform-origin: center; }
-.splash-mark .sm-a, .splash-mark .sm-b { fill: #ececee; }
-.splash-mark .sm-c { fill: #46be9a; }
-.splash-mark .sm-a { animation: smIn .8s var(--spring) .15s both; --fx: -60px; --fy: 0px; --fr: -10deg; }
-.splash-mark .sm-b { animation: smIn .8s var(--spring) .3s both; --fx: 44px; --fy: -44px; --fr: 8deg; }
-.splash-mark .sm-c { animation: smIn .8s var(--spring) .45s both, smGlow 2.4s ease-in-out 1.4s infinite; --fx: 44px; --fy: 44px; --fr: -8deg; }
-@keyframes smIn { from { opacity: 0; transform: translate(var(--fx), var(--fy)) rotate(var(--fr)) scale(.7); filter: blur(6px); } 60% { opacity: 1; filter: blur(0); } }
-@keyframes smGlow { 50% { fill: #6fd9b6; } }
-.splash-name { font-size: 26px; font-weight: 800; letter-spacing: -.03em; margin-top: 14px; display: flex; animation: none; }
-.splash-name span { display: inline-block; animation: spLetter .6s var(--spring) both; animation-delay: calc(.7s + var(--i) * .035s); }
-.splash-name span:nth-child(-n+5) { background: linear-gradient(180deg, #fff, #a7f3d0); -webkit-background-clip: text; background-clip: text; color: transparent; }
-@keyframes spLetter { from { opacity: 0; transform: translateY(14px) scale(.9); filter: blur(4px); } }
-.splash-by { animation: rise .6s var(--ease) 1.15s both; }
-.splash-bar { animation: rise .6s var(--ease) 1.2s both; position: relative; }
-.splash-bar::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent); background-size: 40% 100%; background-repeat: no-repeat; animation: spBarShine 1.6s ease-in-out 1.4s infinite; mix-blend-mode: overlay; }
-@keyframes spBarShine { from { background-position: -60% 0; } to { background-position: 160% 0; } }
-.splash-step { animation: rise .6s var(--ease) 1.25s both; }
-.splash.out { opacity: 0; transform: scale(1.06); filter: blur(10px); transition: opacity .55s var(--ease), transform .6s var(--ease), filter .55s var(--ease); }
-.splash::before { animation: spDots 14s linear infinite; }
-@keyframes spDots { to { background-position: 22px 44px; } }
-.splash-by { color: var(--faint); font-size: 12px; font-weight: 600; letter-spacing: .02em; margin-top: -6px; }
-.splash-bar { width: 200px; height: 4px; border-radius: 99px; background: rgba(255,255,255,.07); margin-top: 16px; }
-.splash-bar i { border-radius: 99px; background: linear-gradient(90deg, #1e9f73, #46be9a 60%, #a7f3d0); box-shadow: 0 0 12px rgba(70, 190, 154, .55); }
 /* 3.2: the credits in the Graphite look, with the new mark */
 .credit-hero { padding: 40px 36px; border: 1px solid var(--edge);
   background: radial-gradient(520px 320px at 86% 50%, rgba(70, 190, 154, .26), transparent 65%), radial-gradient(600px 300px at 0% 120%, rgba(255, 255, 255, .05), transparent 60%), linear-gradient(160deg, var(--card-2), var(--card) 70%);
@@ -1468,7 +1379,6 @@ body.dock-on .toasts { bottom: 84px; }
 .nav.lines .nav-g.first { display: none; }
 .fade-y { -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 var(--ft, 0px), #000 calc(100% - var(--fb, 0px)), transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 var(--ft, 0px), #000 calc(100% - var(--fb, 0px)), transparent 100%); }
 .fade-x { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--fl, 0px), #000 calc(100% - var(--fr, 0px)), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 var(--fl, 0px), #000 calc(100% - var(--fr, 0px)), transparent 100%); }
-
 
 /* ================= 3.1: the Noir look (the default theme), the side menu, the PC health dashboard */
 :root[data-theme="noir"] {
@@ -1692,55 +1602,9 @@ h1 { font-size: 25px; letter-spacing: -.025em; }
 .gp-vendor { display: flex; gap: 14px; align-items: center; }
 .gp-vendor .hi { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; color: #fff; flex: none; background: var(--vc, var(--blue)); }
 .gp-vendor .hi svg { width: 22px; height: 22px; }
-.gp-ask { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--r-l); background: var(--amber-soft); color: #ffcf8a; border: 1px solid rgba(255,181,71,.3); margin-bottom: 10px; font-size: 13px; }
-.gp-ask .t { flex: 1; }
-.gp-ask b { color: var(--text); }
 
-/* 3.3: the splash as a short show — particles gather, the mark comes together, a flash, a light sweep,
-   a turning arc while the scan runs, then the app comes in (transform and opacity only: smooth) */
+/* easings for the motion across the app */
 :root { --expo: cubic-bezier(.16, 1, .3, 1); --quint: cubic-bezier(.22, 1, .36, 1); }
-.splash { will-change: opacity, transform; }
-.sp-rays { position: absolute; left: 50%; top: 40%; width: 1400px; height: 1400px; margin: -700px 0 0 -700px; pointer-events: none; opacity: 0;
-  background: repeating-conic-gradient(from 0deg, rgba(70, 190, 154, .07) 0deg 4deg, transparent 4deg 18deg);
-  -webkit-mask-image: radial-gradient(closest-side, #000 8%, transparent 62%); mask-image: radial-gradient(closest-side, #000 8%, transparent 62%);
-  animation: spRaysIn 1.6s var(--expo) 1.2s forwards, spSpin 60s linear infinite; }
-@keyframes spRaysIn { to { opacity: 1; } }
-.sp-parts { position: relative; width: 0; height: 0; }
-.sp-parts i { position: absolute; left: 0; top: 0; width: var(--s); height: var(--s); margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2); border-radius: 50%;
-  background: #a7f3d0; box-shadow: 0 0 8px #46be9a; opacity: 0; animation: spGather 1.15s var(--quint) var(--d) both; will-change: transform, opacity; }
-@keyframes spGather { 0% { opacity: 0; transform: translate(var(--x), var(--y)) scale(.6); } 25% { opacity: .9; } 85% { opacity: .9; } 100% { opacity: 0; transform: translate(0, 0) scale(.2); } }
-.sp-flash { width: 160px; height: 160px; border-radius: 50%; background: radial-gradient(closest-side, rgba(220, 255, 240, .9), rgba(70, 190, 154, .35) 45%, transparent 72%); opacity: 0;
-  animation: spFlash 1.1s var(--expo) 1.25s both; }
-@keyframes spFlash { 0% { opacity: 0; transform: scale(.4); } 18% { opacity: .85; } 100% { opacity: 0; transform: scale(2.1); } }
-.sp-arc { width: 152px; height: 152px; border-radius: 50%; opacity: 0;
-  background: conic-gradient(from 0deg, transparent 0 62%, rgba(70, 190, 154, .1) 70%, #46be9a 97%, #dffff3 100%);
-  -webkit-mask-image: radial-gradient(closest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); mask-image: radial-gradient(closest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
-  animation: spFade .9s var(--expo) 1.7s forwards, spSpin 1.6s linear 1.7s infinite; }
-.sp-arc { animation-fill-mode: forwards, none; }
-.splash-mark .sm-a { animation: smIn2 1.05s var(--expo) .55s both; --fx: -90px; --fy: 0px; --fr: -14deg; }
-.splash-mark .sm-b { animation: smIn2 1.05s var(--expo) .72s both; --fx: 70px; --fy: -70px; --fr: 12deg; }
-.splash-mark .sm-c { animation: smIn2 1.05s var(--expo) .89s both, smGlow 2.6s ease-in-out 2.2s infinite; --fx: 70px; --fy: 70px; --fr: -12deg; }
-@keyframes smIn2 { 0% { opacity: 0; transform: translate(var(--fx), var(--fy)) rotate(var(--fr)) scale(.55); } 45% { opacity: 1; } 100% { opacity: 1; transform: none; } }
-.splash-mark { animation: spMarkPop .9s var(--expo) 1.25s both; }
-@keyframes spMarkPop { 0% { transform: scale(1); } 30% { transform: scale(1.07); } 100% { transform: scale(1); } }
-.sp-glow { animation: spGlowIn 1.2s var(--expo) .9s both, spBreathe 3.4s ease-in-out 2.2s infinite; }
-.sp-ring { animation: spRing 2.8s var(--quint) 1.35s infinite; }
-.sp-ring.r2 { animation-delay: 2.25s; } .sp-ring.r3 { animation-delay: 3.15s; }
-.sp-orbit { animation: spFade 1s var(--expo) 1.8s both, spSpin 9s linear infinite; }
-.sp-shine { animation: spShine 1.2s var(--quint) 1.6s both, spShineAgain 4.2s var(--quint) 3.4s infinite; }
-.splash-name span { animation: spLetter2 .8s var(--expo) both; animation-delay: calc(1.75s + var(--i) * .045s); }
-@keyframes spLetter2 { from { opacity: 0; transform: translateY(18px) rotateX(70deg); } }
-.splash-name { perspective: 400px; }
-.splash-by { animation: rise .8s var(--expo) 2.35s both; }
-.splash-bar { animation: rise .8s var(--expo) 2.45s both; }
-.splash-bar.det i { transition: width .3s linear; }
-.splash-step { animation: rise .8s var(--expo) 2.55s both; }
-.splash::before { opacity: 0; animation: spDotsIn 1.4s var(--expo) .1s forwards, spDots 18s linear infinite; }
-@keyframes spDotsIn { to { opacity: .5; } }
-.splash.out { opacity: 0; transform: scale(1.08); filter: none; transition: opacity .75s var(--quint), transform .9s var(--quint); }
-.splash.out .sp-stage { transition: transform .9s var(--quint); transform: scale(1.25); }
-body.app-in .shell, body.app-in .winbar { animation: appIn .95s var(--expo) both; }
-@keyframes appIn { from { opacity: 0; transform: scale(.975); } }
 
 /* ================= 3.3: motion across the app */
 /* pages come in with their cards one after another */
@@ -1749,7 +1613,7 @@ body.app-in .shell, body.app-in .winbar { animation: appIn .95s var(--expo) both
 .page.enter .head > div:not(.head-ico):not(.head-r) { animation: headIn .6s var(--expo) both; }
 .page.enter .head .head-r { animation: headIn .6s var(--expo) .08s both; }
 @keyframes headIn { from { opacity: 0; transform: translateX(-14px); } }
-.page.enter :is(.hm-dash > *, .hm-low > *, .hm-cards > *, .gp-live > *, .gp-grid > *, .si-grid > *, .su-stats > *, .twp-cards > *, .tw-pc, .da-vol, .dns-row, .gp-row, .list > .item, .cards > .card, .dh-card, .oss > *, .rc-cards > *, .mem-grid > *, .stats > *, .si-hero, .hm-hero, .gl) {
+.page.enter :is(.hm-dash > *, .hm-low > *, .hm-cards > *, .gp-live > *, .gp-grid > *, .si-grid > *, .su-stats > *, .tw-pc, .da-vol, .dns-row, .gp-row, .list > .item, .cards > .card, .dh-card, .oss > *, .rc-cards > *, .mem-grid > *, .stats > *, .si-hero, .hm-hero, .gl) {
   animation: cardIn .7s var(--expo) both; animation-delay: calc(80ms + var(--k, 0) * 45ms); }
 @keyframes cardIn { from { opacity: 0; transform: translateY(16px) scale(.98); } }
 .page.enter :nth-child(2) { --k: 1; } .page.enter :nth-child(3) { --k: 2; } .page.enter :nth-child(4) { --k: 3; } .page.enter :nth-child(5) { --k: 4; }
@@ -1938,11 +1802,6 @@ body.app-in .shell, body.app-in .winbar { animation: appIn .95s var(--expo) both
 .si-bar.warn i { background: linear-gradient(90deg, #ffb547, #ff8a5c); }
 .si-load { display: flex; align-items: center; gap: 12px; color: var(--muted); padding: 6px 2px 16px; font-size: 13px; }
 .si-skel { height: 150px; border-radius: var(--r-l); }
-.hm-pc { display: flex; align-items: center; gap: 10px; margin-top: 12px; margin-bottom: -2px; padding: 10px 14px; border-radius: var(--r-m); background: var(--card); border: 1px solid var(--edge); color: var(--muted); font-size: 12.5px; cursor: pointer; width: 100%; text-align: left; transition: background .2s; }
-.hm-pc:hover { background: var(--card-2); color: var(--text); }
-.hm-pc svg { width: 16px; height: 16px; flex: none; color: var(--blue-2); }
-.hm-pc span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-.hm-pc .go { margin-left: auto; flex: none; opacity: .6; }
 
 .net-conns { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin-bottom: 4px; }
 .net-c { background: var(--card); border: 1px solid var(--edge); border-radius: var(--r-l); padding: 14px 16px; display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 12px; align-items: center; }
@@ -1974,8 +1833,6 @@ body.app-in .shell, body.app-in .winbar { animation: appIn .95s var(--expo) both
 .tw-b.rec { background: rgba(243, 128, 32, .16); color: #ffb877; }
 @media (max-width: 1100px) { .dns-row { grid-template-columns: 38px minmax(0, 1fr) 110px 104px; } }
 
-.cm-row .su-m .where { color: var(--muted); flex: none; }
-.cm-row.off .su-n > span:first-child { color: var(--muted); text-decoration: line-through; text-decoration-color: rgba(255,255,255,.25); }
 
 .tw-b.new { background: linear-gradient(90deg, rgba(70,190,154,.22), rgba(167,243,208,.12)); color: #a7f3d0; }
 .tw-sec.new span:first-child { display: inline-flex; align-items: center; gap: 7px; color: var(--text); }
@@ -2037,17 +1894,78 @@ body.app-in .shell, body.app-in .winbar { animation: appIn .95s var(--expo) both
 .dd-evm { margin-top: 8px; color: var(--muted); font-size: 12px; user-select: text; line-height: 1.5; }
 .dd-evm .k { display: block; color: var(--faint); font: 11px var(--mono); margin-bottom: 3px; }
 @media (max-width: 1080px) { .dd-nv { grid-template-columns: repeat(3, minmax(0, 1fr)); } .drive-row { grid-template-columns: 44px minmax(0, 1fr) 150px 170px; } }
+
+/* ================= 3.5: the splash — dark #0B0F19, an orbital ring that fills with the real progress,
+   a blur-track bar and an organic percent (compositor-only motion: transform and opacity) */
+.splash { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
+  background: #0b0f19; color: #e8edf5; overflow: hidden; contain: strict; }
+.sp-aura { position: absolute; left: 50%; top: 42%; width: 900px; height: 900px; margin: -450px 0 0 -450px; pointer-events: none; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(70, 190, 154, .16), rgba(70, 190, 154, .05) 45%, transparent 70%); opacity: 0; animation: spAura 1.6s var(--expo) .1s forwards, spBreath 5s ease-in-out 1.7s infinite; will-change: opacity, transform; }
+@keyframes spAura { to { opacity: 1; } }
+@keyframes spBreath { 50% { transform: scale(1.06); opacity: .8; } }
+.sp-core { position: relative; width: 240px; height: 240px; display: grid; place-items: center; }
+.sp-core > * { grid-area: 1 / 1; }
+.sp-ring { width: 240px; height: 240px; transform: rotate(-90deg); overflow: visible; filter: drop-shadow(0 0 10px rgba(70, 190, 154, .45)); }
+.sp-ring circle { fill: none; stroke-linecap: round; }
+.sp-track { stroke: rgba(255, 255, 255, .06); stroke-width: 2; opacity: 0; animation: spIn .9s var(--expo) .2s forwards; }
+.sp-arc { stroke: url(#spArcG); stroke-width: 3; stroke-dasharray: 100 100; stroke-dashoffset: 100; transition: stroke-dashoffset .55s var(--expo); }
+.sp-head { width: 208px; height: 208px; transform: rotate(0deg); transition: transform .55s var(--expo); will-change: transform; pointer-events: none; }
+.sp-head i { position: absolute; left: 50%; top: 0; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: #e6fff6;
+  box-shadow: 0 0 0 4px rgba(70, 190, 154, .22), 0 0 18px 4px rgba(70, 190, 154, .75); opacity: 0; animation: spIn .6s var(--expo) .5s forwards; }
+.sp-sat { width: 236px; height: 236px; border-radius: 50%; opacity: 0; animation: spIn 1.2s var(--expo) .6s forwards, spTurn 14s linear infinite; }
+.sp-sat i { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #9fe7cf; box-shadow: 0 0 8px #46be9a; }
+.sp-sat i:nth-child(1) { left: 50%; top: -2px; } .sp-sat i:nth-child(2) { left: 7%; top: 74%; width: 3px; height: 3px; opacity: .6; }
+@keyframes spTurn { to { transform: rotate(360deg); } }
+@keyframes spIn { to { opacity: 1; } }
+.splash-mark { width: 96px; height: 96px; overflow: visible; filter: drop-shadow(0 14px 30px rgba(70, 190, 154, .28)); }
+.splash-mark path { transform-box: fill-box; transform-origin: center; }
+.splash-mark .sm-a, .splash-mark .sm-b { fill: #eef1f6; }
+.splash-mark .sm-c { fill: #46be9a; }
+.splash-mark .sm-a { animation: smIn .95s var(--expo) .05s both; --fx: -70px; --fy: 0px; --fr: -12deg; }
+.splash-mark .sm-b { animation: smIn .95s var(--expo) .18s both; --fx: 52px; --fy: -52px; --fr: 10deg; }
+.splash-mark .sm-c { animation: smIn .95s var(--expo) .31s both; --fx: 52px; --fy: 52px; --fr: -10deg; }
+@keyframes smIn { 0% { opacity: 0; transform: translate(var(--fx), var(--fy)) rotate(var(--fr)) scale(.6); } 40% { opacity: 1; } 100% { opacity: 1; transform: none; } }
+.sp-shine { transform-box: view-box; transform: translateX(0); animation: spShine 1.3s var(--quint) 1.1s both, spShine 1.3s var(--quint) 4.2s both; }
+@keyframes spShine { from { transform: translateX(0); } to { transform: translateX(470px); } }
+.sp-title { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 22px; animation: spRise .8s var(--expo) .45s both; }
+.sp-title b { font-size: 24px; font-weight: 700; letter-spacing: -.02em; }
+.sp-title span { font-size: 12.5px; color: #7d8799; font-weight: 500; }
+.sp-meter { width: 280px; display: flex; flex-direction: column; align-items: center; margin-top: 26px; animation: spRise .8s var(--expo) .6s both; }
+.sp-pct { display: flex; align-items: baseline; gap: 2px; font-variant-numeric: tabular-nums; }
+.sp-pct b { font-size: 40px; font-weight: 700; letter-spacing: -.03em; line-height: 1; min-width: 2ch; text-align: right; }
+.sp-pct span { font-size: 16px; font-weight: 600; color: #7d8799; }
+.sp-bar { position: relative; width: 100%; height: 3px; margin-top: 16px; border-radius: 3px; background: rgba(255, 255, 255, .07); }
+.sp-bar i, .sp-bar::after { position: absolute; inset: 0; border-radius: inherit; transform-origin: left center; transform: scaleX(var(--p, 0)); transition: transform .55s var(--expo); will-change: transform; }
+.sp-bar i { display: block; background: linear-gradient(90deg, #1e9f73, #46be9a 65%, #c9fbe8); overflow: hidden; }
+.sp-bar::after { content: ""; background: linear-gradient(90deg, rgba(30, 159, 115, 0), #46be9a); filter: blur(7px); opacity: .85; top: -3px; bottom: -3px; }
+.splash-step { margin-top: 12px; min-height: 18px; font-size: 12.5px; color: #8b95a7; text-align: center; max-width: 360px; }
+@keyframes spRise { from { opacity: 0; transform: translateY(12px); } }
+/* done: the ring closes with a soft pulse, then everything leaves */
+.splash.done .sp-ring { animation: spPulse .5s var(--expo); }
+.splash.done .sp-head i { animation: spHeadOut .45s var(--expo) forwards; }
+@keyframes spPulse { 40% { transform: rotate(-90deg) scale(1.045); } }
+@keyframes spHeadOut { to { opacity: 0; transform: scale(2.4); } }
+.splash.out { opacity: 0; transition: opacity .6s var(--quint); pointer-events: none; }
+.splash.out .sp-core { transform: scale(1.08); transition: transform .7s var(--quint); }
+.splash.out .sp-title, .splash.out .sp-meter { transform: translateY(-8px); transition: transform .6s var(--quint); }
+body.app-in .shell, body.app-in .winbar { animation: appIn .8s var(--expo) both; }
+@keyframes appIn { from { opacity: 0; transform: scale(.985); } }
+.nomotion .splash *, .nomotion .splash { animation-duration: 1ms !important; animation-delay: 0s !important; transition-duration: 1ms !important; }
+@media (prefers-reduced-motion: reduce) { .splash *, .splash { animation-duration: 1ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; } }
 </style>
 </head>
 <body>
 <div class="rate-ask" id="rateAsk" role="alertdialog" hidden></div>
-<div class="splash" id="splash" aria-hidden="true">
-  <div class="sp-rays" aria-hidden="true"></div>
-  <div class="sp-stage" aria-hidden="true">
-    <span class="sp-parts"><i style="--x:-234px;--y:72px;--d:0.42s;--s:3.2px"></i><i style="--x:-250px;--y:-12px;--d:0.08s;--s:3.3px"></i><i style="--x:-195px;--y:-207px;--d:0.04s;--s:2.8px"></i><i style="--x:242px;--y:155px;--d:0.31s;--s:2.1px"></i><i style="--x:312px;--y:-35px;--d:0.29s;--s:3.5px"></i><i style="--x:84px;--y:127px;--d:0.24s;--s:2.1px"></i><i style="--x:70px;--y:178px;--d:0.01s;--s:3.2px"></i><i style="--x:-273px;--y:107px;--d:0.23s;--s:3.6px"></i><i style="--x:-263px;--y:0px;--d:0.21s;--s:2.7px"></i><i style="--x:319px;--y:-5px;--d:0.38s;--s:3.8px"></i><i style="--x:-75px;--y:173px;--d:0.13s;--s:2.2px"></i><i style="--x:22px;--y:-217px;--d:0.38s;--s:3.0px"></i><i style="--x:284px;--y:-77px;--d:0.00s;--s:2.5px"></i><i style="--x:194px;--y:-123px;--d:0.44s;--s:3.0px"></i><i style="--x:230px;--y:114px;--d:0.35s;--s:2.7px"></i><i style="--x:176px;--y:108px;--d:0.43s;--s:3.9px"></i><i style="--x:142px;--y:130px;--d:0.05s;--s:2.1px"></i><i style="--x:52px;--y:-172px;--d:0.25s;--s:3.1px"></i></span>
-    <span class="sp-flash"></span><span class="sp-arc"></span>
-    <span class="sp-glow"></span><span class="sp-ring"></span><span class="sp-ring r2"></span><span class="sp-ring r3"></span>
-    <span class="sp-orbit"><i></i><i></i><i></i></span>
+<div class="splash" id="splash" role="progressbar" aria-label="xKi4o Cleaner" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <div class="sp-aura" aria-hidden="true"></div>
+  <div class="sp-core" aria-hidden="true">
+    <svg class="sp-ring" viewBox="0 0 240 240">
+      <defs><linearGradient id="spArcG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e9f73"/><stop offset=".6" stop-color="#46be9a"/><stop offset="1" stop-color="#c9fbe8"/></linearGradient></defs>
+      <circle class="sp-track" cx="120" cy="120" r="104" pathLength="100"/>
+      <circle class="sp-arc" id="spArc" cx="120" cy="120" r="104" pathLength="100"/>
+    </svg>
+    <div class="sp-sat"><i></i><i></i></div>
+    <div class="sp-head" id="spHead"><i></i></div>
     <svg class="splash-mark" viewBox="47.2 27.2 346.7 346.7">
       <defs>
         <linearGradient id="spShineG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
@@ -2057,10 +1975,12 @@ body.app-in .shell, body.app-in .winbar { animation: appIn .95s var(--expo) both
       <g mask="url(#spMask)"><rect class="sp-shine" x="-92.8" y="27.2" width="110" height="346.7" fill="url(#spShineG)"/></g>
     </svg>
   </div>
-  <div class="splash-name" aria-label="xKi4o Cleaner"><span style="--i:0">x</span><span style="--i:1">K</span><span style="--i:2">i</span><span style="--i:3">4</span><span style="--i:4">o</span><span style="--i:5">&nbsp;</span><span style="--i:6">C</span><span style="--i:7">l</span><span style="--i:8">e</span><span style="--i:9">a</span><span style="--i:10">n</span><span style="--i:11">e</span><span style="--i:12">r</span></div>
-  <div class="splash-by">by xKi4o</div>
-  <div class="splash-bar" id="splashBar"><i></i></div>
-  <div class="splash-step" id="splashStep"></div>
+  <div class="sp-title"><b>xKi4o Cleaner</b><span>by xKi4o</span></div>
+  <div class="sp-meter">
+    <div class="sp-pct" aria-hidden="true"><b id="spPct">0</b><span>%</span></div>
+    <div class="sp-bar" id="splashBar"><i></i></div>
+    <div class="splash-step" id="splashStep"></div>
+  </div>
 </div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -2518,6 +2438,7 @@ body.app-in .shell, body.app-in .winbar { animation: appIn .95s var(--expo) both
         <div class="section-t" data-i="set.safety"></div>
         <div class="list">
           <div class="item"><div class="i-ico" data-icon="shield"></div><div><div class="t" data-i="set.rp"></div><div class="d" data-i="set.rpD"></div></div><input type="checkbox" class="switch" id="rpToggle" checked></div>
+          <div class="item"><div class="i-ico" data-icon="history"></div><div><div class="t" data-i="set.rpKeep"></div><div class="d" data-i="set.rpKeepD"></div></div><input type="checkbox" class="switch" id="rpKeepToggle" checked></div>
           <div class="item"><div class="i-ico" data-icon="stop"></div><div><div class="t" data-i="set.force"></div><div class="d" data-i="set.forceD"></div></div><input type="checkbox" class="switch" id="forceToggle" checked></div>
           <div class="item"><div class="i-ico" data-icon="flag"></div><div><div class="t" data-i="set.rpNow"></div><div class="d" id="rpStatus" data-i="set.rpNowD"></div></div><button class="btn small" id="btnRp" data-i="set.rpBtn"></button></div>
           <div class="item"><div class="i-ico" data-icon="undo"></div><div><div class="t" data-i="set.restore"></div><div class="d" data-i="set.restoreD"></div></div><button class="btn small" id="btnRstrui" data-i="set.open"></button></div>
@@ -3527,6 +3448,9 @@ bg: {
   "qf.winsock.d": "Когато има интернет, но сайтове и игри не се свързват. Връща Winsock по подразбиране и изчиства DNS кеша.",
   "qf.winsock.ask": "Winsock се връща по подразбиране и DNS кешът се изчиства. Програми, които добавят мрежови слоеве (някои VPN-и и антивируси), може да трябва да се преинсталират. Нужен е рестарт.",
   "qf.doneReboot": "Готово — рестартирай компютъра, за да важи", "qf.winsock.done": "Готово",
+  "set.rpKeep": "Пази само последните 3 точки на програмата",
+  "set.rpKeepD": "Когато програмата създаде нова точка, най-старата нейна се изтрива, за да не се трупат. Точките на Windows и драйверите не се пипат.", "wu.shutdown": "Изключи",
+  "wu.shutdownT": "Да изключа ли компютъра?", "wu.shutdownD": "Windows ще довърши обновленията, докато се изключва. Запази отворените файлове преди това.",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -4296,6 +4220,9 @@ en: {
   "qf.winsock.d": "When there is internet but sites and games do not connect. Resets Winsock and clears the DNS cache.",
   "qf.winsock.ask": "Winsock goes back to default and the DNS cache is cleared. Programs that add network layers (some VPNs and antivirus) may need reinstalling. A restart is needed.",
   "qf.doneReboot": "Done — restart the PC for it to apply", "qf.winsock.done": "Done",
+  "set.rpKeep": "Keep only the app's newest 3 restore points",
+  "set.rpKeepD": "When the app makes a new point, its oldest one is deleted so they do not pile up. Points made by Windows and drivers are never touched.", "wu.shutdown": "Shut down",
+  "wu.shutdownT": "Shut the PC down?", "wu.shutdownD": "Windows finishes the updates while it shuts down. Save open files first.",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -4664,11 +4591,14 @@ function makeSeg(el, options, value, onChange) {
     thumb.style.width = b.offsetWidth + "px";
     thumb.style.transform = `translateX(${b.offsetLeft}px)`;
   };
-  const set = v => { el.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === String(v)))); place(); };
+  // the thumb is measured once per frame, not in the middle of other DOM work (no forced layouts)
+  let raf = 0;
+  const later = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; place(); }); };
+  const set = v => { el.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === String(v)))); later(); };
   el.querySelectorAll("button").forEach(b => b.addEventListener("click", () => { if (b.disabled) return; set(b.dataset.v); onChange(b.dataset.v); }));
   set(value);
   el._set = set; el._place = place;
-  if (window.ResizeObserver) new ResizeObserver(() => place()).observe(el);
+  if (window.ResizeObserver) new ResizeObserver(later).observe(el);
   return el;
 }
 
@@ -4700,10 +4630,12 @@ function fadeEdges(el) {
     el.style.setProperty("--fl", el.scrollLeft > 1 ? w : "0px");
     el.style.setProperty("--fr", el.scrollLeft < max - 1 ? w : "0px");
   };
+  let raf = 0;
+  const later = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; upd(); }); };
   el.addEventListener("scroll", upd, { passive: true });
-  if (window.ResizeObserver) new ResizeObserver(upd).observe(el);
-  new MutationObserver(upd).observe(el, { childList: true, subtree: true });
-  upd();
+  if (window.ResizeObserver) new ResizeObserver(later).observe(el);
+  new MutationObserver(later).observe(el, { childList: true, subtree: true });
+  later();
 }
 function toTray() {
   api.winTray(!S.settings.trayTold);
@@ -4870,7 +4802,7 @@ function go(page, opt) {
   if (page === "programs") { if (opt && opt.prTab) { PR.tab = opt.prTab; setupPrTabs(); } loadPrograms(); requestAnimationFrame(() => $("#prTab")._place && $("#prTab")._place()); }
   if (page === "game") loadGame();
   if (page === "tidy") { loadTidy(); requestAnimationFrame(() => $("#tdTab")._place && $("#tdTab")._place()); }
-  if (page === "memory") { requestAnimationFrame(() => { $("#segThr")._place(); $("#segInt")._place(); }); }
+  if (page === "memory") { paintMem(); requestAnimationFrame(() => { $("#segThr")._place(); $("#segInt")._place(); }); }
   if (page === "settings") requestAnimationFrame(() => { $("#segLang")._place(); $("#segTheme")._place && $("#segTheme")._place(); });
   if (page === "clean") requestAnimationFrame(() => $("#segSort")._place && $("#segSort")._place());
   if (page === "tweaks") { loadTweaks(); requestAnimationFrame(() => $("#twFilter")._place && $("#twFilter")._place()); }
@@ -5091,7 +5023,7 @@ $("#stAll").addEventListener("click", () => $("#btnCleanAll").click());
 $("#stSel").addEventListener("click", () => $("#btnCleanSel").click());
 $("#stTop").addEventListener("click", () => $("#cleanBody").scrollTo({ top: 0, behavior: motionOK() ? "smooth" : "auto" }));
 new IntersectionObserver(es => es.forEach(e => $("#sticky").classList.toggle("on", !e.isIntersecting)), { root: $("#cleanBody"), threshold: 0.05 }).observe($("#hero"));
-setInterval(() => { if ($("#sticky").classList.contains("on")) syncChrome(); }, 400);
+setInterval(() => { if (document.visibilityState !== "hidden" && $("#sticky").classList.contains("on")) syncChrome(); }, 400);
 $("#cbAll").addEventListener("change", e => {
   const ids = (S.filter === "all" ? GROUPS : GROUPS.filter(g => g.id === S.filter)).flatMap(g => g.items).filter(id => visible(id) && selectable(id));
   S.dryShown = false;
@@ -5442,34 +5374,55 @@ setInterval(async () => {
 }, 3000);
 function secsClock(s) { s = Math.max(0, Math.round(s || 0)); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); }
 
-/* ---- splash: shows the real first scan, 2–3 seconds ---- */
-const SPL = { total: 0, got: 0, hidden: false };
-// the splash's length: about 5 seconds for the show (quick in the page tests: ?fastsplash=1)
+/* ---- splash: follows the real first scan with an organic percent ----
+   target: how far the scan is; cap: never ahead of the show's length; the shown value walks
+   toward them in small, uneven steps (sometimes a pause, sometimes a jump) and never goes back */
+const SPL = { total: 0, got: 0, hidden: false, target: 0, shown: 0, timer: 0, out: false };
+// the splash's length: about 5 seconds (quick in the page tests: ?fastsplash=1)
 const SPL_FAST = /[?&]fastsplash=1/.test(location.search), SPL_MIN = SPL_FAST ? 250 : 4900, SPL_MAX = SPL_FAST ? 1500 : 6800;
+function splashPaint(p) {
+  const sp = $("#splash"); if (!sp) return;
+  p = Math.max(0, Math.min(100, p));
+  const arc = $("#spArc"), head = $("#spHead"), bar = $("#splashBar"), pct = $("#spPct");
+  if (arc) arc.style.strokeDashoffset = (100 - p).toFixed(2);
+  if (head) head.style.transform = `rotate(${(p * 3.6).toFixed(2)}deg)`;
+  if (bar) bar.style.setProperty("--p", (p / 100).toFixed(4));
+  if (pct) pct.textContent = String(Math.round(p));
+  if (SPL.got && SPL.tot && p < 100) { const st = $("#splashStep"); if (st) st.textContent = t("sp.scan", Math.max(1, Math.min(SPL.got, Math.round((p - 22) / 74 * SPL.tot))), SPL.tot); }
+  sp.setAttribute("aria-valuenow", String(Math.round(p)));
+}
+function splashTick() {
+  clearTimeout(SPL.timer);
+  if (SPL.out || !$("#splash")) return;
+  const el = performance.now() - BOOT, cap = SPL.hidden ? 100 : Math.min(99, 3 + 96 * Math.min(1, el / SPL_MIN));
+  const lim = Math.min(SPL.target, cap);
+  if (SPL.shown < lim) {
+    // most steps cover a part of the way left, some pause, some jump
+    const gap = lim - SPL.shown, r = Math.random();
+    const step = r < .12 ? 0 : r < .86 ? Math.max(.8, gap * (.16 + Math.random() * .22)) : gap * (.45 + Math.random() * .3);
+    SPL.shown = Math.min(lim, SPL.shown + step);
+    splashPaint(SPL.shown);
+  }
+  SPL.timer = setTimeout(splashTick, SPL_FAST ? 25 : 100 + Math.random() * 180);
+}
 function splashStep(text, pct) {
-  const st = $("#splashStep"), bar = $("#splashBar");
+  const st = $("#splashStep");
   if (!st || SPL.hidden) return;
   st.textContent = text;
-  if (pct != null) { SPL.target = Math.max(SPL.target || 0, Math.min(100, pct)); bar.classList.add("det"); splashBarTick(); }
-}
-// the bar follows the scan, but never runs ahead of the show: it fills smoothly over its length
-function splashBarTick() {
-  const bar = $("#splashBar"); if (!bar) return;
-  const el = performance.now() - BOOT, cap = SPL.hidden ? 100 : 6 + 94 * Math.min(1, el / SPL_MIN);
-  bar.querySelector("i").style.width = Math.max(4, Math.min(SPL.target || 0, cap)) + "%";
-  if (!SPL.barT && !SPL.done) SPL.barT = setInterval(() => { splashBarTick(); if (!$("#splash")) { clearInterval(SPL.barT); SPL.done = true; } }, 120);
+  if (pct != null) { SPL.target = Math.max(SPL.target, Math.min(100, pct)); if (!SPL.timer) splashTick(); }
 }
 on("analyze-start", d => { SPL.total = d.total || 0; SPL.got = 0; });
 function splashItem() {
   if (SPL.hidden) return;
   SPL.got++;
-  const tot = SPL.total || GROUPS.reduce((n, g) => n + g.items.length, 0);
-  splashStep(t("sp.scan", Math.min(SPL.got, tot), tot), 26 + 70 * Math.min(1, SPL.got / Math.max(1, tot)));
+  const tot = SPL.tot = SPL.total || GROUPS.reduce((n, g) => n + g.items.length, 0);
+  splashStep(t("sp.scan", Math.max(1, Math.min(SPL.got, Math.round((SPL.shown - 22) / 74 * tot))), tot), 26 + 70 * Math.min(1, SPL.got / Math.max(1, tot)));
 }
 function maybeHideSplash(force) {
   if (SPL.hidden) return;
   const el = performance.now() - BOOT;
   if (force || (S.analyzed && el >= SPL_MIN - 500)) {
+    SPL.got = 0;
     splashStep(S.analyzed ? t("sp.ready", fmt(S.total || 0)) : t("sp.later"), 100);
     SPL.hidden = true;
     setTimeout(() => hideSplash(), S.analyzed ? 260 : 120);
@@ -5729,9 +5682,15 @@ function setupMemSegs() {
 }
 function paintAuto() { $("#autoCtl").classList.toggle("dim", !S.settings.mem.auto); $("#navLive").hidden = !S.settings.mem.auto; }
 $("#memAuto").addEventListener("change", e => { S.settings.mem.auto = e.target.checked; paintAuto(); storeSettings(); });
+// the reading is kept every second (the 2-minute chart); the page is drawn only while it is seen
 function showMem(m) {
   if (!m || !m.total) return;
   S.mem = m;
+  memHist.push(m.load); if (memHist.length > 120) memHist.shift();
+  if (S.page === "memory" && document.visibilityState !== "hidden") paintMem();
+}
+function paintMem() {
+  const m = S.mem; if (!m) return;
   const pct = m.load, C = 502.65;
   $("#gaugeVal").style.strokeDashoffset = String(C * (1 - pct / 100));
   $("#memPct").textContent = pct + "%";
@@ -5740,9 +5699,9 @@ function showMem(m) {
   $("#mStandby").textContent = m.lists ? fmt(m.standby) : "—"; $("#mModified").textContent = m.lists ? fmt(m.modified) : "—";
   $("#commitLine").textContent = t("mem.commit", fmt(m.commitUsed), fmt(m.commitTotal));
   $("#memLast").textContent = m.lastAt ? t("mem.last", ago(m.lastAt), fmt(m.lastFreed), m.cleans) : t("mem.never");
-  memHist.push(pct); if (memHist.length > 120) memHist.shift();
   drawChart();
 }
+document.addEventListener("visibilitychange", () => { if (document.visibilityState !== "hidden" && S.page === "memory") paintMem(); });
 function drawChart() {
   const W = 600, H = 150, n = 120, pts = memHist.slice(-n);
   if (pts.length < 2) { $("#chartLine").setAttribute("d", ""); $("#chartArea").setAttribute("d", ""); }
@@ -7006,6 +6965,7 @@ $("#frameToggle").addEventListener("change", async e => {
 });
 $("#motionToggle").addEventListener("change", e => { S.settings.motion = e.target.checked; document.documentElement.classList.toggle("nomotion", !e.target.checked); storeSettings(); });
 $("#rpToggle").addEventListener("change", e => { S.settings.restorePoint = e.target.checked; storeSettings(); });
+$("#rpKeepToggle").addEventListener("change", e => { S.settings.rpKeep = e.target.checked; storeSettings(); });
 $("#forceToggle").addEventListener("change", e => { S.settings.forceClose = e.target.checked; storeSettings(); });
 // one restore point at a time, from Settings or the Restore Center
 function makeRestorePoint() {
@@ -7474,7 +7434,7 @@ function renderWu() {
   const reboot = st && st.reboot;
   let html = `<div class="si-hero wu-hero ${head[3]}"><div class="hi">${head[0]}</div><div class="ht"><h2>${esc(head[1])}</h2><div class="m">${esc(head[2])}</div></div>
     <div class="si-chips">${reboot ? `<span class="chip warn-chip">${esc(t("wu.rebootPending"))}</span>` : ""}${st && st.searched && !st.error ? `<span class="chip">${esc(t("wu.took", Math.max(1, Math.round((st.took || 0) / 1000))))}</span>` : ""}</div></div>`;
-  if (reboot && !run) html += `<div class="notice info wu-rb"><p>${esc(t("wu.rebootD"))}</p><button class="btn small primary" id="wuReboot">${ICONS.refresh}<span>${esc(t("gp.rebootNow"))}</span></button></div>`;
+  if (reboot && !run) html += `<div class="notice info wu-rb"><p>${esc(t("wu.rebootD"))}</p><button class="btn small" id="wuShutdown">${ICONS.power}<span>${esc(t("wu.shutdown"))}</span></button><button class="btn small primary" id="wuReboot">${ICONS.refresh}<span>${esc(t("gp.rebootNow"))}</span></button></div>`;
   if (st && st.admin === false) html += `<div class="notice info"><p>${esc(t("wu.noadmin"))}</p></div>`;
   if (run) {
     const pct = run.n ? Math.round(((run.i - 1) + (run.phase === "install" ? .5 : run.phase === "done" ? 1 : 0)) / run.n * 100) : 0;
@@ -7523,8 +7483,16 @@ function renderWu() {
     cb.addEventListener("change", () => { l.forEach(u => cb.checked ? WU.sel.add(u.id) : WU.sel.delete(u.id)); renderWu(); });
   });
   const ins = $("#wuInstall"); if (ins) ins.addEventListener("click", wuAsk);
-  const rb = $("#wuReboot"); if (rb) rb.addEventListener("click", () => confirmBox({ title: t("gp.rebootT"), text: t("gp.rebootD"), okText: t("gp.rebootNow"), ok: async () => { let ok = false; try { ok = await api.restartPC(); } catch (e) {} if (!ok) toast(t("tw.failed"), "alert", "warn"); } }));
+  const rb = $("#wuReboot"); if (rb) rb.addEventListener("click", wuAskRestart);
+  const sd = $("#wuShutdown"); if (sd) sd.addEventListener("click", wuAskShutdown);
   requestAnimationFrame(() => { const k = $("#wuKind"); if (k && k._place) k._place(); });
+}
+function wuAskRestart() {
+  confirmBox({ title: t("gp.rebootT"), text: t("gp.rebootD"), okText: t("gp.rebootNow"), ok: async () => { let ok = false; try { ok = await api.restartPC(); } catch (e) {} if (!ok) toast(t("tw.failed"), "alert", "warn"); } });
+}
+// shutting down also finishes the updates (Windows installs them on the way out)
+function wuAskShutdown() {
+  confirmBox({ title: t("wu.shutdownT"), text: t("wu.shutdownD"), okText: t("wu.shutdown"), ok: async () => { let ok = false; try { ok = await api.shutdownPC(); } catch (e) {} if (!ok) toast(t("tw.failed"), "alert", "warn"); } });
 }
 function wuAsk() {
   const ups = ((WU.st && WU.st.updates) || []).filter(u => WU.sel.has(u.id));
@@ -7546,10 +7514,11 @@ async function wuRun(ups, rp) {
   if (!r || (r.error && !r.installed)) { toast((r && r.error) || t("tw.failed"), "alert", "warn"); return; }
   openSheet({ title: t(r.failed && r.failed.length ? "wu.doneSome" : "wu.doneAll", r.installed), sub: r.reboot ? t("wu.doneReboot") : "",
     body: `${(r.failed || []).length ? `<div class="sh-note">${esc(t("wu.doneFailed"))}</div><ul class="dh-r">${r.failed.map(f => `<li>${esc(f)}</li>`).join("")}</ul>` : ""}<div class="sh-note">${esc(t(r.reboot ? "wu.doneRebootD" : "wu.doneNoReboot"))}</div>`,
-    foot: `<span class="grow"></span><button class="btn" id="wuLater">${esc(t(r.reboot ? "gp.later" : "modal.ok"))}</button>${r.reboot ? `<button class="btn primary" id="wuRebootNow">${ICONS.refresh}<span>${esc(t("gp.rebootNow"))}</span></button>` : ""}` });
+    foot: `<span class="grow"></span><button class="btn" id="wuLater">${esc(t(r.reboot ? "gp.later" : "modal.ok"))}</button>${r.reboot ? `<button class="btn" id="wuShutdownNow">${ICONS.power}<span>${esc(t("wu.shutdown"))}</span></button><button class="btn primary" id="wuRebootNow">${ICONS.refresh}<span>${esc(t("gp.rebootNow"))}</span></button>` : ""}` });
   $("#wuLater").addEventListener("click", () => closeSheet(false));
   const rn = $("#wuRebootNow");
-  if (rn) rn.addEventListener("click", () => { closeSheet(false); confirmBox({ title: t("gp.rebootT"), text: t("gp.rebootD"), okText: t("gp.rebootNow"), ok: async () => { let ok = false; try { ok = await api.restartPC(); } catch (e) {} if (!ok) toast(t("tw.failed"), "alert", "warn"); } }); });
+  if (rn) rn.addEventListener("click", () => { closeSheet(false); wuAskRestart(); });
+  const sn = $("#wuShutdownNow"); if (sn) sn.addEventListener("click", () => { closeSheet(false); wuAskShutdown(); });
 }
 on("wu-progress", d => {
   const r = WU.run; if (!r) return;
@@ -7591,7 +7560,7 @@ function paintNp() {
     const body = NP.running ? `<div class="np-v"><span class="spin"></span></div><div class="np-m">${esc(t("np.wait"))}</div>`
       : !r ? `<div class="np-v dim">—</div><div class="np-m">${esc(t("np.notYet"))}</div>`
       : r.error || r.lost === r.sent ? `<div class="np-v">${esc(t("np.noAnswer"))}</div><div class="np-m">${esc(r.error || t("np.allLost", r.sent))}</div>`
-      : `<div class="np-v"><b>${esc(nf(0).format(r.avg))}</b><small>ms</small></div>
+      : `<div class="np-v"><b>${esc(r.avg < 1 ? "<1" : nf(0).format(r.avg))}</b><small>ms</small></div>
          <div class="np-stats"><span>${esc(t("np.jitter"))}<b>${esc(nf(1).format(r.jitter))} ms</b></span><span>${esc(t("np.loss"))}<b>${esc(nf(0).format(r.loss))}%</b></span><span>${esc(t("np.range"))}<b>${esc(nf(0).format(r.min))}–${esc(nf(0).format(r.max))}</b></span></div>`;
     return `<div class="np-card ${v}" data-np="${id}"><div class="np-top"><span class="np-dot"></span><b>${esc(t("np.t." + id))}</b><span class="np-host">${esc((r && r.host) || (id === "cloudflare" ? "1.1.1.1" : id === "google" ? "8.8.8.8" : ""))}</span></div>${body}
       ${r && !NP.running ? `<div class="np-say">${esc(t("np.say." + v))}</div>` : ""}</div>`;
@@ -8117,7 +8086,7 @@ async function procTick() {
     if (!PM.hold) renderProcs();
   }
   if (S.page !== "procs") { PM.timer = 0; return; }
-  PM.timer = setTimeout(procTick, PM.first ? 700 : 2000); // the first reading has no CPU yet
+  PM.timer = setTimeout(procTick, PM.first ? 700 : document.visibilityState === "hidden" ? 6000 : 2000); // the first reading has no CPU yet; minimized: rarely
   PM.first = false;
 }
 const PM_KIND = { app: "apps", background: "bg", windows: "win", service: "win", security: "win", self: "win" };
@@ -9151,6 +9120,7 @@ $("#updToggle").addEventListener("change", e => { S.settings.updates = e.target.
    2.7 — icons
 ===================================================================== */
 Object.assign(ICONS, {
+  power: P('<path d="M12 3v9"/><path d="M6.6 6.6a8 8 0 1 0 10.8 0"/>'),
   wupd: P('<path d="M20.5 12a8.5 8.5 0 1 1-2.5-6"/><path d="M20.5 3.8v4.6h-4.6"/><path d="M12 8v5l3 1.8"/>'),
   heart: P('<path d="M12 20s-7.5-4.6-9.3-9.3A5 5 0 0 1 12 5.8a5 5 0 0 1 9.3 4.9"/><path d="M3.5 13h4l2-3 3 6 2-3h6"/>'),
   uninstall: P('<rect x="4" y="4" width="16" height="16" rx="3.2"/><path d="M9.5 9.5l5 5M14.5 9.5l-5 5"/>'),
@@ -9298,7 +9268,7 @@ function homeDoAll() {
       toast(t("hm.queued", pick.size), "clock", "info", { label: t("job.showQ"), run: () => { JOBS.open = true; paintDock(); } });
     } });
 }
-setInterval(() => { if (S.page === "home") renderHome(); }, 4000);
+setInterval(() => { if (S.page === "home" && document.visibilityState !== "hidden") renderHome(); }, 4000);
 /* =====================================================================
    3.1 — PC health as a dashboard: the live cards (processor, graphics
    card, memory, system drive, network), the quick settings, help
@@ -10153,6 +10123,7 @@ async function init() {
   L = S.settings.lang;
   splashStep(t("sp.admin"), 14);
   $("#rpToggle").checked = S.settings.restorePoint;
+  $("#rpKeepToggle").checked = S.settings.rpKeep !== false;
   $("#forceToggle").checked = S.settings.forceClose !== false;
   $("#updToggle").checked = S.settings.updates !== false;
   $("#motionToggle").checked = S.settings.motion;
@@ -10195,9 +10166,17 @@ async function init() {
 }
 const BOOT = performance.now();
 function hideSplash() {
-  const sp = $("#splash"); if (!sp) return;
-  const wait = Math.max(0, SPL_MIN - (performance.now() - BOOT));
-  setTimeout(() => { splashBarTick(); sp.classList.add("out"); document.body.classList.add("app-in"); setTimeout(() => { sp.remove(); document.body.classList.remove("app-in"); }, 900); }, motionOK() ? wait : 0);
+  const sp = $("#splash"); if (!sp || SPL.out) return;
+  SPL.out = true;
+  const wait = motionOK() ? Math.max(0, SPL_MIN - (performance.now() - BOOT)) : 0;
+  setTimeout(() => {
+    clearTimeout(SPL.timer);
+    SPL.shown = 100; SPL.got = 0; splashPaint(100); sp.classList.add("done");
+    setTimeout(() => {
+      sp.classList.add("out"); document.body.classList.add("app-in");
+      setTimeout(() => { sp.remove(); document.body.classList.remove("app-in"); }, 800);
+    }, motionOK() ? 520 : 0);
+  }, wait);
 }
 setTimeout(hideSplash, SPL_MAX + 2500); // never stay stuck on the splash
 
@@ -10415,7 +10394,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "3.4.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "3.5.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -10676,6 +10655,7 @@ const Mock = (() => {
       return { ok: ok > 0, installed: ok, failed, reboot };
     },
     wuCancel: async () => true,
+    shutdownPC: async () => { window.__shutdown = true; return true; },
     wuOpenSettings: async () => { window.__wuSettings = true; return true; },
     // ---- 3.2: the Graphics card page
     gpuState: async () => { await new Promise(r => setTimeout(r, 450)); return JSON.parse(JSON.stringify(mockGpu)); },
@@ -10899,11 +10879,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "3.4.0", latest: nw ? "3.5.0" : "3.4.0", newer: nw, name: "xKi4o Cleaner 3.5.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.5.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "3.5.0", latest: nw ? "3.6.0" : "3.5.0", newer: nw, name: "xKi4o Cleaner 3.6.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.6.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders

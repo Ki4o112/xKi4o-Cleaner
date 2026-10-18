@@ -147,7 +147,7 @@ func srRestorePoint() (ok bool, status uint32) {
 	}
 	withCOM(func() {
 		info := restorePointInfo{eventType: 100, rpType: 12} // BEGIN_SYSTEM_CHANGE, MODIFY_SETTINGS
-		copy(info.desc[:255], windows.StringToUTF16("xKi4o Cleaner"))
+		copy(info.desc[:255], windows.StringToUTF16(rpOwnDesc))
 		var st [12]byte // STATEMGRSTATUS (packed): nStatus, llSequenceNumber
 		r, _, _ := procSRSetRestorePointW.Call(uintptr(unsafe.Pointer(&info)), uintptr(unsafe.Pointer(&st[0])))
 		status = binary.LittleEndian.Uint32(st[:4])
@@ -191,13 +191,17 @@ func createRestorePoint() bool {
 		}
 	}()
 	if ok, _ := srRestorePoint(); ok {
+		trimOwnRestorePoints()
 		return true
 	}
 	// System Restore may be off for the drive: PowerShell turns it on and
 	// makes the point.
 	script := fmt.Sprintf("try { Enable-ComputerRestore -Drive '%s\\' -ErrorAction Stop; "+
-		"Checkpoint-Computer -Description 'xKi4o Cleaner' -RestorePointType 'MODIFY_SETTINGS' -ErrorAction Stop; exit 0 } catch { exit 1 }", systemDrive())
+		"Checkpoint-Computer -Description '"+rpOwnDesc+"' -RestorePointType 'MODIFY_SETTINGS' -ErrorAction Stop; exit 0 } catch { exit 1 }", systemDrive())
 	_, code, _ := runPS(4*time.Minute, script)
+	if code == 0 {
+		trimOwnRestorePoints()
+	}
 	return code == 0
 }
 

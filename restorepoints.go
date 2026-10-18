@@ -58,6 +58,28 @@ func removeRestorePoints(pts []restorePoint, keepNewest bool, remove func(seq in
 	return res
 }
 
+// rpOwnDesc: the name the app gives the restore points it makes.
+const rpOwnDesc = "xKi4o Cleaner"
+
+// rpTrimPlan: the app's own restore points beyond the newest keep, oldest
+// last. Points Windows or other programs made are never in it.
+func rpTrimPlan(pts []restorePoint, keep int) []restorePoint {
+	if keep < 1 {
+		return nil
+	}
+	var own []restorePoint
+	for _, p := range pts {
+		if p.Desc == rpOwnDesc {
+			own = append(own, p)
+		}
+	}
+	sort.Slice(own, func(i, j int) bool { return own[i].Seq > own[j].Seq })
+	if len(own) <= keep {
+		return nil
+	}
+	return own[keep:]
+}
+
 func rpLabel(p restorePoint) string {
 	s := p.Desc
 	if s == "" {

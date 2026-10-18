@@ -143,6 +143,7 @@ func main() {
 		"dnsTest":        dnsTest,
 		"netPing":        netPing,
 		"quickFix":       quickFix,
+		"shutdownPC":     shutdownPC,
 		"dnsFlush":       dnsFlush,
 		"ctxMenuList":    ctxMenuList,
 		"ctxMenuSet":     ctxMenuSet,

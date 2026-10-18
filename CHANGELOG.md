@@ -3,6 +3,24 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 3.5.0 — 2026-10-18
+
+### English
+- New loading screen: an orbital ring and a bar that follow the real scan, with a percent
+- Only the app's newest 3 restore points are kept; Windows' and drivers' points are never touched (can be turned off in Settings)
+- Updates: a Shut down button next to Restart after installing
+- Connection check: under 1 ms now shows as "<1 ms"
+- Faster: the Memory and Processes pages do less work while the window is minimized
+- Removed unused styles; the page is smaller
+
+### Български
+- Нов екран при зареждане: орбитален пръстен и лента, които следват истинското сканиране, с процент
+- Пазят се само последните 3 точки за възстановяване на програмата; точките на Windows и драйверите не се пипат (изключва се от Настройки)
+- Обновления: бутон „Изключи“ до „Рестартирай“ след инсталиране
+- Проверка на връзката: под 1 ms вече се показва като „<1 ms“
+- По-бързо: разделите „Памет“ и „Процеси“ работят по-малко, докато прозорецът е минимизиран
+- Премахнати неизползвани стилове; страницата е по-малка
+
 ## 3.4.0 — 2026-10-18
 
 ### English

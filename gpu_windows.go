@@ -1577,6 +1577,17 @@ func gpuOpenDetails(u string) bool {
 	return false
 }
 
+// shutdownPC turns the PC off (only on a click, after the page asked).
+// Updates Windows has staged are installed while it shuts down.
+func shutdownPC() bool {
+	if !app.admin {
+		return false
+	}
+	logEvent("wu", "info", "", T("log.shutdown"), nil)
+	_, code, err := runQuiet(30*time.Second, sys32("shutdown.exe"), "/s", "/t", "5", "/d", "p:2:17")
+	return err == nil && code == 0
+}
+
 // restartPC restarts Windows after a driver change (only on a click, after
 // the page asked; programs get Windows' usual chance to save).
 func restartPC() bool {
