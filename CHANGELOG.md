@@ -3,6 +3,14 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 3.8.0 — 2026-10-18
+
+### English
+- Merge connections: "Download net-merge" now downloads it from the latest release and unpacks it into the app's own folder, so it is installed and found with one click (no going to the website); "download it from the site yourself" stays as an option
+
+### Български
+- Обединяване на мрежи: „Свали net-merge“ вече го сваля от последната версия и го разархивира в папката на програмата, така че се инсталира и намира с едно натискане (без ходене до сайта); „свали го ръчно от сайта“ остава като опция
+
 ## 3.7.0 — 2026-10-18
 
 ### English

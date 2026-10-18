@@ -3,6 +3,8 @@
 package main
 
 import (
+	"archive/zip"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -58,5 +60,49 @@ func TestTweaks34(t *testing.T) {
 		if tw.group != "perf" || tw.since != "3.4.0" || len(tw.reg) == 0 || presetNever[id] {
 			t.Errorf("%s: group %s since %s", id, tw.group, tw.since)
 		}
+	}
+}
+
+// nmUnzip takes only the known net-merge files and never writes outside its
+// folder (no sub-folders, no "../" escape).
+func TestNMUnzipSafe(t *testing.T) {
+	dir := t.TempDir()
+	zp := filepath.Join(dir, "p.zip")
+	f, err := os.Create(zp)
+	if err != nil {
+		t.Fatal(err)
+	}
+	zw := zip.NewWriter(f)
+	entries := []string{"net-merge.exe", "net-merge-tray.exe", "wintun.dll", "wintun-LICENSE.txt",
+		"LICENSE", "THIRD-PARTY-NOTICES.md", "README.md", "sub/evil.exe", "../escape.exe", "setup.ps1"}
+	for _, n := range entries {
+		w, err := zw.Create(n)
+		if err != nil {
+			t.Fatal(err)
+		}
+		w.Write([]byte("PK stub " + n))
+	}
+	zw.Close()
+	f.Close()
+
+	out := t.TempDir()
+	n, err := nmUnzip(zp, out)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if n != 7 {
+		t.Errorf("extracted %d files, want 7", n)
+	}
+	if _, err := os.Stat(filepath.Join(out, "net-merge.exe")); err != nil {
+		t.Errorf("net-merge.exe not extracted: %v", err)
+	}
+	for _, bad := range []string{"evil.exe", "escape.exe", "setup.ps1"} {
+		if _, err := os.Stat(filepath.Join(out, bad)); err == nil {
+			t.Errorf("%s should not have been written", bad)
+		}
+	}
+	// nothing escaped the output folder
+	if _, err := os.Stat(filepath.Join(filepath.Dir(out), "escape.exe")); err == nil {
+		t.Error("a file escaped the output folder")
 	}
 }

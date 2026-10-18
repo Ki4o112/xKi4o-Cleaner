@@ -1705,6 +1705,11 @@ h1 { font-size: 25px; letter-spacing: -.025em; }
 .nm-w { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--muted); }
 .nm-w .d { width: 6px; height: 6px; margin-top: 6px; border-radius: 50%; background: var(--mint); flex: none; box-shadow: 0 0 8px var(--mint); }
 .nm-cta { margin-top: 4px; }
+.nm-site2 { display: block; margin: 10px 2px 0; }
+.nm-inst { display: flex; align-items: center; gap: 12px; margin: 4px 0; padding: 14px 16px; background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-l); }
+.nm-inst .t { flex: 1; min-width: 0; }
+.nm-inst .t b { font-size: 13px; }
+.nm-inst .si-bar { margin-top: 8px; }
 .nm-tot { display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 26px; margin: 14px 0; padding: 16px 20px; background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-l); }
 .nm-big { display: flex; flex-direction: column; }
 .nm-big .l { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
@@ -3519,6 +3524,8 @@ bg: {
   "df.s2d": "След преглед тревогата изчезва за всички.", "df.s3": "Или сам добави изключение",
   "df.s3d": "В Windows Security → Защита от вируси → Изключения. Програмата не го прави вместо теб.", "df.openSec": "Отвори Windows Security", "df.report": "Докладвай на Microsoft",
   "df.opened": "Отворена е защитата на Windows", "df.note": "Програмата никога не изключва Defender и не добавя изключения сама — това решаваш и правиш ти.",
+  "nm.install": "Свали и инсталирай net-merge", "nm.manual": "Или го свали ръчно от сайта", "nm.i.download": "Свалям net-merge…", "nm.i.extract": "Разархивирам…",
+  "nm.i.done": "net-merge е готов", "nm.err.download": "Свалянето не успя: {0}", "nm.err.unzip": "Разархивирането не успя: {0}", "nm.err.noExe": "net-merge.exe липсва в архива",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -4309,6 +4316,8 @@ en: {
   "df.s2d": "After review the warning goes away for everyone.", "df.s3": "Or add an exclusion yourself",
   "df.s3d": "In Windows Security → Virus & threat protection → Exclusions. The app does not do it for you.", "df.openSec": "Open Windows Security", "df.report": "Report to Microsoft",
   "df.opened": "Opened Windows Security", "df.note": "The app never turns Defender off and never adds exclusions itself — you decide and do that.",
+  "nm.install": "Download and install net-merge", "nm.manual": "Or download it from the site yourself", "nm.i.download": "Downloading net-merge…", "nm.i.extract": "Unpacking…",
+  "nm.i.done": "net-merge is ready", "nm.err.download": "Download failed: {0}", "nm.err.unzip": "Unpacking failed: {0}", "nm.err.noExe": "net-merge.exe missing from the archive",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -7713,7 +7722,7 @@ async function wireDefenderCard(root) {
 }
 
 // ---- net-merge page ----
-const NM = { st: null, loading: false, busy: false, timer: 0 };
+const NM = { st: null, loading: false, busy: false, timer: 0, inst: null };
 async function loadNm(first) {
   clearTimeout(NM.timer); NM.timer = 0;
   if (!NM.loading) {
@@ -7746,7 +7755,10 @@ function renderNm() {
   } else if (!s.installed) {
     html += `<div class="si-hero"><div class="hi">${ICONS.merge}</div><div class="ht"><h2>${esc(t("nm.h.need"))}</h2><div class="m">${esc(t("nm.h.needD"))}</div></div></div>
       <div class="nm-what">${["good", "no", "safe"].map(k => `<div class="nm-w"><span class="d"></span><span>${esc(t("nm.what." + k))}</span></div>`).join("")}</div>
-      <button class="btn primary nm-cta" id="nmInstall">${ICONS.open}<span>${esc(t("nm.install"))}</span></button>
+      ${NM.inst ? `<div class="nm-inst"><span class="spin"></span><div class="t"><b>${esc(t(NM.inst.phase === "extract" ? "nm.i.extract" : "nm.i.download"))}</b>
+        <div class="si-bar"><i style="width:${NM.inst.pct}%"></i></div></div></div>`
+        : `<button class="btn primary nm-cta" id="nmInstall">${ICONS.download}<span>${esc(t("nm.install"))}</span></button>
+        <button class="linkbtn nm-site2" id="nmSite2">${esc(t("nm.manual"))}</button>`}
       ${defenderCardHtml()}`;
   } else if (!s.on) {
     html += `<div class="si-hero"><div class="hi">${ICONS.merge}</div><div class="ht"><h2>${esc(t("nm.h.off"))}</h2><div class="m">${esc(t(s.running ? "nm.h.offRun" : "nm.h.offD"))}</div></div>
@@ -7771,11 +7783,26 @@ function renderNm() {
       <div class="note-line">${esc(t("nm.noteOn"))}</div>`;
   }
   body.innerHTML = html;
-  const ins = $("#nmInstall"); if (ins) ins.addEventListener("click", () => api.nmOpenSite());
+  const ins = $("#nmInstall"); if (ins) ins.addEventListener("click", nmDoInstall);
+  const site2 = $("#nmSite2"); if (site2) site2.addEventListener("click", () => api.nmOpenSite());
   const on = $("#nmOn"); if (on) on.addEventListener("click", () => nmToggle(true));
   const off = $("#nmOff"); if (off) off.addEventListener("click", () => nmToggle(false));
   if ($("#dfCard")) wireDefenderCard(body);
 }
+async function nmDoInstall() {
+  if (NM.inst) return;
+  NM.inst = { phase: "download", pct: 0 }; renderNm();
+  let r = null; try { r = await api.nmInstall(); } catch (e) { r = { error: String((e && e.message) || e) }; }
+  NM.inst = null;
+  if (r && !r.error) { NM.st = r; renderNm(); toast(t("nm.i.done"), "check"); }
+  else { renderNm(); toast((r && r.error) || t("tw.failed"), "alert", "warn"); }
+}
+on("nm-progress", d => {
+  if (!NM.inst) return;
+  if (d.phase === "extract") NM.inst = { phase: "extract", pct: 100 };
+  else NM.inst = { phase: "download", pct: d.total > 0 ? Math.round(d.done / d.total * 100) : Math.min(95, (NM.inst.pct || 0) + 3) };
+  if (S.page === "nmerge") renderNm();
+});
 $("#nmSite").addEventListener("click", () => api.nmOpenSite());
 $("#nmRefresh").addEventListener("click", () => loadNm(true));
 document.addEventListener("visibilitychange", () => { if (document.visibilityState !== "hidden" && S.page === "nmerge" && !NM.timer) loadNm(); });
@@ -10636,7 +10663,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "3.7.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "3.8.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -10857,7 +10884,7 @@ const Mock = (() => {
     // ---- 3.7: net-merge + Defender help
     nmState: async () => {
       await new Promise(r => setTimeout(r, q.get("fast") ? 60 : 350));
-      const kind = q.get("nm") || "need"; // need | off | on
+      const kind = window.__nmInstalled ? "off" : (q.get("nm") || "need"); // need | off | on
       if (kind === "need") return { installed: false, running: false, on: false, adapters: [], rx: 0, tx: 0 };
       if (window.__nmOn === undefined) window.__nmOn = kind === "on";
       if (!window.__nmOn) return { installed: true, path: "C:\\Program Files\\net-merge\\net-merge.exe", running: q.get("nm") === "on", on: false, adapters: [], rx: 0, tx: 0 };
@@ -10871,6 +10898,13 @@ const Mock = (() => {
         adapters: ad, rx: ad.reduce((a, x) => a + x.rx, 0), tx: ad.reduce((a, x) => a + x.tx, 0) };
     },
     nmSet: async on => { window.__nm = (window.__nm || []).concat(on ? "on" : "off"); window.__nmOn = on; await new Promise(r => setTimeout(r, q.get("fast") ? 80 : 700)); return Mock.nmState(); },
+    nmInstall: async () => {
+      const wait = ms => new Promise(r => setTimeout(r, q.get("fast") ? 20 : ms));
+      for (let i = 1; i <= 5; i++) { window.__ev("nm-progress", { phase: "download", done: i * 2, total: 10 }); await wait(140); }
+      window.__ev("nm-progress", { phase: "extract" }); await wait(300);
+      window.__nmInstalled = true; window.__nmOn = false; window.__ev("nm-progress", { phase: "done" });
+      return { installed: true, path: "C:\\Users\\demo\\AppData\\Local\\xKi4oCleaner\\net-merge\\net-merge.exe", running: false, on: false, adapters: [], rx: 0, tx: 0 };
+    },
     nmOpenSite: async () => { window.__nmSite = true; return true; },
     defenderHelp: async () => ({ exe: "C:\\Users\\demo\\Downloads\\xKi4oCleaner.exe", sha256: "9f2c4b1e7a8d0356e1c9b4a2f6d80e3c5172a9bd4e0f8c1a3b6d2e5f70c9a1b4" }),
     openWindowsSecurity: async () => { window.__defSec = true; return true; },
@@ -11143,11 +11177,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "3.7.0", latest: nw ? "3.8.0" : "3.7.0", newer: nw, name: "xKi4o Cleaner 3.8.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.8.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "3.8.0", latest: nw ? "3.9.0" : "3.8.0", newer: nw, name: "xKi4o Cleaner 3.9.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.9.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders

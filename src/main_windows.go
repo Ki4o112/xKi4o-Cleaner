@@ -214,6 +214,7 @@ func main() {
 		"wuOpenSettings":      wuOpenSettings,
 		"nmState":             nmState,
 		"nmSet":               nmSet,
+		"nmInstall":           nmInstall,
 		"nmOpenSite":          nmOpenSite,
 		"defenderHelp":        defenderHelp,
 		"openWindowsSecurity": openWindowsSecurity,
