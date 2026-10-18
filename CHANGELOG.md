@@ -3,6 +3,16 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 3.6.0 — 2026-10-18
+
+### English
+- New opening: the logo fills with liquid as the app loads, then flies into the title bar while the app opens out of it
+- The "What's new" window and the update check wait until the opening has finished
+
+### Български
+- Ново отваряне на програмата: логото се пълни с течност, докато програмата зарежда, после отлита в заглавната лента, а програмата се отваря от него
+- Прозорецът „Какво ново“ и проверката за нова версия изчакват отварянето да свърши
+
 ## 3.5.0 — 2026-10-18
 
 ### English

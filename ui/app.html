@@ -1894,91 +1894,98 @@ h1 { font-size: 25px; letter-spacing: -.025em; }
 .dd-evm .k { display: block; color: var(--faint); font: 11px var(--mono); margin-bottom: 3px; }
 @media (max-width: 1080px) { .dd-nv { grid-template-columns: repeat(3, minmax(0, 1fr)); } .drive-row { grid-template-columns: 44px minmax(0, 1fr) 150px 170px; } }
 
-/* ================= 3.5: the splash — dark #0B0F19, an orbital ring that fills with the real progress,
-   a blur-track bar and an organic percent (compositor-only motion: transform and opacity) */
-.splash { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
-  background: #0b0f19; color: #e8edf5; overflow: hidden; contain: strict; }
-.sp-aura { position: absolute; left: 50%; top: 42%; width: 900px; height: 900px; margin: -450px 0 0 -450px; pointer-events: none; border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(70, 190, 154, .16), rgba(70, 190, 154, .05) 45%, transparent 70%); opacity: 0; animation: spAura 1.6s var(--expo) .1s forwards, spBreath 5s ease-in-out 1.7s infinite; will-change: opacity, transform; }
-@keyframes spAura { to { opacity: 1; } }
-@keyframes spBreath { 50% { transform: scale(1.06); opacity: .8; } }
-.sp-core { position: relative; width: 240px; height: 240px; display: grid; place-items: center; }
-.sp-core > * { grid-area: 1 / 1; }
-.sp-ring { width: 240px; height: 240px; transform: rotate(-90deg); overflow: visible; filter: drop-shadow(0 0 10px rgba(70, 190, 154, .45)); }
-.sp-ring circle { fill: none; stroke-linecap: round; }
-.sp-track { stroke: rgba(255, 255, 255, .06); stroke-width: 2; opacity: 0; animation: spIn .9s var(--expo) .2s forwards; }
-.sp-arc { stroke: url(#spArcG); stroke-width: 3; stroke-dasharray: 100 100; stroke-dashoffset: 100; transition: stroke-dashoffset .55s var(--expo); }
-.sp-head { width: 208px; height: 208px; transform: rotate(0deg); transition: transform .55s var(--expo); will-change: transform; pointer-events: none; }
-.sp-head i { position: absolute; left: 50%; top: 0; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: #e6fff6;
-  box-shadow: 0 0 0 4px rgba(70, 190, 154, .22), 0 0 18px 4px rgba(70, 190, 154, .75); opacity: 0; animation: spIn .6s var(--expo) .5s forwards; }
-.sp-sat { width: 236px; height: 236px; border-radius: 50%; opacity: 0; animation: spIn 1.2s var(--expo) .6s forwards, spTurn 14s linear infinite; }
-.sp-sat i { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #9fe7cf; box-shadow: 0 0 8px #46be9a; }
-.sp-sat i:nth-child(1) { left: 50%; top: -2px; } .sp-sat i:nth-child(2) { left: 7%; top: 74%; width: 3px; height: 3px; opacity: .6; }
-@keyframes spTurn { to { transform: rotate(360deg); } }
-@keyframes spIn { to { opacity: 1; } }
-.splash-mark { width: 96px; height: 96px; overflow: visible; filter: drop-shadow(0 14px 30px rgba(70, 190, 154, .28)); }
-.splash-mark path { transform-box: fill-box; transform-origin: center; }
-.splash-mark .sm-a, .splash-mark .sm-b { fill: #eef1f6; }
-.splash-mark .sm-c { fill: #46be9a; }
-.splash-mark .sm-a { animation: smIn .95s var(--expo) .05s both; --fx: -70px; --fy: 0px; --fr: -12deg; }
-.splash-mark .sm-b { animation: smIn .95s var(--expo) .18s both; --fx: 52px; --fy: -52px; --fr: 10deg; }
-.splash-mark .sm-c { animation: smIn .95s var(--expo) .31s both; --fx: 52px; --fy: 52px; --fr: -10deg; }
-@keyframes smIn { 0% { opacity: 0; transform: translate(var(--fx), var(--fy)) rotate(var(--fr)) scale(.6); } 40% { opacity: 1; } 100% { opacity: 1; transform: none; } }
-.sp-shine { transform-box: view-box; transform: translateX(0); animation: spShine 1.3s var(--quint) 1.1s both, spShine 1.3s var(--quint) 4.2s both; }
-@keyframes spShine { from { transform: translateX(0); } to { transform: translateX(470px); } }
-.sp-title { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 22px; animation: spRise .8s var(--expo) .45s both; }
-.sp-title b { font-size: 24px; font-weight: 700; letter-spacing: -.02em; }
-.sp-title span { font-size: 12.5px; color: #7d8799; font-weight: 500; }
-.sp-meter { width: 280px; display: flex; flex-direction: column; align-items: center; margin-top: 26px; animation: spRise .8s var(--expo) .6s both; }
+/* ================= 3.6: the opening — the logo is the progress bar (it fills with liquid as the
+   real scan goes), then it flies into the title bar while the app opens out of it like an iris.
+   Motion is transform / opacity / clip-path only. */
+body.booting #brand .logo, body.booting #brand .brand-name { opacity: 0; }
+.splash { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; color: #e8edf5; pointer-events: none; }
+.splash.live { pointer-events: auto; }
+.sp-bg { position: absolute; inset: 0; background: #0b0f19; overflow: hidden; }
+.sp-aura { position: absolute; left: 50%; top: 44%; width: 1100px; height: 1100px; margin: -550px 0 0 -550px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(70, 190, 154, .2), rgba(70, 190, 154, .11) 25%, rgba(70, 190, 154, .05) 48%, rgba(70, 190, 154, .015) 70%, transparent 100%);
+  opacity: 0; transform: scale(.7); animation: spAura 2s var(--expo) .05s forwards; }
+@keyframes spAura { to { opacity: 1; transform: none; } }
+.sp-grid { position: absolute; inset: -40px; opacity: 0; animation: spGridIn 2.4s var(--expo) .2s forwards;
+  background-image: radial-gradient(rgba(255, 255, 255, .09) 1px, transparent 1.4px); background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(closest-side at 50% 44%, #000, transparent 75%); mask-image: radial-gradient(closest-side at 50% 44%, #000, transparent 75%); }
+@keyframes spGridIn { from { opacity: 0; transform: scale(1.08); } to { opacity: .55; transform: none; } }
+.sp-center { position: relative; display: flex; flex-direction: column; align-items: center; }
+.sp-logo { position: relative; width: 150px; height: 150px; will-change: transform; }
+.sp-logo > * { position: absolute; left: 50%; top: 50%; }
+.sp-mark { margin: -75px 0 0 -75px; }
+.sp-mark { width: 150px; height: 150px; overflow: visible; filter: drop-shadow(0 18px 40px rgba(70, 190, 154, .32)); }
+.sp-base path { fill: #131b2a; }
+.sp-outline path { fill: none; stroke: rgba(205, 255, 236, .7); stroke-width: 3; stroke-linejoin: round; stroke-dasharray: 100 100; stroke-dashoffset: 100;
+  animation: spDraw 1.25s var(--expo) both, spOutlineDim 1s ease 1.6s forwards; }
+.sp-outline path:nth-child(2) { animation-delay: .12s, 1.7s; } .sp-outline path:nth-child(3) { animation-delay: .24s, 1.8s; }
+@keyframes spDraw { to { stroke-dashoffset: 0; } }
+@keyframes spOutlineDim { to { stroke: rgba(205, 255, 236, .16); } }
+.sp-level { transform: translateY(400px); transition: transform .8s var(--expo); }
+.sp-wave { animation: spWave 2.6s linear infinite; }
+.sp-wave.back { animation-duration: 3.9s; animation-direction: reverse; opacity: .45; }
+@keyframes spWave { from { transform: translateX(0); } to { transform: translateX(-346px); } }
+.sp-bub { fill: rgba(255, 255, 255, .55); animation: spBub 2.8s ease-in infinite; }
+.sp-bub:nth-of-type(2) { animation-delay: .9s; animation-duration: 3.4s; } .sp-bub:nth-of-type(3) { animation-delay: 1.7s; animation-duration: 2.4s; }
+@keyframes spBub { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(-250px); opacity: 0; } }
+.sp-shock { width: 150px; height: 150px; margin: -75px 0 0 -75px; border-radius: 50%; border: 2px solid rgba(127, 240, 200, .8); opacity: 0; pointer-events: none; }
+.sp-flash { width: 260px; height: 260px; margin: -130px 0 0 -130px; border-radius: 50%; opacity: 0; pointer-events: none; background: radial-gradient(closest-side, rgba(220, 255, 242, .55), rgba(70, 190, 154, .18) 50%, transparent 72%); }
+.sp-name { margin-top: 30px; font-size: 26px; font-weight: 700; letter-spacing: -.02em; white-space: nowrap; transform-origin: left top; animation: spTrack 1.3s var(--expo) .35s both; }
+@keyframes spTrack { from { opacity: 0; letter-spacing: .45em; filter: blur(10px); } to { opacity: 1; letter-spacing: -.02em; filter: blur(0); } }
+.sp-by { margin-top: 6px; font-size: 12.5px; color: #7d8799; font-weight: 500; animation: spUp .9s var(--expo) .8s both; }
+.sp-meter { margin-top: 26px; display: flex; flex-direction: column; align-items: center; animation: spUp .9s var(--expo) .95s both; }
 .sp-pct { display: flex; align-items: baseline; gap: 2px; font-variant-numeric: tabular-nums; }
-.sp-pct b { font-size: 40px; font-weight: 700; letter-spacing: -.03em; line-height: 1; min-width: 2ch; text-align: right; }
-.sp-pct span { font-size: 16px; font-weight: 600; color: #7d8799; }
-.sp-bar { position: relative; width: 100%; height: 3px; margin-top: 16px; border-radius: 3px; background: rgba(255, 255, 255, .07); }
-.sp-bar i, .sp-bar::after { position: absolute; inset: 0; border-radius: inherit; transform-origin: left center; transform: scaleX(var(--p, 0)); transition: transform .55s var(--expo); will-change: transform; }
-.sp-bar i { display: block; background: linear-gradient(90deg, #1e9f73, #46be9a 65%, #c9fbe8); overflow: hidden; }
-.sp-bar::after { content: ""; background: linear-gradient(90deg, rgba(30, 159, 115, 0), #46be9a); filter: blur(7px); opacity: .85; top: -3px; bottom: -3px; }
-.splash-step { margin-top: 12px; min-height: 18px; font-size: 12.5px; color: #8b95a7; text-align: center; max-width: 360px; }
-@keyframes spRise { from { opacity: 0; transform: translateY(12px); } }
-/* done: the ring closes with a soft pulse, then everything leaves */
-.splash.done .sp-ring { animation: spPulse .5s var(--expo); }
-.splash.done .sp-head i { animation: spHeadOut .45s var(--expo) forwards; }
-@keyframes spPulse { 40% { transform: rotate(-90deg) scale(1.045); } }
-@keyframes spHeadOut { to { opacity: 0; transform: scale(2.4); } }
-.splash.out { opacity: 0; transition: opacity .6s var(--quint); pointer-events: none; }
-.splash.out .sp-core { transform: scale(1.08); transition: transform .7s var(--quint); }
-.splash.out .sp-title, .splash.out .sp-meter { transform: translateY(-8px); transition: transform .6s var(--quint); }
-body.app-in .shell, body.app-in .winbar { animation: appIn .8s var(--expo) both; }
-@keyframes appIn { from { opacity: 0; transform: scale(.985); } }
-.nomotion .splash *, .nomotion .splash { animation-duration: 1ms !important; animation-delay: 0s !important; transition-duration: 1ms !important; }
-@media (prefers-reduced-motion: reduce) { .splash *, .splash { animation-duration: 1ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; } }
+.sp-pct b { font-size: 34px; font-weight: 700; letter-spacing: -.03em; line-height: 1; min-width: 2ch; text-align: right; }
+.sp-pct span { font-size: 14px; font-weight: 600; color: #7d8799; }
+.splash-step { margin-top: 10px; min-height: 18px; font-size: 12.5px; color: #8b95a7; text-align: center; max-width: 380px; }
+@keyframes spUp { from { opacity: 0; transform: translateY(12px); } }
+/* full: the surface settles, a shock ring and a flash, the words step back */
+.splash.full .sp-wave { animation-play-state: paused; }
+.splash.full .sp-outline path { animation: none; stroke-dashoffset: 0; stroke: rgba(205, 255, 236, .9); transition: stroke 1s ease; }
+.splash.full .sp-shock { animation: spShock .9s var(--expo) forwards; }
+.splash.full .sp-shock.s2 { animation-delay: .12s; }
+.splash.full .sp-flash { animation: spFlash .8s var(--expo) forwards; }
+.splash.full .sp-mark { animation: spPop .7s var(--expo); }
+.splash.full .sp-meter, .splash.full .sp-by { opacity: 0; transform: translateY(8px); transition: opacity .35s ease, transform .5s var(--expo); }
+@keyframes spShock { 0% { opacity: .9; transform: scale(.7); } 100% { opacity: 0; transform: scale(2.6); } }
+@keyframes spFlash { 0% { opacity: 0; transform: scale(.5); } 25% { opacity: 1; } 100% { opacity: 0; transform: scale(1.8); } }
+@keyframes spPop { 35% { transform: scale(1.07); } }
+/* fly: the background lets the app through */
+.splash.fly .sp-bg { opacity: 0; transition: opacity .75s var(--quint) .15s; }
+.splash.fly .sp-outline { opacity: 0; transition: opacity .4s ease; }
+/* the app comes in behind: the menu one by one, the page's cards after */
+body.boot-in .nav > button, body.boot-in .nav-group { animation: navIn .7s var(--expo) both; animation-delay: calc(140ms + var(--bi, 0) * 22ms); }
+@keyframes navIn { from { opacity: 0; transform: translateX(-14px); } }
+body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
+@keyframes brandLand { 0% { transform: scale(1.35); } 100% { transform: none; } }
+.splash.quick { opacity: 0; transition: opacity .35s ease; }
+/* the trail behind the flying mark */
+.sp-ghost { position: fixed; background: var(--logo) center / contain no-repeat; pointer-events: none; will-change: transform, opacity; }
 </style>
 </head>
-<body>
+<body class="booting">
 <div class="rate-ask" id="rateAsk" role="alertdialog" hidden></div>
-<div class="splash" id="splash" role="progressbar" aria-label="xKi4o Cleaner" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-  <div class="sp-aura" aria-hidden="true"></div>
-  <div class="sp-core" aria-hidden="true">
-    <svg class="sp-ring" viewBox="0 0 240 240">
-      <defs><linearGradient id="spArcG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e9f73"/><stop offset=".6" stop-color="#46be9a"/><stop offset="1" stop-color="#c9fbe8"/></linearGradient></defs>
-      <circle class="sp-track" cx="120" cy="120" r="104" pathLength="100"/>
-      <circle class="sp-arc" id="spArc" cx="120" cy="120" r="104" pathLength="100"/>
-    </svg>
-    <div class="sp-sat"><i></i><i></i></div>
-    <div class="sp-head" id="spHead"><i></i></div>
-    <svg class="splash-mark" viewBox="47.2 27.2 346.7 346.7">
-      <defs>
-        <linearGradient id="spShineG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-        <mask id="spMask" maskUnits="userSpaceOnUse" x="47.2" y="27.2" width="346.7" height="346.7"><path d="M60 73L143 73L258 187L143 301L60 301L175 187Z" fill="#fff"/><path d="M297 73L381 73L275 179L232 137Z" fill="#fff"/><path d="M350 190C305 199 268 214 240 243L186 302L252 302C261 302 267 299 273 294C292 315 313 328 340 328L379 328L305 252Z" fill="#fff"/></mask>
-      </defs>
-      <path class="sm-a" d="M60 73L143 73L258 187L143 301L60 301L175 187Z"/><path class="sm-b" d="M297 73L381 73L275 179L232 137Z"/><path class="sm-c" d="M350 190C305 199 268 214 240 243L186 302L252 302C261 302 267 299 273 294C292 315 313 328 340 328L379 328L305 252Z"/>
-      <g mask="url(#spMask)"><rect class="sp-shine" x="-92.8" y="27.2" width="110" height="346.7" fill="url(#spShineG)"/></g>
-    </svg>
-  </div>
-  <div class="sp-title"><b>xKi4o Cleaner</b><span>by xKi4o</span></div>
-  <div class="sp-meter">
-    <div class="sp-pct" aria-hidden="true"><b id="spPct">0</b><span>%</span></div>
-    <div class="sp-bar" id="splashBar"><i></i></div>
-    <div class="splash-step" id="splashStep"></div>
+<div class="splash live" id="splash" role="progressbar" aria-label="xKi4o Cleaner" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <div class="sp-bg" aria-hidden="true"><i class="sp-aura"></i><i class="sp-grid"></i></div>
+  <div class="sp-center">
+    <div class="sp-logo" id="spLogo" aria-hidden="true">
+      <i class="sp-flash"></i><i class="sp-shock"></i><i class="sp-shock s2"></i>
+      <svg class="sp-mark" id="spMark" viewBox="47.2 27.2 346.7 346.7">
+        <defs>
+          <clipPath id="spClipW"><path d="M60 73L143 73L258 187L143 301L60 301L175 187Z"/><path d="M297 73L381 73L275 179L232 137Z"/></clipPath>
+          <clipPath id="spClipG"><path d="M350 190C305 199 268 214 240 243L186 302L252 302C261 302 267 299 273 294C292 315 313 328 340 328L379 328L305 252Z"/></clipPath>
+          <linearGradient id="spLiqW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d9dfe9"/></linearGradient>
+          <linearGradient id="spLiqG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fe6bd"/><stop offset="1" stop-color="#2fa983"/></linearGradient>
+        </defs>
+        <g class="sp-base"><path d="M60 73L143 73L258 187L143 301L60 301L175 187Z"/><path d="M297 73L381 73L275 179L232 137Z"/><path d="M350 190C305 199 268 214 240 243L186 302L252 302C261 302 267 299 273 294C292 315 313 328 340 328L379 328L305 252Z"/></g>
+        <g clip-path="url(#spClipW)"><g class="sp-level"><path class="sp-wave back" fill="#c5ccd8" d="M-60 -7.0 L-54 -7.0 L-48 -6.8 L-42 -6.4 L-36 -5.8 L-30 -5.1 L-24 -4.3 L-18 -3.3 L-12 -2.2 L-6 -1.1 L0 0.0 L6 1.1 L12 2.2 L18 3.3 L24 4.3 L30 5.1 L36 5.8 L42 6.4 L48 6.8 L54 7.0 L60 7.0 L66 6.8 L72 6.5 L78 6.0 L84 5.3 L90 4.5 L96 3.5 L102 2.5 L108 1.4 L114 0.3 L120 -0.9 L126 -2.0 L132 -3.0 L138 -4.0 L144 -4.9 L150 -5.6 L156 -6.2 L162 -6.7 L168 -6.9 L174 -7.0 L180 -6.9 L186 -6.6 L192 -6.1 L198 -5.5 L204 -4.7 L210 -3.8 L216 -2.8 L222 -1.7 L228 -0.6 L234 0.6 L240 1.7 L246 2.8 L252 3.8 L258 4.7 L264 5.5 L270 6.1 L276 6.6 L282 6.9 L288 7.0 L294 6.9 L300 6.7 L306 6.2 L312 5.6 L318 4.9 L324 4.0 L330 3.0 L336 2.0 L342 0.9 L348 -0.3 L354 -1.4 L360 -2.5 L366 -3.5 L372 -4.5 L378 -5.3 L384 -6.0 L390 -6.5 L396 -6.8 L402 -7.0 L408 -7.0 L414 -6.8 L420 -6.4 L426 -5.8 L432 -5.1 L438 -4.3 L444 -3.3 L450 -2.2 L456 -1.1 L462 -0.0 L468 1.1 L474 2.2 L480 3.3 L486 4.3 L492 5.1 L498 5.8 L504 6.4 L510 6.8 L516 7.0 L522 7.0 L528 6.8 L534 6.5 L540 6.0 L546 5.3 L552 4.5 L558 3.5 L564 2.5 L570 1.4 L576 0.3 L582 -0.9 L588 -2.0 L594 -3.0 L600 -4.0 L606 -4.9 L612 -5.6 L618 -6.2 L624 -6.7 L630 -6.9 L636 -7.0 L642 -6.9 L648 -6.6 L654 -6.1 L660 -5.5 L666 -4.7 L672 -3.8 L678 -2.8 L684 -1.7 L690 -0.6 L696 0.6 L702 1.7 L708 2.8 L714 3.8 L720 4.7 L726 5.5 L732 6.1 L738 6.6 L744 6.9 L750 7.0 L756 6.9 L762 6.7 L768 6.2 L774 5.6 L780 4.9 L786 4.0 L792 3.0 L798 2.0 L804 0.9 L810 -0.3 L816 -1.4 L822 -2.5 L828 -3.5 L834 -4.5 L840 -5.3 L840 460 L-60 460Z"/><path class="sp-wave" fill="url(#spLiqW)" d="M-60 -7.4 L-54 -8.3 L-48 -8.9 L-42 -9.0 L-36 -8.7 L-30 -8.0 L-24 -6.9 L-18 -5.5 L-12 -3.8 L-6 -1.9 L0 0.0 L6 1.9 L12 3.8 L18 5.5 L24 6.9 L30 8.0 L36 8.7 L42 9.0 L48 8.9 L54 8.3 L60 7.4 L66 6.1 L72 4.5 L78 2.7 L84 0.8 L90 -1.1 L96 -3.0 L102 -4.8 L108 -6.3 L114 -7.6 L120 -8.4 L126 -8.9 L132 -9.0 L138 -8.6 L144 -7.8 L150 -6.7 L156 -5.2 L162 -3.5 L168 -1.6 L174 0.3 L180 2.3 L186 4.1 L192 5.7 L198 7.1 L204 8.1 L210 8.8 L216 9.0 L222 8.8 L228 8.2 L234 7.2 L240 5.9 L246 4.2 L252 2.4 L258 0.5 L264 -1.5 L270 -3.3 L276 -5.1 L282 -6.6 L288 -7.7 L294 -8.5 L300 -9.0 L306 -8.9 L312 -8.5 L318 -7.7 L324 -6.5 L330 -4.9 L336 -3.2 L342 -1.3 L348 0.7 L354 2.6 L360 4.4 L366 6.0 L372 7.3 L378 8.3 L384 8.8 L390 9.0 L396 8.7 L402 8.1 L408 7.0 L414 5.6 L420 3.9 L426 2.1 L432 0.2 L438 -1.8 L444 -3.7 L450 -5.3 L456 -6.8 L462 -7.9 L468 -8.6 L474 -9.0 L480 -8.9 L486 -8.4 L492 -7.5 L498 -6.2 L504 -4.7 L510 -2.9 L516 -1.0 L522 1.0 L528 2.9 L534 4.7 L540 6.2 L546 7.5 L552 8.4 L558 8.9 L564 9.0 L570 8.6 L576 7.9 L582 6.8 L588 5.3 L594 3.7 L600 1.8 L606 -0.2 L612 -2.1 L618 -3.9 L624 -5.6 L630 -7.0 L636 -8.1 L642 -8.7 L648 -9.0 L654 -8.8 L660 -8.3 L666 -7.3 L672 -6.0 L678 -4.4 L684 -2.6 L690 -0.7 L696 1.3 L702 3.2 L708 4.9 L714 6.5 L720 7.7 L726 8.5 L732 8.9 L738 9.0 L744 8.5 L750 7.7 L756 6.6 L762 5.1 L768 3.3 L774 1.5 L780 -0.5 L786 -2.4 L792 -4.2 L798 -5.9 L804 -7.2 L810 -8.2 L816 -8.8 L822 -9.0 L828 -8.8 L834 -8.1 L840 -7.1 L840 460 L-60 460Z"/></g></g>
+        <g clip-path="url(#spClipG)"><g class="sp-level"><path class="sp-wave back" fill="#1e8f69" d="M-60 -7.0 L-54 -7.0 L-48 -6.8 L-42 -6.4 L-36 -5.8 L-30 -5.1 L-24 -4.3 L-18 -3.3 L-12 -2.2 L-6 -1.1 L0 0.0 L6 1.1 L12 2.2 L18 3.3 L24 4.3 L30 5.1 L36 5.8 L42 6.4 L48 6.8 L54 7.0 L60 7.0 L66 6.8 L72 6.5 L78 6.0 L84 5.3 L90 4.5 L96 3.5 L102 2.5 L108 1.4 L114 0.3 L120 -0.9 L126 -2.0 L132 -3.0 L138 -4.0 L144 -4.9 L150 -5.6 L156 -6.2 L162 -6.7 L168 -6.9 L174 -7.0 L180 -6.9 L186 -6.6 L192 -6.1 L198 -5.5 L204 -4.7 L210 -3.8 L216 -2.8 L222 -1.7 L228 -0.6 L234 0.6 L240 1.7 L246 2.8 L252 3.8 L258 4.7 L264 5.5 L270 6.1 L276 6.6 L282 6.9 L288 7.0 L294 6.9 L300 6.7 L306 6.2 L312 5.6 L318 4.9 L324 4.0 L330 3.0 L336 2.0 L342 0.9 L348 -0.3 L354 -1.4 L360 -2.5 L366 -3.5 L372 -4.5 L378 -5.3 L384 -6.0 L390 -6.5 L396 -6.8 L402 -7.0 L408 -7.0 L414 -6.8 L420 -6.4 L426 -5.8 L432 -5.1 L438 -4.3 L444 -3.3 L450 -2.2 L456 -1.1 L462 -0.0 L468 1.1 L474 2.2 L480 3.3 L486 4.3 L492 5.1 L498 5.8 L504 6.4 L510 6.8 L516 7.0 L522 7.0 L528 6.8 L534 6.5 L540 6.0 L546 5.3 L552 4.5 L558 3.5 L564 2.5 L570 1.4 L576 0.3 L582 -0.9 L588 -2.0 L594 -3.0 L600 -4.0 L606 -4.9 L612 -5.6 L618 -6.2 L624 -6.7 L630 -6.9 L636 -7.0 L642 -6.9 L648 -6.6 L654 -6.1 L660 -5.5 L666 -4.7 L672 -3.8 L678 -2.8 L684 -1.7 L690 -0.6 L696 0.6 L702 1.7 L708 2.8 L714 3.8 L720 4.7 L726 5.5 L732 6.1 L738 6.6 L744 6.9 L750 7.0 L756 6.9 L762 6.7 L768 6.2 L774 5.6 L780 4.9 L786 4.0 L792 3.0 L798 2.0 L804 0.9 L810 -0.3 L816 -1.4 L822 -2.5 L828 -3.5 L834 -4.5 L840 -5.3 L840 460 L-60 460Z"/><path class="sp-wave" fill="url(#spLiqG)" d="M-60 -7.4 L-54 -8.3 L-48 -8.9 L-42 -9.0 L-36 -8.7 L-30 -8.0 L-24 -6.9 L-18 -5.5 L-12 -3.8 L-6 -1.9 L0 0.0 L6 1.9 L12 3.8 L18 5.5 L24 6.9 L30 8.0 L36 8.7 L42 9.0 L48 8.9 L54 8.3 L60 7.4 L66 6.1 L72 4.5 L78 2.7 L84 0.8 L90 -1.1 L96 -3.0 L102 -4.8 L108 -6.3 L114 -7.6 L120 -8.4 L126 -8.9 L132 -9.0 L138 -8.6 L144 -7.8 L150 -6.7 L156 -5.2 L162 -3.5 L168 -1.6 L174 0.3 L180 2.3 L186 4.1 L192 5.7 L198 7.1 L204 8.1 L210 8.8 L216 9.0 L222 8.8 L228 8.2 L234 7.2 L240 5.9 L246 4.2 L252 2.4 L258 0.5 L264 -1.5 L270 -3.3 L276 -5.1 L282 -6.6 L288 -7.7 L294 -8.5 L300 -9.0 L306 -8.9 L312 -8.5 L318 -7.7 L324 -6.5 L330 -4.9 L336 -3.2 L342 -1.3 L348 0.7 L354 2.6 L360 4.4 L366 6.0 L372 7.3 L378 8.3 L384 8.8 L390 9.0 L396 8.7 L402 8.1 L408 7.0 L414 5.6 L420 3.9 L426 2.1 L432 0.2 L438 -1.8 L444 -3.7 L450 -5.3 L456 -6.8 L462 -7.9 L468 -8.6 L474 -9.0 L480 -8.9 L486 -8.4 L492 -7.5 L498 -6.2 L504 -4.7 L510 -2.9 L516 -1.0 L522 1.0 L528 2.9 L534 4.7 L540 6.2 L546 7.5 L552 8.4 L558 8.9 L564 9.0 L570 8.6 L576 7.9 L582 6.8 L588 5.3 L594 3.7 L600 1.8 L606 -0.2 L612 -2.1 L618 -3.9 L624 -5.6 L630 -7.0 L636 -8.1 L642 -8.7 L648 -9.0 L654 -8.8 L660 -8.3 L666 -7.3 L672 -6.0 L678 -4.4 L684 -2.6 L690 -0.7 L696 1.3 L702 3.2 L708 4.9 L714 6.5 L720 7.7 L726 8.5 L732 8.9 L738 9.0 L744 8.5 L750 7.7 L756 6.6 L762 5.1 L768 3.3 L774 1.5 L780 -0.5 L786 -2.4 L792 -4.2 L798 -5.9 L804 -7.2 L810 -8.2 L816 -8.8 L822 -9.0 L828 -8.8 L834 -8.1 L840 -7.1 L840 460 L-60 460Z"/>
+          <circle class="sp-bub" cx="300" cy="300" r="5"/><circle class="sp-bub" cx="335" cy="320" r="3.5"/><circle class="sp-bub" cx="262" cy="290" r="4"/></g></g>
+        <g class="sp-outline"><path pathLength="100" d="M60 73L143 73L258 187L143 301L60 301L175 187Z"/><path pathLength="100" d="M297 73L381 73L275 179L232 137Z"/><path pathLength="100" d="M350 190C305 199 268 214 240 243L186 302L252 302C261 302 267 299 273 294C292 315 313 328 340 328L379 328L305 252Z"/></g>
+      </svg>
+    </div>
+    <div class="sp-name" id="spName">xKi4o Cleaner</div>
+    <div class="sp-by">by xKi4o</div>
+    <div class="sp-meter"><div class="sp-pct" aria-hidden="true"><b id="spPct">0</b><span>%</span></div><div class="splash-step" id="splashStep"></div></div>
   </div>
 </div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -5382,11 +5389,10 @@ const SPL_FAST = /[?&]fastsplash=1/.test(location.search), SPL_MIN = SPL_FAST ? 
 function splashPaint(p) {
   const sp = $("#splash"); if (!sp) return;
   p = Math.max(0, Math.min(100, p));
-  const arc = $("#spArc"), head = $("#spHead"), bar = $("#splashBar"), pct = $("#spPct");
-  if (arc) arc.style.strokeDashoffset = (100 - p).toFixed(2);
-  if (head) head.style.transform = `rotate(${(p * 3.6).toFixed(2)}deg)`;
-  if (bar) bar.style.setProperty("--p", (p / 100).toFixed(4));
-  if (pct) pct.textContent = String(Math.round(p));
+  // the liquid's surface: below the mark when empty (400), above it when full (12)
+  const y = (400 - p / 100 * 388).toFixed(1);
+  sp.querySelectorAll(".sp-level").forEach(g => { g.style.transform = `translateY(${y}px)`; });
+  const pct = $("#spPct"); if (pct) pct.textContent = String(Math.round(p));
   if (SPL.got && SPL.tot && p < 100) { const st = $("#splashStep"); if (st) st.textContent = t("sp.scan", Math.max(1, Math.min(SPL.got, Math.round((p - 22) / 74 * SPL.tot))), SPL.tot); }
   sp.setAttribute("aria-valuenow", String(Math.round(p)));
 }
@@ -10152,7 +10158,7 @@ async function init() {
   setTimeout(countUnseenErrors, 1500);
   paintUpd();
   // after the splash: what is new (once after an update), then the update check
-  setTimeout(async () => { await maybeShowNews(); if (S.settings.updates !== false) updCheck(false); }, SPL_MIN + 1200);
+  setTimeout(async () => { await maybeShowNews(); if (S.settings.updates !== false) updCheck(false); }, SPL_MIN + (SPL_FAST ? 1200 : 3200)); // after the opening has landed
   requestAnimationFrame(moveNav);
   api.winReady().then(paintWin).catch(() => {});
   setTimeout(() => maybeHideSplash(true), SPL_MAX); // never longer: the scan goes on in the window
@@ -10161,21 +10167,80 @@ async function init() {
     try { GM.st = await api.gameState(); } catch (e) {}
     paintGameNav();
     if (GM.st && GM.st.active) toast(t("gm.stillOn"), "gamepad", "info", { label: t("gm.open"), run: () => go("game") });
-  }, 4500);
+  }, SPL_FAST ? 4500 : SPL_MIN + 3600);
 }
 const BOOT = performance.now();
+// the finale: full → the logo and the name fly into the title bar → the app opens out of the logo
+const wait = ms => new Promise(r => setTimeout(r, ms));
+function bootDone(sp) {
+  document.body.classList.remove("booting", "boot-in");
+  ["#winbar", ".shell"].forEach(q => { const e = $(q); if (e) { e.style.clipPath = ""; e.style.willChange = ""; } });
+  if (sp) sp.remove();
+}
+async function splashFinale(sp) {
+  const logo = $("#spLogo"), mark = $("#spMark"), name = $("#spName");
+  const tLogo = $("#brand .logo"), tName = $("#brand .brand-name");
+  sp.classList.add("full");
+  await wait(620);
+  const a = mark.getBoundingClientRect(), b = tLogo ? tLogo.getBoundingClientRect() : null;
+  const na = name.getBoundingClientRect(), nb = tName ? tName.getBoundingClientRect() : null;
+  const fly = b && b.width > 0 && nb && nb.height > 0;
+  sp.classList.add("fly"); sp.classList.remove("live");
+  // the app opens like an iris from the logo's centre
+  const cx = a.left + a.width / 2, cy = a.top + a.height / 2, R = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy)) + 40;
+  const EASE_OPEN = "cubic-bezier(.7, 0, .2, 1)";
+  const opens = ["#winbar", ".shell"].map(q => $(q)).filter(Boolean).map(e => {
+    const r = e.getBoundingClientRect(), x = cx - r.left, y = cy - r.top;
+    e.style.willChange = "clip-path";
+    return e.animate([{ clipPath: `circle(0px at ${x}px ${y}px)` }, { clipPath: `circle(${R}px at ${x}px ${y}px)` }], { duration: 1050, delay: 120, easing: EASE_OPEN, fill: "both" });
+  });
+  $$(".nav > button, .nav-group").forEach((e, k) => e.style.setProperty("--bi", k));
+  document.body.classList.add("boot-in");
+  const pg = document.getElementById("page-" + S.page);
+  if (pg) { pg.classList.remove("enter"); void pg.offsetWidth; pg.classList.add("enter"); clearTimeout(pg._enterT); pg._enterT = setTimeout(() => pg.classList.remove("enter"), 1600); }
+  const anims = [...opens];
+  if (fly) {
+    // the shared element: the big mark becomes the small one in the title bar (a little arc on the way)
+    const dx = (b.left + b.width / 2) - cx, dy = (b.top + b.height / 2) - cy, k = b.width / a.width;
+    const path = [
+      { transform: "translate(0, 0) scale(1) rotate(0deg)" },
+      { transform: `translate(${dx * .38}px, ${dy * .52 - 30}px) scale(${(1 + k) * .42}) rotate(-10deg)`, offset: .55 },
+      { transform: `translate(${dx}px, ${dy}px) scale(${k}) rotate(0deg)` }];
+    anims.push(logo.animate(path, { duration: 1000, easing: "cubic-bezier(.65, 0, .25, 1)", fill: "forwards" }));
+    // two ghosts follow a moment later and fade: a motion trail
+    [[70, .32], [140, .16]].forEach(([d, o]) => {
+      const g = document.createElement("i"); g.className = "sp-ghost";
+      g.style.cssText = `left:${a.left}px;top:${a.top}px;width:${a.width}px;height:${a.height}px;opacity:0`;
+      sp.appendChild(g);
+      g.animate(path.map((f, n) => ({ ...f, opacity: n === 0 ? 0 : n === 1 ? o : 0 })), { duration: 1000, delay: d, easing: "cubic-bezier(.65, 0, .25, 1)", fill: "both" });
+    });
+    const nk = nb.height / na.height;
+    anims.push(name.animate([{ transform: "translate(0, 0) scale(1)" }, { transform: `translate(${nb.left - na.left}px, ${nb.top - na.top}px) scale(${nk})` }],
+      { duration: 1000, delay: 50, easing: "cubic-bezier(.65, 0, .25, 1)", fill: "forwards" }));
+  } else {
+    anims.push(logo.animate([{ opacity: 1 }, { opacity: 0, transform: "scale(1.2)" }], { duration: 500, fill: "forwards" }));
+    anims.push(name.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 400, fill: "forwards" }));
+  }
+  await Promise.race([Promise.all(anims.map(x => x.finished)), wait(1700)]);
+  // land: the real ones take over in the same place
+  document.body.classList.remove("booting"); document.body.classList.add("boot-land");
+  sp.style.visibility = "hidden";
+  setTimeout(() => document.body.classList.remove("boot-land"), 700);
+  await wait(60);
+  opens.forEach(x => { try { x.cancel(); } catch (e) {} });
+  setTimeout(() => bootDone(sp), 900);
+}
 function hideSplash() {
   const sp = $("#splash"); if (!sp || SPL.out) return;
   SPL.out = true;
-  const wait = motionOK() ? Math.max(0, SPL_MIN - (performance.now() - BOOT)) : 0;
-  setTimeout(() => {
+  const quick = !motionOK() || SPL_FAST;
+  const startIn = quick ? 0 : Math.max(0, SPL_MIN - (performance.now() - BOOT));
+  setTimeout(async () => {
     clearTimeout(SPL.timer);
-    SPL.shown = 100; SPL.got = 0; splashPaint(100); sp.classList.add("done");
-    setTimeout(() => {
-      sp.classList.add("out"); document.body.classList.add("app-in");
-      setTimeout(() => { sp.remove(); document.body.classList.remove("app-in"); }, 800);
-    }, motionOK() ? 520 : 0);
-  }, wait);
+    SPL.shown = 100; SPL.got = 0; splashPaint(100);
+    if (quick) { sp.classList.add("quick"); setTimeout(() => bootDone(sp), 380); return; }
+    try { await splashFinale(sp); } catch (e) { bootDone(sp); }
+  }, startIn);
 }
 setTimeout(hideSplash, SPL_MAX + 2500); // never stay stuck on the splash
 
@@ -10393,7 +10458,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "3.5.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "3.6.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -10878,11 +10943,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "3.5.0", latest: nw ? "3.6.0" : "3.5.0", newer: nw, name: "xKi4o Cleaner 3.6.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.6.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "3.6.0", latest: nw ? "3.7.0" : "3.6.0", newer: nw, name: "xKi4o Cleaner 3.7.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v3.7.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders
