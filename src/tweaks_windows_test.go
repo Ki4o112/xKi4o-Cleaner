@@ -407,8 +407,10 @@ func TestTweakListNew(t *testing.T) {
 	}
 	line := fmt.Sprintf("%d.%d", nv[0], nv[1])
 	want := 0
+	cur, _ := parseVersion(appVersion)
 	for _, tw := range tweaks {
-		if v, ok := parseVersion(tw.since); ok && v[0] == nv[0] && v[1] == nv[1] && !tw.legacy {
+		// "new" only within the same major version: a new major (4.0) starts without old badges
+		if v, ok := parseVersion(tw.since); ok && v[0] == nv[0] && v[1] == nv[1] && v[0] == cur[0] && !tw.legacy {
 			want++
 		}
 	}
@@ -423,7 +425,7 @@ func TestTweakListNew(t *testing.T) {
 			t.Errorf("%s: not new but has newIn %q", m.ID, m.NewIn)
 		}
 	}
-	if got != want || got == 0 {
+	if got != want || (got == 0 && nv[0] == cur[0]) {
 		t.Errorf("new tweaks: %d, want %d (line %s, app %s)", got, want, line, appVersion)
 	}
 	t.Logf("%d tweaks new in %s (app %s)", got, line, appVersion)

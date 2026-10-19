@@ -5,6 +5,6 @@ import root "xki4o/cleaner" // the list of changes (CHANGELOG.md at the root) is
 // appVersion is the version of this build. A release on GitHub is tagged
 // "v" + appVersion, and CHANGELOG.md has a "## appVersion" section for it
 // (both are checked by the tests and by the release workflow).
-const appVersion = "3.9.1"
+const appVersion = "4.0.0"
 
 var changelogMD = root.Changelog

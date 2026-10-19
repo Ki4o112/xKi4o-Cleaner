@@ -3,6 +3,22 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.0.0 — 2026-10-19
+
+### English
+- New "Benchmark" page: processor (one core and all cores), memory (speed and latency) and a drive (sequential and 4K), in points, with the change since last time and a history
+- New "Browser extensions" page: every extension in Chrome, Edge, Brave, Vivaldi, Opera and Firefox with what it may do, risky ones marked; it only reads, and "Open in browser" opens the browser's own page for it
+- New PC report: one click on System information saves an HTML report on the Desktop (system, security, drives and their health, free space, network, startup programs, extensions, last benchmark) with what is worth a look
+- New internet speed test on the Network page: download, upload, ping and jitter
+- Search (Ctrl+K) can start the report, the benchmark and the speed test
+
+### Български
+- Нов раздел „Бенчмарк“: процесор (едно и всички ядра), памет (скорост и закъснение) и диск (последователно и 4K) — в точки, с промяната спрямо миналия път и история
+- Нов раздел „Разширения на браузъра“: всички разширения в Chrome, Edge, Brave, Vivaldi, Opera и Firefox и какво им е позволено, рисковите са маркирани; само чете, а „Отвори в браузъра“ отваря страницата на самия браузър
+- Нов доклад за компютъра: с едно натискане в „Информация“ записва HTML доклад на работния плот (система, защита, дискове и здравето им, свободно място, мрежа, програми при стартиране, разширения, последен бенчмарк) с нещата за проверка
+- Нов тест на скоростта на интернета в „Мрежа“: сваляне, качване, пинг и колебание
+- Търсенето (Ctrl+K) може да пуска доклада, бенчмарка и теста на скоростта
+
 ## 3.9.1 — 2026-10-19
 
 ### English

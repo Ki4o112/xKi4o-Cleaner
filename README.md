@@ -42,6 +42,10 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 | **System info** | Processor, graphics card, memory sticks, motherboard, drives, monitors, security and battery — with tips (XMP, old drivers) and a report to copy |
 | **Network** | Switch DNS (Cloudflare recommended, Google, AdGuard…) after a speed test that shows the fastest for you; a connection check (ping, jitter, lost packets); flush the DNS cache |
 | **Merge connections** | Use several internet connections at once (Wi-Fi + Ethernet + phone) for more speed, through [net-merge](https://github.com/rohit267/net-merge) — downloaded and controlled from here, with live per-adapter speeds, each adapter's share of connections and an "Evenly" sharing choice (net-merge stays a separate program; nothing is bundled) |
+| **Benchmark** | Processor (one core and all cores), memory and a drive in points, with the change since last time and a history — the drive test uses one temporary file that is deleted at the end |
+| **Browser extensions** | Every extension in Chrome, Edge, Brave, Vivaldi, Opera and Firefox, with what it may do and the risky ones marked — read only |
+| **PC report** | One HTML page on the Desktop with the system, security, drive health, free space, network, startup programs, extensions and the last benchmark — read only |
+| **Internet speed test** | Download, upload, ping and jitter against Cloudflare's speed test server |
 | **System** | Processes, startup apps, Windows repair (DISM, SFC, disk check) and quick fixes (Explorer, icons, Store, Winsock) |
 | **Automatic cleaning** | Daily, weekly or monthly, with no window; open apps and sensitive categories are left out |
 | **Restore Center** | Puts back what the app changed; every operation has a step-by-step log |
