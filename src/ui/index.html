@@ -166,7 +166,34 @@ h1 { font-size: 23px; font-weight: 700; margin: 0; letter-spacing: -.02em; }
 .bn-drive { padding: 3px; border-radius: 12px; }
 .bn-drive button { height: 28px; min-width: 0; padding: 0 10px; font-size: 12px; border-radius: 9px; }
 .bn-btns { display: flex; gap: 8px; }
-.bn-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.bn-steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.bn-tg.long[aria-pressed="true"] { background: rgba(251, 191, 36, .14); border-color: rgba(251, 191, 36, .45); }
+.bn-spark { width: 100%; height: 34px; margin-top: 4px; }
+.bn-spark polyline { fill: none; stroke: var(--blue-2); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.bn-spark .area { fill: rgba(var(--blue-rgb), .12); stroke: none; }
+.bn-sens { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
+.bn-sens span { font-size: 11.5px; padding: 3px 8px; border-radius: 7px; background: var(--well); color: var(--muted); font-variant-numeric: tabular-nums; }
+.bn-sens span.warn { background: var(--amber-soft); color: var(--amber); } .bn-sens span.bad { background: var(--red-soft); color: var(--red); }
+.bn-rend { font-size: 11px; color: var(--faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bn-an { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+.bn-an h3 { margin: 6px 0 0; font-size: 15px; }
+.bn-bal { background: radial-gradient(100% 160% at 50% 0%, rgba(var(--blue-rgb), .12), transparent 60%), var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-l); padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+.bn-bal .top { display: flex; align-items: center; gap: 10px; justify-content: space-between; flex-wrap: wrap; }
+.bn-bal .top b { font-size: 16px; }
+.bn-bal .vd { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 99px; }
+.bn-bal .vd.good { color: var(--mint); background: var(--mint-soft); } .bn-bal .vd.warn { color: var(--amber); background: var(--amber-soft); } .bn-bal .vd.info { color: var(--blue-2); background: rgba(var(--blue-rgb), .14); }
+.bn-scale { position: relative; height: 12px; border-radius: 12px; background: linear-gradient(90deg, rgba(251, 191, 36, .55), rgba(52, 211, 153, .55) 38%, rgba(52, 211, 153, .55) 62%, rgba(var(--blue-rgb), .55)); }
+.bn-scale i { position: absolute; top: 50%; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 4px rgba(0, 0, 0, .35), 0 4px 12px rgba(0, 0, 0, .5); transform: translate(-50%, -50%); transition: left 1.1s var(--spring); }
+.bn-scale-l { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); }
+.bn-bal .m { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.bn-notes { display: flex; flex-direction: column; gap: 6px; }
+.bn-note { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; align-items: start; padding: 11px 14px; border-radius: 12px; background: var(--card); border: 1px solid var(--line-soft); font-size: 13px; line-height: 1.5; }
+.bn-note .ic { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; background: var(--well); color: var(--muted); }
+.bn-note .ic svg { width: 16px; height: 16px; }
+.bn-note.good .ic { color: var(--mint); background: var(--mint-soft); } .bn-note.warn .ic { color: var(--amber); background: var(--amber-soft); }
+.bn-note.bad .ic { color: var(--red); background: var(--red-soft); } .bn-note.info .ic { color: var(--blue-2); background: rgba(var(--blue-rgb), .14); }
+.bn-note.bad { border-color: rgba(255, 92, 110, .3); } .bn-note.warn { border-color: rgba(251, 191, 36, .25); }
+.bn-note .p { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--faint); display: block; margin-bottom: 1px; }
 .bn-step { background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-l); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; min-width: 0; transition: border-color .3s, opacity .3s; }
 .bn-step.off { opacity: .45; }
 .bn-step.now { border-color: rgba(var(--blue-rgb), .5); box-shadow: 0 0 0 3px rgba(var(--blue-rgb), .08); }
@@ -196,7 +223,7 @@ h1 { font-size: 23px; font-weight: 700; margin: 0; letter-spacing: -.02em; }
 .bn-hrow .p { display: flex; gap: 12px; flex-wrap: wrap; color: var(--muted); font-variant-numeric: tabular-nums; }
 .bn-hrow .p span b { font-size: 12.5px; color: var(--text); }
 .bn-empty { color: var(--faint); font-size: 13px; padding: 10px 2px; }
-@media (max-width: 900px) { .bn-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } .bn-grid { grid-template-columns: 1fr; } .bn-hrow { grid-template-columns: 1fr auto; } .bn-hrow .p { grid-column: 1 / -1; } }
+@media (max-width: 900px) { .bn-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); } .bn-grid { grid-template-columns: 1fr; } .bn-hrow { grid-template-columns: 1fr auto; } .bn-hrow .p { grid-column: 1 / -1; } }
 
 /* ================= 4.0: browser extensions ================= */
 .bx-sum { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
@@ -2541,6 +2568,8 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
               <button class="bn-tg" data-k="cpu" aria-pressed="true"><span data-icon="cpu"></span><span data-i="bn.o.cpu"></span></button>
               <button class="bn-tg" data-k="ram" aria-pressed="true"><span data-icon="memory"></span><span data-i="bn.o.ram"></span></button>
               <button class="bn-tg" data-k="disk" aria-pressed="true"><span data-icon="disk"></span><span data-i="bn.o.disk"></span></button>
+              <button class="bn-tg" data-k="gpu" aria-pressed="true"><span data-icon="gpu"></span><span data-i="bn.o.gpu"></span></button>
+              <button class="bn-tg long" data-k="long" aria-pressed="false" data-i-title="bn.o.longT"><span data-icon="clock"></span><span data-i="bn.o.long"></span></button>
               <div class="seg bn-drive" id="bnDrive"></div>
             </div>
             <div class="bn-btns"><button class="btn primary" id="bnStart"><span data-icon="bench"></span><span data-i="bn.start"></span></button>
@@ -2549,6 +2578,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
         </div>
         <div class="bn-steps" id="bnSteps"></div>
         <div class="bn-grid" id="bnRes"></div>
+        <div id="bnAnalysis"></div>
         <div class="dh-head net-h2"><h3 data-i="bn.hist"></h3><button class="btn small" id="bnClear" hidden><span data-icon="trash"></span><span data-i="bn.clear"></span></button></div>
         <div class="bn-hist" id="bnHist"></div>
         <div class="note-line" data-i="bn.note"></div>
@@ -3706,10 +3736,10 @@ bg: {
   "nm.h.os": "Трябва Windows 10 или 11",
   "nm.h.osD": "net-merge е направен само за Windows 10 и 11, а този компютър е с {0}, затова Windows отказва да го пусне („not a valid Win32 application“). Останалата част на програмата работи нормално.",
   "nm.reinstall": "Инсталирай net-merge наново",
-  "nav.bench": "Бенчмарк", "nav.ext": "Разширения", "bn.title": "Бенчмарк", "bn.sub": "Колко бърз е компютърът: процесор, памет и диск — в точки, с история", "bn.points": "точки",
+  "nav.bench": "Бенчмарк", "nav.ext": "Разширения", "bn.title": "Бенчмарк", "bn.sub": "Колко бърз е компютърът: процесор, памет, диск и видеокарта — в точки, с анализ и история", "bn.points": "точки",
   "bn.o.cpu": "Процесор", "bn.o.ram": "Памет", "bn.o.disk": "Диск", "bn.start": "Пусни теста", "bn.stop": "Спри", "bn.hist": "История", "bn.clear": "Изчисти историята",
   "bn.clearQ": "Да се изчисти ли историята на бенчмарка?",
-  "bn.note": "Тестът трае около минута. Дискът се пробва с един временен файл (1 GB), който се изтрива накрая. За точни резултати затвори игрите и тежките програми. Точките са на xKi4o Cleaner: 1000 = среден компютър от 2022 г.",
+  "bn.note": "Тестът трае около минута (с „Дълъг тест“ — около две). Дискът се пробва с един временен файл (1 GB), който се изтрива накрая; видеокартата рисува тежка сцена извън екрана, без нищо да се показва или променя. За точни резултати затвори игрите и тежките програми. Точките са на xKi4o Cleaner: 1000 = среден компютър от 2022 г.",
   "bn.h.ready": "Готов за тест", "bn.h.readyD": "Избери какво да се мери и натисни „Пусни теста“. Нищо не се променя.", "bn.h.run": "Меря…",
   "bn.h.runD": "Не пипай компютъра, докато тестът върви — така резултатът е най-точен.", "bn.h.done.top": "Много бърз компютър", "bn.h.done.fast": "Бърз компютър",
   "bn.h.done.good": "Добра скорост", "bn.h.done.ok": "Средна скорост", "bn.h.done.slow": "По-бавен компютър", "bn.h.doneD": "Последен тест: {0}", "bn.s.cpu1": "Едно ядро",
@@ -3736,6 +3766,46 @@ bg: {
   "isp.ph.down": "Меря свалянето…", "isp.ph.up": "Меря качването…", "isp.empty": "Натисни „Тествай“, за да видиш реалната скорост на връзката.", "isp.down": "Сваляне",
   "isp.up": "Качване", "isp.ping": "Пинг", "isp.jitter": "Колебание", "isp.server": "Сървър", "pal.a.pcReport": "Направи доклад за компютъра", "pal.a.bench": "Пусни бенчмарк",
   "pal.a.speed": "Тест на скоростта на интернета",
+  "bn.o.gpu": "Видеокарта", "bn.o.long": "Дълъг тест", "bn.o.longT": "30 секунди натоварване на процесора и видеокартата — показва дали скоростта пада от топлина",
+  "bn.s.gpu": "Видеокарта", "bn.c.gpu": "Видеокарта", "bn.c.gpuD": "{0} GFLOPS · {1} кадъра/с на тестовата сцена в 2560×1440", "bn.c.load": "{0}% натоварване",
+  "bn.c.sustainCpu": "Скоростта на всички ядра по време на дългия тест", "bn.c.sustainGpu": "Скоростта на видеокартата по време на дългия тест", "bn.lim.power": "лимит на мощност",
+  "bn.lim.thermal": "забавя се от топлина", "bn.lim.hw": "хардуерно забавяне", "bn.lim.sync": "синхронизация", "bn.lim.app": "ограничена от програма",
+  "bn.gpu.noGL": "Видеокартата не може да се тества тук (няма WebGL 2)", "bn.gpu.fail": "Тестът на видеокартата не тръгна: {0}", "bn.an.title": "Анализ",
+  "bn.an.note": "Анализът е по реално измереното на този компютър и по сензорите на видеокартата. Не е 3DMark, но показва къде е проблемът и какво да оправиш.",
+  "bn.bal.title": "Ботълнек (тясно място в игрите)", "bn.bal.v.balanced": "Балансирано", "bn.bal.v.cpu": "Процесорът спира картата", "bn.bal.v.gpu": "Видеокартата е лимитът",
+  "bn.bal.l": "процесорът спира", "bn.bal.c": "баланс", "bn.bal.r": "видеокартата е лимитът",
+  "bn.bal.d": "{0} е от клас „{1}“ (около {2}% от RTX 3060). За да я държи заета при висок FPS, едно ядро на процесора трябва да има около {4} точки — твоето има {3}.",
+  "bn.bal.res": "На 1080p процесорът тежи най-много; на 1440p и 4K натоварването минава към видеокартата.", "bn.cls.enthusiast": "най-висок", "bn.cls.high": "висок",
+  "bn.cls.upper": "горен среден", "bn.cls.mid": "среден", "bn.cls.entry": "начален", "bn.cls.igpu": "вградена графика", "bn.part.pc": "Компютър", "bn.part.cpu": "Процесор",
+  "bn.part.gpu": "Видеокарта", "bn.part.ram": "Памет", "bn.part.disk": "Диск", "bn.n.cpuScale": "Ядрата работят както трябва: всички заедно дават {0}× едно ядро ({1} нишки).",
+  "bn.n.cpuScaleLow": "Всички ядра дават само {0}× едно ядро (очаква се около {1}×) — други програми, лимит на мощността или топлина спъват процесора.",
+  "bn.n.cpuBusy": "Преди теста други програми ползваха {0}% от процесора, затова резултатът е по-нисък от истинския. Затвори ги и пусни теста пак.",
+  "bn.n.cpuThrottle": "При дългия тест скоростта падна с {0}% — процесорът загрява или стига лимита си на мощност. Провери охлаждането (паста, вентилатори, прах).",
+  "bn.n.cpuSteady": "Скоростта се държи стабилно {0} секунди — охлаждането на процесора е наред.",
+  "bn.n.ramXMP": "Паметта работи на {0} MHz, а е направена за {1} MHz — включи {2} в BIOS и ще стане по-бърза.",
+  "bn.n.ramSingle": "Има само една плочка памет ({0} GB), затова работи на един канал. Втора еднаква плочка почти удвоява скоростта на паметта.",
+  "bn.n.ramMixed": "Плочките памет са различни — понякога това сваля скоростта или стабилността.",
+  "bn.n.ramLat": "Закъснението на паметта е високо ({0} ns) — нормално е за лаптопи и по-стари компютри.", "bn.n.ramOK": "Паметта е наред: {0} GB/s, {1} на {2} MHz.",
+  "bn.n.nvmeSlow": "{0} е NVMe диск, а се мери като SATA ({1} MB/s) — провери слота (някои минават през чипсета или са по-бавни), температурата на диска и свободното място.",
+  "bn.n.ssdSlow": "SSD-то {0} е много бавно ({1} MB/s) — може да е пълно, прегрято или повредено. Виж здравето му в „Оптимизация“.",
+  "bn.n.hdd": "{0} е механичен диск — най-голямото ускорение е Windows и игрите да са на SSD.", "bn.n.diskOK": "Дискът {0} е нормален за вида си: ↓ {1} · ↑ {2} MB/s.",
+  "bn.n.diskFull": "На {0} има само {1}% свободно — пълният SSD е по-бавен. Освободи място.",
+  "bn.n.gpuIGP": "Тестът мина на вградената графика, а не на {0}. В Настройки → Система → Дисплей → Графика задай „Висока производителност“ за xKi4o Cleaner и за игрите.",
+  "bn.n.gpuLoad": "Видеокартата стигна само {0}% натоварване — този тест минава през браузърния двигател и не винаги я натоварва докрай. Сравнявай с предишните си резултати.",
+  "bn.n.gpuHot": "Видеокартата се забави от топлина ({0} °C) — почисти праха, провери вентилаторите и въздуха в кутията.",
+  "bn.n.gpuWarm": "Видеокартата е топла ({0} °C) под натоварване — още е в нормата, но по-добро охлаждане ще помогне.",
+  "bn.n.gpuClock": "Честотата стигна само {0} MHz от максимум {1} MHz — може да е режим за пестене на енергия в драйвера.",
+  "bn.n.gpuPower": "Картата стигна лимита си на мощност ({0} от {1} W) — това е нормално при тежко натоварване.",
+  "bn.n.gpuPCIe": "Видеокартата работи на PCIe {0}.0 x{1}, а може PCIe {2}.0 x{3} — провери в кой слот е и настройките в BIOS.",
+  "bn.n.gpuThrottle": "При дългия тест видеокартата забави с {0}% — загрява се. Провери охлаждането.",
+  "bn.n.gpuOK": "Стойностите са нормални за {0}: {1}% натоварване, {2} MHz, {3} °C, без забавяне от топлина.",
+  "bn.n.gpuNoSensors": "Сензорите на {0} не се четат (дават ги само картите на NVIDIA) — сравнявай точките с предишните си тестове.",
+  "bn.n.balCPU": "Процесорът може да спира видеокартата в игрите (най-вече на 1080p и при висок FPS): за карта от клас „{0}“ е добре едно ядро да има около {2} точки, а твоето има {1}.",
+  "bn.n.balGPU": "В игрите видеокартата е ограничението, а процесорът има запас — най-голям скок във FPS ще даде по-силна видеокарта.",
+  "bn.n.balOK": "Процесорът и видеокартата са балансирани — няма ботълнек.", "bn.n.upgrade.cpu": "Най-слабото звено е процесорът — там ъпгрейдът ще се усети най-много.",
+  "bn.n.upgrade.ram": "Най-слабото звено е паметта — там ъпгрейдът ще се усети най-много.",
+  "bn.n.upgrade.disk": "Най-слабото звено е дискът — SSD (или по-бърз SSD) ще се усети най-много.",
+  "bn.n.upgrade.gpu": "Най-слабото звено е видеокартата — там ъпгрейдът ще се усети най-много в игрите.",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -4539,10 +4609,10 @@ en: {
   "nm.h.os": "Needs Windows 10 or 11",
   "nm.h.osD": "net-merge is made only for Windows 10 and 11, and this PC has {0}, so Windows refuses to start it (“not a valid Win32 application”). The rest of the app works normally.",
   "nm.reinstall": "Reinstall net-merge",
-  "nav.bench": "Benchmark", "nav.ext": "Extensions", "bn.title": "Benchmark", "bn.sub": "How fast this PC is: processor, memory and drive — in points, with history",
+  "nav.bench": "Benchmark", "nav.ext": "Extensions", "bn.title": "Benchmark", "bn.sub": "How fast this PC is: processor, memory, drive and graphics — in points, with analysis and history",
   "bn.points": "points", "bn.o.cpu": "Processor", "bn.o.ram": "Memory", "bn.o.disk": "Drive", "bn.start": "Run the test", "bn.stop": "Stop", "bn.hist": "History",
   "bn.clear": "Clear history", "bn.clearQ": "Clear the benchmark history?",
-  "bn.note": "The test takes about a minute. The drive is tested with one temporary file (1 GB) that is deleted at the end. For exact results, close games and heavy programs. The points are xKi4o Cleaner's own: 1000 = a mid-range PC of 2022.",
+  "bn.note": "The test takes about a minute (about two with “Long test”). The drive is tested with one temporary file (1 GB) that is deleted at the end; the graphics card draws a heavy scene off screen, nothing is shown or changed. For exact results, close games and heavy programs. The points are xKi4o Cleaner's own: 1000 = a mid-range PC of 2022.",
   "bn.h.ready": "Ready to test", "bn.h.readyD": "Choose what to measure and press “Run the test”. Nothing is changed.", "bn.h.run": "Measuring…",
   "bn.h.runD": "Leave the PC alone while the test runs — that gives the most exact result.", "bn.h.done.top": "A very fast PC", "bn.h.done.fast": "A fast PC",
   "bn.h.done.good": "Good speed", "bn.h.done.ok": "Average speed", "bn.h.done.slow": "A slower PC", "bn.h.doneD": "Last test: {0}", "bn.s.cpu1": "One core", "bn.s.cpuN": "All cores",
@@ -4568,6 +4638,47 @@ en: {
   "isp.stop": "Stop", "isp.sub": "Download, upload and ping to Cloudflare's server. The test downloads a few hundred MB — mind mobile data.", "isp.ph.ping": "Measuring the ping…",
   "isp.ph.down": "Measuring download…", "isp.ph.up": "Measuring upload…", "isp.empty": "Press “Test” to see the connection's real speed.", "isp.down": "Download", "isp.up": "Upload",
   "isp.ping": "Ping", "isp.jitter": "Jitter", "isp.server": "Server", "pal.a.pcReport": "Make a PC report", "pal.a.bench": "Run the benchmark", "pal.a.speed": "Internet speed test",
+  "bn.o.gpu": "Graphics", "bn.o.long": "Long test", "bn.o.longT": "30 seconds of load on the processor and graphics card — shows if the speed drops from heat", "bn.s.gpu": "Graphics",
+  "bn.c.gpu": "Graphics card", "bn.c.gpuD": "{0} GFLOPS · {1} frames/s of the test scene at 2560×1440", "bn.c.load": "{0}% load",
+  "bn.c.sustainCpu": "All-core speed during the long test", "bn.c.sustainGpu": "Graphics speed during the long test", "bn.lim.power": "power limit",
+  "bn.lim.thermal": "slowing from heat", "bn.lim.hw": "hardware slowdown", "bn.lim.sync": "sync", "bn.lim.app": "limited by a program",
+  "bn.gpu.noGL": "The graphics card cannot be tested here (no WebGL 2)", "bn.gpu.fail": "The graphics test did not start: {0}", "bn.an.title": "Analysis",
+  "bn.an.note": "The analysis rests on what was measured on this PC and on the graphics card's sensors. It is not 3DMark, but it shows where the problem is and what to fix.",
+  "bn.bal.title": "Bottleneck (in games)", "bn.bal.v.balanced": "Balanced", "bn.bal.v.cpu": "The CPU holds the GPU back", "bn.bal.v.gpu": "The GPU is the limit",
+  "bn.bal.l": "CPU holds back", "bn.bal.c": "balanced", "bn.bal.r": "GPU is the limit",
+  "bn.bal.d": "{0} is in the “{1}” class (about {2}% of an RTX 3060). To keep it busy at high FPS, one processor core should have about {4} points — yours has {3}.",
+  "bn.bal.res": "At 1080p the processor matters most; at 1440p and 4K the load moves to the graphics card.", "bn.cls.enthusiast": "top", "bn.cls.high": "high",
+  "bn.cls.upper": "upper mid", "bn.cls.mid": "mid", "bn.cls.entry": "entry", "bn.cls.igpu": "integrated", "bn.part.pc": "PC", "bn.part.cpu": "Processor", "bn.part.gpu": "Graphics",
+  "bn.part.ram": "Memory", "bn.part.disk": "Drive", "bn.n.cpuScale": "The cores work as they should: all together give {0}× one core ({1} threads).",
+  "bn.n.cpuScaleLow": "All cores give only {0}× one core (about {1}× is expected) — other programs, a power limit or heat hold the processor back.",
+  "bn.n.cpuBusy": "Other programs used {0}% of the processor before the test, so the result is lower than it really is. Close them and run the test again.",
+  "bn.n.cpuThrottle": "In the long test the speed fell by {0}% — the processor heats up or hits its power limit. Check the cooling (paste, fans, dust).",
+  "bn.n.cpuSteady": "The speed held steady for {0} seconds — the processor's cooling is fine.",
+  "bn.n.ramXMP": "The memory runs at {0} MHz but is made for {1} MHz — turn on {2} in the BIOS and it gets faster.",
+  "bn.n.ramSingle": "There is only one memory stick ({0} GB), so it runs on one channel. A second identical stick nearly doubles the memory speed.",
+  "bn.n.ramMixed": "The memory sticks differ — that sometimes lowers speed or stability.", "bn.n.ramLat": "The memory latency is high ({0} ns) — normal for laptops and older PCs.",
+  "bn.n.ramOK": "The memory is fine: {0} GB/s, {1} at {2} MHz.",
+  "bn.n.nvmeSlow": "{0} is an NVMe drive but measures like SATA ({1} MB/s) — check the slot (some go through the chipset or are slower), the drive's temperature and its free space.",
+  "bn.n.ssdSlow": "The SSD {0} is very slow ({1} MB/s) — it may be full, hot or failing. See its health under Optimization.",
+  "bn.n.hdd": "{0} is a hard disk — the biggest speed-up is having Windows and games on an SSD.", "bn.n.diskOK": "Drive {0} is normal for its kind: ↓ {1} · ↑ {2} MB/s.",
+  "bn.n.diskFull": "{0} has only {1}% free — a full SSD is slower. Free up space.",
+  "bn.n.gpuIGP": "The test ran on the integrated graphics, not on {0}. In Settings → System → Display → Graphics set “High performance” for xKi4o Cleaner and for games.",
+  "bn.n.gpuLoad": "The graphics card reached only {0}% load — this test runs through the browser engine and does not always load it fully. Compare with your earlier results.",
+  "bn.n.gpuHot": "The graphics card slowed down from heat ({0} °C) — clean the dust, check the fans and the airflow in the case.",
+  "bn.n.gpuWarm": "The graphics card runs warm ({0} °C) under load — still normal, but better cooling would help.",
+  "bn.n.gpuClock": "The clock reached only {0} MHz of a maximum {1} MHz — maybe a power-saving mode in the driver.",
+  "bn.n.gpuPower": "The card reached its power limit ({0} of {1} W) — normal under heavy load.",
+  "bn.n.gpuPCIe": "The graphics card runs at PCIe {0}.0 x{1} but can do PCIe {2}.0 x{3} — check which slot it is in and the BIOS settings.",
+  "bn.n.gpuThrottle": "In the long test the graphics card slowed by {0}% — it heats up. Check the cooling.",
+  "bn.n.gpuOK": "The values are normal for {0}: {1}% load, {2} MHz, {3} °C, no slowing from heat.",
+  "bn.n.gpuNoSensors": "The sensors of {0} cannot be read (only NVIDIA cards give them) — compare the points with your earlier tests.",
+  "bn.n.balCPU": "The processor may hold the graphics card back in games (mostly at 1080p and high FPS): a “{0}” class card likes about {2} points on one core, and yours has {1}.",
+  "bn.n.balGPU": "In games the graphics card is the limit and the processor has room — a stronger graphics card gives the biggest FPS jump.",
+  "bn.n.balOK": "The processor and the graphics card are balanced — no bottleneck.",
+  "bn.n.upgrade.cpu": "The weakest part is the processor — an upgrade there would be felt the most.",
+  "bn.n.upgrade.ram": "The weakest part is the memory — an upgrade there would be felt the most.",
+  "bn.n.upgrade.disk": "The weakest part is the drive — an SSD (or a faster one) would be felt the most.",
+  "bn.n.upgrade.gpu": "The weakest part is the graphics card — an upgrade there would be felt the most in games.",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -8117,8 +8228,8 @@ document.addEventListener("visibilitychange", () => { if (document.visibilitySta
    4.0 — Benchmark: processor (one core, all cores), memory and a drive.
    The drive test writes one temporary file that is removed at the end.
 ===================================================================== */
-const BN = { run: false, res: null, hist: [], histLoaded: false, drives: null, opts: { cpu: true, ram: true, disk: true, drive: "" }, prog: {}, now: "", stopping: false };
-const BN_STEPS = ["cpu1", "cpuN", "ram", "disk"];
+const BN = { run: false, res: null, hist: [], histLoaded: false, drives: null, opts: { cpu: true, ram: true, disk: true, gpu: true, long: false, drive: "" }, prog: {}, now: "", stopping: false };
+const BN_STEPS = ["cpu1", "cpuN", "ram", "disk", "gpu"];
 const BN_DISK = { "disk-w": [0, 35], "disk-r": [35, 60], "disk-4kr": [60, 80], "disk-4kw": [80, 100] };
 function bnOn(k) { return k === "cpu1" || k === "cpuN" ? BN.opts.cpu : BN.opts[k]; }
 function bnPts(n) { return n > 0 ? nf(0).format(n) : "—"; }
@@ -8180,11 +8291,11 @@ function paintBenchSteps() {
   const val = k => {
     if (BN.run) return BN.prog[k] >= 100 ? t("bn.s.done") : BN.prog[k] > 0 ? Math.round(BN.prog[k]) + "%" : bnOn(k) ? t("bn.s.wait") : t("bn.s.skip");
     if (!r) return "";
-    const v = { cpu1: r.sCPU1, cpuN: r.sCPUN, ram: r.sRAM, disk: r.sDisk }[k];
+    const v = { cpu1: r.sCPU1, cpuN: r.sCPUN, ram: r.sRAM, disk: r.sDisk, gpu: r.sGPU }[k];
     return v > 0 ? nf(0).format(v) : "—";
   };
   box.innerHTML = BN_STEPS.map(k => {
-    const pct = BN.run ? (BN.prog[k] || 0) : (r && ({ cpu1: r.sCPU1, cpuN: r.sCPUN, ram: r.sRAM, disk: r.sDisk }[k] > 0) ? 100 : 0);
+    const pct = BN.run ? (BN.prog[k] || 0) : (r && ({ cpu1: r.sCPU1, cpuN: r.sCPUN, ram: r.sRAM, disk: r.sDisk, gpu: r.sGPU }[k] > 0) ? 100 : 0);
     const cls = !bnOn(k) && BN.run ? "off" : BN.run && BN.now === k ? "now" : "";
     return `<div class="bn-step ${cls}" data-s="${k}"><div class="h"><span>${esc(t("bn.s." + k))}</span><span>${esc(val(k))}</span></div><div class="bn-bar"><i style="width:${pct}%"></i></div></div>`;
   }).join("");
@@ -8211,7 +8322,7 @@ function paintBenchRes() {
   let html = "";
   if (r.cpu1 > 0) {
     html += card("cpu", t("bn.c.cpu1"), r.sCPU1, p && p.sCPU1, t("bn.c.cpu1D", nf(0).format(r.cpu1)));
-    html += card("cpu", t("bn.c.cpuN"), r.sCPUN, p && p.sCPUN, t("bn.c.cpuND", r.threads, nf(1).format(r.cpuN / r.cpu1)));
+    html += card("cpu", t("bn.c.cpuN"), r.sCPUN, p && p.sCPUN, t("bn.c.cpuND", r.threads, nf(1).format(r.cpuN / r.cpu1)), bnSpark(r.cpuSustain, t("bn.c.sustainCpu")));
   }
   if (r.ramBW > 0) html += card("memory", t("bn.c.ram"), r.sRAM, p && p.sRAM, t("bn.c.ramD", nf(1).format(r.ramBW), nf(0).format(r.ramLat)));
   const d = r.disk;
@@ -8221,7 +8332,23 @@ function paintBenchRes() {
       t("bn.c.diskD", nf(0).format(d.seqRead), nf(0).format(d.seqWrite), nf(1).format(d.rndRead), nf(1).format(d.rndWrite)),
       `<div class="k">${esc(t("bn.kind." + (d.kind || "sata")))}</div>`);
   }
+  const g = r.gpu;
+  if (g) {
+    if (g.error) html += card("gpu", t("bn.c.gpu"), 0, 0, g.error, "", "err");
+    else if (g.gflops > 0) {
+      const sens = g.sensors ? `<div class="bn-sens">${[
+        g.utilMax >= 0 ? `<span${g.utilMax < 80 ? ` class="warn"` : ""}>${esc(t("bn.c.load", g.utilMax))}</span>` : "",
+        g.clockMax > 0 ? `<span>${esc(g.clockMax + (g.boostMax ? " / " + g.boostMax : "") + " MHz")}</span>` : "",
+        g.tempMax > 0 ? `<span${g.tempMax >= 86 ? ` class="warn"` : ""}>${esc(g.tempMax + " °C")}</span>` : "",
+        g.powerMax > 0 ? `<span>${esc(nf(0).format(g.powerMax) + (g.powerLimit ? " / " + nf(0).format(g.powerLimit) : "") + " W")}</span>` : "",
+        g.pcieGen > 0 ? `<span${g.pcieMaxGen && (g.pcieGen < g.pcieMaxGen || g.pcieWidth < g.pcieMaxWidth) ? ` class="warn"` : ""}>${esc("PCIe " + g.pcieGen + ".0 x" + g.pcieWidth)}</span>` : "",
+        (g.limits || []).filter(l => l !== "idle").map(l => `<span class="${l === "thermal" || l === "hw" ? "bad" : ""}">${esc(t("bn.lim." + l))}</span>`).join("")].join("")}</div>` : "";
+      html += card("gpu", t("bn.c.gpu"), r.sGPU, p && p.sGPU, t("bn.c.gpuD", nf(0).format(g.gflops), nf(0).format(g.fps)),
+        sens + bnSpark(g.sustain, t("bn.c.sustainGpu")) + `<div class="bn-rend" title="${esc(g.renderer || "")}">${esc(g.name || g.renderer || "")}</div>`);
+    }
+  }
   box.innerHTML = html;
+  paintBenchAnalysis();
 }
 function paintBenchHist() {
   const box = $("#bnHist"); if (!box) return;
@@ -8229,19 +8356,155 @@ function paintBenchHist() {
   if (!BN.hist.length) { box.innerHTML = `<div class="bn-empty">${esc(t("bn.histEmpty"))}</div>`; return; }
   box.innerHTML = BN.hist.slice(0, 12).map(h => `<div class="bn-hrow"><span class="w">${esc(fmtDateTime(h.at))}</span><b>${esc(bnPts(h.score))}</b>
     <div class="p">${h.sCPU1 > 0 ? `<span>${esc(t("bn.s.cpu1"))} <b>${esc(bnPts(h.sCPU1))}</b></span><span>${esc(t("bn.s.cpuN"))} <b>${esc(bnPts(h.sCPUN))}</b></span>` : ""}
-    ${h.sRAM > 0 ? `<span>${esc(t("bn.s.ram"))} <b>${esc(bnPts(h.sRAM))}</b></span>` : ""}${h.sDisk > 0 ? `<span>${esc(t("bn.s.disk"))} ${esc((h.disk && h.disk.drive) || "")} <b>${esc(bnPts(h.sDisk))}</b></span>` : ""}</div></div>`).join("");
+    ${h.sRAM > 0 ? `<span>${esc(t("bn.s.ram"))} <b>${esc(bnPts(h.sRAM))}</b></span>` : ""}${h.sDisk > 0 ? `<span>${esc(t("bn.s.disk"))} ${esc((h.disk && h.disk.drive) || "")} <b>${esc(bnPts(h.sDisk))}</b></span>` : ""}${h.sGPU > 0 ? `<span>${esc(t("bn.s.gpu"))} <b>${esc(bnPts(h.sGPU))}</b></span>` : ""}</div></div>`).join("");
 }
 function fmtDateTime(at) {
   const d = new Date(at); if (isNaN(d)) return "";
   return d.toLocaleString(locale(), { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 }
+
+// a small line of a long run's speed (it should stay flat)
+function bnSpark(xs, label) {
+  if (!xs || xs.length < 3) return "";
+  const mx = Math.max(...xs), mn = Math.min(...xs) * 0.9, w = 200, h = 34;
+  const pt = xs.map((v, i) => `${(i / (xs.length - 1) * w).toFixed(1)},${(h - 3 - (v - mn) / Math.max(1e-9, mx - mn) * (h - 6)).toFixed(1)}`);
+  return `<svg class="bn-spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="${esc(label)}"><title>${esc(label)}</title>
+    <polygon class="area" points="0,${h} ${pt.join(" ")} ${w},${h}"/><polyline points="${pt.join(" ")}"/></svg>`;
+}
+const BN_PART_ICON = { pc: "bench", cpu: "cpu", gpu: "gpu", ram: "memory", disk: "disk" };
+const BN_TONE_ICON = { good: "check", warn: "alert", bad: "alert", info: "info" };
+function paintBenchAnalysis() {
+  const box = $("#bnAnalysis"); if (!box) return;
+  const r = BN.res;
+  if (!r || BN.run || (!r.notes && !r.balance)) { box.innerHTML = ""; return; }
+  let html = `<div class="bn-an"><h3>${esc(t("bn.an.title"))}</h3>`;
+  const b = r.balance;
+  if (b && b.verdict && b.verdict !== "unknown") {
+    const tone = { balanced: "good", cpu: "warn", gpu: "info" }[b.verdict];
+    const gname = (r.gpu && (r.gpu.name || r.gpu.renderer)) || ((r.ctx && r.ctx.gpus || [])[0]) || "";
+    html += `<div class="bn-bal"><div class="top"><b>${esc(t("bn.bal.title"))}</b><span class="vd ${tone}">${esc(t("bn.bal.v." + b.verdict))}</span></div>
+      <div class="bn-scale" role="img" aria-label="${esc(t("bn.bal.v." + b.verdict))}"><i style="left:${b.pos}%"></i></div>
+      <div class="bn-scale-l"><span>${esc(t("bn.bal.l"))}</span><span>${esc(t("bn.bal.c"))}</span><span>${esc(t("bn.bal.r"))}</span></div>
+      <div class="m">${esc(t("bn.bal.d", gname, t("bn.cls." + b.gpuClass), b.gpuIndex, nf(0).format(b.cpuHave), nf(0).format(b.cpuNeed)))}</div>
+      <div class="m">${esc(t("bn.bal.res"))}</div></div>`;
+  }
+  const notes = (r.notes || []).filter(n => !(n.part === "pc" && /^bn\.n\.bal/.test(n.key)));
+  if (notes.length) html += `<div class="bn-notes">${notes.map(n => `<div class="bn-note ${esc(n.tone)}"><span class="ic">${ICONS[BN_TONE_ICON[n.tone]] || ICONS[BN_PART_ICON[n.part]] || ""}</span>
+    <div><span class="p">${esc(t("bn.part." + n.part))}</span>${esc(t(n.key, ...(n.args || []).map(a => t("bn.cls." + a) !== "bn.cls." + a ? t("bn.cls." + a) : a)))}</div></div>`).join("")}</div>`;
+  html += `<div class="note-line">${esc(t("bn.an.note"))}</div></div>`;
+  box.innerHTML = html;
+}
+
+/* The graphics test: WebGL 2 renders a heavy shader into an off-screen
+   2560x1440 image, as fast as the card can (no screen, no vsync limit),
+   while the card's sensors are read. */
+const GPU_FLOPS_PER_PX = 1700; // the shader's work per pixel (96 steps × ~18 operations)
+const GPU_FS = `#version 300 es
+precision highp float;
+uniform vec2 res; uniform float tm;
+out vec4 o;
+void main() {
+  vec2 uv = (gl_FragCoord.xy * 2.0 - res) / res.y;
+  vec2 z = uv * 1.3, c = vec2(-0.745 + 0.02 * sin(tm), 0.186 + 0.01 * cos(tm));
+  float acc = 0.0;
+  for (int i = 0; i < 96; i++) {
+    z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + c;
+    float d = dot(z, z);
+    acc += exp(-d * 0.5);
+    if (d > 64.0) z *= 0.125;
+  }
+  o = vec4(0.5 + 0.5 * cos(vec3(0.0, 0.6, 1.2) + acc * 0.15 + tm), 1.0);
+}`;
+const GPU_VS = `#version 300 es
+void main() { vec2 p = vec2((gl_VertexID << 1) & 2, gl_VertexID & 2); gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0); }`;
+async function gpuBenchReal(long) {
+  const fast = new URLSearchParams(location.search).has("fast");
+  const W = fast ? 320 : 2560, H = fast ? 180 : 1440;
+  const total = fast ? 600 : long ? 30000 : 8000, warm = fast ? 100 : 1200, slice = fast ? 100 : 5000;
+  const cv = document.createElement("canvas"); cv.width = 16; cv.height = 16;
+  const gl = cv.getContext("webgl2", { antialias: false, depth: false, stencil: false, alpha: false, powerPreference: "high-performance", preserveDrawingBuffer: false });
+  if (!gl) return { error: t("bn.gpu.noGL") };
+  const dbg = gl.getExtension("WEBGL_debug_renderer_info");
+  const renderer = String(dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER));
+  const sh = (type, src) => { const x = gl.createShader(type); gl.shaderSource(x, src); gl.compileShader(x); if (!gl.getShaderParameter(x, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(x) || "shader"); return x; };
+  let prog;
+  try {
+    prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, GPU_VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, GPU_FS)); gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog) || "link");
+  } catch (e) { return { error: t("bn.gpu.fail", String(e.message || e)), renderer }; }
+  const tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex); gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGBA8, W, H);
+  const fb = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, fb); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+  gl.viewport(0, 0, W, H); gl.useProgram(prog);
+  gl.uniform2f(gl.getUniformLocation(prog, "res"), W, H);
+  const uT = gl.getUniformLocation(prog, "tm"), px = new Uint8Array(4);
+  const sync = () => gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); // waits for the card to finish
+  let k = 1, frames = 0, counted = 0, tm = 0;
+  const t0 = performance.now(); let tCount = 0, sliceAt = 0, sliceFrames = 0;
+  const sustain = [];
+  while (true) {
+    if (BN.stopping) return { stopped: true, renderer };
+    const b0 = performance.now();
+    for (let i = 0; i < k; i++) { gl.uniform1f(uT, tm += 0.01); gl.drawArrays(gl.TRIANGLES, 0, 3); }
+    sync();
+    const b1 = performance.now(), dt = b1 - b0, el = b1 - t0;
+    frames += k;
+    if (el >= warm) {
+      if (!tCount) { tCount = b0; sliceAt = b0; }
+      counted += k; sliceFrames += k;
+      if (b1 - sliceAt >= slice) { sustain.push(sliceFrames / ((b1 - sliceAt) / 1000)); sliceAt = b1; sliceFrames = 0; }
+    }
+    if (dt < 30) k = Math.min(256, k * 2); else if (dt > 90 && k > 1) k = Math.max(1, k >> 1);
+    BN.prog.gpu = Math.min(99, el / total * 100); BN.now = "gpu";
+    if (S.page === "bench") paintBenchSteps();
+    if (el >= total) break;
+    await new Promise(r => setTimeout(r, 0));
+  }
+  const secs = (performance.now() - tCount) / 1000;
+  const fps = counted / Math.max(0.001, secs);
+  gl.getExtension("WEBGL_lose_context")?.loseContext();
+  return { renderer, fps, gflops: fps * W * H * GPU_FLOPS_PER_PX / 1e9, sustain: long ? sustain.map(f => f * W * H * GPU_FLOPS_PER_PX / 1e9) : [] };
+}
+// runs the graphics test and reads the card's sensors every half second
+async function gpuBench(long) {
+  const peak = { utilMax: -1, clockMax: 0, boostMax: 0, tempMax: 0, powerMax: 0, powerLimit: 0, limits: [], pcieGen: 0, pcieWidth: 0, pcieMaxGen: 0, pcieMaxWidth: 0, sensors: false, name: "" };
+  let on = true;
+  const poll = (async () => {
+    while (on) {
+      try {
+        const g = await api.benchGPUSample();
+        if (g && g.ok && g.src === "nvml") {
+          peak.sensors = true; peak.name = g.name || peak.name;
+          peak.utilMax = Math.max(peak.utilMax, g.util); peak.clockMax = Math.max(peak.clockMax, g.clock || 0); peak.boostMax = Math.max(peak.boostMax, g.maxClock || 0);
+          peak.tempMax = Math.max(peak.tempMax, g.temp || 0); peak.powerMax = Math.max(peak.powerMax, g.power || 0); peak.powerLimit = Math.max(peak.powerLimit, g.powerLimit || 0);
+          (g.limits || []).forEach(l => { if (l !== "idle" && !peak.limits.includes(l)) peak.limits.push(l); });
+          if ((g.util || 0) >= 50) { peak.pcieGen = Math.max(peak.pcieGen, g.pcieGen || 0); peak.pcieWidth = Math.max(peak.pcieWidth, g.pcieWidth || 0); }
+          peak.pcieMaxGen = g.pcieMaxGen || peak.pcieMaxGen; peak.pcieMaxWidth = g.pcieMaxWidth || peak.pcieMaxWidth;
+        } else if (g && g.name && !peak.name) peak.name = g.name;
+      } catch (e) {}
+      await new Promise(r => setTimeout(r, 500));
+    }
+  })();
+  let res;
+  try { res = native || new URLSearchParams(location.search).has("realgpu") ? await gpuBenchReal(long) : await Mock.gpuBenchFake(long); }
+  catch (e) { res = { error: t("bn.gpu.fail", String((e && e.message) || e)) }; }
+  on = false; await poll;
+  if (res.stopped) return null;
+  return Object.assign({}, peak, res, { name: peak.name || (res.renderer || "") });
+}
+
 async function bnStart() {
   if (BN.run) return;
-  const o = { cpu: BN.opts.cpu, ram: BN.opts.ram, disk: BN.opts.disk, drive: BN.opts.drive };
-  if (!o.cpu && !o.ram && !o.disk) { toast(t("bn.pick"), "alert", "warn"); return; }
+  const o = { cpu: BN.opts.cpu, ram: BN.opts.ram, disk: BN.opts.disk, gpu: BN.opts.gpu, long: BN.opts.long, drive: BN.opts.drive };
+  if (!o.cpu && !o.ram && !o.disk && !o.gpu) { toast(t("bn.pick"), "alert", "warn"); return; }
   BN.run = true; BN.stopping = false; BN.prog = {}; BN.now = BN_STEPS.find(bnOn) || "";
   paintBench();
   let r = null; try { r = await api.benchRun(o); } catch (e) { r = { error: String((e && e.message) || e) }; }
+  if (r && r.pending && r.result && !BN.stopping) {
+    BN_STEPS.slice(0, 4).forEach(x => { if (bnOn(x)) BN.prog[x] = 100; });
+    const g = await gpuBench(o.long);
+    if (g && !BN.stopping) { r.result.gpu = g; try { r = await api.benchSave(r.result); } catch (e) { r = { error: String((e && e.message) || e) }; } }
+    else r = { result: Object.assign(r.result, { stopped: true }), history: BN.hist };
+  } else if (r && r.pending) r = { result: Object.assign(r.result, { stopped: true }), history: BN.hist };
   BN.run = false; BN.stopping = false;
   if (r && r.error) toast(r.error, "alert", "warn");
   else if (r && r.result) {
@@ -11245,7 +11508,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "4.0.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "4.1.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -11481,11 +11744,45 @@ const Mock = (() => {
         disk: o.disk ? { drive: o.drive || "C:", sizeMB: 1024, seqRead: 6820, seqWrite: 5410, rndRead: 78.2, rndWrite: 211.7, iopsRead: 19090, iopsWrite: 51680, kind: "nvme4" } : null };
       r.sCPU1 = o.cpu ? 1658 : 0; r.sCPUN = o.cpu ? 2943 : 0; r.sRAM = o.ram ? 1752 : 0; r.sDisk = o.disk ? 2006 : 0;
       r.score = geo([r.sCPU1, r.sCPUN, r.sRAM, r.sDisk]);
-      const h = await Mock.benchHistory();
-      if (!stopped) h.unshift(r);
-      return { result: r, history: h };
+      if (o.long && o.cpu) { r.long = true; r.cpuSustain = [41800, 41500, 41300, 41200, 41100, 41150]; }
+      r.ctx = { cpu: "12th Gen Intel Core i9-12900K", cores: 16, threads: 24, gpus: ["NVIDIA GeForce RTX 4090"] };
+      if (!stopped) return o.gpu ? { result: r, pending: true } : Mock.benchSave(r);
+      return { result: r, history: await Mock.benchHistory() };
     },
     benchStop: async () => { window.__benchStop = true; return true; },
+    benchGPUSample: async () => ({ ok: true, src: q.get("gpu") === "amd" ? "pdh" : "nvml", name: q.get("gpu") === "amd" ? "AMD Radeon RX 7800 XT" : "NVIDIA GeForce RTX 4090", util: 98, clock: 2745, maxClock: 3105, temp: q.get("bn") === "bad" ? 88 : 66,
+      power: 412, powerLimit: 450, limits: q.get("bn") === "bad" ? ["thermal"] : ["power"], pcieGen: q.get("bn") === "bad" ? 3 : 4, pcieWidth: q.get("bn") === "bad" ? 8 : 16, pcieMaxGen: 4, pcieMaxWidth: 16 }),
+    gpuBenchFake: async long => {
+      window.__gpuRuns = (window.__gpuRuns || 0) + 1;
+      for (let p = 0; p <= 100; p += 20) { if (BN.stopping) return { stopped: true }; BN.prog.gpu = p; BN.now = "gpu"; if (S.page === "bench") paintBenchSteps(); await new Promise(r => setTimeout(r, q.get("fast") ? 15 : 160)); }
+      return { renderer: "ANGLE (NVIDIA, NVIDIA GeForce RTX 4090 (0x00002684) Direct3D11 vs_5_0 ps_5_0, D3D11)", fps: 1340, gflops: 8400, sustain: long ? [8420, 8410, 8395, 8380, 8390, 8385] : [] };
+    },
+    benchSave: async r => {
+      const geo = xs => { const v = xs.filter(x => x > 0); return v.length ? Math.round(Math.exp(v.reduce((a, x) => a + Math.log(x), 0) / v.length)) : 0; };
+      if (r.gpu && r.gpu.gflops > 0) r.sGPU = Math.round(r.gpu.gflops / 3000 * 1000);
+      r.score = geo([r.sCPU1, r.sCPUN, r.sRAM, r.sDisk, r.sGPU]);
+      const bad = q.get("bn") === "bad";
+      r.balance = bad ? { verdict: "cpu", gpuClass: "enthusiast", gpuIndex: 330, cpuNeed: 1558, cpuHave: 980, pos: 26 } : { verdict: "balanced", gpuClass: "enthusiast", gpuIndex: 330, cpuNeed: 1558, cpuHave: r.sCPU1 || 1658, pos: 53 };
+      r.notes = bad ? [
+        { part: "pc", tone: "warn", key: "bn.n.balCPU", args: ["enthusiast", "980", "1558"] },
+        { part: "cpu", tone: "warn", key: "bn.n.cpuBusy", args: ["34"] },
+        { part: "gpu", tone: "bad", key: "bn.n.gpuHot", args: ["88"] },
+        { part: "gpu", tone: "warn", key: "bn.n.gpuPCIe", args: ["3", "8", "4", "16"] },
+        { part: "ram", tone: "warn", key: "bn.n.ramXMP", args: ["4800", "6400", "XMP"] },
+        { part: "disk", tone: "warn", key: "bn.n.nvmeSlow", args: ["C:", "520"] },
+      ] : [
+        { part: "pc", tone: "good", key: "bn.n.balOK" },
+        { part: "cpu", tone: "good", key: "bn.n.cpuScale", args: ["10.4", "24"] },
+        ...(r.long ? [{ part: "cpu", tone: "good", key: "bn.n.cpuSteady", args: ["30"] }] : []),
+        { part: "gpu", tone: "good", key: "bn.n.gpuOK", args: ["NVIDIA GeForce RTX 4090", "98", "2745", "66"] },
+        { part: "gpu", tone: "info", key: "bn.n.gpuPower", args: ["412", "450"] },
+        { part: "ram", tone: "good", key: "bn.n.ramOK", args: ["46.2", "DDR5", "6400"] },
+        { part: "disk", tone: "good", key: "bn.n.diskOK", args: ["C:", "6820", "5410"] },
+      ];
+      const h = await Mock.benchHistory();
+      h.unshift(r);
+      return { result: r, history: h };
+    },
     benchClear: async () => { window.__benchHist = []; return true; },
     extScan: async () => {
       await new Promise(r => setTimeout(r, q.get("fast") ? 30 : 500));
@@ -11816,11 +12113,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "4.0.0", latest: nw ? "4.1.0" : "4.0.0", newer: nw, name: "xKi4o Cleaner 4.1.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.1.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "4.1.0", latest: nw ? "4.2.0" : "4.1.0", newer: nw, name: "xKi4o Cleaner 4.2.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.2.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders

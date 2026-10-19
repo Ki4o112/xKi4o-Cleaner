@@ -3,6 +3,22 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.1.0 — 2026-10-19
+
+### English
+- Benchmark: new graphics card test (a heavy WebGL 2 scene at 2560×1440, off screen) with the card's load, clocks, temperature, power and PCIe link read while it runs
+- Benchmark: after the test, an analysis says for each part whether its values are normal and what to do when not (memory below its rating — turn on XMP/EXPO, one memory stick, an NVMe drive running like SATA, a graphics card slowing from heat or on a slower PCIe link, the test running on integrated graphics, other programs loading the processor)
+- Benchmark: bottleneck check — whether the processor can keep the graphics card busy in games, with a balance bar
+- Benchmark: "Long test" — 30 seconds of load that shows whether the speed drops from heat, with a chart
+- The PC report also shows the graphics score and the bottleneck verdict
+
+### Български
+- Бенчмарк: нов тест на видеокартата (тежка WebGL 2 сцена в 2560×1440, извън екрана), като докато върви се четат натоварването, честотите, температурата, мощността и PCIe връзката на картата
+- Бенчмарк: след теста анализът казва за всяка част дали стойностите са нормални и какво да направиш, ако не са (паметта е под номиналната си скорост — включи XMP/EXPO, само една плочка памет, NVMe диск, който работи като SATA, видеокарта, която се забавя от топлина или е на по-бавна PCIe връзка, тест на вградената графика, натоварен от други програми процесор)
+- Бенчмарк: проверка за ботълнек — дали процесорът може да държи видеокартата заета в игрите, с лента за баланса
+- Бенчмарк: „Дълъг тест“ — 30 секунди натоварване, които показват дали скоростта пада от топлина, с графика
+- Докладът за компютъра показва и точките на видеокартата и дали има ботълнек
+
 ## 4.0.0 — 2026-10-19
 
 ### English

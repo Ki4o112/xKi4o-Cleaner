@@ -297,6 +297,12 @@ func buildReport(si sysInfo, dh dhView, drives []driveRow, ns netState, su []sta
 			bs.Rows = append(bs.Rows, repRow{K: T("rep.bench.disk") + " " + b.Disk.Drive,
 				V: fmt.Sprintf("%d · ↓%.0f ↑%.0f MB/s", b.SDisk, b.Disk.SeqRead, b.Disk.SeqWrit)})
 		}
+		if b.SGPU > 0 && b.GPU != nil {
+			bs.Rows = append(bs.Rows, repRow{K: T("rep.bench.gpu"), V: fmt.Sprintf("%d · %.0f GFLOPS", b.SGPU, b.GPU.GFLOPS)})
+		}
+		if bl := b.Balance; bl != nil && bl.Verdict != "" && bl.Verdict != "unknown" {
+			bs.Rows = append(bs.Rows, repRow{K: T("rep.bench.balance"), V: T("rep.bal." + bl.Verdict), Tone: map[string]string{"cpu": "warn", "balanced": "good"}[bl.Verdict]})
+		}
 		bs.Note = T("rep.bench.when", b.At.Format("2006-01-02 15:04"))
 		d.Sections = append(d.Sections, bs)
 	}

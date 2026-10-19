@@ -6,6 +6,7 @@ import (
 	"errors"
 	"os"
 	"strings"
+	"time"
 
 	"golang.org/x/sys/windows"
 )
@@ -49,7 +50,47 @@ func (f *benchFile) Close() error                             { return windows.C
 
 func benchHistPath() string { return benchHistoryPath(os.Getenv("LOCALAPPDATA")) }
 
-// benchRun runs the benchmark the page asked for and saves it in the history.
+// benchContext reads what the PC is, for the analysis (cached reads).
+func benchContext(drive string) *benchCtx {
+	c := &benchCtx{}
+	si := systemInfo(false)
+	for _, p := range si.CPU {
+		c.CPU, c.Cores, c.Threads = p.Name, c.Cores+p.Cores, c.Threads+p.Threads
+	}
+	c.Laptop = si.Board.Laptop
+	for _, m := range si.RAM {
+		c.RAM = append(c.RAM, benchRAM{Size: m.Size, Rated: m.MHz, Cfg: m.Cfg, Type: m.Type, Part: m.Part})
+	}
+	for _, g := range si.GPU {
+		if !g.Virtual {
+			c.GPUs = append(c.GPUs, g.Name)
+		}
+	}
+	letter := strings.TrimSuffix(drive, ":")
+	for _, d := range diskHealthList(false).Disks {
+		for _, l := range d.Letters {
+			if strings.EqualFold(strings.TrimSuffix(l, ":"), letter) {
+				c.DiskBus, c.DiskKind = d.Bus, d.Media
+			}
+		}
+	}
+	if t, f := diskSpace(drive + `\`); t > 0 {
+		c.DiskFree = float64(f) / float64(t) * 100
+	}
+	return c
+}
+
+// otherLoad: how busy the processor is with other programs right now (%).
+func otherLoad() float64 {
+	var m cpuMeter
+	m.read()
+	time.Sleep(700 * time.Millisecond)
+	return m.read()
+}
+
+// benchRun runs the processor, memory and drive parts. When the page also
+// runs the graphics test (o.GPU), the result is not saved yet: the page
+// adds the graphics part and calls benchSave.
 func benchRun(o benchOpts) map[string]any {
 	drive := strings.ToUpper(strings.TrimSpace(o.Drive))
 	if len(drive) < 1 || drive[0] < 'A' || drive[0] > 'Z' {
@@ -72,13 +113,19 @@ func benchRun(o benchOpts) map[string]any {
 			dir = root
 		}
 	}
+	load := 0.0
+	if o.CPU {
+		load = otherLoad()
+	}
 	benchProgress = func(step string, pct int) { emit("bench-progress", map[string]any{"step": step, "pct": pct}) }
-	op := beginOp("bench", drive, T("log.bench"), map[string]any{"cpu": o.CPU, "ram": o.RAM, "disk": o.Disk})
+	op := beginOp("bench", drive, T("log.bench"), map[string]any{"cpu": o.CPU, "ram": o.RAM, "disk": o.Disk, "gpu": o.GPU, "long": o.Long})
 	r := runBench(o, openBenchFileWin, dir, int64(free))
 	if r.Error == errBenchBusy.Error() {
 		op.end("", nil)
 		return map[string]any{"error": T("bench.err.busy")}
 	}
+	r.Load0 = load
+	r.Ctx = benchContext(drive)
 	if r.Disk != nil && r.Disk.Error != "" {
 		if r.Disk.Error == "nospace" {
 			r.Disk.Error = T("bench.err.space", drive)
@@ -86,6 +133,29 @@ func benchRun(o benchOpts) map[string]any {
 		op.fail(drive, r.Disk.Error, nil)
 	}
 	op.end(T("log.benchDone", r.Score), map[string]any{"score": r.Score, "cpu1": r.SCPU1, "cpuN": r.SCPUN, "ram": r.SRAM, "disk": r.SDisk})
+	if o.GPU && !r.Stopped {
+		return map[string]any{"result": r, "pending": true}
+	}
+	return benchSave(r)
+}
+
+// benchSave adds the graphics part (when there is one), scores everything,
+// writes the analysis and keeps it in the history.
+func benchSave(r benchResult) map[string]any {
+	if r.Ctx == nil {
+		r.Ctx = benchContext(systemDrive())
+	}
+	if g := r.GPU; g != nil {
+		g.Limits = uniqStrings(g.Limits)
+		if g.GFLOPS < 0 || g.GFLOPS > 1e7 {
+			g.GFLOPS = 0
+		}
+	}
+	r.score()
+	analyzeBench(&r, *r.Ctx)
+	if r.GPU != nil {
+		logEvent("bench", "info", "gpu", T("log.benchGPU", r.SGPU, r.GPU.Renderer), map[string]any{"gflops": r.GPU.GFLOPS, "util": r.GPU.UtilMax})
+	}
 	var h []benchResult
 	if !r.Stopped && r.Score > 0 {
 		h = addBenchHistory(benchHistPath(), r)
@@ -94,6 +164,22 @@ func benchRun(o benchOpts) map[string]any {
 	}
 	return map[string]any{"result": r, "history": h}
 }
+
+func uniqStrings(xs []string) []string {
+	seen := map[string]bool{}
+	var out []string
+	for _, x := range xs {
+		if x != "" && !seen[x] {
+			seen[x] = true
+			out = append(out, x)
+		}
+	}
+	return out
+}
+
+// benchGPUSample: the graphics card's sensors right now (read during the
+// graphics test). Only NVIDIA cards give these through their driver.
+func benchGPUSample() gpuSensors { return gpuSensorsRead() }
 
 func benchStop() bool { bench.stop.Store(true); return true }
 

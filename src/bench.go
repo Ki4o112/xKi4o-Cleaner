@@ -40,21 +40,31 @@ type benchDisk struct {
 }
 
 type benchResult struct {
-	At       time.Time  `json:"at"`
-	Threads  int        `json:"threads"`
-	CPU1     float64    `json:"cpu1"`   // work units per second, one core
-	CPUN     float64    `json:"cpuN"`   // work units per second, all cores
-	RAMBW    float64    `json:"ramBW"`  // GB/s copied
-	RAMLat   float64    `json:"ramLat"` // ns per random access
-	Disk     *benchDisk `json:"disk,omitempty"`
-	Score    int        `json:"score"`
-	SCPU1    int        `json:"sCPU1"`
-	SCPUN    int        `json:"sCPUN"`
-	SRAM     int        `json:"sRAM"`
-	SDisk    int        `json:"sDisk"`
-	Stopped  bool       `json:"stopped,omitempty"`
-	Error    string     `json:"error,omitempty"`
-	TookSecs float64    `json:"took"`
+	At      time.Time  `json:"at"`
+	Threads int        `json:"threads"`
+	CPU1    float64    `json:"cpu1"`   // work units per second, one core
+	CPUN    float64    `json:"cpuN"`   // work units per second, all cores
+	RAMBW   float64    `json:"ramBW"`  // GB/s copied
+	RAMLat  float64    `json:"ramLat"` // ns per random access
+	Disk    *benchDisk `json:"disk,omitempty"`
+	Score   int        `json:"score"`
+	SCPU1   int        `json:"sCPU1"`
+	SCPUN   int        `json:"sCPUN"`
+	SRAM    int        `json:"sRAM"`
+	SDisk   int        `json:"sDisk"`
+	GPU     *benchGPU  `json:"gpu,omitempty"`
+	SGPU    int        `json:"sGPU"`
+	// a long run: the all-cores speed every 5 seconds (it falls when the
+	// processor gets hot or hits a power limit)
+	CPUSustain []float64     `json:"cpuSustain,omitempty"`
+	Load0      float64       `json:"load0"` // % processor use by other programs just before
+	Long       bool          `json:"long,omitempty"`
+	Ctx        *benchCtx     `json:"ctx,omitempty"`
+	Notes      []benchNote   `json:"notes,omitempty"`
+	Balance    *benchBalance `json:"balance,omitempty"`
+	Stopped    bool          `json:"stopped,omitempty"`
+	Error      string        `json:"error,omitempty"`
+	TookSecs   float64       `json:"took"`
 }
 
 type benchOpts struct {
@@ -63,6 +73,8 @@ type benchOpts struct {
 	Disk  bool   `json:"disk"`
 	Drive string `json:"drive"` // "C:" etc.; empty = the system drive
 	Quick bool   `json:"quick"` // shorter runs (tests)
+	GPU   bool   `json:"gpu"`   // the page runs the graphics test after this
+	Long  bool   `json:"long"`  // 30 s on all cores, to see if the speed holds
 }
 
 // Reference values: 1000 points each. They are a mid-range desktop of
@@ -76,6 +88,7 @@ const (
 	refSeqW   = 2000.0
 	refRndR   = 55.0 // MB/s 4K QD1
 	refRndW   = 120.0
+	refGFLOPS = 3000.0 // the graphics shader on an RTX 3060-class card (estimated)
 )
 
 var bench struct {
@@ -137,7 +150,14 @@ func (w *benchWork) unit() {
 
 // benchCPU runs the work on n goroutines for d and returns units per second.
 func benchCPU(n int, d time.Duration, step string) float64 {
-	var total atomic.Int64
+	r, _ := benchCPUSlices(n, d, 0, step)
+	return r
+}
+
+// benchCPUSlices is benchCPU that also returns the speed of every slice of
+// the run (slice 0 = none).
+func benchCPUSlices(n int, d, slice time.Duration, step string) (float64, []float64) {
+	var total, liveN atomic.Int64
 	var wg sync.WaitGroup
 	start := time.Now()
 	end := start.Add(d)
@@ -152,6 +172,7 @@ func benchCPU(n int, d time.Duration, step string) float64 {
 					w.unit()
 				}
 				c += 4
+				liveN.Add(4)
 			}
 			total.Add(c)
 		}(uint64(i + 1))
@@ -160,16 +181,26 @@ func benchCPU(n int, d time.Duration, step string) float64 {
 	go func() { wg.Wait(); close(done) }()
 	tick := time.NewTicker(200 * time.Millisecond)
 	defer tick.Stop()
+	var slices []float64
+	var lastN int64
+	lastAt := start
 	for {
 		select {
 		case <-done:
 			el := time.Since(start).Seconds()
 			if el <= 0 {
-				return 0
+				return 0, slices
 			}
-			return float64(total.Load()) / el
+			return float64(total.Load()) / el, slices
 		case <-tick.C:
 			benchProgress(step, int(min(99, time.Since(start)*100/d)))
+			if slice > 0 && time.Since(lastAt) >= slice {
+				// the work is counted when each goroutine ends, so sample
+				// the live counter instead
+				cur := liveN.Load()
+				slices = append(slices, float64(cur-lastN)/time.Since(lastAt).Seconds())
+				lastN, lastAt = cur, time.Now()
+			}
 		}
 	}
 }
@@ -385,7 +416,10 @@ func (r *benchResult) score() {
 	if d := r.Disk; d != nil && d.Error == "" && d.SeqRead > 0 {
 		r.SDisk = geo(pts(d.SeqRead, refSeqR), pts(d.SeqWrit, refSeqW), pts(d.RndRead, refRndR), pts(d.RndWrit, refRndW))
 	}
-	r.Score = geo(r.SCPU1, r.SCPUN, r.SRAM, r.SDisk)
+	if g := r.GPU; g != nil && g.Error == "" {
+		r.SGPU = pts(g.GFLOPS, refGFLOPS)
+	}
+	r.Score = geo(r.SCPU1, r.SCPUN, r.SRAM, r.SDisk, r.SGPU)
 }
 
 // runBench runs the chosen parts. open makes the drive's test file.
@@ -405,7 +439,16 @@ func runBench(o benchOpts, open func(path string, size int64) (benchIO, error), 
 	if o.CPU {
 		res.CPU1 = benchCPU(1, cpuD, "cpu1")
 		if !bench.stop.Load() {
-			res.CPUN = benchCPU(runtime.NumCPU(), cpuD, "cpuN")
+			if o.Long {
+				d, sl := 30*time.Second, 5*time.Second
+				if o.Quick {
+					d, sl = 900*time.Millisecond, 200*time.Millisecond
+				}
+				res.CPUN, res.CPUSustain = benchCPUSlices(runtime.NumCPU(), d, sl, "cpuN")
+				res.Long = true
+			} else {
+				res.CPUN = benchCPU(runtime.NumCPU(), cpuD, "cpuN")
+			}
 		}
 	}
 	if o.RAM && !bench.stop.Load() {

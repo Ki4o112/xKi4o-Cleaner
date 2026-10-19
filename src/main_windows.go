@@ -218,6 +218,8 @@ func main() {
 		"nmSetBalance":        nmSetBalance,
 		"benchRun":            benchRun,
 		"benchStop":           benchStop,
+		"benchSave":           benchSave,
+		"benchGPUSample":      benchGPUSample,
 		"benchHistory":        benchHistory,
 		"benchClear":          benchClearHistory,
 		"extScan":             extScan,
