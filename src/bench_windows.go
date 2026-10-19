@@ -48,6 +48,18 @@ func (f *benchFile) WriteAt(p []byte, off int64) (int, error) { return f.at(p, o
 func (f *benchFile) ReadAt(p []byte, off int64) (int, error)  { return f.at(p, off, false) }
 func (f *benchFile) Close() error                             { return windows.CloseHandle(f.h) }
 
+func init() {
+	benchPriority = func() func() {
+		h := windows.CurrentProcess()
+		old, err := windows.GetPriorityClass(h)
+		if err != nil {
+			return func() {}
+		}
+		_ = windows.SetPriorityClass(h, windows.ABOVE_NORMAL_PRIORITY_CLASS)
+		return func() { _ = windows.SetPriorityClass(h, old) }
+	}
+}
+
 func benchHistPath() string { return benchHistoryPath(os.Getenv("LOCALAPPDATA")) }
 
 // benchContext reads what the PC is, for the analysis (cached reads).
@@ -194,4 +206,11 @@ func benchHistory() []benchResult {
 func benchClearHistory() bool {
 	err := os.Remove(benchHistPath())
 	return err == nil || errors.Is(err, os.ErrNotExist)
+}
+
+// openGraphicsSettings opens Windows' Graphics settings (where a program can
+// be set to use the high-performance graphics card). Nothing is changed here.
+func openGraphicsSettings() bool {
+	shellOpen("ms-settings:display-advancedgraphics")
+	return true
 }

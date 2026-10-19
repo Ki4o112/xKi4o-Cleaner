@@ -98,6 +98,10 @@ var bench struct {
 
 var errBenchBusy = errors.New("busy")
 
+// benchPriority raises this program's priority for the test and returns
+// how to put it back (set by the platform; nothing elsewhere).
+var benchPriority = func() func() { return func() {} }
+
 // benchProgress is set by the platform (it sends an event to the page).
 var benchProgress = func(step string, pct int) {}
 
@@ -430,6 +434,8 @@ func runBench(o benchOpts, open func(path string, size int64) (benchIO, error), 
 		return res
 	}
 	defer bench.busy.Store(false)
+	restore := benchPriority() // a little ahead of other programs while measuring
+	defer restore()
 	bench.stop.Store(false)
 	t0 := time.Now()
 	cpuD, ramMB, latSteps, diskPhase := 3*time.Second, 512, 4_000_000, 3*time.Second
@@ -437,12 +443,19 @@ func runBench(o benchOpts, open func(path string, size int64) (benchIO, error), 
 		cpuD, ramMB, latSteps, diskPhase = 300*time.Millisecond, 32, 200_000, 300*time.Millisecond
 	}
 	if o.CPU {
-		res.CPU1 = benchCPU(1, cpuD, "cpu1")
+		// a short warm-up first: the processor raises its clock (boost)
+		// only after a moment of load, and the first run would be low
+		_ = benchCPU(1, cpuD/10, "cpu1")
+		// one core: the best of three runs (a background program waking up
+		// in one of them does not spoil the result)
+		for i := 0; i < 3 && !bench.stop.Load(); i++ {
+			res.CPU1 = math.Max(res.CPU1, benchCPU(1, cpuD/3, "cpu1"))
+		}
 		if !bench.stop.Load() {
 			if o.Long {
 				d, sl := 30*time.Second, 5*time.Second
 				if o.Quick {
-					d, sl = 900*time.Millisecond, 200*time.Millisecond
+					d, sl = 1800*time.Millisecond, 200*time.Millisecond
 				}
 				res.CPUN, res.CPUSustain = benchCPUSlices(runtime.NumCPU(), d, sl, "cpuN")
 				res.Long = true

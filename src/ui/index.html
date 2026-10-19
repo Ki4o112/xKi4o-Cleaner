@@ -272,6 +272,40 @@ h1 { font-size: 23px; font-weight: 700; margin: 0; letter-spacing: -.02em; }
 .sp-t.main b { font-size: 34px; }
 .sp-empty { grid-column: 1 / -1; color: var(--faint); font-size: 13px; background: var(--card); border: 1px dashed var(--line); border-radius: var(--r-l); padding: 16px 18px; }
 @media (max-width: 900px) { .sp-card { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sp-t.main { grid-column: 1 / -1; } }
+
+.bn-vh { display: flex; gap: 14px; align-items: center; padding: 16px 18px; border-radius: var(--r-l); border: 1px solid var(--line-soft); background: var(--card); }
+.bn-vh .ic { width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center; flex: none; }
+.bn-vh .ic svg { width: 22px; height: 22px; }
+.bn-vh b { display: block; font-size: 17px; letter-spacing: -.01em; }
+.bn-vh span:not(.ic) { display: block; font-size: 13px; color: var(--muted); margin-top: 3px; }
+.bn-vh.good { border-color: rgba(52, 211, 153, .35); background: radial-gradient(120% 160% at 0% 0%, rgba(52, 211, 153, .14), transparent 60%), var(--card); } .bn-vh.good .ic { background: var(--mint-soft); color: var(--mint); }
+.bn-vh.warn { border-color: rgba(251, 191, 36, .35); background: radial-gradient(120% 160% at 0% 0%, rgba(251, 191, 36, .12), transparent 60%), var(--card); } .bn-vh.warn .ic { background: var(--amber-soft); color: var(--amber); }
+.bn-vh.info { border-color: rgba(var(--blue-rgb), .35); } .bn-vh.info .ic { background: rgba(var(--blue-rgb), .14); color: var(--blue-2); }
+.bn-recs { margin: 0; padding: 0; list-style: none; counter-reset: rec; display: flex; flex-direction: column; gap: 6px; }
+.bn-recs li { counter-increment: rec; display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 11px 14px; border-radius: 12px; background: var(--card); border: 1px solid var(--line-soft); font-size: 13px; line-height: 1.5; }
+.bn-recs li::before { content: counter(rec); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 12px; background: var(--well); color: var(--muted); }
+.bn-recs li.bad::before { background: var(--red-soft); color: var(--red); } .bn-recs li.warn::before { background: var(--amber-soft); color: var(--amber); }
+.bn-recs li.good::before { content: "✓"; background: var(--mint-soft); color: var(--mint); } .bn-recs li.info::before { background: rgba(var(--blue-rgb), .14); color: var(--blue-2); }
+.bn-recs li > span { grid-column: 2; } .bn-recs li > button { grid-column: 3; white-space: nowrap; }
+
+/* ================= 4.2: Clean — simple mode ================= */
+.clean-mode { padding: 3px; border-radius: 12px; }
+.clean-mode button { height: 30px; min-width: 0; padding: 0 12px; font-size: 12.5px; border-radius: 9px; }
+#cleanBody.simple .cards, #cleanBody.simple .table, #cleanBody.simple #btnCleanSel, #cleanBody.simple .legend, #cleanBody.simple #heroLinks { display: none !important; }
+.easy { display: none; }
+#cleanBody.simple .easy { display: flex; flex-direction: column; gap: 12px; margin: 14px 26px 22px; }
+.easy-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.easy-tile { background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-l); padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+.easy-tile .t { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 14px; }
+.easy-tile .t svg { width: 20px; height: 20px; color: var(--blue-2); }
+.easy-tile b { font-size: 26px; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.easy-tile span.d { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+.easy-safe { display: flex; flex-direction: column; gap: 8px; padding: 16px 18px; border-radius: var(--r-l); background: radial-gradient(120% 160% at 0% 0%, rgba(52, 211, 153, .10), transparent 60%), var(--card); border: 1px solid rgba(52, 211, 153, .25); }
+.easy-safe b { font-size: 14px; }
+.easy-safe div { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.easy-safe div svg { width: 17px; height: 17px; color: var(--mint); flex: none; margin-top: 1px; }
+.easy-more { align-self: flex-start; }
+@media (max-width: 900px) { .easy-tiles { grid-template-columns: 1fr; } }
 /* ================= Segmented pill ================= */
 .seg { position: relative; display: inline-flex; padding: 4px; border-radius: 15px; background: var(--well); border: 1px solid var(--line-soft); }
 .seg button { position: relative; z-index: 1; border: 0; background: none; height: 34px; min-width: 48px; padding: 0 12px; border-radius: 11px; color: var(--muted); font-weight: 600; font-size: 12.5px; cursor: pointer; transition: color .2s, transform .2s var(--spring); display: inline-flex; align-items: center; gap: 8px; justify-content: center; }
@@ -2316,7 +2350,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
       <div class="head">
         <div class="head-ico" data-icon="clean"></div>
         <div><h1 data-i="clean.title"></h1><div class="sub" data-i="clean.sub"></div></div>
-        <div class="head-r"><button class="btn icon-btn" id="btnScan" data-i-title="btn.scan" disabled><span data-icon="refresh"></span></button></div>
+        <div class="head-r"><div class="seg clean-mode" id="cleanMode" data-i-title="cm.t"></div><button class="btn icon-btn" id="btnScan" data-i-title="btn.scan" disabled><span data-icon="refresh"></span></button></div>
       </div>
       <div class="clean-body" id="cleanBody">
       <div class="sticky-wrap"><div class="sticky" id="sticky">
@@ -2352,6 +2386,14 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
       <div class="notice" id="openNotice" hidden><p id="openText"></p><button class="btn small primary" id="btnCloseApps"></button><button class="btn small" id="btnRecheck" data-i="notice.recheck"></button></div>
       <div class="notice info" id="pendingNotice" hidden><p id="pendingText"></p></div>
       <div class="notice info" id="adminNotice" hidden><p data-i="notice.noadmin"></p></div>
+      <div class="easy" id="easy">
+        <div class="easy-tiles" id="easyTiles"></div>
+        <div class="easy-safe"><b data-i="cm.safeT"></b>
+          <div><span data-icon="check"></span><span data-i="cm.safe1"></span></div>
+          <div><span data-icon="check"></span><span data-i="cm.safe2"></span></div>
+          <div><span data-icon="check"></span><span data-i="cm.safe3"></span></div></div>
+        <button class="linkbtn easy-more" id="easyMore" data-i="cm.more"></button>
+      </div>
       <div class="cards" id="cards" data-fade="80"></div>
       <div class="table">
         <div class="tbar">
@@ -3806,6 +3848,43 @@ bg: {
   "bn.n.upgrade.ram": "Най-слабото звено е паметта — там ъпгрейдът ще се усети най-много.",
   "bn.n.upgrade.disk": "Най-слабото звено е дискът — SSD (или по-бърз SSD) ще се усети най-много.",
   "bn.n.upgrade.gpu": "Най-слабото звено е видеокартата — там ъпгрейдът ще се усети най-много в игрите.",
+  "bn.vh.ok": "Няма ботълнек — всичко е наред", "bn.vh.okFix": "Няма ботълнек, но има {0} неща за оправяне", "bn.vh.cpu": "Има ботълнек: видеокартата е по-силна от процесора",
+  "bn.vh.gpu": "Има ботълнек: процесорът е по-силен от видеокартата", "bn.vh.fix": "{0} неща за оправяне", "bn.vh.allOk": "Всичко е наред",
+  "bn.vh.str.gpu": "По-силна е видеокартата — процесорът дава около {0}% от нужното ѝ в игрите.",
+  "bn.vh.str.cpu": "По-силен е процесорът — той дава {0}% от нужното на видеокартата, тя е ограничението.",
+  "bn.vh.str.even": "Процесорът и видеокартата си пасват — процесорът дава {0}% от нужното на картата.", "bn.recs": "Какво да направиш",
+  "bn.r.none": "Няма нищо за оправяне — компютърът работи както трябва.",
+  "bn.r.tryLong": "Пусни „Дълъг тест“ веднъж — той показва дали охлаждането издържа при продължително натоварване.",
+  "bn.r.cpuScaleLow": "Затвори тежките програми на заден план и провери, че лаптопът е на захранване; после пусни теста пак.",
+  "bn.r.cpuBusy": "Затвори програмите, които товарят процесора (виж „Процеси“), и пусни теста пак.",
+  "bn.r.cpuThrottle": "Подобри охлаждането на процесора: почисти праха, смени термопастата, провери вентилаторите — после пусни „Дълъг тест“ за проверка.",
+  "bn.r.ramXMP": "Влез в BIOS и включи {2} — паметта ще работи на {1} MHz вместо на {0} MHz. Безплатно ускорение.",
+  "bn.r.ramSingle": "Добави втора, еднаква плочка памет — двуканалният режим почти удвоява скоростта на паметта.",
+  "bn.r.ramMixed": "Ако има нестабилност, сложи еднакви плочки памет (същия модел и размер).",
+  "bn.r.nvmeSlow": "Сложи NVMe диска {0} в слота, който е директно към процесора (виж ръководството на дъното), и провери температурата му.",
+  "bn.r.ssdSlow": "Провери здравето на SSD-то {0} и освободи място — ако е повредено, направи резервно копие.",
+  "bn.r.hdd": "Премести Windows и игрите на SSD — това е най-голямото ускорение за {0}.",
+  "bn.r.diskFull": "Освободи място на {0} (почистване, големи файлове) — SSD-то ще стане по-бързо.",
+  "bn.r.gpuIGP": "Задай „Висока производителност“ в настройките за графика на Windows, за да ползва {0}.",
+  "bn.r.gpuLoad": "Пусни теста пак със затворени други програми — ако картата пак не се натоварва, сравни с предишните си резултати.",
+  "bn.r.gpuHot": "Почисти праха от видеокартата, провери вентилаторите и въздушния поток в кутията; после „Дълъг тест“ за проверка.",
+  "bn.r.gpuWarm": "По-добро охлаждане на видеокартата (вентилатори, въздух в кутията) ще ѝ даде запас.",
+  "bn.r.gpuClock": "В драйвера на видеокартата задай режим „Предпочитай максимална производителност“.",
+  "bn.r.gpuPCIe": "Сложи видеокартата в горния PCIe слот (x16) и провери настройките за PCIe в BIOS.",
+  "bn.r.gpuThrottle": "Видеокартата загрява при дълго натоварване — подобри охлаждането и пусни „Дълъг тест“ пак.",
+  "bn.r.balCPU": "В игрите пускай по-висока резолюция или графика (така натоварването минава към видеокартата), ползвай „Режим Игри“ и затваряй програмите на заден план. Дългосрочно — по-бърз процесор.",
+  "bn.r.balGPU": "За повече FPS: по-ниски настройки на графиката или DLSS/FSR; дългосрочно — по-силна видеокарта.",
+  "bn.r.upgrade.cpu": "Следващият ъпгрейд: процесор — там ще се усети най-много.", "bn.r.upgrade.ram": "Следващият ъпгрейд: памет — там ще се усети най-много.",
+  "bn.r.upgrade.disk": "Следващият ъпгрейд: по-бърз SSD — там ще се усети най-много.", "bn.r.upgrade.gpu": "Следващият ъпгрейд: видеокарта — в игрите ще се усети най-много.",
+  "bn.a.procs": "Процеси", "bn.a.clean": "Почисти", "bn.a.health": "Здраве на диска", "bn.a.gfx": "Настройки за графика", "bn.a.gpu": "Видеокарта", "bn.a.game": "Режим Игри",
+  "bn.a.again": "Пусни пак", "bn.a.long": "Дълъг тест", "cm.t": "Изглед: лесен или подробен", "cm.simple": "Лесно", "cm.detailed": "Подробно",
+  "cm.g.win": "Временни файлове на Windows", "cm.g.winD": "Кеш, стари отчети за грешки, временни файлове на системата.", "cm.g.web": "Браузъри",
+  "cm.g.webD": "Само кеш — паролите, историята и отметките остават.", "cm.g.apps": "Програми и игри", "cm.g.appsD": "Кеш на Discord, Steam, лаунчери и стари инсталатори на драйвери.",
+  "cm.safeT": "Безопасно е", "cm.safe1": "Трият се само кешове и временни файлове, които програмите правят наново.",
+  "cm.safe2": "Твоите файлове, снимки, пароли и история не се пипат.", "cm.safe3": "Преди почистването се прави точка за възстановяване (ако е включена в Настройки).",
+  "cm.more": "Искам да избера сам какво да се чисти", "hm.bench": "Скорост", "hm.bench0": "Не е тествано",
+  "hm.bench0D": "Пусни бенчмарка, за да видиш колко бърз е компютърът и има ли ботълнек.", "hm.benchBtn": "Бенчмарк", "hm.benchRun": "Тествай", "hm.benchFix": "{0} неща за оправяне",
+  "hm.benchOK": "всичко е наред", "hm.benchBal.balanced": "без ботълнек", "hm.benchBal.cpu": "процесорът спира видеокартата", "hm.benchBal.gpu": "видеокартата е лимитът",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -4679,6 +4758,40 @@ en: {
   "bn.n.upgrade.ram": "The weakest part is the memory — an upgrade there would be felt the most.",
   "bn.n.upgrade.disk": "The weakest part is the drive — an SSD (or a faster one) would be felt the most.",
   "bn.n.upgrade.gpu": "The weakest part is the graphics card — an upgrade there would be felt the most in games.",
+  "bn.vh.ok": "No bottleneck — everything is fine", "bn.vh.okFix": "No bottleneck, but {0} things to fix", "bn.vh.cpu": "Bottleneck: the graphics card is stronger than the processor",
+  "bn.vh.gpu": "Bottleneck: the processor is stronger than the graphics card", "bn.vh.fix": "{0} things to fix", "bn.vh.allOk": "Everything is fine",
+  "bn.vh.str.gpu": "The graphics card is the stronger part — the processor gives about {0}% of what it needs in games.",
+  "bn.vh.str.cpu": "The processor is the stronger part — it gives {0}% of what the graphics card needs; the card is the limit.",
+  "bn.vh.str.even": "The processor and graphics card match — the processor gives {0}% of what the card needs.", "bn.recs": "What to do",
+  "bn.r.none": "Nothing to fix — the PC works as it should.", "bn.r.tryLong": "Run the “Long test” once — it shows whether the cooling holds up under sustained load.",
+  "bn.r.cpuScaleLow": "Close heavy background programs and make sure a laptop is plugged in; then run the test again.",
+  "bn.r.cpuBusy": "Close the programs that load the processor (see Processes) and run the test again.",
+  "bn.r.cpuThrottle": "Improve the processor's cooling: clean the dust, renew the thermal paste, check the fans — then run the “Long test” to check.",
+  "bn.r.ramXMP": "Enter the BIOS and turn on {2} — the memory then runs at {1} MHz instead of {0} MHz. A free speed-up.",
+  "bn.r.ramSingle": "Add a second, identical memory stick — dual channel nearly doubles the memory speed.",
+  "bn.r.ramMixed": "If there is instability, use identical memory sticks (same model and size).",
+  "bn.r.nvmeSlow": "Put the NVMe drive {0} in the slot wired to the processor (see the motherboard manual) and check its temperature.",
+  "bn.r.ssdSlow": "Check the health of the SSD {0} and free up space — if it is failing, back it up.", "bn.r.hdd": "Move Windows and games to an SSD — the biggest speed-up for {0}.",
+  "bn.r.diskFull": "Free up space on {0} (cleaning, large files) — the SSD gets faster.", "bn.r.gpuIGP": "Set “High performance” in Windows' Graphics settings so it uses {0}.",
+  "bn.r.gpuLoad": "Run the test again with other programs closed — if the card still is not loaded, compare with your earlier results.",
+  "bn.r.gpuHot": "Clean the dust off the graphics card, check the fans and the airflow in the case; then run the “Long test” to check.",
+  "bn.r.gpuWarm": "Better cooling for the graphics card (fans, case airflow) gives it headroom.",
+  "bn.r.gpuClock": "In the graphics driver, set the power mode to “Prefer maximum performance”.",
+  "bn.r.gpuPCIe": "Put the graphics card in the top PCIe slot (x16) and check the PCIe settings in the BIOS.",
+  "bn.r.gpuThrottle": "The graphics card heats up under long load — improve its cooling and run the “Long test” again.",
+  "bn.r.balCPU": "In games use a higher resolution or graphics settings (that moves the load to the graphics card), use Game mode and close background programs. In the long run — a faster processor.",
+  "bn.r.balGPU": "For more FPS: lower graphics settings or DLSS/FSR; in the long run — a stronger graphics card.",
+  "bn.r.upgrade.cpu": "Next upgrade: the processor — it would be felt the most.", "bn.r.upgrade.ram": "Next upgrade: memory — it would be felt the most.",
+  "bn.r.upgrade.disk": "Next upgrade: a faster SSD — it would be felt the most.", "bn.r.upgrade.gpu": "Next upgrade: the graphics card — it would be felt the most in games.",
+  "bn.a.procs": "Processes", "bn.a.clean": "Clean", "bn.a.health": "Drive health", "bn.a.gfx": "Graphics settings", "bn.a.gpu": "Graphics card", "bn.a.game": "Game mode",
+  "bn.a.again": "Run again", "bn.a.long": "Long test", "cm.t": "View: simple or detailed", "cm.simple": "Simple", "cm.detailed": "Detailed", "cm.g.win": "Windows temporary files",
+  "cm.g.winD": "Caches, old error reports and the system's temporary files.", "cm.g.web": "Browsers", "cm.g.webD": "Cache only — passwords, history and bookmarks stay.",
+  "cm.g.apps": "Programs and games", "cm.g.appsD": "Caches of Discord, Steam, launchers and old driver installers.", "cm.safeT": "It is safe",
+  "cm.safe1": "Only caches and temporary files that programs make again are deleted.", "cm.safe2": "Your files, photos, passwords and history are not touched.",
+  "cm.safe3": "A restore point is made before cleaning (when it is on in Settings).", "cm.more": "I want to choose what is cleaned myself", "hm.bench": "Speed",
+  "hm.bench0": "Not tested", "hm.bench0D": "Run the benchmark to see how fast the PC is and whether there is a bottleneck.", "hm.benchBtn": "Benchmark", "hm.benchRun": "Test",
+  "hm.benchFix": "{0} things to fix", "hm.benchOK": "everything is fine", "hm.benchBal.balanced": "no bottleneck", "hm.benchBal.cpu": "the processor holds the GPU back",
+  "hm.benchBal.gpu": "the graphics card is the limit",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -5194,7 +5307,7 @@ function applyLang() {
   $$("[data-i-title]").forEach(el => { el.title = t(el.dataset.iTitle); el.setAttribute("aria-label", t(el.dataset.iTitle)); });
   $$("[data-i-ph]").forEach(el => { el.placeholder = t(el.dataset.iPh); });
   $("#keysList").innerHTML = t("keys").map(k => `<div class="key-row"><kbd>${esc(k[0])}</kbd><span>${esc(k[1])}</span></div>`).join("");
-  setupSortSeg(); paintEmptyBtn(); setupThemeSeg();
+  setupSortSeg(); paintEmptyBtn(); setupThemeSeg(); if (S.settings) setupCleanMode();
   $("#console").dataset.empty = t("rep.empty");
   $("#neverList").innerHTML = t("never").map(x => `<li>${esc(x)}</li>`).join("");
   if (S.info) {
@@ -5310,6 +5423,7 @@ function groupTotal(g, onlyChecked) {
   return s;
 }
 function renderCards() {
+  renderEasy();
   const wrap = $("#cards");
   const cards = [{ id: "all", icon: "all", name: t("filter.all") }].concat(GROUPS.map(g => ({ id: g.id, icon: g.id, name: t("g." + g.id) })));
   wrap.innerHTML = cards.map(c => {
@@ -5636,7 +5750,7 @@ $("#btnCleanAll").addEventListener("click", () => {
   const base = Object.keys(S.data).filter(id => selectable(id) && !EXTRAS.some(e => e.items && e.items.includes(id)));
   const avail = EXTRAS.filter(e => !e.items || e.items.some(selectable));
   const ex = S.settings.extras2 || {};
-  const html = avail.map(e => {
+  const html = cleanSimple() ? "" : avail.map(e => {
     const size = e.items ? e.items.reduce((s, id) => s + effSize(id), 0) : 0;
     const label = t(e.id === "ram" ? "ex.ram" : e.id === "trim" ? "ex.trim" : "ex." + e.id) + (size ? " · " + fmt(size) : "");
     // a sensitive extra is never pre-ticked from an old default, only from this dialog
@@ -8377,7 +8491,7 @@ function paintBenchAnalysis() {
   const box = $("#bnAnalysis"); if (!box) return;
   const r = BN.res;
   if (!r || BN.run || (!r.notes && !r.balance)) { box.innerHTML = ""; return; }
-  let html = `<div class="bn-an"><h3>${esc(t("bn.an.title"))}</h3>`;
+  let html = `<div class="bn-an">${bnVerdictHtml(r)}<h3>${esc(t("bn.an.title"))}</h3>`;
   const b = r.balance;
   if (b && b.verdict && b.verdict !== "unknown") {
     const tone = { balanced: "good", cpu: "warn", gpu: "info" }[b.verdict];
@@ -8391,8 +8505,49 @@ function paintBenchAnalysis() {
   const notes = (r.notes || []).filter(n => !(n.part === "pc" && /^bn\.n\.bal/.test(n.key)));
   if (notes.length) html += `<div class="bn-notes">${notes.map(n => `<div class="bn-note ${esc(n.tone)}"><span class="ic">${ICONS[BN_TONE_ICON[n.tone]] || ICONS[BN_PART_ICON[n.part]] || ""}</span>
     <div><span class="p">${esc(t("bn.part." + n.part))}</span>${esc(t(n.key, ...(n.args || []).map(a => t("bn.cls." + a) !== "bn.cls." + a ? t("bn.cls." + a) : a)))}</div></div>`).join("")}</div>`;
+  html += bnRecsHtml(r);
   html += `<div class="note-line">${esc(t("bn.an.note"))}</div></div>`;
   box.innerHTML = html;
+  box.querySelectorAll("[data-bnact]").forEach(btn => btn.addEventListener("click", () => { const a = BN_ACT[btn.dataset.bnact]; if (a) a[1](); }));
+}
+// the headline after a test: a bottleneck or not, and which part is stronger
+function bnVerdictHtml(r) {
+  const b = r.balance, notes = r.notes || [];
+  const fix = notes.filter(n => n.tone === "warn" || n.tone === "bad").length;
+  let tone = "good", title, sub = "";
+  if (b && b.verdict === "cpu") { tone = "warn"; title = t("bn.vh.cpu"); }
+  else if (b && b.verdict === "gpu") { tone = "info"; title = t("bn.vh.gpu"); }
+  else if (b && b.verdict === "balanced") { title = fix ? t("bn.vh.okFix", fix) : t("bn.vh.ok"); if (fix) tone = "warn"; }
+  else { title = fix ? t("bn.vh.fix", fix) : t("bn.vh.allOk"); if (fix) tone = "warn"; }
+  if (b && b.verdict && b.verdict !== "unknown" && b.cpuNeed > 0) {
+    const pct = Math.round(b.cpuHave / b.cpuNeed * 100);
+    const stronger = pct < 82 ? "gpu" : pct > 160 && b.verdict === "gpu" ? "cpu" : "even";
+    sub = t("bn.vh.str." + stronger, pct);
+  }
+  const ic = tone === "good" ? "check" : tone === "warn" ? "alert" : "info";
+  return `<div class="bn-vh ${tone}"><span class="ic">${ICONS[ic]}</span><div><b>${esc(title)}</b>${sub ? `<span>${esc(sub)}</span>` : ""}</div></div>`;
+}
+// what to do, worst first, with a button where the app can take you there
+const BN_ACT = {
+  procs: ["bn.a.procs", () => go("procs")], clean: ["bn.a.clean", () => go("clean")], health: ["bn.a.health", () => go("optimize")],
+  gfx: ["bn.a.gfx", () => api.openGraphicsSettings()], gpu: ["bn.a.gpu", () => go("gpu")], game: ["bn.a.game", () => go("game")],
+  again: ["bn.a.again", () => bnStart()], long: ["bn.a.long", () => { BN.opts.long = true; paintBench(); bnStart(); }],
+};
+const BN_REC = {
+  "bn.n.cpuBusy": "procs", "bn.n.cpuScaleLow": "procs", "bn.n.diskFull": "clean", "bn.n.nvmeSlow": "health", "bn.n.ssdSlow": "health",
+  "bn.n.gpuIGP": "gfx", "bn.n.gpuClock": "gpu", "bn.n.gpuLoad": "again", "bn.n.balCPU": "game",
+  "bn.n.cpuThrottle": "long", "bn.n.gpuHot": "long", "bn.n.gpuThrottle": "long", "bn.n.gpuWarm": "long",
+};
+function bnRecsHtml(r) {
+  const rank = { bad: 0, warn: 1, info: 2 };
+  const recs = (r.notes || []).filter(n => n.tone in rank).sort((a, b) => rank[a.tone] - rank[b.tone]);
+  let items = recs.map(n => ({ tone: n.tone, text: t((n.key + "").replace("bn.n.", "bn.r."), ...(n.args || [])), act: BN_REC[n.key] }))
+    .filter(x => !/^bn\.r\./.test(x.text));
+  if (!items.length) {
+    items = [{ tone: "good", text: t("bn.r.none") }];
+    if (!r.long) items.push({ tone: "info", text: t("bn.r.tryLong"), act: "long" });
+  }
+  return `<h3>${esc(t("bn.recs"))}</h3><ol class="bn-recs">${items.map(x => `<li class="${x.tone}"><span>${esc(x.text)}</span>${x.act && BN_ACT[x.act] ? `<button class="btn small" data-bnact="${x.act}">${esc(t(BN_ACT[x.act][0]))}</button>` : ""}</li>`).join("")}</ol>`;
 }
 
 /* The graphics test: WebGL 2 renders a heavy shader into an off-screen
@@ -8648,6 +8803,42 @@ on("speed-progress", d => {
 });
 $("#spRun").addEventListener("click", spRun);
 renderSp();
+
+/* =====================================================================
+   4.2 — Clean: a simple view for people who do not want the details.
+   One switch: "Simple" shows three totals, what is safe, and one button;
+   "Detailed" is the full list. The choice is remembered.
+===================================================================== */
+const EASY_GROUPS = [
+  { id: "win", icon: "windows", groups: ["system", "windows"] },
+  { id: "web", icon: "browsers", groups: ["browsers"] },
+  { id: "apps", icon: "gamepad", groups: ["apps", "gpu"] },
+];
+function cleanSimple() { return (S.settings && S.settings.cleanMode) === "simple"; }
+function setupCleanMode() {
+  const el = $("#cleanMode"); if (!el) return;
+  makeSeg(el, [{ v: "simple", label: t("cm.simple") }, { v: "detailed", label: t("cm.detailed") }], cleanSimple() ? "simple" : "detailed", v => {
+    S.settings.cleanMode = v; storeSettings(); applyCleanMode();
+  });
+  applyCleanMode();
+}
+function applyCleanMode() {
+  const body = $("#cleanBody"); if (!body) return;
+  body.classList.toggle("simple", cleanSimple());
+  if (cleanSimple()) renderEasy();
+}
+function renderEasy() {
+  const box = $("#easyTiles"); if (!box || !cleanSimple()) return;
+  box.innerHTML = EASY_GROUPS.map(e => {
+    // what "Clean everything" takes from these groups (the extras it asks about are not counted)
+    const ids = e.groups.flatMap(gid => (GROUPS.find(x => x.id === gid) || { items: [] }).items)
+      .filter(id => visible(id) && selectable(id) && !EXTRAS.some(x => x.items && x.items.includes(id)));
+    const total = S.analyzed ? ids.reduce((sum, id) => sum + effSize(id), 0) : -1;
+    return `<div class="easy-tile" data-easy="${e.id}"><div class="t">${ICONS[e.icon] || ""}<span>${esc(t("cm.g." + e.id))}</span></div>
+      <b>${total < 0 ? `<span class="skel" style="width:80px"></span>` : total > 0 ? fmt(total) : "—"}</b><span class="d">${esc(t("cm.g." + e.id + "D"))}</span></div>`;
+  }).join("");
+}
+$("#easyMore").addEventListener("click", () => { S.settings.cleanMode = "detailed"; storeSettings(); setupCleanMode(); });
 
 /* Accent colours */
 const ACCENTS = {
@@ -10220,6 +10411,7 @@ function homeLoad(force) {
   want("rp", 300e3, () => (S.info && !S.info.admin) ? { points: [], noAdmin: true } : api.restorePointList());
   want("probs", 30e3, () => api.logProblems(120));
   want("upd", 1800e3, () => api.wingetUpdates(!!force));
+  want("bench", 120e3, () => api.benchHistory().then(h => ({ list: h || [] })));
   renderHome();
 }
 // what pulls the score down: [{ id, sev: "warn" | "bad", pts }]
@@ -10240,6 +10432,8 @@ function homeIssues() {
   }
   const errs = homeErrors().length;
   if (errs) add("probs", errs >= 5 ? "bad" : "warn", Math.min(15, errs * 3));
+  const lb = HM.bench && HM.bench.list && HM.bench.list[0];
+  if (lb && (lb.notes || []).some(n => n.tone === "bad")) add("bench", "warn", 6);
   return out;
 }
 function homeErrors() { return (Array.isArray(HM.probs) ? HM.probs : []).filter(e => e.level === "error" && Date.now() - (e.t || 0) < 7 * 86400e3); }
@@ -10292,6 +10486,13 @@ function renderHome() {
   // program updates
   const u = HM.upd, ups = homeUpdates();
   cards.push(["upd", "download", t("hm.upd"), u ? u.available === false ? "—" : nfi(ups.length) : "…", u ? u.available === false ? t("wg.missing") : u.error ? u.error : ups.length ? t("hm.updD", ups.slice(0, 3).map(x => x.name).join(", ")) : t("hm.updD0") : t("hm.updChecking"), [t("hm.updBtn"), () => go("programs", { prTab: "updates" })]]);
+  // performance: the last benchmark and what it found
+  const lb = HM.bench && HM.bench.list && HM.bench.list[0];
+  const lbFix = lb ? (lb.notes || []).filter(n => n.tone === "warn" || n.tone === "bad").length : 0;
+  const lbBal = lb && lb.balance && lb.balance.verdict;
+  cards.push(["bench", "bench", t("hm.bench"), lb ? nf(0).format(lb.score) + " " + t("bn.points") : HM.bench ? t("hm.bench0") : "…",
+    lb ? [lbBal && lbBal !== "unknown" ? t("hm.benchBal." + lbBal) : "", lbFix ? t("hm.benchFix", lbFix) : lb.notes ? t("hm.benchOK") : ""].filter(Boolean).join(" · ") || fmtDateTime(lb.at) : t("hm.bench0D"),
+    [t(lb ? "hm.benchBtn" : "hm.benchRun"), () => go("bench")]]);
   $("#hmCards").innerHTML = cards.map((c, i) => `<div class="hm-card ${sev(c[0])}" data-hm="${c[0]}"><div class="hm-top"><span class="hm-ic">${ICONS[c[1]]}</span><span class="hm-t">${esc(c[2])}</span>${dot(c[0])}</div>
     <div class="hm-val">${esc(c[3])}</div><div class="hm-d" title="${esc(c[4])}">${esc(c[4])}</div><button class="btn small" data-hmact="${i}" ${c[5][2] ? "disabled" : ""}>${esc(c[5][0])}</button></div>`).join("");
   $$("#hmCards [data-hmact]").forEach(b => b.addEventListener("click", () => cards[+b.dataset.hmact][5][1]()));
@@ -11159,6 +11360,7 @@ async function init() {
     if (st.mem && typeof st.mem === "object") Object.assign(s.mem, st.mem);
     if (st.sort === "group" || st.sort === "size") s.sort = st.sort;
     if (typeof st.hideEmpty === "boolean") s.hideEmpty = st.hideEmpty;
+    if (st.cleanMode === "simple" || st.cleanMode === "detailed") s.cleanMode = st.cleanMode;
     if (typeof st.accent === "string" && ACCENTS[st.accent]) s.accent = st.accent;
     // 3.1: the new look once for everyone; an accent picked earlier (not the old default) stays
     if (st.theme === "noir" || st.theme === "ocean") s.theme = st.theme;
@@ -11508,7 +11710,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "4.1.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "4.2.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -12113,11 +12315,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "4.1.0", latest: nw ? "4.2.0" : "4.1.0", newer: nw, name: "xKi4o Cleaner 4.2.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.2.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "4.2.0", latest: nw ? "4.3.0" : "4.2.0", newer: nw, name: "xKi4o Cleaner 4.3.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.3.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders

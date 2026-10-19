@@ -3,6 +3,22 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.2.0 — 2026-10-20
+
+### English
+- Benchmark: a clear headline after the test — "No bottleneck — everything is fine", or which part is stronger (the processor or the graphics card) and by how much
+- Benchmark: "What to do" — real steps, worst first, with a button to the right place (Processes, Clean, drive health, Windows graphics settings, Game mode, run the long test)
+- Benchmark: more exact results — a short warm-up so the processor reaches its boost clock, one core is the best of three runs, and the app runs a little ahead of other programs while measuring
+- Clean: one switch for a simple view — three totals (Windows, browsers, programs and games), what is safe, and one button; "Detailed" is the full list as before
+- PC health: a new Speed card with the last benchmark, its bottleneck verdict and what it found
+
+### Български
+- Бенчмарк: ясен извод след теста — „Няма ботълнек — всичко е наред“ или коя част е по-силна (процесорът или видеокартата) и с колко
+- Бенчмарк: „Какво да направиш“ — истински стъпки, най-важните първо, с бутон към правилното място (Процеси, Почистване, здраве на диска, настройки за графика на Windows, Режим Игри, дълъг тест)
+- Бенчмарк: по-точни резултати — кратко загряване, за да стигне процесорът турбо честотата, едно ядро е най-доброто от три измервания, а програмата работи малко пред другите, докато мери
+- Почистване: един бутон за лесен изглед — три суми (Windows, браузъри, програми и игри), какво е безопасно и един бутон; „Подробно“ е пълният списък както досега
+- Здраве на PC: нова карта „Скорост“ с последния бенчмарк, извода за ботълнек и какво е намерил
+
 ## 4.1.0 — 2026-10-19
 
 ### English
