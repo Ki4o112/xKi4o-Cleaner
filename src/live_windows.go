@@ -46,7 +46,7 @@ func netReading() netLive {
 	cur := netSample{at: time.Now()}
 	for i, a := range live.adapters {
 		row := windows.MibIfRow2{InterfaceIndex: uint32(a.Index)}
-		if err := windows.GetIfEntry2Ex(0, &row); err != nil { // MibIfEntryNormal: with the counters
+		if !ifEntry(&row) {
 			continue
 		}
 		cur.rx += row.InOctets
@@ -61,6 +61,26 @@ func netReading() netLive {
 		live.prev = cur
 	}
 	return n
+}
+
+// GetIfEntry2Ex is only in Windows 10 1703 and newer; older Windows (7, 8,
+// 8.1, early 10) have GetIfEntry2, which reads the same row. Calling a missing
+// function would panic, so each is looked up first.
+var (
+	iphlp          = windows.NewLazySystemDLL("iphlpapi.dll")
+	procIfEntry2Ex = iphlp.NewProc("GetIfEntry2Ex")
+	procIfEntry2   = iphlp.NewProc("GetIfEntry2")
+)
+
+func ifEntry(row *windows.MibIfRow2) bool {
+	if procIfEntry2Ex.Find() == nil {
+		return windows.GetIfEntry2Ex(0, row) == nil // MibIfEntryNormal: with the counters
+	}
+	if procIfEntry2.Find() == nil {
+		r, _, _ := procIfEntry2.Call(uintptr(unsafe.Pointer(row)))
+		return r == 0
+	}
+	return false
 }
 
 // ---------------------------------------------------------------- graphics

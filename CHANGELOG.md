@@ -3,6 +3,18 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 3.9.1 — 2026-10-19
+
+### English
+- Merge connections: on Windows older than 10 it now says plainly that net-merge needs Windows 10 or 11, instead of failing with "not a valid Win32 application"
+- Merge connections: when net-merge cannot start, the reason is shown, and a "Reinstall net-merge" option is there
+- The live network speed on the dashboard works on older Windows too (it was failing there with a "GetIfEntry2Ex" error)
+
+### Български
+- Обединяване на мрежи: на Windows по-стар от 10 вече казва ясно, че net-merge иска Windows 10 или 11, вместо грешка „not a valid Win32 application“
+- Обединяване на мрежи: когато net-merge не може да стартира, се показва защо, и има „Инсталирай net-merge наново“
+- Скоростта на мрежата на началния екран работи и на по-стар Windows (там даваше грешка „GetIfEntry2Ex“)
+
 ## 3.9.0 — 2026-10-18
 
 ### English

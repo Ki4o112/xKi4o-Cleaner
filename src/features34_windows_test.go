@@ -5,11 +5,14 @@ package main
 import (
 	"archive/zip"
 	"encoding/json"
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
+
+	"golang.org/x/sys/windows"
 )
 
 // The connection check only sends pings (read only, also on a real PC).
@@ -183,4 +186,33 @@ func TestNMLiveStatus(t *testing.T) {
 		}
 		t.Logf("net-merge.log (last %d lines):\n%s", len(lines), strings.Join(lines, "\n"))
 	}
+}
+
+// Older Windows: net-merge's files need Windows 10, and the live network
+// reading falls back to GetIfEntry2 instead of panicking.
+func TestNMOldWindowsAndIfEntry(t *testing.T) {
+	ok, name := nmOSOK()
+	v := windows.RtlGetVersion()
+	if ok != (v.MajorVersion >= 10) {
+		t.Fatalf("nmOSOK %v for %d.%d", ok, v.MajorVersion, v.MinorVersion)
+	}
+	msg := nmRunErr(&os.PathError{Op: "fork/exec", Path: "net-merge.exe", Err: windows.ERROR_BAD_EXE_FORMAT})
+	if ok && msg != T("nm.err.badExe") || !ok && msg != T("nm.err.os", name) {
+		t.Fatalf("bad exe message: %q", msg)
+	}
+	if nmRunErr(errors.New("x")) != "x" {
+		t.Fatal("other errors keep their text")
+	}
+	if st := nmState(); st.Unsupported == ok {
+		t.Fatalf("unsupported=%v on %d.%d", st.Unsupported, v.MajorVersion, v.MinorVersion)
+	}
+	read, tried := 0, 32
+	for i := 1; i <= tried; i++ { // adapter numbers; missing ones just read nothing
+		row := windows.MibIfRow2{InterfaceIndex: uint32(i)}
+		if ifEntry(&row) {
+			read++
+		}
+	}
+	t.Logf("Windows %d.%d build %d: GetIfEntry2Ex %v, GetIfEntry2 %v, %d of %d adapters read",
+		v.MajorVersion, v.MinorVersion, v.BuildNumber, procIfEntry2Ex.Find() == nil, procIfEntry2.Find() == nil, read, tried)
 }

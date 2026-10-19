@@ -16,6 +16,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -25,6 +26,8 @@ import (
 	"sync/atomic"
 	"syscall"
 	"time"
+
+	"golang.org/x/sys/windows"
 )
 
 const nmReleases = "https://github.com/rohit267/net-merge/releases/latest"
@@ -77,9 +80,13 @@ type nmStatus struct {
 	// Balance is how the user wants connections shared ("auto": by measured
 	// speed, net-merge's default; "even": the same for every adapter).
 	// RunBalance is what the running net-merge actually uses ("" = not running).
-	Balance    string `json:"balance"`
-	RunBalance string `json:"runBalance,omitempty"`
-	Error      string `json:"error,omitempty"`
+	// Unsupported: net-merge is built for Windows 10 and 11 only, and this PC
+	// runs an older Windows (OS names it, e.g. "Windows 7").
+	Unsupported bool   `json:"unsupported,omitempty"`
+	OS          string `json:"os,omitempty"`
+	Balance     string `json:"balance"`
+	RunBalance  string `json:"runBalance,omitempty"`
+	Error       string `json:"error,omitempty"`
 }
 
 // nmExe finds net-merge.exe: the app's own folder first (where it unpacks it),
@@ -119,6 +126,11 @@ func nmTrayExe(exe string) string {
 // and unpacks the program files into the app's own folder. Only github.com is
 // accepted and only the known files are written (no path escapes the folder).
 func nmInstall() nmStatus {
+	if ok, os := nmOSOK(); !ok {
+		st := nmState()
+		st.Error = T("nm.err.os", os)
+		return st
+	}
 	if !nmBusy.CompareAndSwap(false, true) {
 		return nmState()
 	}
@@ -318,8 +330,38 @@ type nmNIC struct {
 	Peak            float64 // bytes/s, the most measured through it
 }
 
+// nmOSOK: net-merge's programs need Windows 10 or newer (their files are
+// marked for Windows 10; older Windows refuses to start them with "%1 is not
+// a valid Win32 application").
+func nmOSOK() (bool, string) {
+	v := windows.RtlGetVersion()
+	if v.MajorVersion >= 10 {
+		return true, ""
+	}
+	name := map[uint32]string{1: "Windows 7", 2: "Windows 8", 3: "Windows 8.1"}[v.MinorVersion]
+	if v.MajorVersion != 6 || name == "" {
+		name = fmt.Sprintf("Windows %d.%d", v.MajorVersion, v.MinorVersion)
+	}
+	return false, name
+}
+
+// nmRunErr turns a start error into words: a file Windows will not run is
+// either an older Windows or a damaged download.
+func nmRunErr(err error) string {
+	if errors.Is(err, windows.ERROR_BAD_EXE_FORMAT) {
+		if ok, os := nmOSOK(); !ok {
+			return T("nm.err.os", os)
+		}
+		return T("nm.err.badExe")
+	}
+	return err.Error()
+}
+
 func nmState() nmStatus {
 	s := nmStatus{Adapters: []nmAdapter{}, Busy: nmBusy.Load()}
+	if ok, os := nmOSOK(); !ok {
+		s.Unsupported, s.OS = true, os
+	}
 	s.Path = nmExe()
 	s.Installed = s.Path != ""
 	s.Running = len(procPIDs(map[string]bool{"net-merge.exe": true, "net-merge-tray.exe": true})) > 0
@@ -549,6 +591,11 @@ func nmSet(on bool) nmStatus {
 	if exe == "" {
 		return nmStatus{Error: T("nm.err.notInstalled")}
 	}
+	if ok, os := nmOSOK(); !ok {
+		st := nmState()
+		st.Error = T("nm.err.os", os)
+		return st
+	}
 	if !nmBusy.CompareAndSwap(false, true) {
 		return nmState()
 	}
@@ -558,16 +605,30 @@ func nmSet(on bool) nmStatus {
 		if !nmRunning() {
 			// start net-merge's tray with the saved sharing choice; it
 			// self-elevates with Windows' own UAC prompt when needed
-			if err := nmStartTray(exe, nmTrayArgs(nmBalance(), false)); err != nil {
+			err := nmStartTray(exe, nmTrayArgs(nmBalance(), false))
+			if err != nil {
 				op.fail("", err.Error(), nil)
-				if nmBalance() == "even" && !nmRunning() {
-					_ = nmStartTray(exe, nmTrayArgs("auto", false))
+				if nmBalance() == "even" && !errors.Is(err, windows.ERROR_BAD_EXE_FORMAT) && !nmRunning() {
+					err = nmStartTray(exe, nmTrayArgs("auto", false))
 				}
+			}
+			if err != nil && !nmRunning() {
+				// it could not start at all: say why instead of trying "on"
+				op.end("", map[string]any{"on": on})
+				st := nmState()
+				st.Error = nmRunErr(err)
+				return st
 			}
 		}
 		_, _, err := runQuiet(20*time.Second, exe, "on")
 		if err != nil {
 			op.fail("", err.Error(), nil)
+			if errors.Is(err, windows.ERROR_BAD_EXE_FORMAT) {
+				op.end("", map[string]any{"on": on})
+				st := nmState()
+				st.Error = nmRunErr(err)
+				return st
+			}
 		}
 	} else {
 		_, _, err := runQuiet(20*time.Second, exe, "off")

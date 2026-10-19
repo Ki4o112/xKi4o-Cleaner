@@ -247,6 +247,8 @@ var texts = map[string][2]string{ // [bg, en]
 	"log.nmSet":           {"Обединяване на мрежи: %s", "Merge connections: %s"},
 	"nm.err.notInstalled": {"net-merge не е инсталиран", "net-merge is not installed"},
 	"log.nmBalance":       {"Обединяване на мрежи: разпределяне %s", "Merge connections: sharing %s"},
+	"nm.err.os":           {"net-merge работи само на Windows 10 и 11, а този компютър е с %s", "net-merge only runs on Windows 10 and 11, and this PC has %s"},
+	"nm.err.badExe":       {"Файловете на net-merge са повредени (може Defender да ги е спрял) — натисни „Инсталирай наново“", "net-merge's files are damaged (Defender may have stopped them) — press “Reinstall”"},
 	"nm.err.restart":      {"net-merge не се затвори — опитай пак", "net-merge did not close — try again"},
 	"nm.err.even":         {"Тази версия на net-merge не поддържа разпределяне поравно — остава автоматично", "This net-merge version does not support even sharing — staying on automatic"},
 	"log.nmInstall":       {"Сваляне и разархивиране на net-merge", "Downloading and unpacking net-merge"},
