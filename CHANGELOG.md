@@ -3,6 +3,18 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.2.1 — 2026-10-20
+
+### English
+- Benchmark: the bottleneck check now uses published test data (Tom's Hardware's GPU and CPU benchmark hierarchies: average frames per second over many games) instead of the app's own points, which wrongly reported a bottleneck for pairs like a Ryzen 5 2600 with a GTX 1660 Super
+- Benchmark: the verdict is given for 1080p, 1440p and 4K, with your screen's resolution marked, and says how many frames per second the processor and the graphics card can each deliver
+- Benchmark: for a processor or graphics card with no published tests (laptop chips, integrated graphics) no bottleneck verdict is given instead of a guess
+
+### Български
+- Бенчмарк: проверката за ботълнек вече ползва публикувани тестове (йерархиите на видеокарти и процесори на Tom's Hardware — средни кадри в секунда от много игри) вместо собствените точки на програмата, които грешно показваха ботълнек за двойки като Ryzen 5 2600 с GTX 1660 Super
+- Бенчмарк: изводът е за 1080p, 1440p и 4K, като резолюцията на твоя екран е отбелязана, и показва колко кадъра в секунда може да даде процесорът и колко видеокартата
+- Бенчмарк: за процесор или видеокарта без публикувани тестове (лаптоп чипове, вградена графика) не се дава извод за ботълнек вместо догадка
+
 ## 4.2.0 — 2026-10-20
 
 ### English

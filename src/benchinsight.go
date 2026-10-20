@@ -52,6 +52,8 @@ type benchCtx struct {
 	DiskBus  string     `json:"diskBus"`  // NVMe, SATA, USB
 	DiskKind string     `json:"diskKind"` // SSD, HDD
 	DiskFree float64    `json:"diskFree"` // % free on the tested drive
+	ResW     int        `json:"resW"`     // the main screen
+	ResH     int        `json:"resH"`
 }
 
 type benchRAM struct {
@@ -70,89 +72,34 @@ type benchNote struct {
 	Args []string `json:"args,omitempty"`
 }
 
-// benchBalance is the bottleneck verdict.
+// benchBalance is the bottleneck verdict, from published test data (see
+// hwdata.go): how many frames per second the processor can prepare in games
+// and how many the graphics card can draw, at each resolution.
 type benchBalance struct {
-	Verdict  string `json:"verdict"` // balanced, cpu, gpu, unknown
-	GPUClass string `json:"gpuClass"`
-	GPUIndex int    `json:"gpuIndex"` // ~ % of an RTX 3060 in games
-	CPUNeed  int    `json:"cpuNeed"`  // one-core points this card likes in games
-	CPUHave  int    `json:"cpuHave"`
-	Pos      int    `json:"pos"` // 0-100 for the balance bar: 50 = even, < 50 CPU limits, > 50 GPU limits
+	Verdict  string        `json:"verdict"`           // balanced, cpu, gpu, unknown
+	Missing  string        `json:"missing,omitempty"` // unknown: cpu or gpu (no test data for that model)
+	CPUName  string        `json:"cpuName"`
+	GPUName  string        `json:"gpuName"`
+	Res      string        `json:"res"` // the resolution of the screen: 1080p, 1440p, 4K
+	CPUFps   float64       `json:"cpuFps"`
+	GPUFps   float64       `json:"gpuFps"`
+	Pct      int           `json:"pct"` // how much the slower part holds the other back (%)
+	Rows     []benchBalRow `json:"rows,omitempty"`
+	GPUClass string        `json:"gpuClass"`
+	GPUIndex int           `json:"gpuIndex"` // % of an RTX 3060 at 1080p
+	Pos      int           `json:"pos"`      // 0-100 for the balance bar: 50 = even, < 50 the processor limits, > 50 the card limits
+	Source   string        `json:"source"`
+}
+
+type benchBalRow struct {
+	Res     string  `json:"res"`
+	CPUFps  float64 `json:"cpuFps"`
+	GPUFps  float64 `json:"gpuFps"`
+	Verdict string  `json:"verdict"`
+	Pct     int     `json:"pct"`
 }
 
 // ---------------------------------------------------------------- graphics card classes
-
-// gpuIndex: rough game performance (1440p) relative to an RTX 3060 = 100.
-// Ordered longest name first where names overlap ("4070 ti super" before
-// "4070 ti" before "4070").
-var gpuTable = []struct {
-	re  *regexp.Regexp
-	idx int
-}{}
-
-var gpuList = []struct {
-	pat string
-	idx int
-}{
-	{`rtx\s*5090`, 420}, {`rtx\s*5080`, 290}, {`rtx\s*5070\s*ti`, 240}, {`rtx\s*5070`, 190}, {`rtx\s*5060\s*ti`, 135}, {`rtx\s*5060`, 115}, {`rtx\s*5050`, 90},
-	{`rtx\s*4090`, 330}, {`rtx\s*4080\s*super`, 265}, {`rtx\s*4080`, 255}, {`rtx\s*4070\s*ti\s*super`, 225}, {`rtx\s*4070\s*ti`, 210},
-	{`rtx\s*4070\s*super`, 190}, {`rtx\s*4070`, 165}, {`rtx\s*4060\s*ti`, 125}, {`rtx\s*4060`, 105},
-	{`rtx\s*3090\s*ti`, 225}, {`rtx\s*3090`, 205}, {`rtx\s*3080\s*ti`, 200}, {`rtx\s*3080`, 185}, {`rtx\s*3070\s*ti`, 155}, {`rtx\s*3070`, 145},
-	{`rtx\s*3060\s*ti`, 125}, {`rtx\s*3060`, 100}, {`rtx\s*3050`, 70},
-	{`rtx\s*2080\s*ti`, 150}, {`rtx\s*2080\s*super`, 130}, {`rtx\s*2080`, 122}, {`rtx\s*2070\s*super`, 115}, {`rtx\s*2070`, 103}, {`rtx\s*2060\s*super`, 95}, {`rtx\s*2060`, 83},
-	{`gtx\s*1660\s*(ti|super)`, 70}, {`gtx\s*1660`, 62}, {`gtx\s*1650\s*super`, 52}, {`gtx\s*1650`, 42},
-	{`gtx\s*1080\s*ti`, 108}, {`gtx\s*1080`, 85}, {`gtx\s*1070\s*ti`, 78}, {`gtx\s*1070`, 72}, {`gtx\s*1060`, 52}, {`gtx\s*1050\s*ti`, 32}, {`gtx\s*1050`, 26},
-	{`rx\s*9070\s*xt`, 240}, {`rx\s*9070`, 215}, {`rx\s*9060\s*xt`, 140},
-	{`rx\s*7900\s*xtx`, 270}, {`rx\s*7900\s*xt`, 235}, {`rx\s*7900\s*gre`, 195}, {`rx\s*7800\s*xt`, 180}, {`rx\s*7700\s*xt`, 150}, {`rx\s*7600\s*xt`, 110}, {`rx\s*7600`, 102},
-	{`rx\s*6950\s*xt`, 205}, {`rx\s*6900\s*xt`, 195}, {`rx\s*6800\s*xt`, 182}, {`rx\s*6800`, 158}, {`rx\s*6750\s*xt`, 135}, {`rx\s*6700\s*xt`, 128}, {`rx\s*6700`, 115},
-	{`rx\s*6650\s*xt`, 108}, {`rx\s*6600\s*xt`, 103}, {`rx\s*6600`, 90}, {`rx\s*6500\s*xt`, 50}, {`rx\s*5700\s*xt`, 98}, {`rx\s*5700`, 88}, {`rx\s*5600\s*xt`, 78}, {`rx\s*5500\s*xt`, 52},
-	{`rx\s*590`, 47}, {`rx\s*580`, 44}, {`rx\s*570`, 38},
-	{`arc.*b580`, 118}, {`arc.*b570`, 103}, {`arc.*a770`, 108}, {`arc.*a750`, 98}, {`arc.*a580`, 88}, {`arc.*a380`, 38},
-	{`radeon.*890m`, 42}, {`radeon.*880m`, 38}, {`radeon.*780m`, 34}, {`radeon.*760m`, 28}, {`radeon.*680m`, 28},
-	{`arc.*140v|arc.*130v`, 36}, {`intel.*arc(\(tm\))?\s*graphics`, 30}, {`iris.*xe`, 18}, {`radeon.*vega`, 14}, {`uhd\s*graphics|hd\s*graphics`, 8}, {`radeon(\(tm\))?\s*graphics`, 16},
-}
-
-func init() {
-	for _, g := range gpuList {
-		gpuTable = append(gpuTable, struct {
-			re  *regexp.Regexp
-			idx int
-		}{regexp.MustCompile(`(?i)` + g.pat), g.idx})
-	}
-}
-
-var reLaptopGPU = regexp.MustCompile(`(?i)laptop|mobile|max-q`)
-
-func gpuIndexOf(name string) int {
-	for _, g := range gpuTable {
-		if g.re.MatchString(name) {
-			// a laptop chip of the same name is clearly slower
-			if reLaptopGPU.MatchString(name) && g.idx > 60 {
-				return g.idx * 7 / 10
-			}
-			return g.idx
-		}
-	}
-	return 0
-}
-
-func gpuClassOf(idx int) string {
-	switch {
-	case idx >= 250:
-		return "enthusiast"
-	case idx >= 160:
-		return "high"
-	case idx >= 95:
-		return "upper"
-	case idx >= 60:
-		return "mid"
-	case idx >= 30:
-		return "entry"
-	case idx > 0:
-		return "igpu"
-	}
-	return ""
-}
 
 // isIntegrated: names of graphics built into the processor.
 func isIntegrated(name string) bool {
@@ -290,7 +237,7 @@ func analyzeBench(r *benchResult, c benchCtx) {
 		}
 		dedicated := ""
 		for _, n := range c.GPUs {
-			if !isIntegrated(n) && gpuIndexOf(n) > 40 {
+			if !isIntegrated(n) && gpuDataFor(n) != nil {
 				dedicated = n
 			}
 		}
@@ -347,32 +294,17 @@ func analyzeBench(r *benchResult, c benchCtx) {
 	if b := r.Balance; b != nil {
 		switch b.Verdict {
 		case "cpu":
-			add("pc", "warn", "bn.n.balCPU", b.GPUClass, itoa(b.CPUHave), itoa(b.CPUNeed))
+			add("pc", "warn", "bn.n.balCPU", b.CPUName, b.GPUName, b.Res, itoa(b.Pct), f0(b.CPUFps), f0(b.GPUFps))
 		case "gpu":
-			add("pc", "info", "bn.n.balGPU")
+			add("pc", "info", "bn.n.balGPU", b.CPUName, b.GPUName, b.Res, f0(b.CPUFps), f0(b.GPUFps))
 		case "balanced":
-			add("pc", "good", "bn.n.balOK")
-		}
-	}
-	// the biggest upgrade: a part far below the others
-	parts := map[string]int{"cpu": r.SCPU1, "ram": r.SRAM, "disk": r.SDisk, "gpu": r.SGPU}
-	var vals []int
-	for _, v := range parts {
-		if v > 0 {
-			vals = append(vals, v)
-		}
-	}
-	if len(vals) >= 3 {
-		sort.Ints(vals)
-		med := vals[len(vals)/2]
-		weak, wv := "", 1<<30
-		for k, v := range parts {
-			if v > 0 && v < wv {
-				weak, wv = k, v
+			add("pc", "good", "bn.n.balOK", b.CPUName, b.GPUName, b.Res)
+		case "unknown":
+			name := b.CPUName
+			if b.Missing == "gpu" {
+				name = b.GPUName
 			}
-		}
-		if wv < med/2 {
-			add("pc", "info", "bn.n.upgrade."+weak)
+			add("pc", "info", "bn.n.balUnknown", name)
 		}
 	}
 	order := map[string]int{"pc": 0, "cpu": 1, "gpu": 2, "ram": 3, "disk": 4}
@@ -393,46 +325,81 @@ func xmpName(cpu string) string {
 	return "XMP"
 }
 
-// bottleneck compares how fast one core is (games lean on one or two
-// threads) with how much processor speed the graphics card asks for to stay
-// busy at high frame rates. At 4K the card is the limit almost always.
+// bottleneck compares, for this processor and graphics card, how many frames
+// per second each can deliver in games (published averages over many games,
+// see hwdata.go) at the screen's resolution. It does not use this app's own
+// points: those are for comparing a PC with itself, not for this.
 func bottleneck(r *benchResult, c benchCtx) *benchBalance {
-	if r.SCPU1 <= 0 {
+	gname := ""
+	if r.GPU != nil {
+		for _, n := range []string{r.GPU.Name, r.GPU.Renderer} {
+			if gname == "" && gpuDataFor(n) != nil {
+				gname = n
+			}
+		}
+	}
+	if gname == "" {
+		for _, n := range c.GPUs {
+			if gpuDataFor(n) != nil {
+				gname = n
+				break
+			}
+		}
+	}
+	if gname == "" && r.GPU == nil && len(c.GPUs) == 0 {
 		return nil
 	}
-	name := ""
-	if r.GPU != nil {
-		name = r.GPU.Name
-		if name == "" || gpuIndexOf(name) == 0 {
-			if gpuIndexOf(r.GPU.Renderer) > 0 {
-				name = r.GPU.Renderer
-			}
-		}
-	}
-	if gpuIndexOf(name) == 0 {
-		for _, n := range c.GPUs {
-			if gpuIndexOf(n) > gpuIndexOf(name) {
-				name = n
-			}
-		}
-	}
-	idx := gpuIndexOf(name)
-	if idx == 0 {
-		return &benchBalance{Verdict: "unknown", CPUHave: r.SCPU1}
-	}
-	need := int(math.Round(700 + 2.6*float64(idx)))
-	b := &benchBalance{GPUIndex: idx, GPUClass: gpuClassOf(idx), CPUNeed: need, CPUHave: r.SCPU1}
-	ratio := float64(r.SCPU1) / float64(need)
+	b := &benchBalance{CPUName: cleanCPUName(c.CPU), Res: resClass(c.ResW, c.ResH), Source: hwDataSource}
+	cpu := cpuDataFor(c.CPU)
+	gpu := gpuDataFor(gname)
 	switch {
-	case ratio < 0.82:
-		b.Verdict = "cpu"
-	case ratio > 1.6 && idx < 120:
-		b.Verdict = "gpu"
-	default:
-		b.Verdict = "balanced"
+	case gpu != nil:
+		b.GPUName = gpu.Name
+	case r.GPU != nil && r.GPU.Name != "":
+		b.GPUName = r.GPU.Name
+	case len(c.GPUs) > 0:
+		b.GPUName = c.GPUs[0]
 	}
-	// the bar: log scale around even
-	pos := 50 + math.Log2(ratio)*35
-	b.Pos = int(math.Max(4, math.Min(96, pos)))
+	switch {
+	case cpu == nil:
+		b.Verdict, b.Missing = "unknown", "cpu"
+		return b
+	case gpu == nil:
+		b.Verdict, b.Missing = "unknown", "gpu"
+		return b
+	}
+	cfps := cpu.Index / 100 * cpuFpsAt100
+	for i, res := range []string{"1080p", "1440p", "4K"} {
+		g := gpu.FPS[i]
+		row := benchBalRow{Res: res, CPUFps: cfps, GPUFps: g}
+		switch {
+		case cfps < g*0.85: // the processor costs more than 15% of the card's frames
+			row.Verdict, row.Pct = "cpu", int(math.Round((1-cfps/g)*100))
+		case g < cfps*0.5: // the card gives less than half of what the processor could feed
+			row.Verdict, row.Pct = "gpu", int(math.Round((1-g/cfps)*100))
+		default:
+			row.Verdict = "balanced"
+		}
+		b.Rows = append(b.Rows, row)
+		if res == b.Res {
+			b.Verdict, b.Pct, b.CPUFps, b.GPUFps = row.Verdict, row.Pct, cfps, g
+		}
+	}
+	b.GPUIndex = int(math.Round(gpu.FPS[0] / gpuRef1080 * 100))
+	b.GPUClass = gpuClassOfFps(gpu.FPS[0])
+	ratio := b.CPUFps / b.GPUFps // > 1: the processor has room; < 1: it holds the card back
+	b.Pos = int(math.Max(4, math.Min(96, 50+math.Log2(ratio)*45)))
 	return b
+}
+
+// resClass: the screen's resolution as one of the three tested ones (an
+// ultrawide 3440x1440 counts as 1440p).
+func resClass(w, h int) string {
+	switch {
+	case h >= 2000 || w >= 3800:
+		return "4K"
+	case h >= 1300:
+		return "1440p"
+	}
+	return "1080p"
 }

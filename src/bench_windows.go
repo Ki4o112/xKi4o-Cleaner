@@ -76,6 +76,9 @@ func benchContext(drive string) *benchCtx {
 	for _, g := range si.GPU {
 		if !g.Virtual {
 			c.GPUs = append(c.GPUs, g.Name)
+			if c.ResW == 0 && g.W > 0 {
+				c.ResW, c.ResH = g.W, g.H
+			}
 		}
 	}
 	letter := strings.TrimSuffix(drive, ":")

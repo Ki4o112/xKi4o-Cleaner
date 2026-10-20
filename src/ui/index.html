@@ -186,6 +186,13 @@ h1 { font-size: 23px; font-weight: 700; margin: 0; letter-spacing: -.02em; }
 .bn-scale i { position: absolute; top: 50%; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 4px rgba(0, 0, 0, .35), 0 4px 12px rgba(0, 0, 0, .5); transform: translate(-50%, -50%); transition: left 1.1s var(--spring); }
 .bn-scale-l { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); }
 .bn-bal .m { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.bn-bal .m.src { font-size: 11.5px; color: var(--faint); }
+.bn-ress { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.bn-res { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: 12px; background: var(--well); border: 1px solid transparent; font-size: 12px; color: var(--muted); }
+.bn-res b { font-size: 14px; color: var(--text); }
+.bn-res.now { border-color: rgba(var(--blue-rgb), .45); background: rgba(var(--blue-rgb), .08); }
+.bn-res .vd { align-self: flex-start; }
+@media (max-width: 760px) { .bn-ress { grid-template-columns: 1fr; } }
 .bn-notes { display: flex; flex-direction: column; gap: 6px; }
 .bn-note { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; align-items: start; padding: 11px 14px; border-radius: 12px; background: var(--card); border: 1px solid var(--line-soft); font-size: 13px; line-height: 1.5; }
 .bn-note .ic { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; background: var(--well); color: var(--muted); }
@@ -3816,7 +3823,6 @@ bg: {
   "bn.an.note": "Анализът е по реално измереното на този компютър и по сензорите на видеокартата. Не е 3DMark, но показва къде е проблемът и какво да оправиш.",
   "bn.bal.title": "Ботълнек (тясно място в игрите)", "bn.bal.v.balanced": "Балансирано", "bn.bal.v.cpu": "Процесорът спира картата", "bn.bal.v.gpu": "Видеокартата е лимитът",
   "bn.bal.l": "процесорът спира", "bn.bal.c": "баланс", "bn.bal.r": "видеокартата е лимитът",
-  "bn.bal.d": "{0} е от клас „{1}“ (около {2}% от RTX 3060). За да я държи заета при висок FPS, едно ядро на процесора трябва да има около {4} точки — твоето има {3}.",
   "bn.bal.res": "На 1080p процесорът тежи най-много; на 1440p и 4K натоварването минава към видеокартата.", "bn.cls.enthusiast": "най-висок", "bn.cls.high": "висок",
   "bn.cls.upper": "горен среден", "bn.cls.mid": "среден", "bn.cls.entry": "начален", "bn.cls.igpu": "вградена графика", "bn.part.pc": "Компютър", "bn.part.cpu": "Процесор",
   "bn.part.gpu": "Видеокарта", "bn.part.ram": "Памет", "bn.part.disk": "Диск", "bn.n.cpuScale": "Ядрата работят както трябва: всички заедно дават {0}× едно ядро ({1} нишки).",
@@ -3841,18 +3847,12 @@ bg: {
   "bn.n.gpuPCIe": "Видеокартата работи на PCIe {0}.0 x{1}, а може PCIe {2}.0 x{3} — провери в кой слот е и настройките в BIOS.",
   "bn.n.gpuThrottle": "При дългия тест видеокартата забави с {0}% — загрява се. Провери охлаждането.",
   "bn.n.gpuOK": "Стойностите са нормални за {0}: {1}% натоварване, {2} MHz, {3} °C, без забавяне от топлина.",
-  "bn.n.gpuNoSensors": "Сензорите на {0} не се четат (дават ги само картите на NVIDIA) — сравнявай точките с предишните си тестове.",
-  "bn.n.balCPU": "Процесорът може да спира видеокартата в игрите (най-вече на 1080p и при висок FPS): за карта от клас „{0}“ е добре едно ядро да има около {2} точки, а твоето има {1}.",
-  "bn.n.balGPU": "В игрите видеокартата е ограничението, а процесорът има запас — най-голям скок във FPS ще даде по-силна видеокарта.",
-  "bn.n.balOK": "Процесорът и видеокартата са балансирани — няма ботълнек.", "bn.n.upgrade.cpu": "Най-слабото звено е процесорът — там ъпгрейдът ще се усети най-много.",
+  "bn.n.gpuNoSensors": "Сензорите на {0} не се четат (дават ги само картите на NVIDIA) — сравнявай точките с предишните си тестове.", "bn.n.upgrade.cpu": "Най-слабото звено е процесорът — там ъпгрейдът ще се усети най-много.",
   "bn.n.upgrade.ram": "Най-слабото звено е паметта — там ъпгрейдът ще се усети най-много.",
   "bn.n.upgrade.disk": "Най-слабото звено е дискът — SSD (или по-бърз SSD) ще се усети най-много.",
   "bn.n.upgrade.gpu": "Най-слабото звено е видеокартата — там ъпгрейдът ще се усети най-много в игрите.",
   "bn.vh.ok": "Няма ботълнек — всичко е наред", "bn.vh.okFix": "Няма ботълнек, но има {0} неща за оправяне", "bn.vh.cpu": "Има ботълнек: видеокартата е по-силна от процесора",
-  "bn.vh.gpu": "Има ботълнек: процесорът е по-силен от видеокартата", "bn.vh.fix": "{0} неща за оправяне", "bn.vh.allOk": "Всичко е наред",
-  "bn.vh.str.gpu": "По-силна е видеокартата — процесорът дава около {0}% от нужното ѝ в игрите.",
-  "bn.vh.str.cpu": "По-силен е процесорът — той дава {0}% от нужното на видеокартата, тя е ограничението.",
-  "bn.vh.str.even": "Процесорът и видеокартата си пасват — процесорът дава {0}% от нужното на картата.", "bn.recs": "Какво да направиш",
+  "bn.vh.gpu": "Има ботълнек: процесорът е по-силен от видеокартата", "bn.vh.fix": "{0} неща за оправяне", "bn.vh.allOk": "Всичко е наред", "bn.recs": "Какво да направиш",
   "bn.r.none": "Няма нищо за оправяне — компютърът работи както трябва.",
   "bn.r.tryLong": "Пусни „Дълъг тест“ веднъж — той показва дали охлаждането издържа при продължително натоварване.",
   "bn.r.cpuScaleLow": "Затвори тежките програми на заден план и провери, че лаптопът е на захранване; после пусни теста пак.",
@@ -3885,6 +3885,18 @@ bg: {
   "cm.more": "Искам да избера сам какво да се чисти", "hm.bench": "Скорост", "hm.bench0": "Не е тествано",
   "hm.bench0D": "Пусни бенчмарка, за да видиш колко бърз е компютърът и има ли ботълнек.", "hm.benchBtn": "Бенчмарк", "hm.benchRun": "Тествай", "hm.benchFix": "{0} неща за оправяне",
   "hm.benchOK": "всичко е наред", "hm.benchBal.balanced": "без ботълнек", "hm.benchBal.cpu": "процесорът спира видеокартата", "hm.benchBal.gpu": "видеокартата е лимитът",
+  "bn.bal.d": "{0} с {1} на {2}: процесорът може да подготвя около {3} кадъра/с, а видеокартата може да рисува около {4} кадъра/с (средно от много игри на високи настройки).",
+  "bn.bal.fps": "процесор ~{0} · карта ~{1} кадъра/с", "bn.bal.vp.cpu": "процесорът спира картата с {0}%", "bn.bal.vp.gpu": "картата е лимитът",
+  "bn.bal.src": "Данни: {0} — средни резултати от тестове на всяка карта и всеки процесор. Отделна игра може да е различна.", "bn.bal.v.unknown": "Няма данни",
+  "bn.bal.unk.cpu": "Няма публикувани тестове за процесора {0} (например лаптоп процесор), затова не казваме дали има ботълнек — по-добре нищо, отколкото грешен отговор.",
+  "bn.bal.unk.gpu": "Няма публикувани тестове за видеокартата {0} (например лаптоп или вградена графика), затова не казваме дали има ботълнек — по-добре нищо, отколкото грешен отговор.",
+  "bn.vh.unk": "За тази комбинация няма публикувани тестове, затова не правим извод за ботълнек.",
+  "bn.vh.str.gpu": "На {0} видеокартата е по-силна: може ~{2} кадъра/с, а процесорът подготвя само ~{1} — губиш около {3}%.",
+  "bn.vh.str.cpu": "На {0} процесорът е по-силен: може ~{1} кадъра/с, а видеокартата рисува ~{2} — тя определя FPS (това е нормално).",
+  "bn.vh.str.even": "На {0} си пасват: процесорът може ~{1} кадъра/с, видеокартата ~{2}.",
+  "bn.n.balCPU": "{0} спира {1} на {2} с около {3}%: процесорът подготвя ~{4} кадъра/с, а картата може ~{5}.",
+  "bn.n.balGPU": "С {0} и {1} на {2} видеокартата определя FPS (~{4} кадъра/с), а процесорът има запас (~{3}) — това не е проблем.",
+  "bn.n.balOK": "{0} и {1} са балансирани на {2} — няма ботълнек.", "bn.n.balUnknown": "За {0} няма публикувани тестове — изводът за ботълнек е пропуснат.",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -4725,7 +4737,6 @@ en: {
   "bn.an.note": "The analysis rests on what was measured on this PC and on the graphics card's sensors. It is not 3DMark, but it shows where the problem is and what to fix.",
   "bn.bal.title": "Bottleneck (in games)", "bn.bal.v.balanced": "Balanced", "bn.bal.v.cpu": "The CPU holds the GPU back", "bn.bal.v.gpu": "The GPU is the limit",
   "bn.bal.l": "CPU holds back", "bn.bal.c": "balanced", "bn.bal.r": "GPU is the limit",
-  "bn.bal.d": "{0} is in the “{1}” class (about {2}% of an RTX 3060). To keep it busy at high FPS, one processor core should have about {4} points — yours has {3}.",
   "bn.bal.res": "At 1080p the processor matters most; at 1440p and 4K the load moves to the graphics card.", "bn.cls.enthusiast": "top", "bn.cls.high": "high",
   "bn.cls.upper": "upper mid", "bn.cls.mid": "mid", "bn.cls.entry": "entry", "bn.cls.igpu": "integrated", "bn.part.pc": "PC", "bn.part.cpu": "Processor", "bn.part.gpu": "Graphics",
   "bn.part.ram": "Memory", "bn.part.disk": "Drive", "bn.n.cpuScale": "The cores work as they should: all together give {0}× one core ({1} threads).",
@@ -4751,18 +4762,12 @@ en: {
   "bn.n.gpuThrottle": "In the long test the graphics card slowed by {0}% — it heats up. Check the cooling.",
   "bn.n.gpuOK": "The values are normal for {0}: {1}% load, {2} MHz, {3} °C, no slowing from heat.",
   "bn.n.gpuNoSensors": "The sensors of {0} cannot be read (only NVIDIA cards give them) — compare the points with your earlier tests.",
-  "bn.n.balCPU": "The processor may hold the graphics card back in games (mostly at 1080p and high FPS): a “{0}” class card likes about {2} points on one core, and yours has {1}.",
-  "bn.n.balGPU": "In games the graphics card is the limit and the processor has room — a stronger graphics card gives the biggest FPS jump.",
-  "bn.n.balOK": "The processor and the graphics card are balanced — no bottleneck.",
   "bn.n.upgrade.cpu": "The weakest part is the processor — an upgrade there would be felt the most.",
   "bn.n.upgrade.ram": "The weakest part is the memory — an upgrade there would be felt the most.",
   "bn.n.upgrade.disk": "The weakest part is the drive — an SSD (or a faster one) would be felt the most.",
   "bn.n.upgrade.gpu": "The weakest part is the graphics card — an upgrade there would be felt the most in games.",
   "bn.vh.ok": "No bottleneck — everything is fine", "bn.vh.okFix": "No bottleneck, but {0} things to fix", "bn.vh.cpu": "Bottleneck: the graphics card is stronger than the processor",
-  "bn.vh.gpu": "Bottleneck: the processor is stronger than the graphics card", "bn.vh.fix": "{0} things to fix", "bn.vh.allOk": "Everything is fine",
-  "bn.vh.str.gpu": "The graphics card is the stronger part — the processor gives about {0}% of what it needs in games.",
-  "bn.vh.str.cpu": "The processor is the stronger part — it gives {0}% of what the graphics card needs; the card is the limit.",
-  "bn.vh.str.even": "The processor and graphics card match — the processor gives {0}% of what the card needs.", "bn.recs": "What to do",
+  "bn.vh.gpu": "Bottleneck: the processor is stronger than the graphics card", "bn.vh.fix": "{0} things to fix", "bn.vh.allOk": "Everything is fine", "bn.recs": "What to do",
   "bn.r.none": "Nothing to fix — the PC works as it should.", "bn.r.tryLong": "Run the “Long test” once — it shows whether the cooling holds up under sustained load.",
   "bn.r.cpuScaleLow": "Close heavy background programs and make sure a laptop is plugged in; then run the test again.",
   "bn.r.cpuBusy": "Close the programs that load the processor (see Processes) and run the test again.",
@@ -4792,6 +4797,18 @@ en: {
   "hm.bench0": "Not tested", "hm.bench0D": "Run the benchmark to see how fast the PC is and whether there is a bottleneck.", "hm.benchBtn": "Benchmark", "hm.benchRun": "Test",
   "hm.benchFix": "{0} things to fix", "hm.benchOK": "everything is fine", "hm.benchBal.balanced": "no bottleneck", "hm.benchBal.cpu": "the processor holds the GPU back",
   "hm.benchBal.gpu": "the graphics card is the limit",
+  "bn.bal.d": "{0} with {1} at {2}: the processor can prepare about {3} frames/s and the graphics card can draw about {4} frames/s (average of many games at high settings).",
+  "bn.bal.fps": "processor ~{0} · card ~{1} frames/s", "bn.bal.vp.cpu": "the processor holds the card back by {0}%", "bn.bal.vp.gpu": "the card is the limit",
+  "bn.bal.src": "Data: {0} — averaged test results for each card and each processor. A single game can differ.", "bn.bal.v.unknown": "No data",
+  "bn.bal.unk.cpu": "There are no published tests for the processor {0} (a laptop processor, for example), so we do not say whether there is a bottleneck — better no answer than a wrong one.",
+  "bn.bal.unk.gpu": "There are no published tests for the graphics card {0} (a laptop or integrated one, for example), so we do not say whether there is a bottleneck — better no answer than a wrong one.",
+  "bn.vh.unk": "There are no published tests for this pair, so no bottleneck verdict is given.",
+  "bn.vh.str.gpu": "At {0} the graphics card is stronger: it can do ~{2} frames/s but the processor prepares only ~{1} — about {3}% lost.",
+  "bn.vh.str.cpu": "At {0} the processor is stronger: it can do ~{1} frames/s and the card draws ~{2} — the card sets the FPS (that is normal).",
+  "bn.vh.str.even": "At {0} they match: the processor can do ~{1} frames/s, the graphics card ~{2}.",
+  "bn.n.balCPU": "{0} holds back {1} at {2} by about {3}%: the processor prepares ~{4} frames/s, the card could do ~{5}.",
+  "bn.n.balGPU": "With {0} and {1} at {2} the graphics card sets the FPS (~{4} frames/s) and the processor has room (~{3}) — not a problem.",
+  "bn.n.balOK": "{0} and {1} are balanced at {2} — no bottleneck.", "bn.n.balUnknown": "There are no published tests for {0} — the bottleneck verdict is skipped.",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -8495,12 +8512,18 @@ function paintBenchAnalysis() {
   const b = r.balance;
   if (b && b.verdict && b.verdict !== "unknown") {
     const tone = { balanced: "good", cpu: "warn", gpu: "info" }[b.verdict];
-    const gname = (r.gpu && (r.gpu.name || r.gpu.renderer)) || ((r.ctx && r.ctx.gpus || [])[0]) || "";
+    const rows = (b.rows || []).map(x => `<div class="bn-res${x.res === b.res ? " now" : ""}"><b>${esc(x.res)}</b>
+      <span>${esc(t("bn.bal.fps", nf(0).format(x.cpuFps), nf(0).format(x.gpuFps)))}</span>
+      <span class="vd ${{ balanced: "good", cpu: "warn", gpu: "info" }[x.verdict]}">${esc(x.verdict === "balanced" ? t("bn.bal.v.balanced") : t("bn.bal.vp." + x.verdict, x.pct))}</span></div>`).join("");
     html += `<div class="bn-bal"><div class="top"><b>${esc(t("bn.bal.title"))}</b><span class="vd ${tone}">${esc(t("bn.bal.v." + b.verdict))}</span></div>
       <div class="bn-scale" role="img" aria-label="${esc(t("bn.bal.v." + b.verdict))}"><i style="left:${b.pos}%"></i></div>
       <div class="bn-scale-l"><span>${esc(t("bn.bal.l"))}</span><span>${esc(t("bn.bal.c"))}</span><span>${esc(t("bn.bal.r"))}</span></div>
-      <div class="m">${esc(t("bn.bal.d", gname, t("bn.cls." + b.gpuClass), b.gpuIndex, nf(0).format(b.cpuHave), nf(0).format(b.cpuNeed)))}</div>
-      <div class="m">${esc(t("bn.bal.res"))}</div></div>`;
+      <div class="m">${esc(t("bn.bal.d", b.cpuName, b.gpuName, b.res, nf(0).format(b.cpuFps), nf(0).format(b.gpuFps)))}</div>
+      <div class="bn-ress">${rows}</div>
+      <div class="m src">${esc(t("bn.bal.src", b.source || "Tom's Hardware"))}</div></div>`;
+  } else if (b && b.verdict === "unknown") {
+    html += `<div class="bn-bal"><div class="top"><b>${esc(t("bn.bal.title"))}</b><span class="vd info">${esc(t("bn.bal.v.unknown"))}</span></div>
+      <div class="m">${esc(t("bn.bal.unk." + (b.missing || "gpu"), b.missing === "cpu" ? b.cpuName : b.gpuName))}</div></div>`;
   }
   const notes = (r.notes || []).filter(n => !(n.part === "pc" && /^bn\.n\.bal/.test(n.key)));
   if (notes.length) html += `<div class="bn-notes">${notes.map(n => `<div class="bn-note ${esc(n.tone)}"><span class="ic">${ICONS[BN_TONE_ICON[n.tone]] || ICONS[BN_PART_ICON[n.part]] || ""}</span>
@@ -8519,11 +8542,10 @@ function bnVerdictHtml(r) {
   else if (b && b.verdict === "gpu") { tone = "info"; title = t("bn.vh.gpu"); }
   else if (b && b.verdict === "balanced") { title = fix ? t("bn.vh.okFix", fix) : t("bn.vh.ok"); if (fix) tone = "warn"; }
   else { title = fix ? t("bn.vh.fix", fix) : t("bn.vh.allOk"); if (fix) tone = "warn"; }
-  if (b && b.verdict && b.verdict !== "unknown" && b.cpuNeed > 0) {
-    const pct = Math.round(b.cpuHave / b.cpuNeed * 100);
-    const stronger = pct < 82 ? "gpu" : pct > 160 && b.verdict === "gpu" ? "cpu" : "even";
-    sub = t("bn.vh.str." + stronger, pct);
-  }
+  if (b && b.verdict && b.verdict !== "unknown" && b.gpuFps > 0) {
+    const stronger = b.verdict === "cpu" ? "gpu" : b.verdict === "gpu" ? "cpu" : "even";
+    sub = t("bn.vh.str." + stronger, b.res, nf(0).format(b.cpuFps), nf(0).format(b.gpuFps), b.pct);
+  } else if (b && b.verdict === "unknown") sub = t("bn.vh.unk");
   const ic = tone === "good" ? "check" : tone === "warn" ? "alert" : "info";
   return `<div class="bn-vh ${tone}"><span class="ic">${ICONS[ic]}</span><div><b>${esc(title)}</b>${sub ? `<span>${esc(sub)}</span>` : ""}</div></div>`;
 }
@@ -11710,7 +11732,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "4.2.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "4.2.1", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -11964,16 +11986,20 @@ const Mock = (() => {
       if (r.gpu && r.gpu.gflops > 0) r.sGPU = Math.round(r.gpu.gflops / 3000 * 1000);
       r.score = geo([r.sCPU1, r.sCPUN, r.sRAM, r.sDisk, r.sGPU]);
       const bad = q.get("bn") === "bad";
-      r.balance = bad ? { verdict: "cpu", gpuClass: "enthusiast", gpuIndex: 330, cpuNeed: 1558, cpuHave: 980, pos: 26 } : { verdict: "balanced", gpuClass: "enthusiast", gpuIndex: 330, cpuNeed: 1558, cpuHave: r.sCPU1 || 1658, pos: 53 };
+      const src = "Tom's Hardware GPU & CPU benchmark hierarchies (2026)";
+      r.balance = bad ? { verdict: "cpu", cpuName: "AMD Ryzen 5 2600", gpuName: "GeForce RTX 4090", res: "1080p", cpuFps: 77, gpuFps: 184, pct: 58, pos: 7, gpuClass: "enthusiast", gpuIndex: 299, source: src,
+          rows: [{ res: "1080p", cpuFps: 77, gpuFps: 184, verdict: "cpu", pct: 58 }, { res: "1440p", cpuFps: 77, gpuFps: 143, verdict: "cpu", pct: 46 }, { res: "4K", cpuFps: 77, gpuFps: 89, verdict: "balanced", pct: 0 }] }
+        : { verdict: "balanced", cpuName: "Intel Core i9-12900K", gpuName: "GeForce RTX 4090", res: "1440p", cpuFps: 150, gpuFps: 143, pct: 0, pos: 53, gpuClass: "enthusiast", gpuIndex: 299, source: src,
+          rows: [{ res: "1080p", cpuFps: 150, gpuFps: 184, verdict: "cpu", pct: 18 }, { res: "1440p", cpuFps: 150, gpuFps: 143, verdict: "balanced", pct: 0 }, { res: "4K", cpuFps: 150, gpuFps: 89, verdict: "balanced", pct: 0 }] };
       r.notes = bad ? [
-        { part: "pc", tone: "warn", key: "bn.n.balCPU", args: ["enthusiast", "980", "1558"] },
+        { part: "pc", tone: "warn", key: "bn.n.balCPU", args: ["AMD Ryzen 5 2600", "GeForce RTX 4090", "1080p", "58", "77", "184"] },
         { part: "cpu", tone: "warn", key: "bn.n.cpuBusy", args: ["34"] },
         { part: "gpu", tone: "bad", key: "bn.n.gpuHot", args: ["88"] },
         { part: "gpu", tone: "warn", key: "bn.n.gpuPCIe", args: ["3", "8", "4", "16"] },
         { part: "ram", tone: "warn", key: "bn.n.ramXMP", args: ["4800", "6400", "XMP"] },
         { part: "disk", tone: "warn", key: "bn.n.nvmeSlow", args: ["C:", "520"] },
       ] : [
-        { part: "pc", tone: "good", key: "bn.n.balOK" },
+        { part: "pc", tone: "good", key: "bn.n.balOK", args: ["Intel Core i9-12900K", "GeForce RTX 4090", "1440p"] },
         { part: "cpu", tone: "good", key: "bn.n.cpuScale", args: ["10.4", "24"] },
         ...(r.long ? [{ part: "cpu", tone: "good", key: "bn.n.cpuSteady", args: ["30"] }] : []),
         { part: "gpu", tone: "good", key: "bn.n.gpuOK", args: ["NVIDIA GeForce RTX 4090", "98", "2745", "66"] },
@@ -12315,11 +12341,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "4.2.0", latest: nw ? "4.3.0" : "4.2.0", newer: nw, name: "xKi4o Cleaner 4.3.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.3.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "4.2.1", latest: nw ? "4.3.0" : "4.2.1", newer: nw, name: "xKi4o Cleaner 4.3.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.3.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 4.2.1 — 2026-10-20\n\n### English\n- Bottleneck check from published test data\n\n### Български\n- Бенчмарк: ботълнек по публикувани тестове\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders
