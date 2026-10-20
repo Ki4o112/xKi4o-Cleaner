@@ -135,7 +135,8 @@ func wingetGone(id string) bool {
 }
 
 type wgOpts struct {
-	Close bool `json:"close"` // close the programs that are open first (and start them again after)
+	Close   bool `json:"close"`   // close the programs that are open first (and start them again after)
+	Install bool `json:"install"` // install new programs (the Install tab) instead of updating
 }
 
 type wgOpenApp struct {
@@ -289,7 +290,7 @@ func wingetUpgrade(ids []string, o wgOpts) bool {
 	wg.stop.Store(false)
 	var clean []string
 	for _, id := range ids {
-		if validWingetID(id) && !wingetSelfUpdating(id) {
+		if validWingetID(id) && (o.Install || !wingetSelfUpdating(id)) {
 			clean = append(clean, id)
 		}
 	}
@@ -302,7 +303,7 @@ func wingetUpgrade(ids []string, o wgOpts) bool {
 		defer recoverLog("winget")
 		defer wg.running.Store(false)
 		defer app.working.Store(false)
-		op := beginOp("winget", "", T("log.wgStart", len(clean)), map[string]any{"ids": clean, "close": o.Close})
+		op := beginOp("winget", "", T("log.wgStart", len(clean)), map[string]any{"ids": clean, "close": o.Close, "install": o.Install})
 		ok := 0
 		for i, id := range clean {
 			if wg.stop.Load() {
@@ -311,7 +312,7 @@ func wingetUpgrade(ids []string, o wgOpts) bool {
 			}
 			emit("winget", map[string]any{"id": id, "state": "run", "n": i + 1, "of": len(clean)})
 			var reopen []gmClosed
-			if o.Close && selfUpdater(id) == "" {
+			if o.Close && !o.Install && selfUpdater(id) == "" {
 				if name, ps := wgProgramProcs(id); len(ps) > 0 {
 					emit("winget", map[string]any{"id": id, "state": "run", "n": i + 1, "of": len(clean), "closing": true})
 					reopen = closeForUpdate(ps)
@@ -335,6 +336,9 @@ func wingetUpgrade(ids []string, o wgOpts) bool {
 			var code int
 			var err error
 			self := selfUpdater(id)
+			if o.Install {
+				self = ""
+			}
 			usedSelf := false
 			if self != "" {
 				out, code, err = runSelfUpdater(self)
@@ -343,9 +347,14 @@ func wingetUpgrade(ids []string, o wgOpts) bool {
 			gone := false
 			if !usedSelf {
 				wg.mu.Lock()
-				out, code, err = runWinget(45*time.Minute, "upgrade", "--id", id, "--exact", "--silent",
-					"--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity")
-				gone = (err == nil || code != -1) && wingetGone(id) // winget ran: the update may have removed the program
+				if o.Install {
+					out, code, err = runWinget(45*time.Minute, "install", "--id", id, "--exact", "--source", wingetSource(id), "--silent",
+						"--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity")
+				} else {
+					out, code, err = runWinget(45*time.Minute, "upgrade", "--id", id, "--exact", "--silent",
+						"--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity")
+					gone = (err == nil || code != -1) && wingetGone(id) // winget ran: the update may have removed the program
+				}
 				wg.mu.Unlock()
 			}
 			tick.Stop()
@@ -370,6 +379,10 @@ func wingetUpgrade(ids []string, o wgOpts) bool {
 				ok++
 				op.info(id, T("log.wgSelf"), nil)
 				emit("winget", map[string]any{"id": id, "state": "ok", "msg": T("wg.selfDone"), "self": true})
+			case o.Install && (uint32(code) == 0x8A15002B || uint32(code) == 0x8A150061): // already installed, nothing newer
+				ok++
+				op.info(id, T("wg.already"), nil)
+				emit("winget", map[string]any{"id": id, "state": "ok", "msg": T("wg.already"), "self": true})
 			case code == 0:
 				ok++
 				op.info(id, T("log.wgOK"), map[string]any{"message": msg})

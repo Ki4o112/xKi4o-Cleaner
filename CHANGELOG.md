@@ -3,6 +3,24 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.3.0 — 2026-10-20
+
+### English
+- Programs: new "Install" tab — tick the programs you want (browsers, chat, game launchers, media, tools, hardware utilities) and install them all with one button, quietly, through winget (like Ninite); the ones you already have are marked
+- New "Passwords" page: check whether a password has leaked (Have I Been Pwned — only the first 5 characters of its SHA-1 hash leave the PC), and see the passwords of saved Wi-Fi networks, hidden until you press the eye
+- New "Blue screens" page: the last crashes and sudden power-offs from the Windows event log, explained in plain words (driver, graphics card, memory, hardware, drive, Windows files, sleep) with what helps and a button to the right place — including Windows' own memory test
+- New "Recover files" page: find deleted photos, documents, videos, music or archives with Microsoft's Windows File Recovery, installed and driven from the app; what is found is saved to another drive
+- Game mode: a frame counter — frames per second, 1% low and frame time of the game, and a small box above the game; counting is done by Intel's PresentMon (downloaded on request and checked by SHA-256), nothing is injected into the game
+- Repair: a new quick fix for games that stutter after a driver update (clears the shader cache only)
+
+### Български
+- Програми: нов раздел „Инсталирай“ — отметни програмите, които искаш (браузъри, разговори, лаунчери за игри, музика и видео, полезни програми, за хардуера) и ги инсталирай всичките с един бутон, тихо, през winget (като Ninite); вече инсталираните са отбелязани
+- Нов раздел „Пароли“: провери дали парола е изтичала (Have I Been Pwned — от компютъра излизат само първите 5 знака на SHA-1 хеша ѝ) и виж паролите на запазените Wi-Fi мрежи, скрити, докато не натиснеш окото
+- Нов раздел „Сини екрани“: последните сривове и внезапни изключвания от журнала на Windows, обяснени на прост език (драйвер, видеокарта, памет, хардуер, диск, файлове на Windows, заспиване), с какво помага и бутон към правилното място — включително тестът на паметта на Windows
+- Нов раздел „Изтрити файлове“: търси изтрити снимки, документи, видеа, музика или архиви с Windows File Recovery на Microsoft, инсталиран и управляван от програмата; намереното се запазва на друг диск
+- Режим „Игри“: брояч на кадри — кадри в секунда, 1% low и време за кадър на играта, и малко прозорче над играта; брои PresentMon на Intel (свален при поискване и проверен по SHA-256), нищо не се вкарва в играта
+- Поправка: нова бърза поправка за игри, които засичат след нов драйвер (изтрива само кеша на шейдърите)
+
 ## 4.2.1 — 2026-10-20
 
 ### English

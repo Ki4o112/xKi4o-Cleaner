@@ -292,3 +292,12 @@ func sameProgram(a, b string) bool {
 	}
 	return x == y // the upgrade list shows the installed name, so the cleaned names are equal
 }
+
+// wingetSource: Microsoft Store ids ("9" and 11 more, or "XP" and 12 more
+// capitals and digits) install from the msstore source, the rest from winget's own.
+func wingetSource(id string) string {
+	if ((len(id) == 12 && id[0] == '9') || (len(id) == 14 && strings.HasPrefix(id, "XP"))) && strings.ToUpper(id) == id && validWingetID(id) && !strings.ContainsAny(id, ".-_+{}") {
+		return "msstore"
+	}
+	return "winget"
+}

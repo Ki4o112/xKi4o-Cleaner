@@ -461,6 +461,25 @@ var texts = map[string][2]string{ // [bg, en]
 	"log.wuInstalled":  {"Инсталирани: %d, неуспешни: %d", "Installed: %d, failed: %d"},
 	"log.wuOne":        {"Инсталирано", "Installed"},
 	"log.wuOneFail":    {"Не се инсталира: %s", "Not installed: %s"},
+	// 4.3: installing programs, passwords, blue screens, the frame counter, recovering files
+	"wg.already":       {"Вече е инсталирана — няма по-нова версия.", "Already installed — there is no newer version."},
+	"wifi.none":        {"Няма запазени Wi-Fi мрежи (или няма Wi-Fi)", "No saved Wi-Fi networks (or no Wi-Fi)"},
+	"pw.err.net":       {"Няма връзка с Have I Been Pwned", "No connection to Have I Been Pwned"},
+	"bs.err.read":      {"Журналът на Windows не се прочете: %s", "The Windows event log could not be read: %s"},
+	"log.fpsInstall":   {"Сваляне на PresentMon %s", "Downloading PresentMon %s"},
+	"log.fpsInstalled": {"PresentMon е свален", "PresentMon was downloaded"},
+	"log.fpsStart":     {"Броячът на кадри е пуснат", "The frame counter started"},
+	"log.fpsStop":      {"Броячът на кадри е спрян", "The frame counter stopped"},
+	"fps.err.download": {"PresentMon не се свали: %s", "PresentMon could not be downloaded: %s"},
+	"fps.err.missing":  {"PresentMon още не е свален", "PresentMon is not downloaded yet"},
+	"fps.err.ended":    {"PresentMon спря сам: %s", "PresentMon stopped by itself: %s"},
+	"rf.err.missing":   {"Windows File Recovery не е инсталирана", "Windows File Recovery is not installed"},
+	"rf.err.drive":     {"Избери диск за търсене и друг диск за запазване", "Choose a drive to search and another drive to save to"},
+	"rf.err.same":      {"Намереното трябва да се запази на друг диск — иначе може да презапише точно файловете, които търсиш", "Save to another drive — otherwise it may overwrite the very files you are looking for"},
+	"rf.err.name":      {"Името не може да съдържа \" / \\ : < > |", "The name cannot contain \" / \\ : < > |"},
+	"rf.err.what":      {"Избери какво да търся — вид файлове или част от името", "Choose what to look for — a kind of file or part of the name"},
+	"rf.err.run":       {"Windows File Recovery спря: %s", "Windows File Recovery stopped: %s"},
+	"log.rfStart":      {"Търсене на изтрити файлове на %s (запазване на %s)", "Searching for deleted files on %s (saving to %s)"},
 }
 
 // T returns the text for key in the current language.

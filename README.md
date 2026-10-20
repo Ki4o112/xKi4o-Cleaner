@@ -33,9 +33,9 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 | --- | --- |
 | **PC health** | A live dashboard — processor, graphics card (temperature and video memory on NVIDIA), memory, system drive and network — with one score, what lowers it, and one button for what is recommended |
 | **Cleanup** | Caches and temporary files of Windows, browsers, games and apps — the size of each before you clean |
-| **Programs** | Uninstall with a scan for leftovers (like Revo), remove Store apps, update programs with winget |
+| **Programs** | Uninstall with a scan for leftovers (like Revo), remove Store apps, update programs with winget, and install the programs you pick in one go (like Ninite) |
 | **Tweaker** | About 90 Windows tweaks and one-click presets (Essential, Gaming, Privacy, Ultimate); switching one off brings back exactly what you had |
-| **Memory and game mode** | Free RAM; close the programs you choose while you play and start them again after |
+| **Memory and game mode** | Free RAM; close the programs you choose while you play and start them again after; a frame counter (FPS, 1% low, frame time) with a small box above the game, through Intel's [PresentMon](https://github.com/GameTechDev/PresentMon) — downloaded on request, nothing is injected into the game |
 | **Disks** | Disk Analyzer, disk health (S.M.A.R.T., what the errors mean and what helps), TRIM and defragmentation, duplicates, empty folders, broken shortcuts |
 | **Graphics card** | Live sensors (temperature, power, fans, clocks on NVIDIA), checks (refresh rate, PCIe lanes, Resizable BAR, HAGS), go back to an older driver or download one from NVIDIA, and remove the driver like DDU — with a copy to put it back |
 | **Updates** | Search for Windows and driver updates and install the ones you tick, with a restore point and a log — through Windows Update itself |
@@ -43,10 +43,13 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 | **Network** | Switch DNS (Cloudflare recommended, Google, AdGuard…) after a speed test that shows the fastest for you; a connection check (ping, jitter, lost packets); flush the DNS cache |
 | **Merge connections** | Use several internet connections at once (Wi-Fi + Ethernet + phone) for more speed, through [net-merge](https://github.com/rohit267/net-merge) — downloaded and controlled from here, with live per-adapter speeds, each adapter's share of connections and an "Evenly" sharing choice (net-merge stays a separate program; nothing is bundled) |
 | **Benchmark** | Processor (one core and all cores), memory, a drive and the graphics card in points, with an analysis, recommendations and a bottleneck check at 1080p/1440p/4K based on [Tom's Hardware's GPU](https://www.tomshardware.com/reviews/gpu-hierarchy,4388.html) and [CPU](https://www.tomshardware.com/reviews/cpu-hierarchy,4312.html) benchmark hierarchies — the drive test uses one temporary file that is deleted at the end |
+| **Passwords** | Check whether a password has leaked ([Have I Been Pwned](https://haveibeenpwned.com/Passwords) — only the first 5 characters of its SHA-1 hash leave the PC) and see the passwords of saved Wi-Fi networks |
+| **Blue screens** | The last crashes and sudden power-offs, explained in plain words with what helps and a button to the right place (driver updates, the graphics driver, Windows' memory test, drive health, Windows repair) |
+| **Recover files** | Find deleted photos, documents and videos with Microsoft's [Windows File Recovery](https://support.microsoft.com/en-us/windows/windows-file-recovery-61f5b28a-f5b8-3cc2-0f8e-a63cb4e1d4c4), installed and driven from the app; what is found is saved to another drive |
 | **Browser extensions** | Every extension in Chrome, Edge, Brave, Vivaldi, Opera and Firefox, with what it may do and the risky ones marked — read only |
 | **PC report** | One HTML page on the Desktop with the system, security, drive health, free space, network, startup programs, extensions and the last benchmark — read only |
 | **Internet speed test** | Download, upload, ping and jitter against Cloudflare's speed test server |
-| **System** | Processes, startup apps, Windows repair (DISM, SFC, disk check) and quick fixes (Explorer, icons, Store, Winsock) |
+| **System** | Processes, startup apps, Windows repair (DISM, SFC, disk check) and quick fixes (Explorer, icons, Store, Winsock, the shader cache for games that stutter) |
 | **Automatic cleaning** | Daily, weekly or monthly, with no window; open apps and sensitive categories are left out |
 | **Restore Center** | Puts back what the app changed; every operation has a step-by-step log |
 
@@ -68,7 +71,7 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 - Files you pick yourself (Disk Analyzer, duplicates) go to the Recycle Bin and can be restored.
 - Windows Update is never turned off; updates install only when you pick them. Defender, hibernation, power plans and startup apps change only when you switch them yourself.
 - A restore point is made before system changes, and every tweak can be undone. DNS changes go back with one click too.
-- No telemetry. The app itself only asks GitHub whether there is a new version (this can be turned off); program updates go through winget.
+- No telemetry. The app itself only asks GitHub whether there is a new version (this can be turned off); programs are installed and updated through winget. Only when you press the button: the password check asks Have I Been Pwned (with 5 characters of the hash, never the password), and the frame counter downloads PresentMon from GitHub.
 
 ## FAQ
 
@@ -109,7 +112,7 @@ GOOS=windows GOARCH=amd64 go build -trimpath -ldflags "-s -w -H windowsgui" -o x
 
 ## Credits
 
-Made by **xKi4o**. Built with [go-webview2](https://github.com/jchv/go-webview2), [Go](https://go.dev) and the [Inter](https://github.com/rsms/inter) font. The cleaning rules were checked against [BleachBit](https://www.bleachbit.org) and [Winapp2](https://github.com/MoscaDotTo/Winapp2), RAM cleaning follows [Mem Reduct](https://github.com/henrypp/memreduct), and the Tweaker follows the lists of [Sparkle](https://github.com/Parcoil/Sparkle), [WinUtil](https://github.com/ChrisTitusTech/winutil) and the [ReviOS playbook](https://github.com/meetrevision/playbook) — everything was written anew. Licenses of the components are in `src/third_party/` and on the app's Credits page.
+Made by **xKi4o**. Built with [go-webview2](https://github.com/jchv/go-webview2), [Go](https://go.dev) and the [Inter](https://github.com/rsms/inter) font. The frame counter uses Intel's [PresentMon](https://github.com/GameTechDev/PresentMon) (MIT, downloaded on request), the password check [Have I Been Pwned](https://haveibeenpwned.com/Passwords), and recovering files Microsoft's Windows File Recovery. The cleaning rules were checked against [BleachBit](https://www.bleachbit.org) and [Winapp2](https://github.com/MoscaDotTo/Winapp2), RAM cleaning follows [Mem Reduct](https://github.com/henrypp/memreduct), and the Tweaker follows the lists of [Sparkle](https://github.com/Parcoil/Sparkle), [WinUtil](https://github.com/ChrisTitusTech/winutil) and the [ReviOS playbook](https://github.com/meetrevision/playbook) — everything was written anew. Licenses of the components are in `src/third_party/` and on the app's Credits page.
 
 ## License
 
@@ -124,7 +127,7 @@ Made by **xKi4o**. Built with [go-webview2](https://github.com/jchv/go-webview2)
 
 **Как се пуска:** свали **xKi4oCleaner.exe** от [последната версия](../../releases/latest), пусни го и разреши администраторските права. Ако SmartScreen каже *„Windows защити компютъра ви“*, натисни **Още информация → Изпълни въпреки това**.
 
-**Какво може:** здраве на компютъра с една оценка, почистване на кеш и временни файлове (и автоматично по график), деинсталиране с остатъци, обновяване на програми, около 80 туийка с връщане назад и пресети (Игри, Поверителност…), освобождаване на RAM, режим „Игри“, анализ и здраве на дисковете, дубликати, празни папки, информация за системата, смяна на DNS с тест на скоростта, контекстното меню, процеси, стартиращи програми, поправка на Windows и център за възстановяване.
+**Какво може:** здраве на компютъра с една оценка, почистване на кеш и временни файлове (и автоматично по график), деинсталиране с остатъци, обновяване на програми, инсталиране на много програми наведнъж (като Ninite), проверка дали парола е изтичала и запазените Wi-Fi пароли, обяснение на сините екрани, възстановяване на изтрити файлове, брояч на кадри в игрите, около 80 туийка с връщане назад и пресети (Игри, Поверителност…), освобождаване на RAM, режим „Игри“, анализ и здраве на дисковете, дубликати, празни папки, информация за системата, смяна на DNS с тест на скоростта, контекстното меню, процеси, стартиращи програми, поправка на Windows и център за възстановяване.
 
 **Безопасно ли е:** трие само кеш и временни данни. Лични файлове, история, пароли и запазени игри не се пипат. Избраните от теб файлове отиват в кошчето. Windows Update, Defender, хибернацията, плановете за захранване и стартиращите програми се променят само ако ти ги превключиш.
 

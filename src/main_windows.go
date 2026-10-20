@@ -244,6 +244,21 @@ func main() {
 		"exportTweakProfile":   exportTweakProfile,
 		"importTweakProfile":   importTweakProfile,
 		"restartExplorer":      restartExplorerLogged,
+		// 4.3: passwords, blue screens, the frame counter, recovering files
+		"wifiNets":       wifiNets,
+		"pwnedCheck":     pwnedCheck,
+		"bsodRecent":     bsodRecent,
+		"memTest":        memTest,
+		"fpsState":       fpsState,
+		"fpsInstall":     fpsInstall,
+		"fpsStart":       fpsStart,
+		"fpsStop":        fpsStop,
+		"fpsOverlay":     fpsSetOverlay,
+		"recoverState":   recoverState,
+		"recoverInstall": recoverInstall,
+		"recoverStart":   recoverStart,
+		"recoverStop":    recoverStop,
+		"recoverOpen":    recoverOpen,
 		// Logs & error reports
 		"logOps":        logOps,
 		"logEntries":    logEntries,
@@ -335,6 +350,10 @@ func main() {
 
 	w.SetHtml(indexHTML)
 	w.Run()
+	if fpsState().Running {
+		fpsStop()
+	}
+	recoverStop()
 	if win.inTray.Load() {
 		trayRemove()
 	}

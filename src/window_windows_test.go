@@ -12,28 +12,10 @@ import (
 )
 
 var (
-	procRegisterClassExW = user32.NewProc("RegisterClassExW")
-	procCreateWindowExW  = user32.NewProc("CreateWindowExW")
-	procDestroyWindow    = user32.NewProc("DestroyWindow")
-	procGetWindowRect    = user32.NewProc("GetWindowRect")
-	procClientToScreen   = user32.NewProc("ClientToScreen")
-	procSendMessageW     = user32.NewProc("SendMessageW")
+	procGetWindowRect  = user32.NewProc("GetWindowRect")
+	procClientToScreen = user32.NewProc("ClientToScreen")
+	procSendMessageW   = user32.NewProc("SendMessageW")
 )
-
-type wndClassEx struct {
-	Size       uint32
-	Style      uint32
-	WndProc    uintptr
-	ClsExtra   int32
-	WndExtra   int32
-	Instance   windows.Handle
-	Icon       windows.Handle
-	Cursor     windows.Handle
-	Background windows.Handle
-	MenuName   *uint16
-	ClassName  *uint16
-	IconSm     windows.Handle
-}
 
 // testWindow: a window of the app's style whose messages go through the
 // app's hook first, as the main window's do. Not shown.

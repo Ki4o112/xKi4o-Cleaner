@@ -262,6 +262,65 @@ h1 { font-size: 23px; font-weight: 700; margin: 0; letter-spacing: -.02em; }
 .bx-row.off .bx-main, .bx-row.off .bx-b { opacity: .55; }
 .bx-why { margin-top: 14px; padding: 14px 16px; border-radius: var(--r-l); background: var(--card); border: 1px dashed var(--line); display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; color: var(--muted); line-height: 1.55; }
 .bx-why b { color: var(--text); font-size: 13px; }
+/* 4.3: install programs, passwords, blue screens, recover files, frame counter */
+.pr-list.in-mode { background: none; border: 0; border-radius: 0; overflow: visible; }
+.in-bar { flex-wrap: wrap; padding: 0 0 4px; background: none; }
+.in-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.in-item { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 9px 12px; border-radius: var(--r-m); background: var(--card); border: 1px solid var(--line-soft); cursor: pointer; transition: border-color .2s, background .2s; }
+.in-item:hover { border-color: var(--line-hi); }
+.in-item.on { border-color: var(--blue); background: var(--blue-soft); }
+.in-item .in-t { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
+.in-item .in-n { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; font-size: 13px; }
+.in-item .tw-b, .in-item .tw-st { margin: 0; }
+.pw-box { display: flex; gap: 8px; align-items: center; }
+.search.pw-in { flex: 1 1 auto; margin-left: 0; }
+.search.rf-name { display: block; margin-left: 0; max-width: 420px; }
+#rfBody, #bsTop { margin-top: 8px; }
+.pw-h2 { margin-top: 26px; }
+.pw-res { display: flex; gap: 12px; align-items: flex-start; margin-top: 12px; padding: 12px 14px; border-radius: var(--r-l); font-size: 13px; line-height: 1.5; background: var(--card); border: 1px solid var(--line-soft); }
+.pw-res.bad { background: var(--red-soft); border-color: transparent; }
+.pw-res.good { background: var(--mint-soft); border-color: transparent; }
+.pw-res svg { flex: none; width: 18px; height: 18px; margin-top: 1px; }
+.wf-k { display: flex; align-items: center; gap: 6px; }
+.wf-key { font-family: var(--mono); font-size: 13px; padding: 4px 10px; border-radius: var(--r-s); background: var(--well); user-select: all; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wf-key.hid { letter-spacing: .15em; color: var(--muted); user-select: none; }
+.bs-cards { display: grid; gap: 10px; margin-bottom: 6px; }
+.bs-card { padding: 14px 16px; border-radius: var(--r-l); background: var(--card); border: 1px solid var(--line-soft); }
+.bs-card .bs-h { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.bs-card .bs-n { font-weight: 800; color: var(--red); font-variant-numeric: tabular-nums; }
+.bs-card.power .bs-n, .bs-card.other .bs-n { color: var(--amber); }
+.bs-card.manual .bs-n { color: var(--muted); }
+.bs-card p { margin: 6px 0 0; color: var(--muted); font-size: 12.5px; line-height: 1.55; }
+.bs-card .bs-f { margin-top: 8px; font-size: 12.5px; line-height: 1.55; }
+.bs-card .btn { margin-top: 10px; }
+.bs-row { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 16px; border-top: 1px solid var(--line-soft); font-size: 13px; }
+.bs-row:first-child { border-top: 0; }
+.bs-row .m { display: block; color: var(--muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bs-row b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bs-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
+.bs-dot.power, .bs-dot.other { background: var(--amber); } .bs-dot.manual { background: var(--faint); }
+.bs-at { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.rf-need, .fps-need { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 16px 18px; border-radius: var(--r-l); background: var(--card); border: 1px solid var(--line-soft); }
+.fps-need { grid-template-columns: minmax(0, 1fr) auto; }
+.rf-need p, .fps-need p { margin: 4px 0 0; color: var(--muted); font-size: 12.5px; line-height: 1.5; }
+.rf-need .i-ico svg { width: 26px; height: 26px; }
+.rf-vols { display: flex; flex-wrap: wrap; gap: 8px; }
+.rf-vol { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; min-width: 120px; padding: 9px 14px; border-radius: var(--r-m); background: var(--card); border: 1px solid var(--line-soft); color: var(--text); cursor: pointer; text-align: left; font: inherit; }
+.rf-vol b { font-size: 15px; } .rf-vol span { font-size: 12px; color: var(--muted); } .rf-vol .m { color: var(--faint); }
+.rf-vol.on { border-color: var(--blue); background: var(--blue-soft); }
+.rf-vol:disabled { opacity: .45; cursor: default; }
+.rf-kinds { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.rf-kind { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 99px; background: var(--card); border: 1px solid var(--line-soft); cursor: pointer; font-size: 13px; font-weight: 600; }
+.rf-kind.on { border-color: var(--blue); background: var(--blue-soft); }
+.rf-go { display: flex; gap: 10px; align-items: center; margin-top: 16px; flex-wrap: wrap; }
+.rf-line { color: var(--muted); font-size: 12px; font-family: var(--mono); margin-top: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rf-res { margin-top: 14px; }
+.fps-box { margin-bottom: 4px; }
+.fps-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.fps-app { flex: 1; min-width: 0; color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fps-app b { color: var(--text); }
+.fps-box .bx-tile b { color: var(--mint); }
+.fps-box .list { margin-top: 2px; }
 @media (max-width: 760px) { .bx-row { grid-template-columns: 38px minmax(0, 1fr); } .bx-r { grid-column: 2; align-items: flex-start; } }
 
 /* ================= 4.0: internet speed test ================= */
@@ -1543,7 +1602,7 @@ body.dock-on .toasts { bottom: 84px; }
 .tw-cats { -webkit-mask-image: none; mask-image: none; padding-right: 0; }
 .nav.fit button, .nav.fit .nav-ind { height: var(--navh) !important; }
 .nav.fit .ico { width: min(26px, calc(var(--navh) - 3px)) !important; height: min(26px, calc(var(--navh) - 3px)) !important; }
-.nav.fit .ico svg { width: min(15px, calc(var(--navh) - 11px)) !important; height: min(15px, calc(var(--navh) - 11px)) !important; }
+.nav.fit .ico svg { width: min(15px, calc(var(--navh) - 7px)) !important; height: min(15px, calc(var(--navh) - 7px)) !important; }
 .nav.fit { gap: 1px; }
 .nav.tight .nav-g { padding: 6px 12px 1px !important; font-size: 10px !important; line-height: 12px; }
 .nav.tight .nav-g.first { padding-top: 2px !important; }
@@ -2247,6 +2306,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
       <button data-page="disk"><span class="ico" data-icon="pie"></span><span class="label" data-i="nav.disk"></span></button>
       <button data-page="dupes"><span class="ico" data-icon="copy"></span><span class="label" data-i="nav.dupes"></span><span class="badge" id="dupBadge" hidden></span></button>
       <button data-page="tidy"><span class="ico" data-icon="broken"></span><span class="label" data-i="nav.tidy"></span></button>
+      <button data-page="recover"><span class="ico" data-icon="history"></span><span class="label" data-i="nav.recover"></span></button>
       <div class="nav-g" data-i="nav.g.system"></div>
       <button data-page="programs"><span class="ico" data-icon="package"></span><span class="label" data-i="nav.programs"></span><span class="badge" id="prBadge" hidden></span></button>
       <button data-page="procs"><span class="ico" data-icon="cpu"></span><span class="label" data-i="nav.procs"></span></button>
@@ -2261,8 +2321,10 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
       <button data-page="network"><span class="ico" data-icon="network"></span><span class="label" data-i="nav.network"></span></button>
       <button data-page="nmerge"><span class="ico" data-icon="merge"></span><span class="label" data-i="nav.nmerge"></span></button>
       <button data-page="repair"><span class="ico" data-icon="repair"></span><span class="label" data-i="nav.repair"></span></button>
+      <button data-page="bsod"><span class="ico" data-icon="alert"></span><span class="label" data-i="nav.bsod"></span><span class="badge err" id="bsBadge" hidden></span></button>
       <div class="nav-g" data-i="nav.g.safety"></div>
       <button data-page="restore"><span class="ico" data-icon="lifebuoy"></span><span class="label" data-i="nav.restore"></span></button>
+      <button data-page="pass"><span class="ico" data-icon="lock"></span><span class="label" data-i="nav.pass"></span></button>
       <button data-page="ext"><span class="ico" data-icon="puzzle"></span><span class="label" data-i="nav.ext"></span><span class="badge err" id="exBadge" hidden></span></button>
       <button data-page="logs"><span class="ico" data-icon="logs"></span><span class="label" data-i="nav.logs"></span><span class="badge err" id="lgBadge" hidden></span></button>
     </nav>
@@ -2644,6 +2706,50 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
         <div class="bx-why"><b data-i="bx.why.t"></b><span data-i="bx.why.d"></span></div></div>
     </section>
 
+    <!-- =============== PASSWORDS (4.3) =============== -->
+    <section class="page" id="page-pass">
+      <div class="head">
+        <div class="head-ico" data-icon="lock"></div>
+        <div><h1 data-i="ps.title"></h1><div class="sub" data-i="ps.sub"></div></div>
+      </div>
+      <div class="tw-body">
+        <div class="dh-head net-h2"><h3 data-i="pw.title"></h3></div>
+        <div class="dh-sub" data-i="pw.sub"></div>
+        <form class="pw-box" id="pwForm" autocomplete="off">
+          <label class="search pw-in"><span data-icon="lock"></span><input id="pwIn" type="password" autocomplete="new-password" spellcheck="false" data-i-ph="pw.ph"></label>
+          <button type="button" class="btn icon-btn" id="pwEye" data-i-title="pw.show"><span data-icon="eye"></span></button>
+          <button type="submit" class="btn primary" id="pwGo"><span data-i="pw.check"></span></button>
+        </form>
+        <div id="pwRes"></div>
+        <div class="note-line" data-i="pw.note"></div>
+        <div class="dh-head net-h2 pw-h2"><h3 data-i="wf.title"></h3><button class="btn icon-btn" id="wfRefresh" data-i-title="si.refresh"><span data-icon="refresh"></span></button></div>
+        <div class="dh-sub" data-i="wf.sub"></div>
+        <div class="list" id="wfList"></div>
+      </div>
+    </section>
+
+    <!-- =============== BLUE SCREENS (4.3) =============== -->
+    <section class="page" id="page-bsod">
+      <div class="head">
+        <div class="head-ico" data-icon="alert"></div>
+        <div><h1 data-i="bs.title"></h1><div class="sub" data-i="bs.sub"></div></div>
+        <div class="head-r"><button class="btn icon-btn" id="bsRefresh" data-i-title="si.refresh"><span data-icon="refresh"></span></button></div>
+      </div>
+      <div class="tw-body"><div id="bsTop"></div><div class="section-t" id="bsListT" data-i="bs.list" hidden></div><div class="list" id="bsList" hidden></div>
+        <div class="note-line" data-i="bs.note"></div></div>
+    </section>
+
+    <!-- =============== RECOVER DELETED FILES (4.3) =============== -->
+    <section class="page" id="page-recover">
+      <div class="head">
+        <div class="head-ico" data-icon="history"></div>
+        <div><h1 data-i="rf.title"></h1><div class="sub" data-i="rf.sub"></div></div>
+      </div>
+      <div class="tw-body"><div id="rfBody"></div>
+        <div class="bx-why"><b data-i="rf.tipT"></b><span data-i="rf.tip"></span><span data-i="rf.ssd"></span></div>
+        <div class="note-line" data-i="rf.note"></div></div>
+    </section>
+
     <!-- =============== REPAIR =============== -->
     <section class="page" id="page-repair">
       <div class="head">
@@ -2897,6 +3003,8 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
           <div class="item"><div class="i-ico" data-icon="stop"></div><div><div class="t" data-i="gm.force"></div><div class="d" data-i="gm.forceD"></div></div><input type="checkbox" class="switch" id="gmForce"></div>
         </div>
         <div id="gmClosed"></div>
+        <div class="section-t" data-i="fps.title"></div>
+        <div class="fps-box" id="fpsBox"></div>
         <div class="section-t" data-i="gm.listT"></div>
         <div class="list" id="gmList"></div>
         <div class="note-line" data-i="gm.note"></div>
@@ -3896,6 +4004,66 @@ bg: {
   "bn.n.balCPU": "{0} спира {1} на {2} с около {3}%: процесорът подготвя ~{4} кадъра/с, а картата може ~{5}.",
   "bn.n.balGPU": "С {0} и {1} на {2} видеокартата определя FPS (~{4} кадъра/с), а процесорът има запас (~{3}) — това не е проблем.",
   "bn.n.balOK": "{0} и {1} са балансирани на {2} — няма ботълнек.", "bn.n.balUnknown": "За {0} няма публикувани тестове — изводът за ботълнек е пропуснат.",
+  // 4.3
+  "nav.pass": "Пароли", "nav.bsod": "Сини екрани", "nav.recover": "Изтрити файлове", "pr.tab.install": "Инсталирай",
+  "in.cat.browsers": "Браузъри", "in.cat.chat": "Разговори", "in.cat.games": "Игри", "in.cat.media": "Музика и видео", "in.cat.tools": "Полезни",
+  "in.cat.office": "Документи", "in.cat.dev": "За програмисти", "in.cat.hw": "Хардуер", "in.sel": "Инсталирай избраните", "in.selN": "Инсталирай избраните ({0})",
+  "in.installing": "Инсталирам…", "in.have": "Инсталирана", "in.clear": "Изчисти избора", "in.sub": "Отметни каквото искаш — всичко се инсталира тихо, едно след друго.",
+  "in.note": "Всичко идва през winget — официалния мениджър на програми на Windows — направо от производителя, без реклами и без допълнителни програми.",
+  "job.inOne": "Инсталиране на {0}", "job.inN": "Инсталиране на {0} програми",
+  "ps.title": "Пароли", "ps.sub": "Провери дали парола е изтичала и виж паролите на запазените Wi-Fi мрежи",
+  "pw.title": "Изтичала ли е паролата ми?", "pw.sub": "Проверява в базата на Have I Been Pwned с над 900 милиона изтекли пароли. Паролата не напуска компютъра.",
+  "pw.ph": "Напиши парола…", "pw.check": "Провери", "pw.checking": "Проверявам…", "pw.show": "Покажи или скрий",
+  "pw.bad": "Тази парола е изтичала {0} пъти. Смени я навсякъде, където я ползваш — хакерите пробват точно такива пароли първо.",
+  "pw.good": "Не е намерена в известните изтичания. Това не значи, че е силна: ползвай дълга и различна парола за всеки сайт.",
+  "pw.note": "Как работи: SHA-1 хешът на паролата се смята тук; към api.pwnedpasswords.com отиват само първите му 5 знака, а съвпадението се търси на компютъра. Нищо не се записва.",
+  "wf.title": "Запазени Wi-Fi пароли", "wf.sub": "Паролите на мрежите, към които този компютър се е свързвал. Скрити са, докато не натиснеш окото.",
+  "wf.none": "Няма запазени Wi-Fi мрежи", "wf.open": "Отворена мрежа — без парола", "wf.ent": "Вход с име и парола (фирмена мрежа) — паролата не се пази тук",
+  "wf.noKey": "Паролата не може да се прочете", "wf.copy": "Копирай паролата", "wf.copied": "Паролата на {0} е копирана", "wf.show": "Покажи паролата", "wf.hide": "Скрий паролата",
+  "bs.title": "Сини екрани", "bs.sub": "Защо компютърът се е сринал или изключил сам — на прост език и какво помага",
+  "bs.none": "Няма сини екрани и внезапни изключвания в журнала на Windows — всичко е наред.", "bs.list": "Всички записи",
+  "bs.t30": "срива за последните 30 дни", "bs.tAll": "записа общо", "bs.tLast": "последен", "bs.power": "Внезапно изключване", "bs.help": "Какво помага:",
+  "bs.k.driver.t": "Срив на драйвер", "bs.k.driver.d": "Драйвер (програмата, която управлява устройство) е направил грешка в ядрото на Windows. Най-често това са драйверите на видеокартата, мрежата и Wi-Fi, звука или антивирусна програма.",
+  "bs.k.driver.f": "Обнови драйверите — особено ако сривовете започнаха след ново устройство или програма. Премахни наскоро инсталирана програма, която добавя драйвер (антивирус, VPN, RGB софтуер). На по-стар компютър провери и паметта.",
+  "bs.k.gpu.t": "Драйверът на видеокартата спря", "bs.k.gpu.d": "Видеокартата спря да отговаря и Windows не успя да рестартира драйвера ѝ. Причини: развален драйвер, твърде силен овърклок, прегряване или недостатъчно захранване.",
+  "bs.k.gpu.f": "Инсталирай драйвера наново начисто (раздел „Видеокарта“ го премахва като DDU). Махни овърклока. Провери температурата и прахта. Ако е в игри — захранването може да е слабо.",
+  "bs.k.ram.t": "Проблем с паметта (RAM)", "bs.k.ram.d": "Windows е прочел от паметта грешни данни. Най-често: нестабилен XMP/EXPO профил, разхлабена или повредена плочка памет, понякога драйвер.",
+  "bs.k.ram.f": "Пусни теста на паметта на Windows. За проба изключи XMP/EXPO в BIOS. Извади плочките и ги сложи отново; ако са две, пробвай с по една.",
+  "bs.k.hw.t": "Хардуерна грешка", "bs.k.hw.d": "Процесорът е съобщил за грешка, която не може да поправи (WHEA). Обикновено: овърклок или андервoлт, прегряване, слабо захранване или стар BIOS.",
+  "bs.k.hw.f": "Върни честотите и напреженията по подразбиране в BIOS. Провери температурите при натоварване (дългия тест в Бенчмарк). Обнови BIOS-а. Ако продължава — захранването или процесорът.",
+  "bs.k.disk.t": "Дискът не отговори", "bs.k.disk.d": "Windows не успя да прочете нужни данни от диска. Причини: износен или повреден диск, разхлабен кабел, стар фърмуер на SSD или драйвер за дисковете.",
+  "bs.k.disk.f": "Провери здравето на диска (S.M.A.R.T.). Направи копие на важните файлове. Провери кабелите и обнови фърмуера на SSD-то от сайта на производителя.",
+  "bs.k.system.t": "Повредени файлове на Windows", "bs.k.system.d": "Важен процес на Windows спря неочаквано. Често заради повредени системни файлове, неуспешно обновление или зловредна програма.",
+  "bs.k.system.f": "Пусни поправката на Windows (DISM и SFC). Провери с Windows Security. Ако започна след обновление — премахни го или се върни към точка за възстановяване.",
+  "bs.k.sleep.t": "Срив при заспиване или събуждане", "bs.k.sleep.d": "Драйвер не е отговорил, докато компютърът заспива или се събужда — най-често Wi-Fi, USB или видеокартата.",
+  "bs.k.sleep.f": "Обнови драйверите. Изключи бързото стартиране (Fast startup) в Tweaker. На лаптоп обнови BIOS-а и драйвера на чипсета.",
+  "bs.k.power.t": "Изключване без син екран", "bs.k.power.d": "Компютърът е угаснал, без Windows да успее да запише грешка: спрял ток, задържан бутон за захранване или пълно забиване.",
+  "bs.k.power.f": "Ако става в игри — най-често е захранването или прегряване. Провери кабела и разклонителя. Ако забива — провери температурите и драйвера на видеокартата.",
+  "bs.k.manual.t": "Пуснат нарочно", "bs.k.manual.d": "Този срив е пуснат ръчно (клавишна комбинация или програма за тестване). Не е проблем.", "bs.k.manual.f": "Нищо не е нужно.",
+  "bs.k.other.t": "Друг срив", "bs.k.other.d": "Рядък код на грешка, който програмата не познава.",
+  "bs.k.other.f": "Потърси кода в интернет заедно с думата BSOD. Обновяването на драйверите и проверката на паметта и диска помагат при повечето сривове.",
+  "bs.go.driver": "Обнови драйверите", "bs.go.gpu": "Към видеокартата", "bs.go.ram": "Тест на паметта", "bs.go.hw": "Дълъг тест", "bs.go.disk": "Здраве на диска", "bs.go.system": "Поправи Windows",
+  "bs.memT": "Тест на паметта", "bs.memD": "Windows ще попита дали да рестартира сега или при следващото пускане. Тестът отнема 10–20 минути, а резултатът се показва след влизане.", "bs.memOk": "Пусни",
+  "bs.note": "Чете само журнала на Windows (събития BugCheck 1001 и Kernel-Power 41). Файловете на сривовете (.dmp) остават където са.",
+  "rf.title": "Възстанови изтрити файлове", "rf.sub": "Търси изтрити снимки, документи и видеа с Windows File Recovery на Microsoft",
+  "rf.need": "Нужна е Windows File Recovery", "rf.needD": "Безплатен инструмент на Microsoft от Microsoft Store. Програмата го инсталира през winget и го управлява оттук — без команди.",
+  "rf.install": "Инсталирай Windows File Recovery", "rf.installing": "Инсталирам…", "rf.src": "Къде да търся", "rf.dst": "Къде да запазя намереното", "rf.what": "Какво да търся",
+  "rf.k.photos": "Снимки", "rf.k.docs": "Документи", "rf.k.videos": "Видеа", "rf.k.music": "Музика", "rf.k.archives": "Архиви",
+  "rf.name": "Част от името (по избор)", "rf.deep": "Дълбоко търсене", "rf.deepD": "По-бавно, но намира и по-стари файлове и такива от форматиран диск.",
+  "rf.start": "Търси", "rf.stop": "Спри", "rf.running": "Търся изтрити файлове…", "rf.open": "Отвори папката", "rf.done": "Намерени файлове: {0}",
+  "rf.doneNone": "Нищо не беше намерено. Пробвай „Дълбоко търсене“.", "rf.stopped": "Спряно. Каквото е намерено дотук, е в папката.",
+  "rf.tipT": "Колкото по-скоро, толкова по-добре", "rf.tip": "Не записвай нищо на диска, от който търсиш, докато не приключиш — новите файлове може да заемат мястото на изтритите.",
+  "rf.ssd": "На SSD изтритите файлове обикновено се изчистват от самия диск (TRIM) за минути, затова там шансът е малък. На HDD, флашки и карти памет е много по-голям.",
+  "rf.oneDrive": "Намереното трябва да се запази на друг диск — включи флашка или външен диск.", "rf.fixed": "Диск", "rf.removable": "Флашка", "rf.free": "свободни",
+  "rf.note": "Windows File Recovery само чете диска, от който търси; намереното се копира в нова папка Recovery_<дата> на другия диск.",
+  "fps.title": "Брояч на кадри (FPS)", "fps.sub": "Кадри в секунда, 1% low и време за кадър — и малко прозорче над играта.",
+  "fps.need": "Нужен е PresentMon", "fps.needD": "Безплатен инструмент на Intel с отворен код (около 1 MB). Чете графичните събития на Windows — нищо не се вкарва в играта, затова е безопасен с анти-чийт системите.",
+  "fps.get": "Свали PresentMon", "fps.getting": "Свалям… {0}", "fps.start": "Пусни брояча", "fps.stop": "Спри брояча",
+  "fps.overlay": "Показвай над играта", "fps.overlayD": "В горния ляв ъгъл на екрана. Работи при игри в прозорец и „Borderless“; при истински цял екран (exclusive) Windows го скрива.",
+  "fps.wait": "Пусни игра — броячът я намира сам.", "fps.fps": "кадъра в секунда", "fps.low": "1% low", "fps.ms": "мс на кадър",
+  "fps.note": "Броенето е чрез PresentMon {0} (Intel, лиценз MIT), свален от GitHub и проверен по SHA-256. Нужни са администраторски права.",
+  "qf.shaders.t": "Играта засича след нов драйвер", "qf.shaders.d": "Изтрива кеша на шейдърите (NVIDIA, AMD, Intel, DirectX, Steam) — игрите го създават наново.",
+  "qf.shaders.ask": "Първото пускане на всяка игра ще е малко по-бавно, докато шейдърите се създадат отново. Затвори игрите и Steam преди това.",
 },
 en: {
   "nav.clean": "Cleanup", "nav.memory": "Memory", "nav.optimize": "Optimize", "nav.repair": "Repair", "nav.settings": "Settings", "nav.credits": "Credits",
@@ -4808,6 +4976,66 @@ en: {
   "bn.n.balCPU": "{0} holds back {1} at {2} by about {3}%: the processor prepares ~{4} frames/s, the card could do ~{5}.",
   "bn.n.balGPU": "With {0} and {1} at {2} the graphics card sets the FPS (~{4} frames/s) and the processor has room (~{3}) — not a problem.",
   "bn.n.balOK": "{0} and {1} are balanced at {2} — no bottleneck.", "bn.n.balUnknown": "There are no published tests for {0} — the bottleneck verdict is skipped.",
+  // 4.3
+  "nav.pass": "Passwords", "nav.bsod": "Blue screens", "nav.recover": "Recover files", "pr.tab.install": "Install",
+  "in.cat.browsers": "Browsers", "in.cat.chat": "Chat", "in.cat.games": "Games", "in.cat.media": "Music & video", "in.cat.tools": "Utilities",
+  "in.cat.office": "Documents", "in.cat.dev": "Developers", "in.cat.hw": "Hardware", "in.sel": "Install selected", "in.selN": "Install selected ({0})",
+  "in.installing": "Installing…", "in.have": "Installed", "in.clear": "Clear", "in.sub": "Tick what you want — everything installs quietly, one after another.",
+  "in.note": "Everything comes through winget — Windows' own package manager — straight from the maker, with no ads and no bundled extras.",
+  "job.inOne": "Installing {0}", "job.inN": "Installing {0} programs",
+  "ps.title": "Passwords", "ps.sub": "Check whether a password has leaked and see the passwords of saved Wi-Fi networks",
+  "pw.title": "Has my password leaked?", "pw.sub": "Checks Have I Been Pwned's list of over 900 million leaked passwords. The password never leaves this PC.",
+  "pw.ph": "Type a password…", "pw.check": "Check", "pw.checking": "Checking…", "pw.show": "Show or hide",
+  "pw.bad": "This password has leaked {0} times. Change it everywhere you use it — attackers try exactly these passwords first.",
+  "pw.good": "Not found in known leaks. That does not make it strong: use a long, different password for each site.",
+  "pw.note": "How it works: the password's SHA-1 hash is made here; only its first 5 characters go to api.pwnedpasswords.com and the match is found on this PC. Nothing is saved.",
+  "wf.title": "Saved Wi-Fi passwords", "wf.sub": "The passwords of the networks this PC has joined. They stay hidden until you press the eye.",
+  "wf.none": "No saved Wi-Fi networks", "wf.open": "Open network — no password", "wf.ent": "Sign-in with a user name (work network) — no password is stored here",
+  "wf.noKey": "The password cannot be read", "wf.copy": "Copy the password", "wf.copied": "The password of {0} was copied", "wf.show": "Show the password", "wf.hide": "Hide the password",
+  "bs.title": "Blue screens", "bs.sub": "Why the PC crashed or turned off by itself — in plain words, and what helps",
+  "bs.none": "No blue screens or sudden power-offs in the Windows event log — all is well.", "bs.list": "All entries",
+  "bs.t30": "crashes in the last 30 days", "bs.tAll": "entries in all", "bs.tLast": "last one", "bs.power": "Sudden power-off", "bs.help": "What helps:",
+  "bs.k.driver.t": "A driver crashed", "bs.k.driver.d": "A driver (the program that runs a device) made an error inside Windows' core. Most often it is the graphics, network or Wi-Fi or sound driver, or an antivirus.",
+  "bs.k.driver.f": "Update the drivers — especially if the crashes began after a new device or program. Remove a recently installed program that adds a driver (antivirus, VPN, RGB software). On an older PC, test the memory too.",
+  "bs.k.gpu.t": "The graphics driver stopped", "bs.k.gpu.d": "The graphics card stopped answering and Windows could not restart its driver. Causes: a broken driver, too much overclock, overheating or not enough power.",
+  "bs.k.gpu.f": "Reinstall the driver cleanly (the Graphics card page removes it like DDU). Remove any overclock. Check the temperature and the dust. If it happens in games, the power supply may be too weak.",
+  "bs.k.ram.t": "A memory (RAM) problem", "bs.k.ram.d": "Windows read wrong data from memory. Most often: an unstable XMP/EXPO profile, a loose or faulty memory stick, sometimes a driver.",
+  "bs.k.ram.f": "Run Windows' memory test. Turn XMP/EXPO off in the BIOS to try. Take the sticks out and put them back; with two, try one at a time.",
+  "bs.k.hw.t": "A hardware error", "bs.k.hw.d": "The processor reported an error it could not fix (WHEA). Usually: an overclock or undervolt, overheating, a weak power supply or an old BIOS.",
+  "bs.k.hw.f": "Put clocks and voltages back to default in the BIOS. Check temperatures under load (the long test in Benchmark). Update the BIOS. If it goes on: the power supply or the processor.",
+  "bs.k.disk.t": "The drive did not answer", "bs.k.disk.d": "Windows could not read data it needed from the drive. Causes: a worn or failing drive, a loose cable, old SSD firmware or a storage driver.",
+  "bs.k.disk.f": "Check the drive's health (S.M.A.R.T.). Back up important files. Check the cables and update the SSD's firmware from its maker's site.",
+  "bs.k.system.t": "Damaged Windows files", "bs.k.system.d": "An essential Windows process stopped unexpectedly. Often damaged system files, a failed update or malware.",
+  "bs.k.system.f": "Run the Windows repair (DISM and SFC). Scan with Windows Security. If it began after an update, remove it or go back to a restore point.",
+  "bs.k.sleep.t": "A crash when sleeping or waking", "bs.k.sleep.d": "A driver did not answer while the PC went to sleep or woke up — most often Wi-Fi, USB or graphics.",
+  "bs.k.sleep.f": "Update the drivers. Turn off Fast startup in the Tweaker. On a laptop, update the BIOS and the chipset driver.",
+  "bs.k.power.t": "Turned off without a blue screen", "bs.k.power.d": "The PC went off before Windows could write an error: a power cut, a held power button or a complete freeze.",
+  "bs.k.power.f": "If it happens in games, it is most often the power supply or heat. Check the power cable and strip. If it freezes, check temperatures and the graphics driver.",
+  "bs.k.manual.t": "Started on purpose", "bs.k.manual.d": "This crash was started on purpose (a key combination or a test tool). Not a problem.", "bs.k.manual.f": "Nothing to do.",
+  "bs.k.other.t": "Another crash", "bs.k.other.d": "A rare stop code the app does not know.",
+  "bs.k.other.f": "Search the code online with the word BSOD. Updating the drivers and testing the memory and the drive help with most crashes.",
+  "bs.go.driver": "Update drivers", "bs.go.gpu": "Graphics card", "bs.go.ram": "Test the memory", "bs.go.hw": "Long test", "bs.go.disk": "Drive health", "bs.go.system": "Repair Windows",
+  "bs.memT": "Memory test", "bs.memD": "Windows asks whether to restart now or at the next start. The test takes 10–20 minutes; the result shows after you sign in.", "bs.memOk": "Start",
+  "bs.note": "Reads only the Windows event log (BugCheck 1001 and Kernel-Power 41 events). The crash files (.dmp) stay where they are.",
+  "rf.title": "Recover deleted files", "rf.sub": "Find deleted photos, documents and videos with Microsoft's Windows File Recovery",
+  "rf.need": "Windows File Recovery is needed", "rf.needD": "A free Microsoft tool from the Microsoft Store. The app installs it through winget and drives it from here — no commands.",
+  "rf.install": "Install Windows File Recovery", "rf.installing": "Installing…", "rf.src": "Where to look", "rf.dst": "Where to save what is found", "rf.what": "What to look for",
+  "rf.k.photos": "Photos", "rf.k.docs": "Documents", "rf.k.videos": "Videos", "rf.k.music": "Music", "rf.k.archives": "Archives",
+  "rf.name": "Part of the name (optional)", "rf.deep": "Deep search", "rf.deepD": "Slower, but finds older files and ones on a formatted drive too.",
+  "rf.start": "Search", "rf.stop": "Stop", "rf.running": "Searching for deleted files…", "rf.open": "Open the folder", "rf.done": "Files found: {0}",
+  "rf.doneNone": "Nothing was found. Try a deep search.", "rf.stopped": "Stopped. What was found so far is in the folder.",
+  "rf.tipT": "The sooner the better", "rf.tip": "Write nothing to the drive you search until you are done — new files can take the place of the deleted ones.",
+  "rf.ssd": "On an SSD, deleted files are usually wiped by the drive itself (TRIM) within minutes, so the chance there is low. On HDDs, USB sticks and memory cards it is much better.",
+  "rf.oneDrive": "What is found must be saved to another drive — plug in a USB stick or an external drive.", "rf.fixed": "Drive", "rf.removable": "USB", "rf.free": "free",
+  "rf.note": "Windows File Recovery only reads the drive it searches; what it finds is copied into a new Recovery_<date> folder on the other drive.",
+  "fps.title": "Frame counter (FPS)", "fps.sub": "Frames per second, 1% low and frame time — and a small box above the game.",
+  "fps.need": "PresentMon is needed", "fps.needD": "A free, open-source tool by Intel (about 1 MB). It reads Windows' graphics events — nothing is injected into the game, so it is safe with anti-cheat.",
+  "fps.get": "Download PresentMon", "fps.getting": "Downloading… {0}", "fps.start": "Start the counter", "fps.stop": "Stop the counter",
+  "fps.overlay": "Show above the game", "fps.overlayD": "In the screen's top-left corner. Works with windowed and borderless games; true exclusive full screen hides it.",
+  "fps.wait": "Start a game — the counter finds it by itself.", "fps.fps": "frames per second", "fps.low": "1% low", "fps.ms": "ms per frame",
+  "fps.note": "Counting is done by PresentMon {0} (Intel, MIT license), downloaded from GitHub and checked by SHA-256. Administrator rights are needed.",
+  "qf.shaders.t": "A game stutters after a new driver", "qf.shaders.d": "Deletes the shader cache (NVIDIA, AMD, Intel, DirectX, Steam) — games build it again.",
+  "qf.shaders.ask": "The first start of each game is a little slower while the shaders are built again. Close games and Steam first.",
 }};
 let L = "en";
 function t(k, ...a) {
@@ -5282,7 +5510,7 @@ function fitNav() {
     n.classList.toggle("tight", mode === "tight"); n.classList.toggle("lines", mode === "lines");
     const over = n.scrollHeight - n.clientHeight;
     const h = Math.floor(h0 - over / bs.length - .5);
-    if (h >= 24 || mode === "lines") { n.style.setProperty("--navh", Math.max(21, Math.min(h0, h)) + "px"); n.classList.add("fit"); break; }
+    if (h >= 24 || mode === "lines") { n.style.setProperty("--navh", Math.max(19, Math.min(h0, h)) + "px"); n.classList.add("fit"); break; }
   }
   moveNav();
 }
@@ -5391,7 +5619,7 @@ function go(page, opt) {
   if (page === "optimize") { loadDrives(); loadDiskHealth(false); }
   if (page === "home") { homeLoad(false); paintLive(); if (!LIVE.timer && !LIVE.busy) liveTick(); if (!AUTO.st) loadAuto(); }
   if (page === "programs") { if (opt && opt.prTab) { PR.tab = opt.prTab; setupPrTabs(); } loadPrograms(); requestAnimationFrame(() => $("#prTab")._place && $("#prTab")._place()); }
-  if (page === "game") loadGame();
+  if (page === "game") { loadGame(); loadFps(); }
   if (page === "tidy") { loadTidy(); requestAnimationFrame(() => $("#tdTab")._place && $("#tdTab")._place()); }
   if (page === "memory") { paintMem(); requestAnimationFrame(() => { $("#segThr")._place(); $("#segInt")._place(); }); }
   if (page === "settings") requestAnimationFrame(() => { $("#segLang")._place(); $("#segTheme")._place && $("#segTheme")._place(); });
@@ -5405,6 +5633,9 @@ function go(page, opt) {
   if (page === "nmerge") loadNm(true);
   if (page === "bench") loadBench();
   if (page === "ext") loadExt();
+  if (page === "pass") loadWifi(false);
+  if (page === "bsod") loadBsod(false);
+  if (page === "recover") loadRecover(false);
   if (page === "network") paintNp();
   if (page === "repair") paintQf();
   if (page === "settings") { loadAuto(); requestAnimationFrame(() => $("#segAuto")._place && $("#segAuto")._place()); }
@@ -8171,6 +8402,7 @@ $("#npRun").addEventListener("click", async () => {
 // 3.4: quick fixes — small repairs Windows has itself, each after a question
 const QF = [
   { id: "explorer", icon: "folder" }, { id: "icons", icon: "image" }, { id: "store", icon: "package" }, { id: "winsock", icon: "network", admin: true, reboot: true },
+  { id: "shaders", icon: "gamepad", clean: true }, // a cleaning of one category, through the Cleanup page
 ];
 const QFS = { busy: "" };
 function paintQf() {
@@ -8181,6 +8413,7 @@ function paintQf() {
 }
 function qfAsk(f) {
   confirmBox({ title: t("qf." + f.id + ".t"), text: t("qf." + f.id + ".ask"), okText: t("qf.run"), ok: async () => {
+    if (f.clean) { go("clean"); beginClean([f.id], {}); return; }
     QFS.busy = f.id; paintQf();
     let r = null; try { r = await api.quickFix(f.id); } catch (e) { r = { error: String((e && e.message) || e) }; }
     QFS.busy = ""; paintQf();
@@ -8190,6 +8423,219 @@ function qfAsk(f) {
   } });
 }
 paintQf();
+
+/* =====================================================================
+   4.3 — Passwords (leak check, saved Wi-Fi passwords), Blue screens,
+   Recover deleted files (Windows File Recovery), the frame counter.
+===================================================================== */
+// ---- has my password leaked? (only 5 characters of its SHA-1 leave the PC)
+const PW = { busy: false, res: null };
+function paintPw() {
+  const b = $("#pwRes"); if (!b) return;
+  $("#pwGo").disabled = PW.busy;
+  $("#pwGo").innerHTML = PW.busy ? `<span class="spin"></span><span>${esc(t("pw.checking"))}</span>` : `<span>${esc(t("pw.check"))}</span>`;
+  const r = PW.res;
+  if (!r) { b.innerHTML = ""; return; }
+  if (r.error) { b.innerHTML = `<div class="pw-res">${ICONS.alert}<span>${esc(r.error)}</span></div>`; return; }
+  b.innerHTML = r.count > 0 ? `<div class="pw-res bad">${ICONS.alert}<span>${esc(t("pw.bad", nfi(r.count)))}</span></div>` : `<div class="pw-res good">${ICONS.check}<span>${esc(t("pw.good"))}</span></div>`;
+}
+$("#pwForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const v = $("#pwIn").value; if (!v || PW.busy) return;
+  PW.busy = true; PW.res = null; paintPw();
+  let r = null; try { r = await api.pwnedCheck(v); } catch (err) { r = { error: String((err && err.message) || err) }; }
+  PW.busy = false; PW.res = r || { error: t("tw.failed") }; paintPw();
+});
+$("#pwIn").addEventListener("input", () => { if (PW.res) { PW.res = null; paintPw(); } });
+$("#pwEye").addEventListener("click", () => { const i = $("#pwIn"); i.type = i.type === "password" ? "text" : "password"; $("#pwEye").innerHTML = i.type === "password" ? ICONS.eye : ICONS.eyeoff; });
+
+// ---- saved Wi-Fi passwords (hidden until asked)
+const WF = { v: null, loading: false, shown: new Set() };
+async function loadWifi(force) {
+  if (WF.loading) return;
+  if (WF.v && !force) { renderWifi(); return; }
+  WF.loading = true; renderWifi();
+  try { WF.v = await api.wifiNets(); } catch (e) { WF.v = { nets: [], error: String((e && e.message) || e) }; }
+  WF.loading = false; WF.shown.clear(); renderWifi();
+}
+function wfAuth(a) { return { WPA3SAE: "WPA3", WPA2PSK: "WPA2", WPAPSK: "WPA", WPA2: "WPA2-Enterprise", WPA: "WPA-Enterprise", WPA3ENT192: "WPA3-Enterprise", WPA3ENT: "WPA3-Enterprise", open: "" }[a] ?? a; }
+function renderWifi() {
+  const box = $("#wfList"); if (!box) return;
+  if (WF.loading || !WF.v) { box.innerHTML = `<div class="tw-empty"><span class="spin"></span></div>`; return; }
+  const ns = WF.v.nets || [];
+  if (WF.v.error) { box.innerHTML = `<div class="tw-empty">${esc(WF.v.error)}</div>`; return; }
+  if (!ns.length) { box.innerHTML = `<div class="tw-empty">${esc(t("wf.none"))}</div>`; return; }
+  box.innerHTML = ns.map((n, i) => {
+    const show = WF.shown.has(i);
+    const right = n.key ? `<div class="wf-k"><span class="wf-key${show ? "" : " hid"}">${esc(show ? n.key : "••••••••")}</span>
+        <button class="ibtn" data-wfeye="${i}" title="${esc(t(show ? "wf.hide" : "wf.show"))}" aria-label="${esc(t(show ? "wf.hide" : "wf.show"))}">${show ? ICONS.eyeoff : ICONS.eye}</button>
+        <button class="ibtn" data-wfcopy="${i}" title="${esc(t("wf.copy"))}" aria-label="${esc(t("wf.copy"))}">${ICONS.copy}</button></div>` : "";
+    const d = n.open ? t("wf.open") : n.key ? wfAuth(n.auth) : /^WPA[23]?(ENT|$)/.test(n.auth || "") ? t("wf.ent") : t("wf.noKey");
+    return `<div class="item"><div class="i-ico">${ICONS.wifi}</div><div style="min-width:0"><div class="t">${esc(n.name)}</div><div class="d">${esc(d)}</div></div>${right}</div>`;
+  }).join("");
+  box.querySelectorAll("[data-wfeye]").forEach(b => b.addEventListener("click", () => { const i = +b.dataset.wfeye; if (WF.shown.has(i)) WF.shown.delete(i); else WF.shown.add(i); renderWifi(); }));
+  box.querySelectorAll("[data-wfcopy]").forEach(b => b.addEventListener("click", async () => { const n = ns[+b.dataset.wfcopy]; if (n && await copyToClipboard(n.key)) toast(t("wf.copied", n.name), "copy"); }));
+}
+$("#wfRefresh").addEventListener("click", () => loadWifi(true));
+
+// ---- blue screens explained
+const BS = { v: null, loading: false };
+const BS_GO = { driver: ["bs.go.driver", () => go("wupd")], sleep: ["bs.go.driver", () => go("wupd")], gpu: ["bs.go.gpu", () => go("gpu")],
+  ram: ["bs.go.ram", () => confirmBox({ title: t("bs.memT"), text: t("bs.memD"), okText: t("bs.memOk"), ok: () => api.memTest() })],
+  hw: ["bs.go.hw", () => go("bench")], disk: ["bs.go.disk", () => go("optimize")], system: ["bs.go.system", () => go("repair")] };
+async function loadBsod(force) {
+  if (BS.loading) return;
+  if (BS.v && !force) { renderBsod(); return; }
+  BS.loading = true; renderBsod();
+  try { BS.v = await api.bsodRecent(); } catch (e) { BS.v = { events: [], error: String((e && e.message) || e) }; }
+  BS.loading = false; renderBsod();
+}
+function renderBsod() {
+  const top = $("#bsTop"), list = $("#bsList"); if (!top || !list) return;
+  if (BS.loading || !BS.v) { top.innerHTML = `<div class="tw-empty"><span class="spin"></span></div>`; list.hidden = $("#bsListT").hidden = true; return; }
+  const es = BS.v.events || [];
+  const n30 = es.filter(e => e.at > Date.now() - 30 * 864e5 && e.cat !== "manual").length;
+  const b = $("#bsBadge"); if (b) { b.hidden = !n30; b.textContent = n30 ? String(n30) : ""; }
+  list.hidden = $("#bsListT").hidden = !es.length;
+  if (!es.length) { top.innerHTML = `<div class="tw-empty">${BS.v.error ? esc(BS.v.error) : `${ICONS.check} ${esc(t("bs.none"))}`}</div>`; list.innerHTML = ""; return; }
+  const groups = {};
+  es.forEach(e => { (groups[e.cat] = groups[e.cat] || []).push(e); });
+  const order = Object.keys(groups).sort((a, c) => groups[c].length - groups[a].length || groups[c][0].at - groups[a][0].at);
+  const when = ms => new Date(ms).toLocaleString(locale(), { dateStyle: "medium", timeStyle: "short" });
+  top.innerHTML = `<div class="bx-sum"><div class="bx-tile${n30 ? " high" : ""}"><b>${n30}</b><span>${esc(t("bs.t30"))}</span></div><div class="bx-tile"><b>${es.length}</b><span>${esc(t("bs.tAll"))}</span></div>
+      <div class="bx-tile"><b style="font-size:18px">${esc(relDay(es[0].at / 1000) || when(es[0].at))}</b><span>${esc(t("bs.tLast"))}</span></div></div>
+    <div class="bs-cards">${order.map(c => `<div class="bs-card ${esc(c)}"><div class="bs-h"><span class="bs-n">${groups[c].length}×</span><b>${esc(t("bs.k." + c + ".t"))}</b></div>
+      <p>${esc(t("bs.k." + c + ".d"))}</p><div class="bs-f"><b>${esc(t("bs.help"))}</b> ${esc(t("bs.k." + c + ".f"))}</div>
+      ${BS_GO[c] ? `<button class="btn small" data-bsgo="${esc(c)}">${esc(t(BS_GO[c][0]))}</button>` : ""}</div>`).join("")}</div>`;
+  top.querySelectorAll("[data-bsgo]").forEach(x => x.addEventListener("click", () => BS_GO[x.dataset.bsgo][1]()));
+  list.innerHTML = es.map(e => `<div class="bs-row"><span class="bs-dot ${esc(e.cat)}"></span><div style="min-width:0"><b>${esc(e.cat === "power" ? t("bs.power") : e.name || e.code)}</b>
+      <span class="m" title="${esc(e.dump || "")}">${esc([e.code, t("bs.k." + e.cat + ".t")].filter(Boolean).join(" · "))}</span></div><span class="bs-at">${esc(when(e.at))}</span></div>`).join("");
+}
+$("#bsRefresh").addEventListener("click", () => loadBsod(true));
+
+// ---- recover deleted files with Windows File Recovery
+const WINFR = "9N26S50LN705";
+const RF = { st: null, vols: null, src: "", dst: "", kinds: new Set(["photos", "docs"]), name: "", deep: false, run: false, pct: -1, line: "", res: null, installing: false };
+async function loadRecover(force) {
+  try {
+    const [st, vols] = await Promise.all([api.recoverState(), RF.vols && !force ? RF.vols : api.diskVolumes()]);
+    RF.st = st || { installed: false }; RF.vols = (vols || []).filter(v => v.kind !== "network" && /^[A-Z]:/i.test(v.root || ""));
+  } catch (e) { RF.st = RF.st || { installed: false }; RF.vols = RF.vols || []; }
+  RF.run = !!RF.st.running;
+  const ls = RF.vols.map(v => v.root[0].toUpperCase());
+  if (!ls.includes(RF.src)) RF.src = ls[0] || "";
+  if (!ls.includes(RF.dst) || RF.dst === RF.src) RF.dst = ls.find(l => l !== RF.src) || "";
+  renderRecover();
+}
+function rfCanGo() { return !RF.run && RF.src && RF.dst && RF.src !== RF.dst && (RF.kinds.size || RF.name.trim()); }
+function renderRecover() {
+  const box = $("#rfBody"); if (!box) return;
+  const s = RF.st;
+  if (!s) { box.innerHTML = `<div class="tw-empty"><span class="spin"></span></div>`; return; }
+  if (!s.installed) {
+    const w = PR.wg[WINFR] || {}, busy = RF.installing;
+    box.innerHTML = `<div class="rf-need"><div class="i-ico">${ICONS.history}</div><div><b>${esc(t("rf.need"))}</b><p>${esc(t("rf.needD"))}</p>${w.state === "fail" ? `<p class="su-e">${esc(w.msg || t("wg.fail"))}</p>` : ""}</div>
+      <button class="btn primary" id="rfInst" ${busy ? "disabled" : ""}>${busy ? '<span class="spin"></span>' : ICONS.download}<span>${esc(t(busy ? "rf.installing" : "rf.install"))}</span></button></div>`;
+    $("#rfInst").addEventListener("click", rfInstall); return;
+  }
+  const vols = RF.vols || [];
+  const vol = (v, which) => { const l = v.root[0].toUpperCase(), cur = which === "src" ? RF.src : RF.dst;
+    return `<button class="rf-vol${cur === l ? " on" : ""}" data-${which}="${l}" ${RF.run || (which === "dst" && l === RF.src) ? "disabled" : ""}><b>${l}:</b><span>${esc(v.label || t(v.kind === "removable" ? "rf.removable" : "rf.fixed"))}</span><span class="m">${esc(fmt(v.free))} ${esc(t("rf.free"))}</span></button>`; };
+  const kinds = ["photos", "docs", "videos", "music", "archives"].map(k => `<label class="rf-kind${RF.kinds.has(k) ? " on" : ""}"><input type="checkbox" class="cb" data-kind="${k}" ${RF.kinds.has(k) ? "checked" : ""} ${RF.run ? "disabled" : ""}><span>${esc(t("rf.k." + k))}</span></label>`).join("");
+  const r = RF.res;
+  const result = r ? `<div class="pw-res rf-res${r.error ? " bad" : r.files ? " good" : ""}">${r.error ? ICONS.alert : ICONS.check}<span>${esc(r.error || (r.stopped ? t("rf.stopped") : r.files ? t("rf.done", nfi(r.files)) : t("rf.doneNone")))}</span>
+      ${r.out ? `<button class="btn small" id="rfOpen" style="margin-left:auto">${ICONS.folder}<span>${esc(t("rf.open"))}</span></button>` : ""}</div>` : "";
+  box.innerHTML = `<div class="section-t">${esc(t("rf.src"))}</div><div class="rf-vols">${vols.map(v => vol(v, "src")).join("")}</div>
+    <div class="section-t">${esc(t("rf.dst"))}</div>${vols.length < 2 ? `<div class="pw-res">${ICONS.alert}<span>${esc(t("rf.oneDrive"))}</span></div>` : `<div class="rf-vols">${vols.map(v => vol(v, "dst")).join("")}</div>`}
+    <div class="section-t">${esc(t("rf.what"))}</div><div class="rf-kinds">${kinds}</div>
+    <label class="search rf-name"><span>${ICONS.search}</span><input id="rfName" type="search" spellcheck="false" autocomplete="off" maxlength="80" placeholder="${esc(t("rf.name"))}" aria-label="${esc(t("rf.name"))}" value="${esc(RF.name)}" ${RF.run ? "disabled" : ""}></label>
+    <div class="list" style="margin-top:12px"><div class="item"><div class="i-ico">${ICONS.search}</div><div><div class="t">${esc(t("rf.deep"))}</div><div class="d">${esc(t("rf.deepD"))}</div></div><input type="checkbox" class="switch" id="rfDeep" ${RF.deep ? "checked" : ""} ${RF.run ? "disabled" : ""} aria-label="${esc(t("rf.deep"))}"></div></div>
+    <div class="rf-go">${RF.run ? `<button class="btn danger" id="rfStop">${ICONS.stop}<span>${esc(t("rf.stop"))}</span></button><span class="spin"></span><span>${esc(t("rf.running"))}${RF.pct >= 0 ? " " + RF.pct + "%" : ""}</span>`
+      : `<button class="btn primary" id="rfGo" ${rfCanGo() ? "" : "disabled"}>${ICONS.search}<span>${esc(t("rf.start"))}</span></button>`}</div>
+    ${RF.run ? `<div class="progress${RF.pct < 0 ? " indet" : ""}"><i style="width:${Math.max(0, RF.pct)}%"></i></div>${RF.line ? `<div class="rf-line">${esc(RF.line)}</div>` : ""}` : ""}${result}`;
+  box.querySelectorAll("[data-src]").forEach(b => b.addEventListener("click", () => { RF.src = b.dataset.src; if (RF.dst === RF.src) RF.dst = vols.map(v => v.root[0].toUpperCase()).find(l => l !== RF.src) || ""; renderRecover(); }));
+  box.querySelectorAll("[data-dst]").forEach(b => b.addEventListener("click", () => { RF.dst = b.dataset.dst; renderRecover(); }));
+  box.querySelectorAll("[data-kind]").forEach(c => c.addEventListener("change", () => { if (c.checked) RF.kinds.add(c.dataset.kind); else RF.kinds.delete(c.dataset.kind); renderRecover(); }));
+  const nm = $("#rfName"); if (nm) nm.addEventListener("input", () => { RF.name = nm.value; const g = $("#rfGo"); if (g) g.disabled = !rfCanGo(); });
+  const dp = $("#rfDeep"); if (dp) dp.addEventListener("change", () => { RF.deep = dp.checked; });
+  const g = $("#rfGo"); if (g) g.addEventListener("click", rfStart);
+  const sp = $("#rfStop"); if (sp) sp.addEventListener("click", () => { api.recoverStop(); sp.disabled = true; });
+  const op = $("#rfOpen"); if (op) op.addEventListener("click", () => api.recoverOpen());
+}
+async function rfStart() {
+  if (!rfCanGo()) return;
+  RF.res = null; RF.pct = -1; RF.line = ""; RF.run = true; renderRecover();
+  let r = null; try { r = await api.recoverStart({ src: RF.src, dst: RF.dst, kinds: Array.from(RF.kinds), name: RF.name.trim(), deep: RF.deep }); } catch (e) { r = { error: String((e && e.message) || e) }; }
+  if (!r || r.error) { RF.run = false; toast((r && r.error) || t("tw.failed"), "alert", "warn"); }
+  renderRecover();
+}
+function rfInstall() {
+  if (PR.wgRun || jobOf("winget")) { toast(t("job.already", (jobOf("winget") || {}).title || ""), "clock"); return; }
+  RF.installing = true; PR.wg[WINFR] = { state: "queued" };
+  jobAdd({ kind: "winget", page: "recover", title: t("rf.install"), stop: () => api.wingetStop(),
+    onDrop: () => { RF.installing = false; delete PR.wg[WINFR]; renderRecover(); },
+    run: job => new Promise(res => {
+      job.done = res; PR.wgRun = true; PR.wgIds = [WINFR]; renderRecover();
+      const fail = () => { PR.wgRun = false; RF.installing = false; renderRecover(); jobFinish("winget", "error", t("wg.cant")); };
+      api.recoverInstall().then(ok => { if (ok === false) fail(); }).catch(fail);
+    }) });
+  renderRecover();
+}
+on("recover", d => {
+  if (d.state === "run") { RF.run = true; if (d.pct >= 0) RF.pct = d.pct; if (d.line) RF.line = d.line; }
+  if (d.state === "end") {
+    RF.run = false; RF.res = d;
+    if (d.error) toast(d.error, "alert", "warn"); else if (!d.stopped) toast(d.files ? t("rf.done", nfi(d.files)) : t("rf.doneNone"), d.files ? "check" : "info");
+  }
+  if (S.page === "recover") renderRecover();
+});
+
+// ---- the frame counter (PresentMon), on the Game mode page
+const FP = { st: null, now: null, dl: 0, busy: false, err: "" };
+function fpsOvCfg() { return gmCfg().fpsOverlay !== false; }
+async function loadFps() {
+  try { FP.st = await api.fpsState(); } catch (e) { FP.st = { installed: false }; }
+  paintFps();
+}
+function paintFps() {
+  const b = $("#fpsBox"); if (!b) return;
+  const s = FP.st;
+  if (!s) { b.innerHTML = `<div class="tw-empty"><span class="spin"></span></div>`; return; }
+  const err = FP.err ? `<div class="su-e" style="margin-top:8px">${esc(FP.err)}</div>` : "";
+  if (!s.installed) {
+    b.innerHTML = `<div class="fps-need"><div><b>${esc(t("fps.need"))}</b><p>${esc(t("fps.needD"))}</p></div>
+      <button class="btn primary" id="fpsGet" ${FP.busy ? "disabled" : ""}>${FP.busy ? '<span class="spin"></span>' : ICONS.download}<span>${esc(FP.busy ? t("fps.getting", FP.dl ? fmt(FP.dl) : "") : t("fps.get"))}</span></button></div>${err}`;
+    $("#fpsGet").addEventListener("click", async () => {
+      FP.busy = true; FP.err = ""; FP.dl = 0; paintFps();
+      let r = null; try { r = await api.fpsInstall(); } catch (e) { r = { error: String((e && e.message) || e) }; }
+      FP.busy = false; FP.st = r || FP.st; FP.err = (r && r.error) || ""; paintFps();
+    });
+    return;
+  }
+  b.innerHTML = `<div class="fps-top"><div class="fps-app" id="fpsApp"></div><button class="btn ${s.running ? "danger" : "primary"}" id="fpsGo">${s.running ? ICONS.stop : ICONS.gauge}<span>${esc(t(s.running ? "fps.stop" : "fps.start"))}</span></button></div>
+    ${s.running ? `<div class="bx-sum"><div class="bx-tile"><b id="fpsV1">—</b><span>${esc(t("fps.fps"))}</span></div><div class="bx-tile"><b id="fpsV2">—</b><span>${esc(t("fps.low"))}</span></div><div class="bx-tile"><b id="fpsV3">—</b><span>${esc(t("fps.ms"))}</span></div></div>` : ""}
+    <div class="list"><div class="item"><div class="i-ico">${ICONS.window}</div><div><div class="t">${esc(t("fps.overlay"))}</div><div class="d">${esc(t("fps.overlayD"))}</div></div><input type="checkbox" class="switch" id="fpsOv" ${fpsOvCfg() ? "checked" : ""} aria-label="${esc(t("fps.overlay"))}"></div></div>
+    ${err}<div class="note-line">${esc(t("fps.note", "2.6.0"))}</div>`;
+  paintFpsNow();
+  $("#fpsGo").addEventListener("click", async () => {
+    const btn = $("#fpsGo"); btn.disabled = true; FP.err = "";
+    let r = null; try { r = s.running ? await api.fpsStop() : await api.fpsStart(fpsOvCfg()); } catch (e) { r = { error: String((e && e.message) || e) }; }
+    FP.now = null; FP.st = Object.assign({}, FP.st, r || {}); FP.err = (r && r.error) || ""; paintFps();
+  });
+  $("#fpsOv").addEventListener("change", e => { gmCfg().fpsOverlay = e.target.checked; storeSettings(); if (s.running) api.fpsOverlay(e.target.checked); });
+}
+function paintFpsNow() {
+  const v = FP.now, app = $("#fpsApp"); if (!app) return;
+  app.innerHTML = FP.st && FP.st.running ? (v && v.app ? `<b>${esc(v.app)}</b>` : esc(t("fps.wait"))) : esc(t("fps.sub"));
+  setTxt("#fpsV1", v ? String(Math.round(v.fps)) : "—"); setTxt("#fpsV2", v ? String(Math.round(v.low1)) : "—"); setTxt("#fpsV3", v ? v.ms.toFixed(1) : "—");
+}
+on("fps", d => {
+  if (d.state === "end") { FP.st = Object.assign({}, FP.st, { running: false }); FP.now = null; FP.err = d.error || ""; if (S.page === "game") paintFps(); return; }
+  FP.now = d.now || null;
+  if (FP.st && !FP.st.running) { FP.st.running = true; if (S.page === "game") paintFps(); }
+  if (S.page === "game") paintFpsNow();
+});
+on("fps-dl", d => { FP.dl = d.done || 0; const b = $("#fpsGet span:last-child"); if (b && FP.busy) b.textContent = t("fps.getting", fmt(FP.dl)); });
 
 /* =====================================================================
    3.7 — Merge connections (net-merge) + the Windows Defender false-positive
@@ -8896,7 +9342,7 @@ function setupSwatches() {
 }
 
 /* Keyboard shortcuts */
-const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "sysinfo", "gpu", "wupd", "bench", "optimize", "network", "nmerge", "repair", "restore", "ext", "logs", "settings", "credits"];
+const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "sysinfo", "gpu", "wupd", "bench", "optimize", "network", "nmerge", "repair", "restore", "ext", "pass", "bsod", "recover", "logs", "settings", "credits"];
 document.addEventListener("keydown", e => {
   if ($("#veil").classList.contains("on") || $("#sveil").classList.contains("on")) return;
   if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K" || e.key === "p" || e.key === "P")) { e.preventDefault(); if ($("#palVeil").classList.contains("on")) palClose(); else palOpen(); return; }
@@ -10150,8 +10596,8 @@ on("auto-clean", d => {
    Command palette (Ctrl+K): every section, action, tweak and category
 ===================================================================== */
 const PAL = { items: [], idx: 0 };
-const PAGE_ICON = { home: "heart", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", sysinfo: "board", gpu: "gpu", wupd: "wupd", network: "network", nmerge: "merge", bench: "bench", ext: "puzzle", tweaks: "tweaks", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
-const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", sysinfo: "si.sub", gpu: "gp.sub", wupd: "wu.sub", network: "net.sub", nmerge: "nm.sub", bench: "bn.sub", ext: "bx.sub", tweaks: "tw.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
+const PAGE_ICON = { home: "heart", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", sysinfo: "board", gpu: "gpu", wupd: "wupd", network: "network", nmerge: "merge", bench: "bench", ext: "puzzle", pass: "lock", bsod: "alert", recover: "history", tweaks: "tweaks", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
+const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", sysinfo: "si.sub", gpu: "gp.sub", wupd: "wu.sub", network: "net.sub", nmerge: "nm.sub", bench: "bn.sub", ext: "bx.sub", pass: "ps.sub", bsod: "bs.sub", recover: "rf.sub", tweaks: "tw.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
 function palSources() {
   const items = [];
   PAGES.forEach((p, i) => items.push({ g: "pal.g.pages", icon: PAGE_ICON[p], title: t("nav." + p), sub: t(PAGE_SUB[p]), hint: i < 9 ? "Ctrl " + (i + 1) : "", kw: p, run: () => go(p) }));
@@ -10882,7 +11328,7 @@ function paintPrBadge() {
 }
 function setupPrTabs() {
   const n = (PR.upd && (PR.upd.updates || []).length) || 0;
-  makeSeg($("#prTab"), [{ v: "apps", label: t("pr.tab.apps") }, { v: "store", label: t("pr.tab.store") }, { v: "updates", label: n ? t("pr.tab.updN", n) : t("pr.tab.upd") }], PR.tab, v => { PR.tab = v; loadPrograms(); });
+  makeSeg($("#prTab"), [{ v: "apps", label: t("pr.tab.apps") }, { v: "store", label: t("pr.tab.store") }, { v: "updates", label: n ? t("pr.tab.updN", n) : t("pr.tab.upd") }, { v: "install", label: t("pr.tab.install") }], PR.tab, v => { PR.tab = v; loadPrograms(); });
   const so = $("#prSort");
   so.innerHTML = ["name", "size", "installed", "used", "publisher"].map(k => `<option value="${k}">${esc(t("pr.sort." + k))}</option>`).join("");
   so.value = PR.sort;
@@ -10906,14 +11352,16 @@ function prSorted(list) {
 function renderPrograms() {
   const box = $("#prList"); if (!box) return;
   const tab = PR.tab;
-  $("#prTools").hidden = tab === "updates";
+  box.classList.toggle("in-mode", tab === "install");
+  $("#prTools").hidden = tab === "updates" || tab === "install";
   $("#prUpdBar").hidden = tab !== "updates";
-  $("#prNote").hidden = tab === "updates";
-  $("#prCopy").hidden = tab === "updates";
+  $("#prNote").hidden = tab === "updates" || tab === "install";
+  $("#prCopy").hidden = tab === "updates" || tab === "install";
   const un = UN.app && ["queued", "rp", "run", "scan"].includes(UN.phase) && !unShown();
   $("#prUnNote").hidden = !un;
   if (un) { $("#prUnText").textContent = t("un.bg", UN.app.name); }
   if (tab === "updates") { renderUpdates(); return; }
+  if (tab === "install") { renderInstall(); return; }
   const loading = tab === "apps" ? PR.loading && !PR.apps : PR.storeLoading && !PR.store;
   const all = (tab === "apps" ? PR.apps : PR.store) || [];
   if (loading) {
@@ -10949,6 +11397,57 @@ function renderPrograms() {
     const l = row.querySelector("[data-prloc]"); if (l) l.addEventListener("click", () => api.uninstOpenLocation(a.id));
     const u = row.querySelector("[data-prun]"); if (u) u.addEventListener("click", () => unOpen(a, !!a.broken));
   });
+}
+
+/* ---- 4.3: install programs in one go (like Ninite), through winget ---- */
+// [winget id, name, what the installed program's name starts with or holds ("=": exactly)]
+const IN_CAT = [
+  ["browsers", [["Google.Chrome", "Google Chrome"], ["Mozilla.Firefox", "Firefox"], ["Brave.Brave", "Brave"], ["Opera.OperaGX", "Opera GX"], ["Vivaldi.Vivaldi", "Vivaldi"]]],
+  ["chat", [["Discord.Discord", "Discord"], ["Telegram.TelegramDesktop", "Telegram", "telegram desktop"], ["OpenWhisperSystems.Signal", "Signal"], ["Rakuten.Viber", "Viber"], ["Zoom.Zoom", "Zoom"]]],
+  ["games", [["Valve.Steam", "Steam"], ["EpicGames.EpicGamesLauncher", "Epic Games", "epic games launcher"], ["ElectronicArts.EADesktop", "EA app"], ["Ubisoft.Connect", "Ubisoft Connect"], ["GOG.Galaxy", "GOG Galaxy"], ["Blizzard.BattleNet", "Battle.net"]]],
+  ["media", [["VideoLAN.VLC", "VLC", "vlc media player"], ["Spotify.Spotify", "Spotify"], ["OBSProject.OBSStudio", "OBS Studio"], ["HandBrake.HandBrake", "HandBrake"]]],
+  ["tools", [["7zip.7zip", "7-Zip"], ["voidtools.Everything", "Everything"], ["Microsoft.PowerToys", "PowerToys"], ["ShareX.ShareX", "ShareX"], ["Notepad++.Notepad++", "Notepad++"], ["qBittorrent.qBittorrent", "qBittorrent"]]],
+  ["office", [["TheDocumentFoundation.LibreOffice", "LibreOffice"], ["SumatraPDF.SumatraPDF", "SumatraPDF"], ["Obsidian.Obsidian", "Obsidian"]]],
+  ["dev", [["Microsoft.VisualStudioCode", "VS Code", "microsoft visual studio code"], ["Git.Git", "Git", "=git"], ["Python.Python.3.13", "Python 3.13"], ["OpenJS.NodeJS.LTS", "Node.js"]]],
+  ["hw", [["CPUID.CPU-Z", "CPU-Z"], ["TechPowerUp.GPU-Z", "GPU-Z"], ["CrystalDewWorld.CrystalDiskInfo", "CrystalDiskInfo"], ["REALiX.HWiNFO", "HWiNFO"], ["Guru3D.Afterburner", "MSI Afterburner"]]],
+];
+const IN = { sel: new Set(), run: false };
+function inName(id) { for (const [, items] of IN_CAT) for (const [i, n] of items) if (i === id) return n; return id; }
+function inHave(m) {
+  m = m.toLowerCase();
+  return (PR.apps || []).some(a => { const n = (a.name || "").toLowerCase(); return m[0] === "=" ? n === m.slice(1) : n.startsWith(m) || n.includes(" " + m); });
+}
+function renderInstall() {
+  const box = $("#prList"); $("#prSum").textContent = "";
+  const busy = PR.wgRun && IN.run;
+  const st = id => { const s = PR.wg[id] || {};
+    return s.state === "run" ? `<span class="spin"></span>` : s.state === "ok" ? `<span class="tw-st on">${esc(t("wg.ok"))}</span>`
+      : s.state === "fail" ? `<span class="tw-st err" title="${esc(s.msg || "")}">${esc(t("wg.fail"))}</span>` : s.state === "queued" ? `<span class="tw-st off">${esc(t("wg.queued"))}</span>` : ""; };
+  box.innerHTML = `<div class="tw-tools in-bar"><button class="btn small primary" id="inGo" ${!IN.sel.size || PR.wgRun ? "disabled" : ""}>${ICONS.download}<span>${esc(busy ? t("in.installing") : IN.sel.size ? t("in.selN", IN.sel.size) : t("in.sel"))}</span></button>
+      ${busy ? `<button class="btn small danger" id="inStop">${esc(t("wg.stop"))}</button>` : IN.sel.size ? `<button class="btn small" id="inClear">${esc(t("in.clear"))}</button>` : ""}<span class="wg-note">${esc(t("in.sub"))}</span></div>` +
+    IN_CAT.map(([c, items]) => `<div class="section-t">${esc(t("in.cat." + c))}</div><div class="in-grid">${items.map(([id, name, m]) => {
+      const s = st(id) || (inHave(m || name) ? `<span class="tw-b">${esc(t("in.have"))}</span>` : "");
+      return `<label class="in-item${IN.sel.has(id) ? " on" : ""}" title="${esc(id)}"><input type="checkbox" class="cb" data-in="${esc(id)}" ${IN.sel.has(id) ? "checked" : ""} ${PR.wgRun ? "disabled" : ""}>${letterIcon(name)}<span class="in-t"><span class="in-n">${esc(name)}</span>${s}</span></label>`;
+    }).join("")}</div>`).join("") + `<div class="note-line">${esc(t("in.note"))}</div>`;
+  box.querySelectorAll("[data-in]").forEach(cb => cb.addEventListener("change", () => { if (cb.checked) IN.sel.add(cb.dataset.in); else IN.sel.delete(cb.dataset.in); renderInstall(); }));
+  const go = $("#inGo"); if (go) go.addEventListener("click", () => inQueue(Array.from(IN.sel)));
+  const cl = $("#inClear"); if (cl) cl.addEventListener("click", () => { IN.sel.clear(); renderInstall(); });
+  const sp = $("#inStop"); if (sp) sp.addEventListener("click", () => { api.wingetStop(); sp.disabled = true; toast(t("wg.stopping"), "clock"); });
+}
+function inQueue(ids) {
+  if (!ids.length) return;
+  if (PR.wgRun || jobOf("winget")) { toast(t("job.already", (jobOf("winget") || {}).title || ""), "clock"); return; }
+  ids.forEach(id => { PR.wg[id] = { state: "queued" }; });
+  IN.run = true;
+  jobAdd({ kind: "winget", page: "programs", title: ids.length === 1 ? t("job.inOne", inName(ids[0])) : t("job.inN", ids.length),
+    stop: () => api.wingetStop(),
+    onDrop: () => { ids.forEach(id => delete PR.wg[id]); IN.run = false; renderPrograms(); },
+    run: job => new Promise(res => {
+      job.done = res; PR.wgRun = true; PR.wgIds = ids; if (S.page === "programs") renderPrograms();
+      const fail = () => { PR.wgRun = false; IN.run = false; ids.forEach(id => delete PR.wg[id]); renderPrograms(); jobFinish("winget", "error", t("wg.cant")); };
+      api.wingetUpgrade(ids, { close: false, install: true }).then(ok => { if (ok === false) fail(); }).catch(fail);
+    }) });
+  renderPrograms();
 }
 
 /* ---- the uninstall wizard ---- */
@@ -11186,12 +11685,15 @@ on("winget", d => {
     // the list again (what is still out of date); the results stay on the rows meanwhile
     const keep = PR.wg; HM.upd = null;
     api.wingetUpdates(true).then(v => { PR.upd = v || PR.upd; HM.upd = PR.upd; HM.at.upd = Date.now(); PR.wgSel = new Set(((PR.upd || {}).updates || []).filter(u => !u.explicit && !u.cut && (keep[u.id] || {}).state !== "fail").map(u => u.id)); renderPrograms(); paintPrBadge(); setupPrTabs(); }).catch(() => {});
+    if (IN.run) { IN.run = false; IN.sel.clear(); PR.apps = null; if (S.page === "programs" && PR.tab === "install") loadPrograms(true); }
+    if (RF.installing) { RF.installing = false; RF.st = null; if (S.page === "recover") loadRecover(true); }
     renderPrograms(); return;
   }
   if (!d.id) return;
   PR.wg[d.id] = { state: d.state, msg: d.msg || "", secs: d.secs || 0, hint: d.hint || "", site: !!d.site, self: !!d.self, closing: !!d.closing };
   if (d.state === "run") jobText("winget", t("wg.jobText", d.n || 1, d.of || 1, d.id) + (d.secs ? " · " + secsClock(d.secs) : ""), d.of ? ((d.n - 1) / d.of) * 100 : null);
-  if (S.page === "programs" && PR.tab === "updates") renderUpdates();
+  if (S.page === "programs" && (PR.tab === "updates" || PR.tab === "install")) renderPrograms();
+  if (RF.installing && S.page === "recover") renderRecover();
 });
 
 /* =====================================================================
@@ -11731,7 +12233,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "4.2.1", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "4.3.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -12024,6 +12526,31 @@ const Mock = (() => {
       ];
       return { exts: xs, browsers: ["chrome", "edge", "brave", "firefox"], high: 2, medium: 2 };
     },
+    // ---- 4.3
+    wifiNets: async () => { await new Promise(r => setTimeout(r, q.get("fast") ? 20 : 400)); return q.get("wf") === "none" ? { nets: [] } : { nets: [
+      { name: "Home 5G", auth: "WPA2PSK", key: "correct horse battery staple" }, { name: "Office", auth: "WPA2" }, { name: "Cafe Free", auth: "open", open: true }, { name: "Phone hotspot", auth: "WPA3SAE", key: "hotspot-2026" }] }; },
+    pwnedCheck: async pw => { window.__pwSent = (window.__pwSent || 0) + 1; await new Promise(r => setTimeout(r, q.get("fast") ? 20 : 600)); return { count: /^(password|123456|qwerty)/i.test(pw) ? 9659365 : 0 }; },
+    bsodRecent: async () => { await new Promise(r => setTimeout(r, q.get("fast") ? 20 : 400)); if (q.get("bs") === "none") return { events: [] }; const d = 864e5, n = Date.now(); return { events: [
+      { at: n - 2 * d, code: "0x00000116", name: "VIDEO_TDR_FAILURE", cat: "gpu", dump: "C:\\WINDOWS\\Minidump\\101826-9015-01.dmp" },
+      { at: n - 5 * d, code: "0x00000116", name: "VIDEO_TDR_FAILURE", cat: "gpu", dump: "C:\\WINDOWS\\Minidump\\101526-8890-01.dmp" },
+      { at: n - 9 * d, cat: "power" },
+      { at: n - 40 * d, code: "0x0000001A", name: "MEMORY_MANAGEMENT", cat: "ram", dump: "C:\\WINDOWS\\MEMORY.DMP" }] }; },
+    memTest: async () => { window.__memTest = true; return true; },
+    fpsState: async () => ({ installed: !!window.__fpsInst || q.get("fps") === "on", running: !!window.__fpsTimer, overlay: !!window.__fpsOv }),
+    fpsInstall: async () => { for (let i = 1; i <= 4; i++) { window.__ev("fps-dl", { done: i * 245000 }); await new Promise(r => setTimeout(r, q.get("fast") ? 10 : 200)); } window.__fpsInst = true; return Mock.fpsState(); },
+    fpsStart: async ov => { window.__fpsOv = ov; clearInterval(window.__fpsTimer); let k = 0;
+      window.__fpsTimer = setInterval(() => { k++; window.__ev("fps", k < 2 ? { state: "run" } : { state: "run", now: { app: "Cyberpunk2077.exe", pid: 7720, fps: 138 + Math.random() * 8, low1: 96 + Math.random() * 4, ms: 7.1 } }); }, q.get("fast") ? 40 : 1000);
+      return { installed: true, running: true, overlay: ov }; },
+    fpsStop: async () => { clearInterval(window.__fpsTimer); window.__fpsTimer = 0; return { installed: true, running: false }; },
+    fpsOverlay: async on => { window.__fpsOv = on; return Mock.fpsState(); },
+    recoverState: async () => ({ installed: !!window.__rfInst || q.get("rf") === "on", running: false }),
+    recoverInstall: async () => { window.__rfInst = true; return Mock.wingetUpgrade(["9N26S50LN705"], { install: true }); },
+    recoverStart: async req => { window.__rfReq = req; window.__rfStop = false;
+      (async () => { for (let p = 0; p <= 100; p += 20) { if (window.__rfStop) { window.__ev("recover", { state: "end", stopped: true, out: "D:\\Recovery_20261020_101500" }); return; } window.__ev("recover", { state: "run", pct: p, line: "Pass 1: Scanning disk: " + p + "%" }); await new Promise(r => setTimeout(r, q.get("fast") ? 15 : 400)); }
+        window.__ev("recover", { state: "end", out: "D:\\Recovery_20261020_101500", files: 37 }); })();
+      return { installed: true, running: true }; },
+    recoverStop: async () => { window.__rfStop = true; return true; },
+    recoverOpen: async () => { window.__rfOpened = true; return true; },
     extOpen: async (b, id) => { window.__extOpen = b + ":" + id; return { ok: true }; },
     extShowFolder: async p => { window.__extFolder = p; return true; },
     reportMake: async () => { await new Promise(r => setTimeout(r, q.get("fast") ? 40 : 1200)); window.__report = (window.__report || 0) + 1; return { path: "C:\\Users\\demo\\Desktop\\xKi4o-report-DESKTOP-XKI4O-2026-10-19_1930.html", score: 88, findings: 2 }; },
@@ -12340,11 +12867,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "4.2.1", latest: nw ? "4.3.0" : "4.2.1", newer: nw, name: "xKi4o Cleaner 4.3.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.3.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "4.3.0", latest: nw ? "4.4.0" : "4.3.0", newer: nw, name: "xKi4o Cleaner 4.4.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.4.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 4.2.1 — 2026-10-20\n\n### English\n- Bottleneck check from published test data\n\n### Български\n- Бенчмарк: ботълнек по публикувани тестове\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 4.3.0 — 2026-10-20\n\n### English\n- Install programs in one go, Passwords, Blue screens, Recover files, frame counter\n\n### Български\n- Инсталиране наведнъж, Пароли, Сини екрани, Изтрити файлове, брояч на кадри\n\n## 4.2.1 — 2026-10-20\n\n### English\n- Bottleneck check from published test data\n\n### Български\n- Бенчмарк: ботълнек по публикувани тестове\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders
@@ -12459,6 +12986,7 @@ Object.assign(Mock, (() => {
     wingetOpen: async ids => ids.includes("OBSProject.OBSStudio") ? [{ id: "OBSProject.OBSStudio", name: "OBS Studio", count: 1 }] : [],
     wingetSite: async () => true,
     wingetUpgrade: async (ids, o) => {
+      if (o && o.install) window.__wgInstall = ids.slice();
       let i = 0, ok = 0;
       const next = () => {
         if (i >= ids.length) { ev("winget", { state: "end", ok, of: ids.length }); return; }
