@@ -965,7 +965,7 @@ async def main():
         check("view: Easy shows the six main sections and the one-button cleanup", ok and await pg.evaluate("S.settings.cleanMode === 'simple'"))
         await pg.evaluate("go('tweaks')")
         await pg.click("#modeSw [data-mode=full]")
-        check("view: Full brings every section back", await wait_for(pg, "S.settings.uiMode === 'full' && [...document.querySelectorAll('.nav button[data-page]')].filter(b => b.offsetParent).length >= 28", 3000))
+        check("view: Full brings every section back", await wait_for(pg, "S.settings.uiMode === 'full' && [...document.querySelectorAll('.nav button[data-page]')].filter(b => b.offsetParent).length === document.querySelectorAll('.nav button[data-page]').length", 3000))
         await pg.click("#modeSw [data-mode=easy]")
         check("view: a page Easy does not show goes back to PC health", await wait_for(pg, "S.page === 'home'", 3000))
         check("no page errors (view)", not pg.errs, pg.errs)
