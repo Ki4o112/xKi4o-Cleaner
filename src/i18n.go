@@ -480,6 +480,16 @@ var texts = map[string][2]string{ // [bg, en]
 	"rf.err.what":      {"Избери какво да търся — вид файлове или част от името", "Choose what to look for — a kind of file or part of the name"},
 	"rf.err.run":       {"Windows File Recovery спря: %s", "Windows File Recovery stopped: %s"},
 	"log.rfStart":      {"Търсене на изтрити файлове на %s (запазване на %s)", "Searching for deleted files on %s (saving to %s)"},
+	// 4.5: virus scan, game ping
+	"av.err.read":  {"Windows Defender не отговори", "Windows Defender did not answer"},
+	"av.err.scan":  {"Сканирането спря: %s", "The scan stopped: %s"},
+	"av.k.quick":   {"бързо", "quick"},
+	"av.k.full":    {"пълно", "full"},
+	"av.k.folder":  {"на папка", "of a folder"},
+	"log.avScan":   {"Сканиране за вируси (%s)", "Virus scan (%s)"},
+	"log.avDone":   {"Намерени заплахи: %d", "Threats found: %d"},
+	"log.avRemove": {"Премахване на активните заплахи", "Removing the active threats"},
+	"gp.err.dns":   {"Адресът не се намери", "The address was not found"},
 	// 4.4: game mode by itself
 	"log.gmGameStart": {"Пусната игра: %s — освобождаване на паметта", "A game started: %s — freeing memory"},
 	"log.gmGameEnd":   {"Затворена игра: %s — освобождаване на паметта", "A game closed: %s — freeing memory"},

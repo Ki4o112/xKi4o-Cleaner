@@ -131,3 +131,16 @@ func TestDiskTopIsExact(t *testing.T) {
 		t.Fatalf("top: %d entries, first %d, last %d", len(top), top[0].Size, top[len(top)-1].Size)
 	}
 }
+
+func TestProgramFolderOK(t *testing.T) {
+	for rel, want := range map[string]bool{
+		`program files\obs-studio`: true, `program files (x86)\steam\logs`: true, `programdata\nvidia corporation`: true,
+		`program files`: false, `program files\`: false, `program files\windows defender`: false, `program files\common files\x`: false,
+		`program files\windowsapps\pkg`: false, `program files\microsoft office`: false, `programdata\microsoft\windows`: false,
+		`windows\system32`: false, `users\a`: false,
+	} {
+		if got := programFolderOK(rel); got != want {
+			t.Errorf("%s: %v, want %v", rel, got, want)
+		}
+	}
+}

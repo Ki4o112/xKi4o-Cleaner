@@ -107,7 +107,8 @@ func TestProtectedPaths(t *testing.T) {
 	initPaths()
 	me := filepath.Base(P.profile)
 	for p, want := range map[string]bool{
-		`C:\`: true, `C:\Windows\Temp\x`: true, `C:\Program Files\App`: true, `C:\pagefile.sys`: true,
+		`C:\`: true, `C:\Windows\Temp\x`: true, `C:\Program Files\App`: false, `C:\Program Files`: true, `C:\pagefile.sys`: true,
+		`C:\Program Files\Windows Defender\x`: true, `C:\ProgramData\Microsoft\Windows`: true, `C:\ProgramData\SomeApp\cache`: false,
 		`C:\Users`: true, `C:\Users\someoneelse\Documents`: true, `C:\Users\` + me: true,
 		`C:\Users\` + me + `\Videos\a.mp4`: false, `C:\Games\x`: false, `D:\Movies`: false,
 		`C:\Users\` + me + `\AppData\Local`: true, `C:\Users\` + me + `\AppData\Local\Temp\x`: false,

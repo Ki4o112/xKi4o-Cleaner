@@ -457,6 +457,9 @@ func protectedPath(p string) bool {
 	if i := strings.IndexByte(rel, '\\'); i >= 0 {
 		first = rel[:i]
 	}
+	if programFolderOK(rel) {
+		return false // a program's own folder (or something in it): it can go, to the Recycle Bin
+	}
 	switch first {
 	case "windows", "program files", "program files (x86)", "programdata", "system volume information", "$recycle.bin",
 		"recovery", "boot", "efi", "$windows.~bt", "$windows.~ws", "$winreagent", "config.msi", "msocache", "documents and settings":

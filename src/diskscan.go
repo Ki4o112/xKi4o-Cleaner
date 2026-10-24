@@ -396,3 +396,28 @@ func rollupShallow(n *dnode) {
 
 // sinceMs is a small helper for progress timing.
 func sinceMs(t time.Time) int64 { return time.Since(t).Milliseconds() }
+
+// windowsOwned: folders in Program Files and ProgramData that belong to
+// Windows itself (or to all programs), never deleted from the Disk Analyzer.
+var windowsOwned = map[string]bool{"windows defender": true, "windows defender advanced threat protection": true, "windowsapps": true,
+	"modifiablewindowsapps": true, "common files": true, "windows nt": true, "windows mail": true, "windows media player": true,
+	"windows photo viewer": true, "windows portable devices": true, "windows security": true, "windows sidebar": true,
+	"windowspowershell": true, "internet explorer": true, "microsoft": true, "microsoft.net": true, "reference assemblies": true,
+	"msbuild": true, "dotnet": true, "uninstall information": true, "packages": true, "package cache": true, "regid.1991-06.com.microsoft": true,
+	"ssh": true, "usoshared": true, "usoprivate": true, "softwaredistribution": true, "desktop": true, "documents": true,
+	"start menu": true, "templates": true, "application data": true}
+
+// programFolderOK: rel (lower case, below the drive) is a program's folder in
+// Program Files, Program Files (x86) or ProgramData, or inside one, and not
+// one that belongs to Windows.
+func programFolderOK(rel string) bool {
+	parts := strings.Split(rel, `\`)
+	if len(parts) < 2 || parts[1] == "" {
+		return false
+	}
+	switch parts[0] {
+	case "program files", "program files (x86)", "programdata":
+		return !windowsOwned[parts[1]] && !strings.HasPrefix(parts[1], "microsoft") && !strings.HasPrefix(parts[1], "windows")
+	}
+	return false
+}

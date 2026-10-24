@@ -260,6 +260,12 @@ func main() {
 		"recoverStart":   recoverStart,
 		"recoverStop":    recoverStop,
 		"recoverOpen":    recoverOpen,
+		// 4.5: virus scan (Defender's engine), game server ping
+		"avState":  avStateRead,
+		"avScan":   avScan,
+		"avStop":   avStop,
+		"avRemove": avRemove,
+		"gamePing": gamePing,
 		// Logs & error reports
 		"logOps":        logOps,
 		"logEntries":    logEntries,

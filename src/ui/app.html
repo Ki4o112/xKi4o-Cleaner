@@ -262,6 +262,14 @@ h1 { font-size: 23px; font-weight: 700; margin: 0; letter-spacing: -.02em; }
 .bx-row.off .bx-main, .bx-row.off .bx-b { opacity: .55; }
 .bx-why { margin-top: 14px; padding: 14px 16px; border-radius: var(--r-l); background: var(--card); border: 1px dashed var(--line); display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; color: var(--muted); line-height: 1.55; }
 .bx-why b { color: var(--text); font-size: 13px; }
+.gpg-row { display: grid; grid-template-columns: minmax(0, 1fr) 90px 70px; gap: 12px; align-items: center; padding: 10px 16px; border-top: 1px solid var(--line-soft); font-size: 13px; }
+.gpg-row:first-child { border-top: 0; } .gpg-row .m { color: var(--muted); font-size: 12px; } .gpg-row .r { text-align: right; font-variant-numeric: tabular-nums; }
+.gpg-row.best { background: var(--mint-soft); } .gpg-row .ms { font-weight: 700; } .gpg-row .ms.slow { color: var(--amber); } .gpg-row .ms.bad { color: var(--red); }
+.av-scan { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 4px; }
+.av-st { display: flex; flex-wrap: wrap; gap: 8px; }
+.av-th { padding: 12px 16px; border-top: 1px solid var(--line-soft); } .av-th:first-child { border-top: 0; }
+.av-th .h { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; } .av-th .f { color: var(--muted); font-size: 12px; margin-top: 4px; overflow-wrap: anywhere; }
+.sg-row { padding: 12px 4px; } .sg-row:first-child { border-top: 0; } .sg-sz { color: var(--mint); margin-left: 6px; }
 /* 4.3: install programs, passwords, blue screens, recover files, frame counter */
 .pr-list.in-mode { background: none; border: 0; border-radius: 0; overflow: visible; }
 .in-bar { flex-wrap: wrap; padding: 0 0 4px; background: none; }
@@ -2325,6 +2333,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
       <div class="nav-g" data-i="nav.g.safety"></div>
       <button data-page="restore"><span class="ico" data-icon="lifebuoy"></span><span class="label" data-i="nav.restore"></span></button>
       <button data-page="pass"><span class="ico" data-icon="lock"></span><span class="label" data-i="nav.pass"></span></button>
+      <button data-page="av"><span class="ico" data-icon="shieldq"></span><span class="label" data-i="nav.av"></span><span class="badge err" id="avBadge" hidden></span></button>
       <button data-page="ext"><span class="ico" data-icon="puzzle"></span><span class="label" data-i="nav.ext"></span><span class="badge err" id="exBadge" hidden></span></button>
       <button data-page="logs"><span class="ico" data-icon="logs"></span><span class="label" data-i="nav.logs"></span><span class="badge err" id="lgBadge" hidden></span></button>
     </nav>
@@ -2608,6 +2617,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
           <div class="da-bar">
             <div class="seg" id="daTab"></div>
             <div class="seg" id="daMode"></div>
+            <button class="btn small primary" id="daSuggest"><span data-icon="sparkle"></span><span data-i="da.sg.btn"></span></button>
             <span class="grow"></span>
             <span class="da-acts" id="daActs"></span>
           </div>
@@ -2728,6 +2738,16 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
       </div>
     </section>
 
+    <!-- =============== VIRUS SCAN (4.5) =============== -->
+    <section class="page" id="page-av">
+      <div class="head">
+        <div class="head-ico" data-icon="shieldq"></div>
+        <div><h1 data-i="av.title"></h1><div class="sub" data-i="av.sub"></div></div>
+        <div class="head-r"><button class="btn icon-btn" id="avRefresh" data-i-title="si.refresh"><span data-icon="refresh"></span></button></div>
+      </div>
+      <div class="tw-body"><div id="avBody"></div><div class="note-line" data-i="av.note"></div></div>
+    </section>
+
     <!-- =============== BLUE SCREENS (4.3) =============== -->
     <section class="page" id="page-bsod">
       <div class="head">
@@ -2817,6 +2837,10 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
         <div class="dh-head net-h2"><h3 data-i="np.title"></h3><button class="btn small" id="npRun"><span data-icon="bolt"></span><span id="npRunTxt" data-i="np.run"></span></button></div>
         <div class="dh-sub" data-i="np.sub"></div>
         <div class="np-grid" id="npGrid"></div>
+        <div class="dh-head net-h2"><h3 data-i="gpg.title"></h3><button class="btn small" id="gpgRun"><span data-icon="gamepad"></span><span data-i="gpg.run"></span></button></div>
+        <div class="dh-sub" data-i="gpg.sub"></div>
+        <div class="seg" id="gpgGame" style="margin-bottom:10px"></div>
+        <div class="list" id="gpgList"></div>
         <div class="dh-head net-h2"><h3 data-i="net.dns"></h3><button class="btn small" id="netRestore" hidden><span data-icon="undo"></span><span data-i="net.restore"></span></button></div>
         <div class="dh-sub" data-i="net.dnsSub"></div>
         <div class="notice info net-best" id="netBest" hidden></div>
@@ -3339,7 +3363,8 @@ bg: {
   "da.minAny": "Всякакъв размер", "da.catAll": "Всички видове", "da.ext": ".разш.", "da.here": "Само в тази папка", "da.del": "Изтрий избраните", "da.delN": "Изтрий избраните ({0})…",
   "da.selT": "Избери за изтриване (в Кошчето)", "da.cantDel": "Не може да се изтрие оттук: защитен, непрочетен изцяло или връзка", "da.colName": "Име", "da.colAlloc": "На диска",
   "da.colSize": "Логически", "da.colFiles": "Файлове", "da.colType": "Вид", "da.colDate": "Променен", "da.prot": "защитен",
-  "da.protT": "Системен или защитен елемент — не се изтрива от програмата", "da.deniedB": "без достъп", "da.partialB": "непълно",
+  "da.protT": "Заключено: част от Windows, системен файл или профил на друг потребител — изтриването му може да спре Windows или програмите",
+  "da.progWarn": "Това е папка на програма. По-чисто е да я деинсталираш — така се махат и записите ѝ в регистъра и преките пътища.", "da.progGo": "Деинсталирай от Програми", "da.deniedB": "без достъп", "da.partialB": "непълно",
   "da.partialT": "Част от съдържанието не можа да се прочете", "da.link": "връзка", "da.linkT": "Връзка или junction — не се следва, за да не се брои нещо два пъти",
   "da.cloud": "в облака", "da.more": "+ още {0} по-малки елемента не са показани.", "da.noTop": "Няма файлове, които отговарят на филтъра.",
   "da.topNote": "Списъкът е от най-големите файлове, открити при сканирането (до 1000).", "da.delTitle": "Да преместя ли {0} елемента ({1}) в Кошчето?",
@@ -4007,6 +4032,23 @@ bg: {
   "bn.n.balCPU": "{0} спира {1} на {2} с около {3}%: процесорът подготвя ~{4} кадъра/с, а картата може ~{5}.",
   "bn.n.balGPU": "С {0} и {1} на {2} видеокартата определя FPS (~{4} кадъра/с), а процесорът има запас (~{3}) — това не е проблем.",
   "bn.n.balOK": "{0} и {1} са балансирани на {2} — няма ботълнек.", "bn.n.balUnknown": "За {0} няма публикувани тестове — изводът за ботълнек е пропуснат.",
+  "gpg.title": "Пинг до сървърите на игрите", "gpg.run": "Провери", "gpg.sub": "Колко бързо стигаш до всеки регион. Най-добрият е отбелязан — избери него в играта.",
+  "gpg.best": "най-добър", "gpg.none": "Натисни „Провери“.", "gpg.noAnswer": "няма отговор", "gpg.loss": "{0}% загуба", "gpg.noList": "Списъкът на Valve не се свали — провери интернета.",
+  "nav.av": "Вируси", "av.title": "Скенер за вируси", "av.sub": "Провери компютъра с двигателя на Windows Defender — базата му се обновява всеки ден",
+  "av.quick": "Бързо сканиране", "av.full": "Пълно сканиране", "av.folder": "Сканирай папка", "av.stop": "Спри", "av.running": "Сканирам… {0}",
+  "av.fullD": "Пълното сканиране проверява всеки файл и може да отнеме час и повече.", "av.on": "Защитата в реално време е включена", "av.rtOff": "Защитата в реално време е изключена",
+  "av.sig": "База от {0}", "av.off": "Windows Defender не е активен на този компютър", "av.offD": "Друга антивирусна програма го е заменила: {0}. Сканирай с нея.", "av.offNone": "Включи го от Windows Security.",
+  "av.openSec": "Отвори Windows Security", "av.clean": "Няма намерени заплахи", "av.cleanD": "Нищо опасно за последните 30 дни.", "av.found": "Намерени заплахи",
+  "av.st.done": "Под карантина — безопасно", "av.st.active": "Активна", "av.st.allowed": "Разрешена от теб", "av.remove": "Премахни активните ({0})",
+  "av.removeT": "Да премахна ли заплахите?", "av.removeD": "Windows Defender ще изтрие активните заплахи. Ако някой файл ти трябва, първо провери пътя му.", "av.removed": "Заплахите са премахнати",
+  "av.sev1": "ниска", "av.sev2": "средна", "av.sev4": "висока", "av.sev5": "сериозна", "av.done": "Сканирането приключи: {0}",
+  "av.note": "Сканира Windows Defender (MpCmdRun). Каквото намери, той обикновено слага под карантина сам; останалото активно можеш да премахнеш оттук. Програмата не добавя изключения и не изключва защитата.",
+  "da.sg.btn": "Какво да изтрия?", "da.sg.title": "Какво да изтрия за повече място", "da.sg.sub": "Най-големите безопасни неща първо. Нищо не се трие, преди да го потвърдиш.",
+  "da.sg.pick": "Виж и избери ({0})", "da.sg.junk.t": "Боклуци и кеш", "da.sg.junk.d": "Временни файлове, кеш на браузърите, на Windows и игрите — създават се наново сами.", "da.sg.junk.go": "Към Почистване",
+  "da.sg.downloads.t": "Стари инсталатори и архиви в Downloads", "da.sg.downloads.d": "Програмите вече са инсталирани, а архивите обикновено са разархивирани.",
+  "da.sg.images.t": "Дискови образи (ISO, VHD)", "da.sg.images.d": "Образи на Windows, игри и виртуални машини, които често са забравени.",
+  "da.sg.videos.t": "Големи видеа (над 1 GB)", "da.sg.videos.d": "Провери дали още ти трябват — може да ги преместиш на друг диск.",
+  "da.sg.hib.t": "Файлът за хибернация", "da.sg.hib.d": "Ако не ползваш хибернация, изключи я и Windows изтрива hiberfil.sys.", "da.sg.hib.go": "Изключи хибернацията",
   // 4.3
   "nav.pass": "Пароли", "nav.bsod": "Сини екрани", "nav.recover": "Изтрити файлове", "pr.tab.install": "Инсталирай",
   "in.cat.browsers": "Браузъри", "in.cat.chat": "Разговори", "in.cat.games": "Игри", "in.cat.media": "Музика и видео", "in.cat.tools": "Полезни",
@@ -4333,7 +4375,8 @@ en: {
   "da.minAny": "Any size", "da.catAll": "All kinds", "da.ext": ".ext", "da.here": "Only in this folder", "da.del": "Delete selected", "da.delN": "Delete selected ({0})…",
   "da.selT": "Select to delete (to the Recycle Bin)", "da.cantDel": "Cannot be deleted from here: protected, not fully read, or a link", "da.colName": "Name",
   "da.colAlloc": "On disk", "da.colSize": "Logical", "da.colFiles": "Files", "da.colType": "Kind", "da.colDate": "Modified", "da.prot": "protected",
-  "da.protT": "System or protected item — the app does not delete it", "da.deniedB": "access denied", "da.partialB": "incomplete",
+  "da.protT": "Locked: part of Windows, a system file or another user's profile — deleting it could stop Windows or programs from working",
+  "da.progWarn": "This is a program's folder. Uninstalling it is cleaner — its registry entries and shortcuts go too.", "da.progGo": "Uninstall from Programs", "da.deniedB": "access denied", "da.partialB": "incomplete",
   "da.partialT": "Part of the contents could not be read", "da.link": "link", "da.linkT": "A link or junction — not followed, so nothing is counted twice", "da.cloud": "in the cloud",
   "da.more": "+ {0} smaller items are not listed.", "da.noTop": "No files match the filter.", "da.topNote": "The list holds the largest files found by the scan (up to 1000).",
   "da.delTitle": "Move {0} items ({1}) to the Recycle Bin?", "da.delSub": "Check the full paths — exactly this will be moved:",
@@ -4981,6 +5024,23 @@ en: {
   "bn.n.balCPU": "{0} holds back {1} at {2} by about {3}%: the processor prepares ~{4} frames/s, the card could do ~{5}.",
   "bn.n.balGPU": "With {0} and {1} at {2} the graphics card sets the FPS (~{4} frames/s) and the processor has room (~{3}) — not a problem.",
   "bn.n.balOK": "{0} and {1} are balanced at {2} — no bottleneck.", "bn.n.balUnknown": "There are no published tests for {0} — the bottleneck verdict is skipped.",
+  "gpg.title": "Ping to game servers", "gpg.run": "Check", "gpg.sub": "How fast you reach each region. The best one is marked — pick it in the game.",
+  "gpg.best": "best", "gpg.none": "Press “Check”.", "gpg.noAnswer": "no answer", "gpg.loss": "{0}% lost", "gpg.noList": "Valve's list could not be downloaded — check the internet.",
+  "nav.av": "Viruses", "av.title": "Virus scanner", "av.sub": "Check this PC with Windows Defender's engine — its database is updated every day",
+  "av.quick": "Quick scan", "av.full": "Full scan", "av.folder": "Scan a folder", "av.stop": "Stop", "av.running": "Scanning… {0}",
+  "av.fullD": "A full scan checks every file and can take an hour or more.", "av.on": "Real-time protection is on", "av.rtOff": "Real-time protection is off",
+  "av.sig": "Database from {0}", "av.off": "Windows Defender is not active on this PC", "av.offD": "Another antivirus has taken its place: {0}. Scan with it.", "av.offNone": "Turn it on in Windows Security.",
+  "av.openSec": "Open Windows Security", "av.clean": "No threats found", "av.cleanD": "Nothing dangerous in the last 30 days.", "av.found": "Threats found",
+  "av.st.done": "In quarantine — safe", "av.st.active": "Active", "av.st.allowed": "Allowed by you", "av.remove": "Remove the active ones ({0})",
+  "av.removeT": "Remove the threats?", "av.removeD": "Windows Defender deletes the active threats. If you need one of the files, check its path first.", "av.removed": "The threats were removed",
+  "av.sev1": "low", "av.sev2": "moderate", "av.sev4": "high", "av.sev5": "severe", "av.done": "The scan is done: {0}",
+  "av.note": "Windows Defender (MpCmdRun) does the scanning. What it finds it usually quarantines by itself; anything left active you can remove from here. The app adds no exclusions and never turns protection off.",
+  "da.sg.btn": "What can I delete?", "da.sg.title": "What to delete for more space", "da.sg.sub": "The biggest safe things first. Nothing is deleted before you confirm it.",
+  "da.sg.pick": "Review and pick ({0})", "da.sg.junk.t": "Junk and cache", "da.sg.junk.d": "Temporary files and the caches of browsers, Windows and games — they are built again by themselves.", "da.sg.junk.go": "Go to Cleanup",
+  "da.sg.downloads.t": "Old installers and archives in Downloads", "da.sg.downloads.d": "The programs are installed already, and archives are usually unpacked.",
+  "da.sg.images.t": "Disk images (ISO, VHD)", "da.sg.images.d": "Images of Windows, games and virtual machines that are often forgotten.",
+  "da.sg.videos.t": "Big videos (over 1 GB)", "da.sg.videos.d": "Check whether you still need them — you can move them to another drive.",
+  "da.sg.hib.t": "The hibernation file", "da.sg.hib.d": "If you do not use hibernation, turn it off and Windows deletes hiberfil.sys.", "da.sg.hib.go": "Turn off hibernation",
   // 4.3
   "nav.pass": "Passwords", "nav.bsod": "Blue screens", "nav.recover": "Recover files", "pr.tab.install": "Install",
   "in.cat.browsers": "Browsers", "in.cat.chat": "Chat", "in.cat.games": "Games", "in.cat.media": "Music & video", "in.cat.tools": "Utilities",
@@ -5515,7 +5575,7 @@ function fitNav() {
     n.classList.toggle("tight", mode === "tight"); n.classList.toggle("lines", mode === "lines");
     const over = n.scrollHeight - n.clientHeight;
     const h = Math.floor(h0 - over / bs.length - .5);
-    if (h >= 24 || mode === "lines") { n.style.setProperty("--navh", Math.max(19, Math.min(h0, h)) + "px"); n.classList.add("fit"); break; }
+    if (h >= 24 || mode === "lines") { n.style.setProperty("--navh", Math.max(18, Math.min(h0, h)) + "px"); n.classList.add("fit"); break; }
   }
   moveNav();
 }
@@ -5639,6 +5699,8 @@ function go(page, opt) {
   if (page === "bench") loadBench();
   if (page === "ext") loadExt();
   if (page === "pass") loadWifi(false);
+  if (page === "av") loadAv(false);
+  if (page === "network") { paintGpg(); requestAnimationFrame(() => $("#gpgGame")._place && $("#gpgGame")._place()); }
   if (page === "bsod") loadBsod(false);
   if (page === "recover") loadRecover(false);
   if (page === "network") paintNp();
@@ -7618,14 +7680,40 @@ function renderDiskTop() {
   $("#daExt").addEventListener("change", async e => { DA.f.ext = e.target.value.trim(); await loadDiskTop(); renderDiskTop(); });
   $("#daHere").addEventListener("change", async e => { DA.f.here = e.target.checked; await loadDiskTop(); renderDiskTop(); });
 }
+// 4.5: "What can I delete?" — the biggest safe wins, from the scan that is already there
+async function daSuggest() {
+  const btn = $("#daSuggest"); btn.disabled = true;
+  const MB = 1024 ** 2, GB = 1024 ** 3, dl = ((S.info && S.info.profile) || "") + "\\Downloads";
+  const get = f => api.diskTop(Object.assign({ limit: 200 }, f)).then(x => x || []).catch(() => []);
+  const [inst, arch, imgs, vids, hib] = await Promise.all([get({ under: dl, cat: "programs", min: 5 * MB }), get({ under: dl, cat: "archives", min: 20 * MB }),
+    get({ cat: "diskimages", min: 500 * MB }), get({ cat: "video", min: GB }), get({ query: "hiberfil.sys" })]);
+  btn.disabled = false;
+  const ok = xs => xs.filter(daCanDelete), sum = xs => xs.reduce((a, x) => a + (x.size || 0), 0);
+  const rows = [{ id: "junk", icon: "clean", size: S.analyzed ? S.total : 0, run: () => { go("clean"); if (!S.analyzed && !S.busy) analyze(); } }];
+  for (const [id, icon, files] of [["downloads", "download", ok(inst).concat(ok(arch))], ["images", "disk", ok(imgs)], ["videos", "image", ok(vids)]])
+    if (files.length) rows.push({ id, icon, size: sum(files), files });
+  const h = hib.find(x => /\\hiberfil\.sys$/i.test(x.path));
+  if (h && h.size > GB) rows.push({ id: "hib", icon: "bolt", size: h.size, run: () => palTweak("hibernation-off") });
+  rows.sort((a, b) => b.size - a.size);
+  openSheet({ title: t("da.sg.title"), sub: t("da.sg.sub"), foot: `<button class="btn" id="sgClose">${esc(t("modal.close"))}</button>`,
+    body: rows.map((r, i) => `<div class="item sg-row"><div class="i-ico">${ICONS[r.icon]}</div><div style="min-width:0"><div class="t">${esc(t("da.sg." + r.id + ".t"))}${r.size ? ` <b class="sg-sz">${esc(fmt(r.size))}</b>` : ""}</div>
+      <div class="d">${esc(t("da.sg." + r.id + ".d"))}</div></div><button class="btn small${i ? "" : " primary"}" data-sg="${i}">${esc(r.files ? t("da.sg.pick", r.files.length) : t("da.sg." + r.id + ".go"))}</button></div>`).join("") });
+  $("#sgClose").addEventListener("click", () => closeSheet(true));
+  $$("#shBody [data-sg]").forEach(b => b.addEventListener("click", () => { const r = rows[+b.dataset.sg]; closeSheet(false); if (r.files) confirmDiskDelete(r.files); else r.run(); }));
+}
+$("#daSuggest").addEventListener("click", daSuggest);
 function confirmDiskDelete(pick) {
   pick = pick.filter(daCanDelete);
   if (!pick.length) return;
   const total = pick.reduce((s, x) => s + x.size, 0);
-  const body = `<div class="sh-note">${esc(t("da.delText"))}</div>` + pick.map(x => `<div class="pv-row"><span>${daIcon(x)}</span><div class="pv-p"><div class="pv-n">${esc(x.name)}</div><div class="pv-d"><bdi>${esc(x.path)}</bdi></div></div><div class="pv-s">${fmt(x.size)}${x.dir ? `<small>${esc(t("row.files", nfi(x.files)))}</small>` : ""}</div><span></span></div>`).join("");
+  // a program's own folder: uninstalling it is the clean way (its registry entries and shortcuts go too)
+  const prog = pick.some(x => x.dir && /^[a-z]:\\(program files( \(x86\))?|programdata)\\[^\\]+$/i.test(x.path));
+  const body = (prog ? `<div class="sh-note warn">${esc(t("da.progWarn"))} <button class="btn small" id="ddUninst">${ICONS.package}<span>${esc(t("da.progGo"))}</span></button></div>` : "") +
+    `<div class="sh-note">${esc(t("da.delText"))}</div>` + pick.map(x => `<div class="pv-row"><span>${daIcon(x)}</span><div class="pv-p"><div class="pv-n">${esc(x.name)}</div><div class="pv-d"><bdi>${esc(x.path)}</bdi></div></div><div class="pv-s">${fmt(x.size)}${x.dir ? `<small>${esc(t("row.files", nfi(x.files)))}</small>` : ""}</div><span></span></div>`).join("");
   openSheet({ wide: true, title: t("da.delTitle", pick.length, fmt(total)), sub: t("da.delSub"), body,
     foot: `<button class="btn" id="ddCancel">${esc(t("modal.cancel"))}</button><button class="btn danger" id="ddOk">${ICONS.trash}<span>${esc(t("da.delOk"))}</span></button>` });
   $("#ddCancel").addEventListener("click", () => closeSheet(true));
+  const un = $("#ddUninst"); if (un) un.addEventListener("click", () => { closeSheet(true); go("programs", { prTab: "apps" }); });
   $("#ddOk").addEventListener("click", async () => {
     $("#ddOk").disabled = $("#ddCancel").disabled = true; $("#ddOk").innerHTML = '<span class="spin"></span>';
     let res = []; try { res = (await api.diskDelete(pick.map(x => x.path))) || []; } catch (e) {}
@@ -8482,6 +8570,85 @@ function renderWifi() {
   box.querySelectorAll("[data-wfcopy]").forEach(b => b.addEventListener("click", async () => { const n = ns[+b.dataset.wfcopy]; if (n && await copyToClipboard(n.key)) toast(t("wf.copied", n.name), "copy"); }));
 }
 $("#wfRefresh").addEventListener("click", () => loadWifi(true));
+
+// ---- 4.5: ping to game servers (Network page)
+const GPG = { game: "cs2", res: {}, busy: false };
+const GPG_GAMES = [["cs2", "Counter-Strike 2"], ["fortnite", "Fortnite"], ["lol", "League of Legends"]];
+function paintGpg() {
+  const seg = $("#gpgGame"); if (!seg) return;
+  if (seg.dataset.lang !== L) { seg.dataset.lang = L; makeSeg(seg, GPG_GAMES.map(([v, label]) => ({ v, label })), GPG.game, v => { GPG.game = v; paintGpg(); }); }
+  $("#gpgRun").disabled = GPG.busy;
+  const box = $("#gpgList"), rs = GPG.res[GPG.game];
+  if (GPG.busy && !rs) { box.innerHTML = `<div class="tw-empty"><span class="spin"></span></div>`; return; }
+  if (!rs) { box.innerHTML = `<div class="tw-empty">${esc(t("gpg.none"))}</div>`; return; }
+  if (!rs.length) { box.innerHTML = `<div class="tw-empty">${esc(t(GPG.game === "cs2" ? "gpg.noList" : "gpg.none"))}</div>`; return; }
+  const list = rs.slice().sort((a, b) => (a.avg > 0 ? a.avg : 1e9) - (b.avg > 0 ? b.avg : 1e9));
+  box.innerHTML = list.map(r => {
+    const ms = r.avg > 0 ? Math.round(r.avg) : 0, cls = !ms ? "" : ms > 120 ? " bad" : ms > 60 ? " slow" : "";
+    return `<div class="gpg-row${r.best ? " best" : ""}"><div style="min-width:0"><b>${esc(r.name)}</b>${r.best ? ` <span class="tw-st on">${esc(t("gpg.best"))}</span>` : ""}<div class="m">${esc(r.code.toUpperCase())} · ${esc(r.host || "")}</div></div>
+      <div class="r ms${cls}">${ms ? ms + " ms" : esc(r.error || t("gpg.noAnswer"))}</div><div class="r m">${r.loss > 0 && ms ? esc(t("gpg.loss", r.loss)) : ""}</div></div>`;
+  }).join("");
+}
+$("#gpgRun").addEventListener("click", async () => {
+  if (GPG.busy) return;
+  const g = GPG.game; GPG.busy = true; delete GPG.res[g]; paintGpg();
+  let r = []; try { r = (await api.gamePing(g)) || []; } catch (e) {}
+  GPG.busy = false; GPG.res[g] = r; paintGpg();
+});
+
+// ---- 4.5: virus scan with Windows Defender's engine
+const AV = { st: null, loading: false, run: false, secs: 0, last: null };
+async function loadAv(force) {
+  if (AV.loading || (AV.st && !force)) { renderAv(); return; }
+  AV.loading = true; renderAv();
+  try { AV.st = await api.avState(); } catch (e) { AV.st = { error: String((e && e.message) || e), threats: [] }; }
+  AV.loading = false; AV.run = AV.run || !!(AV.st && AV.st.running); renderAv();
+}
+function renderAv() {
+  const box = $("#avBody"); if (!box) return;
+  const s = AV.st;
+  if (!s) { box.innerHTML = `<div class="tw-empty"><span class="spin"></span></div>`; return; }
+  const ths = AV.last || s.threats || [], active = ths.filter(x => x.active);
+  const b = $("#avBadge"); if (b) { b.hidden = !active.length; b.textContent = active.length ? String(active.length) : ""; }
+  if (!s.on) {
+    box.innerHTML = `<div class="pw-res">${ICONS.shieldq}<span><b>${esc(t("av.off"))}</b><br>${esc((s.other || []).length ? t("av.offD", s.other.join(", ")) : t("av.offNone"))}</span>
+      <button class="btn small" id="avSec" style="margin-left:auto">${ICONS.open}<span>${esc(t("av.openSec"))}</span></button></div>`;
+    $("#avSec").addEventListener("click", () => api.openWindowsSecurity()); return;
+  }
+  const chip = (cls, txt) => `<span class="tw-st ${cls}">${esc(txt)}</span>`;
+  const st = `<div class="av-st">${chip(s.rt ? "on" : "err", t(s.rt ? "av.on" : "av.rtOff"))}${s.sig ? chip("off", t("av.sig", new Date(s.sig).toLocaleString(locale(), { dateStyle: "medium", timeStyle: "short" }))) : ""}</div>`;
+  const scan = AV.run ? `<div class="av-scan"><span class="spin"></span><span>${esc(t("av.running", secsClock(AV.secs)))}</span><button class="btn small danger" id="avStop">${ICONS.stop}<span>${esc(t("av.stop"))}</span></button></div><div class="progress indet"><i></i></div>`
+    : `<div class="av-scan"><button class="btn primary" data-av="quick">${ICONS.shieldq}<span>${esc(t("av.quick"))}</span></button><button class="btn" data-av="full" title="${esc(t("av.fullD"))}">${esc(t("av.full"))}</button>
+      <button class="btn" data-av="folder">${ICONS.folder}<span>${esc(t("av.folder"))}</span></button></div><div class="note-line">${esc(t("av.fullD"))}</div>`;
+  const list = ths.length ? `<div class="dh-head net-h2"><h3>${esc(t("av.found"))}</h3>${active.length && !AV.run ? `<button class="btn small danger" id="avRm">${ICONS.trash}<span>${esc(t("av.remove", active.length))}</span></button>` : ""}</div>
+      <div class="list">${ths.map(x => `<div class="av-th"><div class="h"><b>${esc(x.name || x.id)}</b>${x.sev ? chip(x.sev >= 4 ? "err" : "off", t("av.sev" + x.sev)) : ""}${chip(x.active ? "err" : "on", t("av.st." + x.status))}</div>
+        ${(x.files || []).slice(0, 5).map(f => `<div class="f"><bdi>${esc(f)}</bdi></div>`).join("")}</div>`).join("")}</div>`
+    : AV.run ? "" : `<div class="pw-res good" style="margin-top:14px">${ICONS.check}<span><b>${esc(t("av.clean"))}</b><br>${esc(t("av.cleanD"))}</span></div>`;
+  box.innerHTML = st + scan + list;
+  box.querySelectorAll("[data-av]").forEach(x => x.addEventListener("click", () => avStart(x.dataset.av)));
+  const sp = $("#avStop"); if (sp) sp.addEventListener("click", () => { api.avStop(); sp.disabled = true; });
+  const rm = $("#avRm"); if (rm) rm.addEventListener("click", () => confirmBox({ title: t("av.removeT"), text: t("av.removeD"), list: active.map(x => x.name), okText: t("av.remove", active.length), ok: async () => {
+    let r = null; try { r = await api.avRemove(); } catch (e) {}
+    if (r) { AV.st = r; AV.last = null; toast(t("av.removed"), "check"); } else toast(t("tw.failed"), "alert", "warn");
+    renderAv();
+  } }));
+}
+async function avStart(kind) {
+  let path = "";
+  if (kind === "folder") { try { path = await api.diskPickFolder(); } catch (e) {} if (!path) return; }
+  let ok = false; try { ok = await api.avScan(kind, path); } catch (e) {}
+  if (!ok) { toast(t("tw.failed"), "alert", "warn"); return; }
+  AV.run = true; AV.secs = 0; AV.last = null; renderAv();
+}
+on("av", d => {
+  if (d.state === "run") { AV.run = true; AV.secs = d.secs || 0; const x = $("#avBody .av-scan span:nth-child(2)"); if (x && S.page === "av") { x.textContent = t("av.running", secsClock(AV.secs)); return; } }
+  if (d.state === "end") {
+    AV.run = false; AV.last = d.threats || [];
+    if (d.error) toast(d.error, "alert", "warn"); else if (!d.stopped) toast(t("av.done", AV.last.length ? t("av.found") + ": " + AV.last.length : t("av.clean")), AV.last.length ? "alert" : "check", AV.last.length ? "warn" : "");
+  }
+  if (S.page === "av") renderAv();
+});
+$("#avRefresh").addEventListener("click", () => { AV.last = null; loadAv(true); });
 
 // ---- blue screens explained
 const BS = { v: null, loading: false };
@@ -9347,7 +9514,7 @@ function setupSwatches() {
 }
 
 /* Keyboard shortcuts */
-const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "sysinfo", "gpu", "wupd", "bench", "optimize", "network", "nmerge", "repair", "restore", "ext", "pass", "bsod", "recover", "logs", "settings", "credits"];
+const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "sysinfo", "gpu", "wupd", "bench", "optimize", "network", "nmerge", "repair", "restore", "ext", "pass", "av", "bsod", "recover", "logs", "settings", "credits"];
 document.addEventListener("keydown", e => {
   if ($("#veil").classList.contains("on") || $("#sveil").classList.contains("on")) return;
   if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K" || e.key === "p" || e.key === "P")) { e.preventDefault(); if ($("#palVeil").classList.contains("on")) palClose(); else palOpen(); return; }
@@ -10601,8 +10768,8 @@ on("auto-clean", d => {
    Command palette (Ctrl+K): every section, action, tweak and category
 ===================================================================== */
 const PAL = { items: [], idx: 0 };
-const PAGE_ICON = { home: "heart", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", sysinfo: "board", gpu: "gpu", wupd: "wupd", network: "network", nmerge: "merge", bench: "bench", ext: "puzzle", pass: "lock", bsod: "alert", recover: "history", tweaks: "tweaks", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
-const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", sysinfo: "si.sub", gpu: "gp.sub", wupd: "wu.sub", network: "net.sub", nmerge: "nm.sub", bench: "bn.sub", ext: "bx.sub", pass: "ps.sub", bsod: "bs.sub", recover: "rf.sub", tweaks: "tw.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
+const PAGE_ICON = { home: "heart", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", sysinfo: "board", gpu: "gpu", wupd: "wupd", network: "network", nmerge: "merge", bench: "bench", ext: "puzzle", pass: "lock", av: "shieldq", bsod: "alert", recover: "history", tweaks: "tweaks", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
+const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", sysinfo: "si.sub", gpu: "gp.sub", wupd: "wu.sub", network: "net.sub", nmerge: "nm.sub", bench: "bn.sub", ext: "bx.sub", pass: "ps.sub", av: "av.sub", bsod: "bs.sub", recover: "rf.sub", tweaks: "tw.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
 function palSources() {
   const items = [];
   PAGES.forEach((p, i) => items.push({ g: "pal.g.pages", icon: PAGE_ICON[p], title: t("nav." + p), sub: t(PAGE_SUB[p]), hint: i < 9 ? "Ctrl " + (i + 1) : "", kw: p, run: () => go(p) }));
@@ -12246,7 +12413,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "4.4.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "4.5.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -12539,6 +12706,18 @@ const Mock = (() => {
       ];
       return { exts: xs, browsers: ["chrome", "edge", "brave", "firefox"], high: 2, medium: 2 };
     },
+    gamePing: async g => { await new Promise(r => setTimeout(r, q.get("fast") ? 20 : 900));
+      const T = { cs2: [["fra", "Frankfurt (Germany)", 18], ["ams", "Amsterdam (Netherlands)", 31], ["waw", "Warsaw (Poland)", 24], ["iad", "Sterling (Virginia)", 112]], fortnite: [["EU", "Europe", 29], ["NAE", "NA-East", 118], ["ME", "Middle East", 0]], lol: [["EUNE", "Europe Nordic & East", 33], ["EUW", "Europe West", 41], ["NA", "North America", 131]] }[g] || [];
+      const rs = T.map(([code, name, avg]) => ({ code, name, host: "1.2.3.4", avg, loss: 0, sent: 5, lost: avg ? 0 : 5 }));
+      const best = rs.filter(r => r.avg > 0).sort((a, b) => a.avg - b.avg)[0]; if (best) best.best = true; return rs; },
+    avState: async () => { await new Promise(r => setTimeout(r, q.get("fast") ? 20 : 400)); if (q.get("av") === "off") return { on: false, other: ["Bitdefender Antivirus"], threats: [] };
+      return { on: true, rt: true, sig: Date.now() - 5 * 3600e3, running: false, threats: window.__avRemoved ? [] : [{ id: "2147519003", name: "Virus:DOS/EICAR_Test_File", sev: 5, status: "done", active: false, files: ["C:\\Users\\demo\\Downloads\\eicar.com"], at: Date.now() - 864e5 }] }; },
+    avScan: async (kind, path) => { window.__avKind = kind; window.__avStop = false;
+      (async () => { for (let i = 1; i <= 3; i++) { if (window.__avStop) { window.__ev("av", { state: "end", stopped: true, threats: [] }); return; } window.__ev("av", { state: "run", secs: i }); await new Promise(r => setTimeout(r, q.get("fast") ? 15 : 600)); }
+        window.__ev("av", { state: "end", secs: 3, threats: [{ id: "1", name: "Trojan:Win32/Wacatac.B!ml", sev: 5, status: "active", active: true, files: ["C:\\Users\\demo\\Downloads\\free-game-crack.exe"] }] }); })();
+      return true; },
+    avStop: async () => { window.__avStop = true; return true; },
+    avRemove: async () => { window.__avRemoved = true; return Mock.avState(); },
     // ---- 4.3
     wifiNets: async () => { await new Promise(r => setTimeout(r, q.get("fast") ? 20 : 400)); return q.get("wf") === "none" ? { nets: [] } : { nets: [
       { name: "Home 5G", auth: "WPA2PSK", key: "correct horse battery staple" }, { name: "Office", auth: "WPA2" }, { name: "Cafe Free", auth: "open", open: true }, { name: "Phone hotspot", auth: "WPA3SAE", key: "hotspot-2026" }] }; },
@@ -12880,11 +13059,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "4.4.0", latest: nw ? "4.5.0" : "4.4.0", newer: nw, name: "xKi4o Cleaner 4.5.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.5.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "4.5.0", latest: nw ? "4.6.0" : "4.5.0", newer: nw, name: "xKi4o Cleaner 4.6.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.6.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 4.4.0 — 2026-10-20\n\n### English\n- Game mode turns on by itself when a game starts\n\n### Български\n- Режим „Игри“ се включва сам при пускане на игра\n\n## 4.3.0 — 2026-10-20\n\n### English\n- Install programs in one go, Passwords, Blue screens, Recover files, frame counter\n\n### Български\n- Инсталиране наведнъж, Пароли, Сини екрани, Изтрити файлове, брояч на кадри\n\n## 4.2.1 — 2026-10-20\n\n### English\n- Bottleneck check from published test data\n\n### Български\n- Бенчмарк: ботълнек по публикувани тестове\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 4.5.0 — 2026-10-24\n\n### English\n- Virus scanner, ping to game servers, What can I delete?\n\n### Български\n- Скенер за вируси, пинг до сървърите на игрите, Какво да изтрия?\n\n## 4.4.0 — 2026-10-20\n\n### English\n- Game mode turns on by itself when a game starts\n\n### Български\n- Режим „Игри“ се включва сам при пускане на игра\n\n## 4.3.0 — 2026-10-20\n\n### English\n- Install programs in one go, Passwords, Blue screens, Recover files, frame counter\n\n### Български\n- Инсталиране наведнъж, Пароли, Сини екрани, Изтрити файлове, брояч на кадри\n\n## 4.2.1 — 2026-10-20\n\n### English\n- Bottleneck check from published test data\n\n### Български\n- Бенчмарк: ботълнек по публикувани тестове\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders

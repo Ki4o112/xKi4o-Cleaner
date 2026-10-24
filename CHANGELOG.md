@@ -3,6 +3,20 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.5.0 — 2026-10-24
+
+### English
+- New "Viruses" page: a quick, full or folder scan with Windows Defender's own engine (its database is updated every day); what it finds is listed with its files, and anything still active can be removed with one button; when another antivirus has replaced Defender, the page names it
+- Network: ping to the servers of Counter-Strike 2 (Valve's live relay list), Fortnite and League of Legends, region by region, with the best one marked (Riot publishes no addresses for Valorant, so it is not included)
+- Disk Analyzer: a "What can I delete?" button — junk and cache, old installers and archives in Downloads, disk images, big videos and the hibernation file, biggest first; nothing is deleted before you see the list and confirm
+- Disk Analyzer: programs' own folders in Program Files and ProgramData can now be deleted (to the Recycle Bin), with a hint to uninstall them properly instead; Windows' own folders stay locked, and the lock now says why
+
+### Български
+- Нов раздел „Вируси“: бързо, пълно или сканиране на папка с двигателя на Windows Defender (базата му се обновява всеки ден); намереното е в списък с файловете, а останалото активно се премахва с един бутон; ако друга антивирусна програма е заменила Defender, разделът казва коя
+- Мрежа: пинг до сървърите на Counter-Strike 2 (живият списък на Valve), Fortnite и League of Legends по региони, с отбелязан най-добрия (Riot не публикува адреси за Valorant, затова го няма)
+- Анализ на диска: бутон „Какво да изтрия?“ — боклуци и кеш, стари инсталатори и архиви в Downloads, дискови образи, големи видеа и файлът за хибернация, най-големите първо; нищо не се трие, преди да видиш списъка и да потвърдиш
+- Анализ на диска: папките на програмите в Program Files и ProgramData вече може да се трият (в кошчето), с подсказка да ги деинсталираш правилно; папките на Windows остават заключени, а катинарът казва защо
+
 ## 4.4.0 — 2026-10-20
 
 ### English
