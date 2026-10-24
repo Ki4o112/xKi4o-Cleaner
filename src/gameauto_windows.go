@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 	"unsafe"
 
@@ -34,9 +35,13 @@ var gmAuto struct {
 	mu      sync.Mutex
 }
 
-// gmAutoCfg: the Game mode page's settings (kept in the settings file).
+// gmCfgCache: the Game mode page's settings, set from every save of the
+// settings (applySettings), so the 2-second watch never reads the file.
+var gmCfgCache atomic.Value // map[string]any
+
+// gmAutoCfg: the Game mode page's settings.
 func gmAutoCfg() (auto, ram, force bool, apps []string) {
-	g, _ := getSettings()["game"].(map[string]any)
+	g, _ := gmCfgCache.Load().(map[string]any)
 	auto, _ = g["auto"].(bool)
 	ram = true
 	if v, ok := g["ram"].(bool); ok {

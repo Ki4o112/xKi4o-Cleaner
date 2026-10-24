@@ -3,6 +3,18 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.8.0 — 2026-10-24
+
+### English
+- After an update, "What's new" lists every version you skipped, not only the last one
+- A cleaner look: clearer focus, rows that light up under the mouse, softer cards
+- Faster: the game watch no longer reads the settings file every 2 seconds
+
+### Български
+- След обновяване „Какво ново“ показва всички пропуснати версии, не само последната
+- По-изчистен вид: по-ясен фокус, редове, които светват под мишката, по-меки карти
+- По-бързо: следенето за игри вече не чете файла с настройките на всеки 2 секунди
+
 ## 4.7.0 — 2026-10-24
 
 ### English

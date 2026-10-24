@@ -385,6 +385,9 @@ func applySettings(m map[string]any) {
 	if l, ok := m["lang"].(string); ok {
 		setLang(l)
 	}
+	if g, ok := m["game"].(map[string]any); ok {
+		gmCfgCache.Store(g)
+	}
 	if raw, ok := m["mem"]; ok {
 		b, _ := json.Marshal(raw)
 		var c memConfig
