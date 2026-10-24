@@ -130,6 +130,7 @@ func main() {
 	applyFrame(app.hwnd, ownFrame) // now the page leaves its top edge for resizing
 	bringToFront(app.hwnd)
 	go memAutoLoop() // started after app.w is set, so its events can reach the page
+	go gameAutoLoop()
 	w.SetSize(min(int(980*scale), width), min(int(660*scale), height), webview2.HintMin)
 
 	binds := map[string]any{

@@ -1,0 +1,54 @@
+package main
+
+import (
+	"strings"
+	"testing"
+)
+
+func TestGameVerdict(t *testing.T) {
+	cases := []struct {
+		exe, path     string
+		known, full3D bool
+		want          bool
+	}{
+		{"Cyberpunk2077.exe", `D:\SteamLibrary\steamapps\common\Cyberpunk 2077\bin\x64\Cyberpunk2077.exe`, false, false, true},
+		{"FortniteClient-Win64-Shipping.exe", `C:\Program Files\Epic Games\Fortnite\FortniteGame\Binaries\Win64\FortniteClient-Win64-Shipping.exe`, false, false, true},
+		{"minecraft.exe", `C:\Games\Minecraft\minecraft.exe`, true, false, true},         // Windows knows it
+		{"indiegame.exe", `C:\Users\a\Downloads\indie\indiegame.exe`, false, true, true}, // full screen with 3D
+		{"steam.exe", `C:\Program Files (x86)\Steam\steam.exe`, false, true, false},
+		{"steamwebhelper.exe", `C:\Program Files (x86)\Steam\bin\cef\steamwebhelper.exe`, false, false, false},
+		{"UnityCrashHandler64.exe", `D:\SteamLibrary\steamapps\common\Game\UnityCrashHandler64.exe`, false, false, false},
+		{"chrome.exe", `C:\Program Files\Google\Chrome\Application\chrome.exe`, false, true, false}, // a full-screen video
+		{"vlc.exe", `C:\Program Files\VideoLAN\VLC\vlc.exe`, true, true, false},
+		{"notepad.exe", `C:\Windows\notepad.exe`, false, false, false},
+		{"xKi4oCleaner.exe", `C:\Tools\xKi4oCleaner.exe`, false, true, false},
+	}
+	for _, c := range cases {
+		if got := gameVerdict(c.exe, c.path, c.known, c.full3D); got != c.want {
+			t.Errorf("%s: %v, want %v", c.exe, got, c.want)
+		}
+	}
+}
+
+func TestGameLaunchersAreKept(t *testing.T) {
+	ps := []gmProc{
+		{PID: 4, PPID: 0, Created: 1, Exe: "explorer.exe"},
+		{PID: 10, PPID: 4, Created: 2, Exe: "steam.exe"},
+		{PID: 20, PPID: 10, Created: 3, Exe: "eldenring.exe"},
+		{PID: 30, PPID: 4, Created: 4, Exe: "discord.exe"},
+		{PID: 40, PPID: 99, Created: 5, Exe: "orphan.exe"},
+	}
+	keep := gameLaunchers(ps, 20)
+	if !keep["eldenring.exe"] || !keep["steam.exe"] || keep["discord.exe"] {
+		t.Fatalf("%v", keep)
+	}
+	apps := withoutExes([]string{"Steam.exe", "discord.exe", "spotify.exe"}, keep)
+	if strings.Join(apps, ",") != "discord.exe,spotify.exe" {
+		t.Fatalf("the launcher must never be closed: %v", apps)
+	}
+	// a reused PID: a "parent" started after its child is not its parent
+	ps = append(ps, gmProc{PID: 50, PPID: 60, Created: 1, Exe: "game.exe"}, gmProc{PID: 60, PPID: 4, Created: 9, Exe: "steam.exe"})
+	if k := gameLaunchers(ps, 50); k["steam.exe"] {
+		t.Fatalf("%v", k)
+	}
+}

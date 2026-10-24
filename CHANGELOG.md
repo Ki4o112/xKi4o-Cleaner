@@ -3,6 +3,18 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.4.0 — 2026-10-20
+
+### English
+- Game mode: "Turn on by itself when a game starts" — any game is noticed as soon as its window comes to the front (games Windows knows, games from Steam, Epic, GOG, EA, Ubisoft, Xbox, Riot and others, and any full-screen program that draws in 3D); game mode turns on and, after the game, off again
+- Game mode: while it is on, memory is freed the moment a game starts and again after you close it ("Free memory" switch)
+- Game mode never closes the game's own launcher (Steam, Epic…), even when it is on the list, so the game keeps running
+
+### Български
+- Режим „Игри“: „Включвай сам при пускане на игра“ — всяка игра се засича, щом прозорецът ѝ излезе отпред (игрите, които Windows познава, игрите от Steam, Epic, GOG, EA, Ubisoft, Xbox, Riot и други, и всяка програма на цял екран с 3D графика); режимът се включва, а след играта се изключва
+- Режим „Игри“: докато е включен, паметта се освобождава в момента, в който пуснеш игра, и отново след като я затвориш (ключът „Освободи паметта“)
+- Режим „Игри“ никога не затваря лаунчера на играта (Steam, Epic…), дори да е в списъка, за да не спре и играта
+
 ## 4.3.0 — 2026-10-20
 
 ### English

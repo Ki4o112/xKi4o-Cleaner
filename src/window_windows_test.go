@@ -12,7 +12,6 @@ import (
 )
 
 var (
-	procGetWindowRect  = user32.NewProc("GetWindowRect")
 	procClientToScreen = user32.NewProc("ClientToScreen")
 	procSendMessageW   = user32.NewProc("SendMessageW")
 )
