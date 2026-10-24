@@ -270,6 +270,21 @@ h1 { font-size: 23px; font-weight: 700; margin: 0; letter-spacing: -.02em; }
 .av-th { padding: 12px 16px; border-top: 1px solid var(--line-soft); } .av-th:first-child { border-top: 0; }
 .av-th .h { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; } .av-th .f { color: var(--muted); font-size: 12px; margin-top: 4px; overflow-wrap: anywhere; }
 .sg-row { padding: 12px 4px; } .sg-row:first-child { border-top: 0; } .sg-sz { color: var(--mint); margin-left: 6px; }
+/* 4.7 */
+.og-card { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; width: 100%; margin-bottom: 14px; padding: 16px 18px; border: 1px solid transparent; border-radius: var(--r-xl); text-align: left; color: #fff; font: inherit; cursor: pointer;
+  background: linear-gradient(120deg, var(--blue-deep, var(--blue)), var(--blue) 55%, var(--blue-2)); box-shadow: 0 16px 40px -22px var(--blue-glow); overflow: hidden; transition: transform .35s var(--spring), box-shadow .35s; }
+.og-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.16) 50%, transparent 70%); transform: translateX(-100%); transition: transform .9s var(--ease); }
+.og-card:hover { transform: translateY(-2px); box-shadow: 0 22px 50px -22px var(--blue-glow); } .og-card:hover::after { transform: translateX(100%); }
+.og-card:focus-visible { outline: 2px solid var(--blue-light); outline-offset: 2px; }
+.og-ic { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: rgba(255,255,255,.16); } .og-ic svg { width: 22px; height: 22px; }
+.og-t b { display: block; font-size: 16px; font-weight: 800; } .og-t span { font-size: 12.5px; opacity: .85; }
+.gs-row { display: grid; grid-template-columns: minmax(0, 1fr) repeat(4, auto); gap: 16px; align-items: center; padding: 10px 16px; border-top: 1px solid var(--line-soft); font-size: 13px; }
+.gs-row:first-child { border-top: 0; } .gs-row .m { color: var(--muted); font-size: 12px; } .gs-row .v { text-align: right; font-variant-numeric: tabular-nums; }
+.gs-row .v b { display: block; } .gs-row .v.hot b { color: var(--amber); } .gs-row .v.burn b { color: var(--red); }
+.bn-rank { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+.bn-rank > div { padding: 12px 14px; border-radius: var(--r-l); background: var(--well); }
+.bn-rank b { font-size: 22px; font-weight: 800; color: var(--mint); } .bn-rank span { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+.bn-rank i { display: block; height: 6px; margin-top: 8px; border-radius: 3px; background: linear-gradient(90deg, var(--mint) var(--p), var(--line) var(--p)); }
 /* 4.6: Easy / Full mode */
 .side-top { display: flex; gap: 6px; align-items: center; margin: 0 2px 6px; }
 .side-top .cmd-btn { flex: 1; min-width: 0; margin: 0; }
@@ -2359,7 +2374,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
       <div class="nav-g" data-i="nav.g.system"></div>
       <button data-page="programs" data-easy><span class="ico" data-icon="package"></span><span class="label" data-i="nav.programs"></span><span class="badge" id="prBadge" hidden></span></button>
       <button data-page="procs"><span class="ico" data-icon="cpu"></span><span class="label" data-i="nav.procs"></span></button>
-      <button data-page="startup"><span class="ico" data-icon="rocket"></span><span class="label" data-i="nav.startup"></span></button>
+      <button data-page="startup"><span class="ico" data-icon="rocket"></span><span class="label" data-i="nav.startup"></span><span class="badge err" id="suBadge" hidden></span></button>
       <button data-page="tweaks"><span class="ico" data-icon="tweaks"></span><span class="label" data-i="nav.tweaks"></span><span class="badge" id="twBadge" hidden></span></button>
       <div class="nav-g" data-i="nav.g.pc"></div>
       <button data-page="sysinfo"><span class="ico" data-icon="board"></span><span class="label" data-i="nav.sysinfo"></span></button>
@@ -2908,6 +2923,8 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
           <div class="item"><div class="i-ico" data-icon="palette"></div><div><div class="t" data-i="set.accent"></div><div class="d" data-i="set.accentD"></div></div><div class="swatches" id="swatches"></div></div>
           <div class="item"><div class="i-ico" data-icon="sparkle"></div><div><div class="t" data-i="set.motion"></div><div class="d" data-i="set.motionD"></div></div><input type="checkbox" class="switch" id="motionToggle" checked></div>
           <div class="item"><div class="i-ico" data-icon="cpu"></div><div><div class="t" data-i="set.pulse"></div><div class="d" data-i="set.pulseD"></div></div><input type="checkbox" class="switch" id="pulseToggle" checked></div>
+          <div class="item"><div class="i-ico" data-icon="clean"></div><div><div class="t" data-i="rm.set"></div><div class="d" data-i="rm.setD"></div></div>
+            <div class="row" style="gap:10px"><select class="sel" id="rmGb" aria-label="GB"></select><input type="checkbox" class="switch" id="rmToggle" checked aria-label="reminder"></div></div>
           <div class="item"><div class="i-ico" data-icon="pie"></div><div><div class="t" data-i="set.autoDisk"></div><div class="d" data-i="set.autoDiskD"></div></div><input type="checkbox" class="switch" id="autoDiskToggle" checked></div>
           <div class="item"><div class="i-ico" data-icon="window"></div><div><div class="t" data-i="set.frame"></div><div class="d" data-i="set.frameD"></div></div><input type="checkbox" class="switch" id="frameToggle"></div>
         </div>
@@ -3060,6 +3077,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
         <div class="head-r"><button class="btn icon-btn" id="gmRefresh" data-i-title="gm.refresh"><span data-icon="refresh"></span></button></div>
       </div>
       <div class="tw-body" id="gmBody">
+        <button class="og-card" id="ogGo"><span class="og-ic" data-icon="rocket"></span><span class="og-t"><b data-i="og.t"></b><span data-i="og.d"></span></span><span class="og-go" data-icon="chev"></span></button>
         <div class="gm-hero panel" id="gmHero">
           <div class="gm-ic" data-icon="gamepad"></div>
           <div style="min-width:0"><div class="gm-st" id="gmState"></div><div class="gm-sd" id="gmStateD"></div></div>
@@ -3071,6 +3089,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
           <div class="item"><div class="i-ico" data-icon="stop"></div><div><div class="t" data-i="gm.force"></div><div class="d" data-i="gm.forceD"></div></div><input type="checkbox" class="switch" id="gmForce"></div>
         </div>
         <div id="gmClosed"></div>
+        <div id="gsBox"></div>
         <div class="section-t" data-i="fps.title"></div>
         <div class="fps-box" id="fpsBox"></div>
         <div class="section-t" data-i="gm.listT"></div>
@@ -4095,6 +4114,11 @@ bg: {
   "bn.n.balCPU": "{0} спира {1} на {2} с около {3}%: процесорът подготвя ~{4} кадъра/с, а картата може ~{5}.",
   "bn.n.balGPU": "С {0} и {1} на {2} видеокартата определя FPS (~{4} кадъра/с), а процесорът има запас (~{3}) — това не е проблем.",
   "bn.n.balOK": "{0} и {1} са балансирани на {2} — няма ботълнек.", "bn.n.balUnknown": "За {0} няма публикувани тестове — изводът за ботълнек е пропуснат.",
+  "rm.set": "Напомняне за боклуци", "rm.setD": "Казва ти, когато се съберат повече от избраното — най-много веднъж на 3 дни.", "rm.t": "Имаш {0} боклуци", "rm.d": "Да ги почистя ли? Безопасно е — само кеш и временни файлове.", "rm.go": "Почисти",
+  "su.newT": "Нова програма се пуска с Windows", "su.newD": "{0} — провери дали я познаваш.", "su.review": "Провери",
+  "og.t": "Оптимизирай за игри", "og.d": "Туийковете за игри, сам включващ се режим „Игри“ и почистване на кеша на шейдърите — с един бутон, всичко може да се върне.", "og.loading": "Подготвям…",
+  "gs.title": "Последни игри", "gs.cpu": "процесор", "gs.gpu": "видеокарта", "gs.temp": "макс. темп.", "gs.mem": "памет", "gs.note": "Записва се, докато режим „Игри“ следи игрите. Температурата е на видеокартата (NVIDIA).",
+  "bn.rank.t": "Спрямо другите в тестовете", "bn.rank.cpu": "по-бърз от {0}% от {1} процесора", "bn.rank.gpu": "по-бърза от {0}% от {1} видеокарти", "bn.rank.src": "По публикуваните тестове на Tom's Hardware в игри.",
   "um.easy": "Лесен", "um.full": "Пълен", "um.swT": "Лесен или пълен изглед", "um.title": "Как искаш да изглежда програмата?", "um.sub": "Избери сега — можеш да смениш по всяко време горе вляво или от Настройки.",
   "um.easyD": "Само най-важното, с големи бутони. За всеки, който иска просто компютърът да е бърз и чист.", "um.easy1": "6 раздела вместо 28", "um.easy2": "Почистване с един бутон", "um.easy3": "Останалото се намира с търсенето (Ctrl+K)",
   "um.fullD": "Всички инструменти и настройки — за хора, които обичат да имат контрол.", "um.full1": "Всичките 28 раздела", "um.full2": "Подробни списъци и туийкове", "um.full3": "Както досега",
@@ -5092,6 +5116,11 @@ en: {
   "bn.n.balCPU": "{0} holds back {1} at {2} by about {3}%: the processor prepares ~{4} frames/s, the card could do ~{5}.",
   "bn.n.balGPU": "With {0} and {1} at {2} the graphics card sets the FPS (~{4} frames/s) and the processor has room (~{3}) — not a problem.",
   "bn.n.balOK": "{0} and {1} are balanced at {2} — no bottleneck.", "bn.n.balUnknown": "There are no published tests for {0} — the bottleneck verdict is skipped.",
+  "rm.set": "Junk reminder", "rm.setD": "Tells you when more than the chosen amount has piled up — at most once every 3 days.", "rm.t": "You have {0} of junk", "rm.d": "Clean it now? It is safe — only cache and temporary files.", "rm.go": "Clean",
+  "su.newT": "A new program starts with Windows", "su.newD": "{0} — check that you know it.", "su.review": "Review",
+  "og.t": "Optimize for games", "og.d": "The gaming tweaks, game mode that turns on by itself and a clean shader cache — one button, and all of it can be undone.", "og.loading": "Getting ready…",
+  "gs.title": "Last games", "gs.cpu": "processor", "gs.gpu": "graphics", "gs.temp": "max temp", "gs.mem": "memory", "gs.note": "Recorded while game mode watches for games. The temperature is the graphics card's (NVIDIA).",
+  "bn.rank.t": "Compared with the others in the tests", "bn.rank.cpu": "faster than {0}% of {1} processors", "bn.rank.gpu": "faster than {0}% of {1} graphics cards", "bn.rank.src": "From Tom's Hardware's published game tests.",
   "um.easy": "Easy", "um.full": "Full", "um.swT": "Easy or full view", "um.title": "How do you want the app to look?", "um.sub": "Choose now — you can change it any time at the top left or in Settings.",
   "um.easyD": "Only what matters, with big buttons. For anyone who just wants a fast, clean PC.", "um.easy1": "6 sections instead of 28", "um.easy2": "Cleanup with one button", "um.easy3": "The rest is in search (Ctrl+K)",
   "um.fullD": "Every tool and setting — for people who like to be in control.", "um.full1": "All 28 sections", "um.full2": "Detailed lists and tweaks", "um.full3": "As it has been",
@@ -5757,7 +5786,9 @@ function go(page, opt) {
   if (page === "optimize") { loadDrives(); loadDiskHealth(false); }
   if (page === "home") { homeLoad(false); paintLive(); if (!LIVE.timer && !LIVE.busy) liveTick(); if (!AUTO.st) loadAuto(); }
   if (page === "programs") { if (opt && opt.prTab) { PR.tab = opt.prTab; setupPrTabs(); } loadPrograms(); requestAnimationFrame(() => $("#prTab")._place && $("#prTab")._place()); }
-  if (page === "game") { loadGame(); loadFps(); }
+  if (page === "game") { loadGame(); loadFps(); loadSessions(); }
+  if (page === "startup") { SUN.n = 0; $("#suBadge").hidden = true; }
+  if (page === "settings") paintRm();
   if (page === "tidy") { loadTidy(); requestAnimationFrame(() => $("#tdTab")._place && $("#tdTab")._place()); }
   if (page === "memory") { paintMem(); requestAnimationFrame(() => { $("#segThr")._place(); $("#segInt")._place(); }); }
   if (page === "settings") requestAnimationFrame(() => { $("#segLang")._place(); $("#segTheme")._place && $("#segTheme")._place(); });
@@ -6086,6 +6117,7 @@ function analyzeDone(d) {
   jobFinish("scan", "ok", S.total ? t("job.scanRes", fmt(S.total)) : t("hero.none"));
   if (S.page === "home") renderHome();
   if (!S.autoDiskTried) { S.autoDiskTried = true; setTimeout(daAutoStart, 900); }
+  junkReminder();
 }
 on("analyze-done", analyzeDone);
 $("#btnScan").addEventListener("click", analyze);
@@ -9211,6 +9243,10 @@ function paintBenchAnalysis() {
       <div class="m">${esc(t("bn.bal.d", b.cpuName, b.gpuName, b.res, nf(0).format(b.cpuFps), nf(0).format(b.gpuFps)))}</div>
       <div class="bn-ress">${rows}</div>
       <div class="m src">${esc(t("bn.bal.src", b.source || "Tom's Hardware"))}</div></div>`;
+    if (b.cpuOf || b.gpuOf) html += `<div class="bn-bal"><div class="top"><b>${esc(t("bn.rank.t"))}</b></div><div class="bn-rank">
+      ${b.cpuOf ? `<div><b>${b.cpuPct}%</b><span>${esc(b.cpuName)} — ${esc(t("bn.rank.cpu", b.cpuPct, b.cpuOf))}</span><i style="--p:${b.cpuPct}%"></i></div>` : ""}
+      ${b.gpuOf ? `<div><b>${b.gpuPct}%</b><span>${esc(b.gpuName)} — ${esc(t("bn.rank.gpu", b.gpuPct, b.gpuOf))}</span><i style="--p:${b.gpuPct}%"></i></div>` : ""}</div>
+      <div class="m src">${esc(t("bn.rank.src"))}</div></div>`;
   } else if (b && b.verdict === "unknown") {
     html += `<div class="bn-bal"><div class="top"><b>${esc(t("bn.bal.title"))}</b><span class="vd info">${esc(t("bn.bal.v.unknown"))}</span></div>
       <div class="m">${esc(t("bn.bal.unk." + (b.missing || "gpu"), b.missing === "cpu" ? b.cpuName : b.gpuName))}</div></div>`;
@@ -11644,6 +11680,60 @@ function renderPrograms() {
   });
 }
 
+/* ---- 4.7: the junk reminder ---- */
+function rmCfg() { const r = S.settings.remind || (S.settings.remind = {}); if (typeof r.on !== "boolean") r.on = true; if (![2, 5, 10, 20].includes(r.gb)) r.gb = 5; return r; }
+function junkReminder() {
+  const r = rmCfg(), GB = 1024 ** 3;
+  if (!r.on || !S.analyzed || S.total < r.gb * GB || Date.now() - (r.at || 0) < 3 * 864e5) return;
+  r.at = Date.now(); storeSettings();
+  const size = fmt(S.total);
+  toast(t("rm.t", size) + " — " + t("rm.d"), "clean", "", { label: t("rm.go"), run: () => { go("clean"); const b = $("#btnCleanAll"); if (b && !b.disabled) b.click(); } });
+  api.notify(t("rm.t", size), t("rm.d")); // shown only when the app is in the tray
+}
+function paintRm() {
+  const r = rmCfg(), sel = $("#rmGb");
+  sel.innerHTML = [2, 5, 10, 20].map(g => `<option value="${g}">${g} GB</option>`).join(""); sel.value = String(r.gb); sel.disabled = !r.on;
+  $("#rmToggle").checked = r.on;
+}
+$("#rmToggle").addEventListener("change", e => { rmCfg().on = e.target.checked; storeSettings(); paintRm(); });
+$("#rmGb").addEventListener("change", e => { rmCfg().gb = +e.target.value; storeSettings(); });
+// while the app stays open (in the tray), the junk is counted again every 12 hours
+setInterval(() => { if (!S.busy && !S.cleaning && !jobOf("clean")) { S.quietScan = true; analyze(); } }, 12 * 3600e3);
+
+/* ---- 4.7: a new program in startup ---- */
+const SUN = { n: 0 };
+on("startup-new", d => {
+  const items = d.items || []; if (!items.length) return;
+  SUN.n += items.length;
+  const b = $("#suBadge"); b.hidden = false; b.textContent = String(SUN.n);
+  toast(t("su.newT") + ": " + t("su.newD", items.map(x => x.name).join(", ")), "rocket", "warn", { label: t("su.review"), run: () => go("startup") });
+});
+
+/* ---- 4.7: Optimize for games (one button) ---- */
+$("#ogGo").addEventListener("click", async () => {
+  const b = $("#ogGo"); if (b.disabled) return;
+  b.disabled = true; const t0 = b.querySelector(".og-t span"), was = t0.textContent; t0.textContent = t("og.loading");
+  gmCfg().auto = true; storeSettings(); $("#gmAuto").checked = true;
+  loadTweaks(); loadPresets();
+  for (let i = 0; i < 100 && !(TW.loaded && TWP.list.length); i++) await new Promise(r => setTimeout(r, 100));
+  b.disabled = false; t0.textContent = was;
+  if (!TW.loaded || !TWP.list.some(p => p.id === "gaming")) { toast(t("tw.failed"), "alert", "warn"); return; }
+  openPreset("gaming");
+  const ok = $("#tpOk"); if (ok) ok.addEventListener("click", () => setTimeout(() => { if (!jobOf("clean") && !S.cleaning) beginClean(["shaders"], {}); }, 0), { once: true });
+});
+
+/* ---- 4.7: the last games ---- */
+async function loadSessions() {
+  let ss = []; try { ss = (await api.gameSessions()) || []; } catch (e) {}
+  const box = $("#gsBox"); if (!box) return;
+  if (!ss.length) { box.innerHTML = ""; return; }
+  const v = (val, lab, cls) => `<div class="v ${cls || ""}"><b>${val}</b><span class="m">${esc(lab)}</span></div>`;
+  box.innerHTML = `<div class="section-t">${esc(t("gs.title"))}</div><div class="list">${ss.slice(0, 6).map(x => `<div class="gs-row"><div style="min-width:0"><b>${esc(x.game)}</b>
+      <div class="m">${esc(new Date(x.start).toLocaleString(locale(), { dateStyle: "medium", timeStyle: "short" }))} · ${esc(x.secs >= 3600 ? Math.floor(x.secs / 3600) + ":" + secsClock(x.secs % 3600).padStart(5, "0") : secsClock(x.secs))}</div></div>
+      ${v(Math.round(x.cpuMax) + "%", t("gs.cpu"))}${v(x.gpuMax >= 0 ? x.gpuMax + "%" : "—", t("gs.gpu"))}${v(x.tempMax ? x.tempMax + "°C" : "—", t("gs.temp"), x.tempMax >= 85 ? "burn" : x.tempMax >= 78 ? "hot" : "")}${v(x.memMax + "%", t("gs.mem"))}</div>`).join("")}</div>
+    <div class="note-line">${esc(t("gs.note"))}</div>`;
+}
+
 /* ---- 4.6: Easy / Full view ---- */
 function uiEasy() { return S.settings.uiMode === "easy"; }
 function applyUiMode(animate) {
@@ -12021,7 +12111,7 @@ on("gm-auto", d => {
   const g = d.game || "", freed = d.freed > 0 ? fmt(d.freed) : "";
   if (d.state === "start") toast(d.started ? t("gm.autoOn", g) : t("gm.gameRam", g, freed || "0 B"), "gamepad");
   else toast(d.stopped ? t("gm.autoOff", g) : t("gm.gameEnd", g, freed || "0 B"), "gamepad");
-  loadGame(); paintGameNav();
+  loadGame(); paintGameNav(); if (d.state === "end") loadSessions();
 });
 $("#gmRam").addEventListener("change", e => { gmCfg().ram = e.target.checked; storeSettings(); renderGame(); });
 $("#gmForce").addEventListener("change", e => { gmCfg().force = e.target.checked; storeSettings(); });
@@ -12167,6 +12257,7 @@ async function init() {
     if (typeof st.hideEmpty === "boolean") s.hideEmpty = st.hideEmpty;
     if (st.cleanMode === "simple" || st.cleanMode === "detailed") s.cleanMode = st.cleanMode;
     if (st.uiMode === "easy" || st.uiMode === "full") s.uiMode = st.uiMode;
+    if (st.remind && typeof st.remind === "object") s.remind = st.remind;
     if (typeof st.accent === "string" && ACCENTS[st.accent]) s.accent = st.accent;
     // 3.1: the new look once for everyone; an accent picked earlier (not the old default) stays
     if (st.theme === "noir" || st.theme === "ocean") s.theme = st.theme;
@@ -12400,6 +12491,7 @@ const Mock = (() => {
   let mem = { total: 16 * GB, used: 10.4 * GB, standby: 3.1 * GB, modified: 180 * MB, lastAt: 0, lastFreed: 0, cleans: 0 };
   let settings = q.get("lang") ? { lang: q.get("lang") } : {};
   if (q.get("ui") !== "ask") settings.uiMode = q.get("ui") || "full";
+  if (q.get("remind") !== "on") settings.remind = { on: false, gb: 5 }; // the tests are not reminded unless asked
   if (q.get("accent")) settings.accent = q.get("accent");
   if (q.get("theme")) settings.theme = q.get("theme");
   // the preview scans C: at start only when asked (?autodisk=1): the flow tests time their own jobs
@@ -12518,7 +12610,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "4.6.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "4.7.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -12773,9 +12865,9 @@ const Mock = (() => {
       r.score = geo([r.sCPU1, r.sCPUN, r.sRAM, r.sDisk, r.sGPU]);
       const bad = q.get("bn") === "bad";
       const src = "Tom's Hardware GPU & CPU benchmark hierarchies (2026)";
-      r.balance = bad ? { verdict: "cpu", cpuName: "AMD Ryzen 5 2600", gpuName: "GeForce RTX 4090", res: "1080p", cpuFps: 77, gpuFps: 184, pct: 58, pos: 7, gpuClass: "enthusiast", gpuIndex: 299, source: src,
+      r.balance = bad ? { verdict: "cpu", cpuName: "AMD Ryzen 5 2600", gpuName: "GeForce RTX 4090", res: "1080p", cpuFps: 77, gpuFps: 184, pct: 58, pos: 7, gpuClass: "enthusiast", gpuIndex: 299, source: src, cpuPct: 12, cpuOf: 61, gpuPct: 98, gpuOf: 88,
           rows: [{ res: "1080p", cpuFps: 77, gpuFps: 184, verdict: "cpu", pct: 58 }, { res: "1440p", cpuFps: 77, gpuFps: 143, verdict: "cpu", pct: 46 }, { res: "4K", cpuFps: 77, gpuFps: 89, verdict: "balanced", pct: 0 }] }
-        : { verdict: "balanced", cpuName: "Intel Core i9-12900K", gpuName: "GeForce RTX 4090", res: "1440p", cpuFps: 150, gpuFps: 143, pct: 0, pos: 53, gpuClass: "enthusiast", gpuIndex: 299, source: src,
+        : { verdict: "balanced", cpuName: "Intel Core i9-12900K", gpuName: "GeForce RTX 4090", res: "1440p", cpuFps: 150, gpuFps: 143, pct: 0, pos: 53, gpuClass: "enthusiast", gpuIndex: 299, source: src, cpuPct: 64, cpuOf: 61, gpuPct: 98, gpuOf: 88,
           rows: [{ res: "1080p", cpuFps: 150, gpuFps: 184, verdict: "cpu", pct: 18 }, { res: "1440p", cpuFps: 150, gpuFps: 143, verdict: "balanced", pct: 0 }, { res: "4K", cpuFps: 150, gpuFps: 89, verdict: "balanced", pct: 0 }] };
       r.notes = bad ? [
         { part: "pc", tone: "warn", key: "bn.n.balCPU", args: ["AMD Ryzen 5 2600", "GeForce RTX 4090", "1080p", "58", "77", "184"] },
@@ -12811,6 +12903,9 @@ const Mock = (() => {
       ];
       return { exts: xs, browsers: ["chrome", "edge", "brave", "firefox"], high: 2, medium: 2 };
     },
+    notify: async (a, b) => { window.__notified = (window.__notified || []).concat(a); return true; },
+    gameSessions: async () => q.get("gs") === "none" ? [] : [{ game: "eldenring", start: Date.now() - 864e5, secs: 4320, cpuMax: 71, cpuAvg: 48, gpuMax: 99, gpuAvg: 94, tempMax: 79, memMax: 72 },
+      { game: "cs2", start: Date.now() - 2 * 864e5, secs: 2710, cpuMax: 88, cpuAvg: 61, gpuMax: 76, gpuAvg: 58, tempMax: 66, memMax: 55 }],
     gamePing: async g => { await new Promise(r => setTimeout(r, q.get("fast") ? 20 : 900));
       const T = { cs2: [["fra", "Frankfurt (Germany)", 18], ["ams", "Amsterdam (Netherlands)", 31], ["waw", "Warsaw (Poland)", 24], ["iad", "Sterling (Virginia)", 112]], fortnite: [["EU", "Europe", 29], ["NAE", "NA-East", 118], ["ME", "Middle East", 0]], lol: [["EUNE", "Europe Nordic & East", 33], ["EUW", "Europe West", 41], ["NA", "North America", 131]] }[g] || [];
       const rs = T.map(([code, name, avg]) => ({ code, name, host: "1.2.3.4", avg, loss: 0, sent: 5, lost: avg ? 0 : 5 }));
@@ -13164,11 +13259,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "4.6.0", latest: nw ? "4.7.0" : "4.6.0", newer: nw, name: "xKi4o Cleaner 4.7.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.7.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "4.7.0", latest: nw ? "4.8.0" : "4.7.0", newer: nw, name: "xKi4o Cleaner 4.8.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.8.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 4.6.0 — 2026-10-24\n\n### English\n- Easy and Full view\n\n### Български\n- Лесен и пълен изглед\n\n## 4.5.0 — 2026-10-24\n\n### English\n- Virus scanner, ping to game servers, What can I delete?\n\n### Български\n- Скенер за вируси, пинг до сървърите на игрите, Какво да изтрия?\n\n## 4.4.0 — 2026-10-20\n\n### English\n- Game mode turns on by itself when a game starts\n\n### Български\n- Режим „Игри“ се включва сам при пускане на игра\n\n## 4.3.0 — 2026-10-20\n\n### English\n- Install programs in one go, Passwords, Blue screens, Recover files, frame counter\n\n### Български\n- Инсталиране наведнъж, Пароли, Сини екрани, Изтрити файлове, брояч на кадри\n\n## 4.2.1 — 2026-10-20\n\n### English\n- Bottleneck check from published test data\n\n### Български\n- Бенчмарк: ботълнек по публикувани тестове\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 4.7.0 — 2026-10-24\n\n### English\n- Optimize for games, last games, junk reminder\n\n### Български\n- Оптимизирай за игри, последни игри, напомняне за боклуци\n\n## 4.6.0 — 2026-10-24\n\n### English\n- Easy and Full view\n\n### Български\n- Лесен и пълен изглед\n\n## 4.5.0 — 2026-10-24\n\n### English\n- Virus scanner, ping to game servers, What can I delete?\n\n### Български\n- Скенер за вируси, пинг до сървърите на игрите, Какво да изтрия?\n\n## 4.4.0 — 2026-10-20\n\n### English\n- Game mode turns on by itself when a game starts\n\n### Български\n- Режим „Игри“ се включва сам при пускане на игра\n\n## 4.3.0 — 2026-10-20\n\n### English\n- Install programs in one go, Passwords, Blue screens, Recover files, frame counter\n\n### Български\n- Инсталиране наведнъж, Пароли, Сини екрани, Изтрити файлове, брояч на кадри\n\n## 4.2.1 — 2026-10-20\n\n### English\n- Bottleneck check from published test data\n\n### Български\n- Бенчмарк: ботълнек по публикувани тестове\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders

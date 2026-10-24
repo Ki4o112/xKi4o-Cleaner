@@ -82,3 +82,44 @@ func withoutExes(apps []string, keep map[string]bool) []string {
 	}
 	return out
 }
+
+// gameSession: what one game asked of the PC (sampled every 2 seconds).
+type gameSession struct {
+	Game    string  `json:"game"`
+	Start   int64   `json:"start"` // unix ms
+	Secs    int     `json:"secs"`
+	CPUMax  float64 `json:"cpuMax"`
+	CPUAvg  float64 `json:"cpuAvg"`
+	GPUMax  int     `json:"gpuMax"` // load %, -1 unknown
+	GPUAvg  int     `json:"gpuAvg"`
+	TempMax int     `json:"tempMax"` // graphics card °C, 0 unknown (NVIDIA only)
+	MemMax  uint32  `json:"memMax"`  // % of RAM in use
+	n       int
+	cpuSum  float64
+	gpuSum  int
+	gpuN    int
+}
+
+func (s *gameSession) add(cpu float64, gpuUtil, gpuTemp int, mem uint32) {
+	s.n++
+	s.cpuSum += cpu
+	s.CPUMax = max(s.CPUMax, cpu)
+	s.CPUAvg = s.cpuSum / float64(s.n)
+	if gpuUtil >= 0 {
+		s.gpuN++
+		s.gpuSum += gpuUtil
+		s.GPUMax = max(s.GPUMax, gpuUtil)
+		s.GPUAvg = s.gpuSum / s.gpuN
+	}
+	s.TempMax = max(s.TempMax, gpuTemp)
+	s.MemMax = max(s.MemMax, mem)
+}
+
+// keepSessions: the newest first, at most 20.
+func keepSessions(old []gameSession, s gameSession) []gameSession {
+	out := append([]gameSession{s}, old...)
+	if len(out) > 20 {
+		out = out[:20]
+	}
+	return out
+}

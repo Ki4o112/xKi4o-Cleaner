@@ -131,6 +131,7 @@ func main() {
 	bringToFront(app.hwnd)
 	go memAutoLoop() // started after app.w is set, so its events can reach the page
 	go gameAutoLoop()
+	go startupWatchLoop()
 	w.SetSize(min(int(980*scale), width), min(int(660*scale), height), webview2.HintMin)
 
 	binds := map[string]any{
@@ -266,6 +267,12 @@ func main() {
 		"avStop":   avStop,
 		"avRemove": avRemove,
 		"gamePing": gamePing,
+		// 4.7: the junk reminder, game sessions
+		"notify": func(title, text string) bool {
+			app.w.Dispatch(func() { trayNotify(title, text) })
+			return true
+		},
+		"gameSessions": gameSessions,
 		// Logs & error reports
 		"logOps":        logOps,
 		"logEntries":    logEntries,

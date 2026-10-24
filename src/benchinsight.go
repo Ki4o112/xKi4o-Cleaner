@@ -89,6 +89,12 @@ type benchBalance struct {
 	GPUIndex int           `json:"gpuIndex"` // % of an RTX 3060 at 1080p
 	Pos      int           `json:"pos"`      // 0-100 for the balance bar: 50 = even, < 50 the processor limits, > 50 the card limits
 	Source   string        `json:"source"`
+	// how this processor and card compare with the others in the published
+	// tests: faster than CPUPct% of CPUOf processors (0 of 0: not in the tests)
+	CPUPct int `json:"cpuPct"`
+	CPUOf  int `json:"cpuOf"`
+	GPUPct int `json:"gpuPct"`
+	GPUOf  int `json:"gpuOf"`
 }
 
 type benchBalRow struct {
@@ -352,6 +358,12 @@ func bottleneck(r *benchResult, c benchCtx) *benchBalance {
 	b := &benchBalance{CPUName: cleanCPUName(c.CPU), Res: resClass(c.ResW, c.ResH), Source: hwDataSource}
 	cpu := cpuDataFor(c.CPU)
 	gpu := gpuDataFor(gname)
+	if cpu != nil {
+		b.CPUPct, b.CPUOf = cpuRank(cpu.Index)
+	}
+	if gpu != nil {
+		b.GPUPct, b.GPUOf = gpuRank(gpu.FPS[0])
+	}
 	switch {
 	case gpu != nil:
 		b.GPUName = gpu.Name

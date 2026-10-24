@@ -3,6 +3,9 @@
 package main
 
 import (
+	"encoding/json"
+	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
@@ -24,6 +27,7 @@ var gmAuto struct {
 	pid     uint32
 	name    string
 	started bool
+	sess    *gameSession
 	notGame map[uint32]time.Time // looked at, not a game (looked at again after 10 s: a game may start in a small window)
 	known   map[string]bool      // Windows' own list of games (exe paths, lower case)
 	knownAt time.Time
@@ -67,14 +71,29 @@ func gameAutoStep() {
 	defer gmAuto.mu.Unlock()
 	if gmAuto.pid != 0 {
 		if processAlive(gmAuto.pid) {
+			if s := gmAuto.sess; s != nil {
+				l := liveStats()
+				gpu := l.GPU.Util
+				if !l.GPU.OK {
+					gpu = -1
+				}
+				s.add(l.CPU, gpu, l.GPU.Temp, l.MemLoad)
+			}
 			return
 		}
 		name, started := gmAuto.name, gmAuto.started
 		gmAuto.pid, gmAuto.name, gmAuto.started = 0, "", false
+		var last *gameSession
+		if s := gmAuto.sess; s != nil && s.n > 0 {
+			s.Secs = int(time.Since(time.UnixMilli(s.Start)).Seconds())
+			saveGameSession(*s)
+			last = s
+		}
+		gmAuto.sess = nil
 		if !active {
 			return // turned off by hand meanwhile
 		}
-		ev := map[string]any{"state": "end", "game": name}
+		ev := map[string]any{"state": "end", "game": name, "session": last}
 		if started && active {
 			gameStop()
 			ev["stopped"] = true
@@ -108,6 +127,7 @@ func gameAutoStep() {
 	delete(gmAuto.notGame, pid)
 	name := strings.TrimSuffix(exe, ".exe")
 	gmAuto.pid, gmAuto.name = pid, name
+	gmAuto.sess = &gameSession{Game: name, Start: time.Now().UnixMilli(), GPUMax: -1, GPUAvg: -1}
 	ev := map[string]any{"state": "start", "game": name}
 	if !active {
 		var keep map[string]bool
@@ -213,4 +233,28 @@ func fullScreen3D(pid uint32) bool {
 		}
 	}
 	return false
+}
+
+func gameSessionsPath() string { return dataDirPath("game-sessions.json") }
+
+func gameSessionsRead() []gameSession {
+	var ss []gameSession
+	if b, err := os.ReadFile(gameSessionsPath()); err == nil {
+		_ = json.Unmarshal(b, &ss)
+	}
+	return ss
+}
+
+func saveGameSession(s gameSession) {
+	b, _ := json.Marshal(keepSessions(gameSessionsRead(), s))
+	_ = os.MkdirAll(filepath.Dir(gameSessionsPath()), 0o755)
+	_ = os.WriteFile(gameSessionsPath(), b, 0o644)
+}
+
+// gameSessions: the last games played while game mode watched (newest first).
+func gameSessions() []gameSession {
+	if ss := gameSessionsRead(); ss != nil {
+		return ss
+	}
+	return []gameSession{}
 }

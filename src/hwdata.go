@@ -123,3 +123,32 @@ func gpuClassOfFps(fps1080 float64) string {
 	}
 	return "low"
 }
+
+// cpuRank: how many of the tested processors (in %) are slower in games, and of how many.
+func cpuRank(index float64) (pct, of int) {
+	slower := 0
+	for _, r := range cpuGameData {
+		if r.Index < index {
+			slower++
+		}
+	}
+	return rankPct(slower, len(cpuGameData)), len(cpuGameData)
+}
+
+// gpuRank: the same for graphics cards, by frames per second at 1080p.
+func gpuRank(fps1080 float64) (pct, of int) {
+	slower := 0
+	for _, r := range gpuFPSData {
+		if r.FPS108 < fps1080 {
+			slower++
+		}
+	}
+	return rankPct(slower, len(gpuFPSData)), len(gpuFPSData)
+}
+
+func rankPct(slower, of int) int {
+	if of <= 1 {
+		return 0
+	}
+	return min(100, slower*100/(of-1)) // the fastest one is faster than 100% of the others
+}

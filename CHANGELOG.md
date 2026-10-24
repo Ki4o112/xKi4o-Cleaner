@@ -3,6 +3,22 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.7.0 — 2026-10-24
+
+### English
+- Game mode: an "Optimize for games" button — the Gaming tweaks (each one listed first and undoable), game mode that turns on by itself, and a clean shader cache, in one go
+- Game mode: "Last games" — for every game played while game mode watched: how long, the highest processor and graphics load, the graphics card's highest temperature (NVIDIA) and memory use
+- A junk reminder: when more than the chosen amount (2–20 GB, 5 by default) has piled up, the app says so with a Clean button — at most once every 3 days, also from the tray; it can be turned off in Settings
+- Startup: a program that starts adding itself to Windows' startup is told at once (also from the tray) and marked in the menu
+- Benchmark: where your processor and graphics card stand among all the ones in Tom's Hardware's game tests ("faster than 64% of 61 processors")
+
+### Български
+- Режим „Игри“: бутон „Оптимизирай за игри“ — туийковете за игри (всеки е показан преди това и може да се върне), сам включващ се режим „Игри“ и почистен кеш на шейдърите, наведнъж
+- Режим „Игри“: „Последни игри“ — за всяка игра, докато режимът следи: колко е продължила, най-високото натоварване на процесора и видеокартата, най-високата температура на видеокартата (NVIDIA) и паметта
+- Напомняне за боклуци: когато се съберат повече от избраното (2–20 GB, по подразбиране 5), програмата казва с бутон „Почисти“ — най-много веднъж на 3 дни, и от трея; изключва се от Настройки
+- Стартиране: програма, която се добави към стартирането на Windows, се съобщава веднага (и от трея) и се отбелязва в менюто
+- Бенчмарк: къде са твоят процесор и видеокарта сред всички в тестовете на Tom's Hardware в игри („по-бърз от 64% от 61 процесора“)
+
 ## 4.6.0 — 2026-10-24
 
 ### English

@@ -480,6 +480,9 @@ var texts = map[string][2]string{ // [bg, en]
 	"rf.err.what":      {"Избери какво да търся — вид файлове или част от името", "Choose what to look for — a kind of file or part of the name"},
 	"rf.err.run":       {"Windows File Recovery спря: %s", "Windows File Recovery stopped: %s"},
 	"log.rfStart":      {"Търсене на изтрити файлове на %s (запазване на %s)", "Searching for deleted files on %s (saving to %s)"},
+	// 4.7: startup watch
+	"log.suNew": {"Нова програма при стартиране: %s", "New startup program: %s"},
+	"su.newT":   {"Нова програма се пуска с Windows", "A new program starts with Windows"},
 	// 4.5: virus scan, game ping
 	"av.err.read":  {"Windows Defender не отговори", "Windows Defender did not answer"},
 	"av.err.scan":  {"Сканирането спря: %s", "The scan stopped: %s"},
