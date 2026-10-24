@@ -3,6 +3,16 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.6.0 — 2026-10-24
+
+### English
+- Easy and Full view: the first start asks which one you want; Easy shows only the six main sections (PC health, Cleanup, Game mode, Programs, Updates, Viruses) with bigger buttons and the one-button cleanup, Full is everything as before
+- A switch next to search changes the view at any time (also in Settings); the other sections are still found with search (Ctrl+K)
+
+### Български
+- Лесен и пълен изглед: при първо пускане програмата пита кой искаш; лесният показва само шестте основни раздела (Здраве на PC, Почистване, Режим „Игри“, Програми, Обновления, Вируси) с по-големи бутони и почистване с един бутон, а пълният е всичко както досега
+- Ключ до търсенето сменя изгледа по всяко време (и от Настройки); другите раздели се намират с търсенето (Ctrl+K)
+
 ## 4.5.0 — 2026-10-24
 
 ### English

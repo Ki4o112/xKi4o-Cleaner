@@ -270,6 +270,41 @@ h1 { font-size: 23px; font-weight: 700; margin: 0; letter-spacing: -.02em; }
 .av-th { padding: 12px 16px; border-top: 1px solid var(--line-soft); } .av-th:first-child { border-top: 0; }
 .av-th .h { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; } .av-th .f { color: var(--muted); font-size: 12px; margin-top: 4px; overflow-wrap: anywhere; }
 .sg-row { padding: 12px 4px; } .sg-row:first-child { border-top: 0; } .sg-sz { color: var(--mint); margin-left: 6px; }
+/* 4.6: Easy / Full mode */
+.side-top { display: flex; gap: 6px; align-items: center; margin: 0 2px 6px; }
+.side-top .cmd-btn { flex: 1; min-width: 0; margin: 0; }
+.side-top .cmd-btn kbd { display: none; }
+.mode-sw { position: relative; flex: none; width: 72px; height: 36px; display: grid; grid-template-columns: 1fr 1fr; padding: 3px; margin: 0; border-radius: 14px; background: var(--well); border: 1px solid var(--line-soft); isolation: isolate; }
+.mode-sw::before { content: ""; position: absolute; z-index: -1; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); border-radius: 10px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-2)); box-shadow: 0 4px 18px -6px var(--blue-glow), inset 0 1px 0 rgba(255,255,255,.18); transition: transform .45s var(--spring); }
+.mode-sw.full::before { transform: translateX(100%); }
+.mode-sw button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 28px; border: 0; background: none; color: var(--muted); font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer; border-radius: 10px; transition: color .25s; }
+.mode-sw button svg { width: 14px; height: 14px; }
+.mode-sw button[aria-pressed="true"] { color: #fff; }
+.mode-sw button:focus-visible { outline: 2px solid var(--blue-light); outline-offset: 1px; }
+body.ui-easy .nav button[data-page]:not([data-easy]), body.ui-easy .nav .nav-g { display: none; }
+body.ui-easy .nav button[data-easy] { height: 52px !important; font-size: 15px; }
+body.ui-easy .nav button[data-easy] .ico { width: 32px !important; height: 32px !important; }
+body.ui-easy .nav button[data-easy] .ico svg { width: 17px !important; height: 17px !important; }
+body.ui-easy .nav .nav-ind { height: 52px !important; }
+.um-veil { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 24px; background: radial-gradient(1200px 600px at 50% 0%, rgba(var(--blue-rgb), .18), transparent 60%), var(--veil); backdrop-filter: blur(14px); animation: pageIn .4s var(--ease); }
+.um-box { width: min(860px, 100%); text-align: center; }
+.um-box h2 { margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+.um-sub { margin: 8px 0 22px; color: var(--muted); font-size: 14px; }
+.um-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.um-card { position: relative; display: flex; flex-direction: column; gap: 6px; padding: 22px 22px 20px; text-align: left; border-radius: var(--r-xl); border: 1px solid var(--line); background: var(--card); color: var(--text); font: inherit; cursor: pointer;
+  transition: transform .35s var(--spring), border-color .25s, box-shadow .35s; animation: pageIn .5s var(--ease) both; }
+.um-card.um-f { animation-delay: .08s; }
+.um-card:hover, .um-card:focus-visible { transform: translateY(-4px); border-color: var(--blue); box-shadow: 0 18px 50px -20px var(--blue-glow); outline: none; }
+.um-card b { font-size: 20px; font-weight: 800; } .um-card > span { color: var(--muted); font-size: 13px; line-height: 1.5; }
+.um-card ul { margin: 8px 0 0; padding-left: 18px; color: var(--muted); font-size: 12.5px; line-height: 1.7; }
+.um-card em { position: absolute; top: 16px; right: 16px; font-style: normal; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 99px; color: #fff; background: linear-gradient(135deg, var(--blue), var(--blue-2)); }
+.um-art { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; height: 74px; margin-bottom: 10px; padding: 10px; border-radius: var(--r-l); background: var(--well); }
+.um-art i { border-radius: 8px; background: linear-gradient(135deg, rgba(var(--blue-rgb), .55), rgba(var(--blue-rgb), .18)); }
+.um-card.um-e .um-art { grid-template-columns: repeat(3, 1fr); } .um-card.um-e .um-art i { border-radius: 12px; }
+.um-card.um-f .um-art { grid-template-columns: repeat(6, 1fr); } .um-card.um-f .um-art i { background: linear-gradient(135deg, rgba(var(--blue-rgb), .35), rgba(var(--blue-rgb), .1)); }
+.um-note { margin-top: 16px; color: var(--faint); font-size: 12px; }
+@media (max-width: 720px) { .um-cards { grid-template-columns: 1fr; } }
 /* 4.3: install programs, passwords, blue screens, recover files, frame counter */
 .pr-list.in-mode { background: none; border: 0; border-radius: 0; overflow: visible; }
 .in-bar { flex-wrap: wrap; padding: 0 0 4px; background: none; }
@@ -2302,28 +2337,34 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
 </header>
 <div class="shell">
   <aside class="side">
+    <div class="side-top">
     <button class="cmd-btn" id="cmdBtn" data-i-title="pal.btnT"><span data-icon="search"></span><span class="lbl" data-i="pal.btn"></span><kbd>Ctrl K</kbd></button>
+    <div class="mode-sw" id="modeSw" role="group" data-i-title="um.swT">
+      <button data-mode="easy" data-i-title="um.easy"><span data-icon="sparkle"></span></button>
+      <button data-mode="full" data-i-title="um.full"><span data-icon="list"></span></button>
+    </div>
+    </div>
     <nav class="nav" id="nav" aria-label="Sections">
       <div class="nav-ind" id="navInd"></div>
-      <button data-page="home" aria-current="page"><span class="ico" data-icon="heart"></span><span class="label" data-i="nav.home"></span><span class="badge" id="homeBadge" hidden></span></button>
+      <button data-page="home" data-easy aria-current="page"><span class="ico" data-icon="heart"></span><span class="label" data-i="nav.home"></span><span class="badge" id="homeBadge" hidden></span></button>
       <div class="nav-g" data-i="nav.g.clean"></div>
-      <button data-page="clean"><span class="ico" data-icon="clean"></span><span class="label" data-i="nav.clean"></span><span class="badge" id="navBadge" hidden></span></button>
+      <button data-page="clean" data-easy><span class="ico" data-icon="clean"></span><span class="label" data-i="nav.clean"></span><span class="badge" id="navBadge" hidden></span></button>
       <button data-page="memory"><span class="ico" data-icon="memory"></span><span class="label" data-i="nav.memory"></span><span class="live" id="navLive" hidden></span></button>
-      <button data-page="game"><span class="ico" data-icon="gamepad"></span><span class="label" data-i="nav.game"></span><span class="badge on" id="gmBadge" hidden></span></button>
+      <button data-page="game" data-easy><span class="ico" data-icon="gamepad"></span><span class="label" data-i="nav.game"></span><span class="badge on" id="gmBadge" hidden></span></button>
       <div class="nav-g" data-i="nav.g.files"></div>
       <button data-page="disk"><span class="ico" data-icon="pie"></span><span class="label" data-i="nav.disk"></span></button>
       <button data-page="dupes"><span class="ico" data-icon="copy"></span><span class="label" data-i="nav.dupes"></span><span class="badge" id="dupBadge" hidden></span></button>
       <button data-page="tidy"><span class="ico" data-icon="broken"></span><span class="label" data-i="nav.tidy"></span></button>
       <button data-page="recover"><span class="ico" data-icon="history"></span><span class="label" data-i="nav.recover"></span></button>
       <div class="nav-g" data-i="nav.g.system"></div>
-      <button data-page="programs"><span class="ico" data-icon="package"></span><span class="label" data-i="nav.programs"></span><span class="badge" id="prBadge" hidden></span></button>
+      <button data-page="programs" data-easy><span class="ico" data-icon="package"></span><span class="label" data-i="nav.programs"></span><span class="badge" id="prBadge" hidden></span></button>
       <button data-page="procs"><span class="ico" data-icon="cpu"></span><span class="label" data-i="nav.procs"></span></button>
       <button data-page="startup"><span class="ico" data-icon="rocket"></span><span class="label" data-i="nav.startup"></span></button>
       <button data-page="tweaks"><span class="ico" data-icon="tweaks"></span><span class="label" data-i="nav.tweaks"></span><span class="badge" id="twBadge" hidden></span></button>
       <div class="nav-g" data-i="nav.g.pc"></div>
       <button data-page="sysinfo"><span class="ico" data-icon="board"></span><span class="label" data-i="nav.sysinfo"></span></button>
       <button data-page="gpu"><span class="ico" data-icon="gpu"></span><span class="label" data-i="nav.gpu"></span><span class="badge" id="gpBadge" hidden></span></button>
-      <button data-page="wupd"><span class="ico" data-icon="wupd"></span><span class="label" data-i="nav.wupd"></span><span class="badge" id="wuBadge" hidden></span></button>
+      <button data-page="wupd" data-easy><span class="ico" data-icon="wupd"></span><span class="label" data-i="nav.wupd"></span><span class="badge" id="wuBadge" hidden></span></button>
       <button data-page="bench"><span class="ico" data-icon="bench"></span><span class="label" data-i="nav.bench"></span></button>
       <button data-page="optimize"><span class="ico" data-icon="optimize"></span><span class="label" data-i="nav.optimize"></span></button>
       <button data-page="network"><span class="ico" data-icon="network"></span><span class="label" data-i="nav.network"></span></button>
@@ -2333,7 +2374,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
       <div class="nav-g" data-i="nav.g.safety"></div>
       <button data-page="restore"><span class="ico" data-icon="lifebuoy"></span><span class="label" data-i="nav.restore"></span></button>
       <button data-page="pass"><span class="ico" data-icon="lock"></span><span class="label" data-i="nav.pass"></span></button>
-      <button data-page="av"><span class="ico" data-icon="shieldq"></span><span class="label" data-i="nav.av"></span><span class="badge err" id="avBadge" hidden></span></button>
+      <button data-page="av" data-easy><span class="ico" data-icon="shieldq"></span><span class="label" data-i="nav.av"></span><span class="badge err" id="avBadge" hidden></span></button>
       <button data-page="ext"><span class="ico" data-icon="puzzle"></span><span class="label" data-i="nav.ext"></span><span class="badge err" id="exBadge" hidden></span></button>
       <button data-page="logs"><span class="ico" data-icon="logs"></span><span class="label" data-i="nav.logs"></span><span class="badge err" id="lgBadge" hidden></span></button>
     </nav>
@@ -2860,6 +2901,8 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
         <div class="list">
           <div class="item"><div class="i-ico" data-icon="globe"></div><div><div class="t" data-i="set.lang"></div><div class="d" data-i="set.langD"></div></div>
             <div class="seg blue" id="segLang"></div></div>
+          <div class="item"><div class="i-ico" data-icon="sparkle"></div><div><div class="t" data-i="um.set"></div><div class="d" data-i="um.setD"></div></div>
+            <div class="seg blue" id="segUi"></div></div>
           <div class="item"><div class="i-ico" data-icon="monitor"></div><div><div class="t" data-i="set.theme"></div><div class="d" data-i="set.themeD"></div></div>
             <div class="seg blue" id="segTheme"></div></div>
           <div class="item"><div class="i-ico" data-icon="palette"></div><div><div class="t" data-i="set.accent"></div><div class="d" data-i="set.accentD"></div></div><div class="swatches" id="swatches"></div></div>
@@ -3086,6 +3129,26 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
 </div>
 <div class="tm-tip" id="tmTip" hidden></div>
 
+  <div class="um-veil" id="umVeil" hidden>
+    <div class="um-box" role="dialog" aria-modal="true" aria-labelledby="umTitle">
+      <h2 id="umTitle" data-i="um.title"></h2>
+      <p class="um-sub" data-i="um.sub"></p>
+      <div class="um-cards">
+        <button class="um-card um-e" data-um="easy">
+          <span class="um-art"><i></i><i></i><i></i></span>
+          <b data-i="um.easy"></b><span data-i="um.easyD"></span>
+          <ul><li data-i="um.easy1"></li><li data-i="um.easy2"></li><li data-i="um.easy3"></li></ul>
+          <em data-i="um.rec"></em>
+        </button>
+        <button class="um-card um-f" data-um="full">
+          <span class="um-art"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <b data-i="um.full"></b><span data-i="um.fullD"></span>
+          <ul><li data-i="um.full1"></li><li data-i="um.full2"></li><li data-i="um.full3"></li></ul>
+        </button>
+      </div>
+      <p class="um-note" data-i="um.note"></p>
+    </div>
+  </div>
 <script>
 "use strict";
 /* =====================================================================
@@ -4032,6 +4095,11 @@ bg: {
   "bn.n.balCPU": "{0} спира {1} на {2} с около {3}%: процесорът подготвя ~{4} кадъра/с, а картата може ~{5}.",
   "bn.n.balGPU": "С {0} и {1} на {2} видеокартата определя FPS (~{4} кадъра/с), а процесорът има запас (~{3}) — това не е проблем.",
   "bn.n.balOK": "{0} и {1} са балансирани на {2} — няма ботълнек.", "bn.n.balUnknown": "За {0} няма публикувани тестове — изводът за ботълнек е пропуснат.",
+  "um.easy": "Лесен", "um.full": "Пълен", "um.swT": "Лесен или пълен изглед", "um.title": "Как искаш да изглежда програмата?", "um.sub": "Избери сега — можеш да смениш по всяко време горе вляво или от Настройки.",
+  "um.easyD": "Само най-важното, с големи бутони. За всеки, който иска просто компютърът да е бърз и чист.", "um.easy1": "6 раздела вместо 28", "um.easy2": "Почистване с един бутон", "um.easy3": "Останалото се намира с търсенето (Ctrl+K)",
+  "um.fullD": "Всички инструменти и настройки — за хора, които обичат да имат контрол.", "um.full1": "Всичките 28 раздела", "um.full2": "Подробни списъци и туийкове", "um.full3": "Както досега",
+  "um.rec": "Препоръчано", "um.note": "И в двата изгледа програмата прави същото безопасно — разликата е само колко неща виждаш.", "um.set": "Изглед", "um.setD": "Лесен — само най-важното; Пълен — всички раздели.",
+  "um.toEasy": "Лесен изглед — само най-важното", "um.toFull": "Пълен изглед — всички раздели",
   "gpg.title": "Пинг до сървърите на игрите", "gpg.run": "Провери", "gpg.sub": "Колко бързо стигаш до всеки регион. Най-добрият е отбелязан — избери него в играта.",
   "gpg.best": "най-добър", "gpg.none": "Натисни „Провери“.", "gpg.noAnswer": "няма отговор", "gpg.loss": "{0}% загуба", "gpg.noList": "Списъкът на Valve не се свали — провери интернета.",
   "nav.av": "Вируси", "av.title": "Скенер за вируси", "av.sub": "Провери компютъра с двигателя на Windows Defender — базата му се обновява всеки ден",
@@ -5024,6 +5092,11 @@ en: {
   "bn.n.balCPU": "{0} holds back {1} at {2} by about {3}%: the processor prepares ~{4} frames/s, the card could do ~{5}.",
   "bn.n.balGPU": "With {0} and {1} at {2} the graphics card sets the FPS (~{4} frames/s) and the processor has room (~{3}) — not a problem.",
   "bn.n.balOK": "{0} and {1} are balanced at {2} — no bottleneck.", "bn.n.balUnknown": "There are no published tests for {0} — the bottleneck verdict is skipped.",
+  "um.easy": "Easy", "um.full": "Full", "um.swT": "Easy or full view", "um.title": "How do you want the app to look?", "um.sub": "Choose now — you can change it any time at the top left or in Settings.",
+  "um.easyD": "Only what matters, with big buttons. For anyone who just wants a fast, clean PC.", "um.easy1": "6 sections instead of 28", "um.easy2": "Cleanup with one button", "um.easy3": "The rest is in search (Ctrl+K)",
+  "um.fullD": "Every tool and setting — for people who like to be in control.", "um.full1": "All 28 sections", "um.full2": "Detailed lists and tweaks", "um.full3": "As it has been",
+  "um.rec": "Recommended", "um.note": "Both views do the same safe things — the only difference is how much you see.", "um.set": "View", "um.setD": "Easy — only what matters; Full — every section.",
+  "um.toEasy": "Easy view — only what matters", "um.toFull": "Full view — every section",
   "gpg.title": "Ping to game servers", "gpg.run": "Check", "gpg.sub": "How fast you reach each region. The best one is marked — pick it in the game.",
   "gpg.best": "best", "gpg.none": "Press “Check”.", "gpg.noAnswer": "no answer", "gpg.loss": "{0}% lost", "gpg.noList": "Valve's list could not be downloaded — check the internet.",
   "nav.av": "Viruses", "av.title": "Virus scanner", "av.sub": "Check this PC with Windows Defender's engine — its database is updated every day",
@@ -5616,7 +5689,7 @@ function applyLang() {
   $$("[data-i-title]").forEach(el => { el.title = t(el.dataset.iTitle); el.setAttribute("aria-label", t(el.dataset.iTitle)); });
   $$("[data-i-ph]").forEach(el => { el.placeholder = t(el.dataset.iPh); });
   $("#keysList").innerHTML = t("keys").map(k => `<div class="key-row"><kbd>${esc(k[0])}</kbd><span>${esc(k[1])}</span></div>`).join("");
-  setupSortSeg(); paintEmptyBtn(); setupThemeSeg(); if (S.settings) setupCleanMode();
+  setupSortSeg(); paintEmptyBtn(); setupThemeSeg(); if (S.settings) { setupCleanMode(); applyUiMode(); }
   $("#console").dataset.empty = t("rep.empty");
   $("#neverList").innerHTML = t("never").map(x => `<li>${esc(x)}</li>`).join("");
   if (S.info) {
@@ -11571,6 +11644,35 @@ function renderPrograms() {
   });
 }
 
+/* ---- 4.6: Easy / Full view ---- */
+function uiEasy() { return S.settings.uiMode === "easy"; }
+function applyUiMode(animate) {
+  document.body.classList.toggle("ui-easy", uiEasy());
+  const sw = $("#modeSw"); sw.classList.toggle("full", !uiEasy());
+  sw.querySelectorAll("[data-mode]").forEach(b => b.setAttribute("aria-pressed", String((b.dataset.mode === "easy") === uiEasy())));
+  const seg = $("#segUi"); if (seg) makeSeg(seg, [{ v: "easy", label: t("um.easy") }, { v: "full", label: t("um.full") }], uiEasy() ? "easy" : "full", setUiMode);
+  if (uiEasy() && !document.querySelector(`.nav [data-page="${S.page}"][data-easy]`) && !["settings", "credits"].includes(S.page)) go("home");
+  fitNav();
+  if (animate && motionOK()) { const n = $("#nav"); n.animate([{ opacity: .3, transform: "translateX(-6px)" }, { opacity: 1, transform: "none" }], { duration: 380, easing: "cubic-bezier(.2,.8,.2,1)" }); }
+}
+function setUiMode(v, quiet) {
+  if (S.settings.uiMode === v) return;
+  S.settings.uiMode = v;
+  if (v === "easy" && S.settings.cleanMode !== "detailed") { S.settings.cleanMode = "simple"; setupCleanMode(); } // the one-button cleanup
+  storeSettings(); applyUiMode(true);
+  if (!quiet) toast(t(v === "easy" ? "um.toEasy" : "um.toFull"), "sparkle");
+}
+$$("#modeSw [data-mode]").forEach(b => b.addEventListener("click", () => setUiMode(b.dataset.mode)));
+function askUiMode() {
+  const v = $("#umVeil"); v.hidden = false;
+  setTimeout(() => { const c = v.querySelector(".um-card.um-e"); if (c) c.focus(); }, 60);
+  v.querySelectorAll("[data-um]").forEach(b => b.onclick = () => {
+    setUiMode(b.dataset.um, true);
+    if (motionOK()) v.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260 }).finished.then(() => { v.hidden = true; });
+    else v.hidden = true;
+  });
+}
+
 /* ---- 4.3: install programs in one go (like Ninite), through winget ---- */
 // [winget id, name, what the installed program's name starts with or holds ("=": exactly)]
 const IN_CAT = [
@@ -12064,6 +12166,7 @@ async function init() {
     if (st.sort === "group" || st.sort === "size") s.sort = st.sort;
     if (typeof st.hideEmpty === "boolean") s.hideEmpty = st.hideEmpty;
     if (st.cleanMode === "simple" || st.cleanMode === "detailed") s.cleanMode = st.cleanMode;
+    if (st.uiMode === "easy" || st.uiMode === "full") s.uiMode = st.uiMode;
     if (typeof st.accent === "string" && ACCENTS[st.accent]) s.accent = st.accent;
     // 3.1: the new look once for everyone; an accent picked earlier (not the old default) stays
     if (st.theme === "noir" || st.theme === "ocean") s.theme = st.theme;
@@ -12129,6 +12232,7 @@ const BOOT = performance.now();
 const wait = ms => new Promise(r => setTimeout(r, ms));
 function bootDone(sp) {
   document.body.classList.remove("booting", "boot-in");
+  if (!S.settings.uiMode) setTimeout(askUiMode, 250);
   ["#winbar", ".shell"].forEach(q => { const e = $(q); if (e) { e.style.clipPath = ""; e.style.willChange = ""; } });
   if (sp) sp.remove();
 }
@@ -12295,6 +12399,7 @@ const Mock = (() => {
   };
   let mem = { total: 16 * GB, used: 10.4 * GB, standby: 3.1 * GB, modified: 180 * MB, lastAt: 0, lastFreed: 0, cleans: 0 };
   let settings = q.get("lang") ? { lang: q.get("lang") } : {};
+  if (q.get("ui") !== "ask") settings.uiMode = q.get("ui") || "full";
   if (q.get("accent")) settings.accent = q.get("accent");
   if (q.get("theme")) settings.theme = q.get("theme");
   // the preview scans C: at start only when asked (?autodisk=1): the flow tests time their own jobs
@@ -12413,7 +12518,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "4.5.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "4.6.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -13059,11 +13164,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "4.5.0", latest: nw ? "4.6.0" : "4.5.0", newer: nw, name: "xKi4o Cleaner 4.6.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.6.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "4.6.0", latest: nw ? "4.7.0" : "4.6.0", newer: nw, name: "xKi4o Cleaner 4.7.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.7.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 4.5.0 — 2026-10-24\n\n### English\n- Virus scanner, ping to game servers, What can I delete?\n\n### Български\n- Скенер за вируси, пинг до сървърите на игрите, Какво да изтрия?\n\n## 4.4.0 — 2026-10-20\n\n### English\n- Game mode turns on by itself when a game starts\n\n### Български\n- Режим „Игри“ се включва сам при пускане на игра\n\n## 4.3.0 — 2026-10-20\n\n### English\n- Install programs in one go, Passwords, Blue screens, Recover files, frame counter\n\n### Български\n- Инсталиране наведнъж, Пароли, Сини екрани, Изтрити файлове, брояч на кадри\n\n## 4.2.1 — 2026-10-20\n\n### English\n- Bottleneck check from published test data\n\n### Български\n- Бенчмарк: ботълнек по публикувани тестове\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 4.6.0 — 2026-10-24\n\n### English\n- Easy and Full view\n\n### Български\n- Лесен и пълен изглед\n\n## 4.5.0 — 2026-10-24\n\n### English\n- Virus scanner, ping to game servers, What can I delete?\n\n### Български\n- Скенер за вируси, пинг до сървърите на игрите, Какво да изтрия?\n\n## 4.4.0 — 2026-10-20\n\n### English\n- Game mode turns on by itself when a game starts\n\n### Български\n- Режим „Игри“ се включва сам при пускане на игра\n\n## 4.3.0 — 2026-10-20\n\n### English\n- Install programs in one go, Passwords, Blue screens, Recover files, frame counter\n\n### Български\n- Инсталиране наведнъж, Пароли, Сини екрани, Изтрити файлове, брояч на кадри\n\n## 4.2.1 — 2026-10-20\n\n### English\n- Bottleneck check from published test data\n\n### Български\n- Бенчмарк: ботълнек по публикувани тестове\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders

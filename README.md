@@ -25,6 +25,8 @@ Clean junk safely, apply 90 reversible tweaks, boost games, update Windows and d
 2. Run it and allow the administrator prompt.
 3. If Windows SmartScreen says *"Windows protected your PC"* (the exe is not code-signed), click **More info → Run anyway**.
 
+On the first start you choose the **Easy** view (only the six main sections, big buttons) or the **Full** one; a switch next to search changes it any time.
+
 Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 already has. New versions are offered by the app itself.
 
 ## Features
