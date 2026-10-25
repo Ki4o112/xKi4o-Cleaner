@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -28,13 +29,15 @@ const (
 )
 
 type App struct {
-	w        webview2.WebView
-	hwnd     uintptr
-	admin    bool
-	busy     atomic.Bool // any disk job, scans included
-	working  jobCount    // jobs worth asking about before closing
-	critical jobCount    // system tools running right now
-	stop     atomic.Bool
+	w          webview2.WebView
+	hwnd       uintptr
+	admin      bool
+	trayClose  atomic.Bool // the app starts with Windows: closing the window hides it in the tray
+	trayHinted atomic.Bool
+	busy       atomic.Bool // any disk job, scans included
+	working    jobCount    // jobs worth asking about before closing
+	critical   jobCount    // system tools running right now
+	stop       atomic.Bool
 }
 
 // jobCount counts running jobs of one kind. Several can overlap (a tweak
@@ -128,7 +131,13 @@ func main() {
 	app.w = w
 	defer w.Destroy()
 	applyFrame(app.hwnd, ownFrame) // now the page leaves its top edge for resizing
-	bringToFront(app.hwnd)
+	if slices.Contains(os.Args[1:], "--tray") && trayAdd(false) {
+		win.inTray.Store(true) // started with Windows: straight to the notification area
+		_, _, _ = procShowWindow.Call(app.hwnd, swHide)
+	} else {
+		bringToFront(app.hwnd)
+	}
+	go bootGet()     // closing goes to the tray when the app starts with Windows
 	go memAutoLoop() // started after app.w is set, so its events can reach the page
 	go gameAutoLoop()
 	go startupWatchLoop()
@@ -150,6 +159,8 @@ func main() {
 		"ctxMenuList":    ctxMenuList,
 		"ctxMenuSet":     ctxMenuSet,
 		"autoCleanState": autoCleanState,
+		"bootState":      bootGet,
+		"bootSet":        bootSet,
 		"autoCleanSet":   autoCleanSet,
 		"autoCleanNow": func() bool {
 			if app.busy.Load() || autoCleanBusy() {
@@ -437,6 +448,11 @@ func webviewMissing() {
 }
 
 func confirmClose() bool {
+	if app.trayClose.Load() && !win.quitting.Load() {
+		winTray(!app.trayHinted.Swap(true)) // started with Windows: closing hides it, game mode keeps watching
+		return false
+	}
+	win.quitting.Store(false)
 	if !app.working.Load() {
 		return true
 	}

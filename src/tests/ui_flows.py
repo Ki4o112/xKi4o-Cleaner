@@ -335,7 +335,7 @@ async def main():
         await pg.evaluate("(() => { const o = LG.v.ops.find(x => x.state === 'error'); document.querySelector(`#lgOps [data-op=\"${o.id}\"]`).click(); })()")
         await wait_for(pg, "document.querySelector('#lgDet .st-pill.error')")
         await pg.click("#lgCopy")
-        ok = await wait_for(pg, "(window.__copied || '').includes('Ultimate Performance') && window.__copied.includes('Version 4.14.0')", 3000)
+        ok = await wait_for(pg, "(window.__copied || '').includes('Ultimate Performance') && window.__copied.includes('Version 4.15.0')", 3000)
         check("logs: 'Copy report' puts a full report on the clipboard", ok, await pg.evaluate("(window.__copied || '').slice(0, 200)"))
         await pg.select_option("#lgKind", "dupes")
         n = await wait_for(pg, "LG.v.ops.length > 0 && LG.v.ops.every(o => o.kind === 'dupes')")
@@ -453,7 +453,7 @@ async def main():
         await pg.click("#updToggle")
         check("updates: the check can be turned off (and it is saved)", await wait_for(pg, "S.settings.updates === false"))
         await pg.click("#updNews")
-        check("updates: 'What's new' shows this version's changes", await wait_for(pg, "(document.querySelector('#shBody .upd-notes') || {}).textContent && document.querySelector('#shBody .upd-notes').textContent.includes('Отчет след всяка игра')"))
+        check("updates: 'What's new' shows this version's changes", await wait_for(pg, "(document.querySelector('#shBody .upd-notes') || {}).textContent && document.querySelector('#shBody .upd-notes').textContent.includes('Тръгва с Windows в трея')"))
         check("no page errors (updates)", not pg.errs, pg.errs)
         # 22. PC health: a score, the cards, and "Do all recommended" through the queue
         await pg.close()
@@ -998,7 +998,7 @@ async def main():
         pg = await page(b, "?lang=en&fast=1&last=4.3.0", start=None)
         ok = await wait_for(pg, "!!document.querySelector('#shBody .upd-notes')", 9000)
         heads = await pg.evaluate("[...document.querySelectorAll('#shBody .upd-v')].map(h => h.textContent)") if ok else []
-        check("what's new: from 4.3.0 every newer version, newest first", heads[:2] == ["4.14.0", "4.13.0"] and heads[-1] == "4.4.0" and "4.3.0" not in heads, heads)
+        check("what's new: from 4.3.0 every newer version, newest first", heads[:2] == ["4.15.0", "4.14.0"] and heads[-1] == "4.4.0" and "4.3.0" not in heads, heads)
         check("what's new: the title says from which version", "from 4.3.0" in (await pg.text_content("#shTitle") or ""))
         await pg.close()
         # 4.7: junk reminder, new startup program, Optimize for games, last games, hardware rank
@@ -1095,6 +1095,10 @@ async def main():
         check("game mode: a game that turned it on says so", await wait_for(pg, "[...document.querySelectorAll('.toast')].some(x => x.textContent.includes('eldenring: game mode is on'))", 2000))
         await pg.evaluate("window.__ev('gm-auto', { state: 'end', game: 'eldenring', freed: 1073741824 })")
         check("game mode: a closed game says how much memory was freed", await wait_for(pg, "[...document.querySelectorAll('.toast')].some(x => x.textContent.includes('eldenring closed: 1') && x.textContent.includes('freed'))", 2000))
+        check("start with Windows: turned on once by itself", await wait_for(pg, "window.__bootSets === 1 && S.settings.bootSeen === true && document.getElementById('bootToggle').checked", 5000))
+        await pg.evaluate("go('settings')")
+        await pg.click("#bootToggle")
+        check("start with Windows: can be turned off", await wait_for(pg, "window.__bootOn === false && !document.getElementById('bootToggle').checked", 2000))
         check("no page errors (auto game mode)", not pg.errs, pg.errs)
         await pg.close()
         pg = await page(b, "?lang=en&fast=1", start="repair")

@@ -83,6 +83,7 @@ const (
 var win struct {
 	own      atomic.Bool // the app's own title bar (false: Windows' title bar)
 	inTray   atomic.Bool // hidden, with an icon in the notification area
+	quitting atomic.Bool // Exit was chosen in the tray menu: closing really ends the app
 	max      atomic.Bool
 	msgShow  uint32 // "come to the front", sent by a second copy of the app
 	msgTBar  uint32 // "TaskbarCreated": Explorer restarted, the tray icon must be added again
@@ -510,6 +511,7 @@ func trayMenu(hwnd uintptr) {
 		winShow()
 	case 2:
 		winShow() // a question about running work needs the window
+		win.quitting.Store(true)
 		_, _, _ = procPostMessageW.Call(hwnd, wmClose, 0, 0)
 	}
 }

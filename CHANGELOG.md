@@ -3,6 +3,14 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.15.0 — 2026-10-25
+
+### English
+- Starts with Windows, hidden in the tray by the clock, with no rights prompt, so game mode and the memory cleaning keep working; closing the window hides it there (Exit is in the icon's menu). Settings → Start with Windows turns it off
+
+### Български
+- Тръгва с Windows, скрита в трея до часовника, без въпрос за права, за да работят режим „Игри“ и чистенето на паметта; затварянето на прозореца я скрива там („Изход“ е в менюто на иконката). Изключва се от Настройки → Пускай с Windows
+
 ## 4.14.0 — 2026-10-25
 
 ### English

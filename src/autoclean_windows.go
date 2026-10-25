@@ -40,8 +40,10 @@ func taskFile() string {
 }
 
 // readTaskXML: the task as Windows stores it (UTF-16 XML), "" when there is none.
-func readTaskXML() string {
-	b, err := os.ReadFile(taskFile())
+func readTaskXML() string { return readTaskFile(taskFile()) }
+
+func readTaskFile(path string) string {
+	b, err := os.ReadFile(path)
 	if err != nil || len(b) < 2 {
 		return ""
 	}
