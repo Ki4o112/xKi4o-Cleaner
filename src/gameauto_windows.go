@@ -29,6 +29,8 @@ var gmAuto struct {
 	name    string
 	started bool
 	sess    *gameSession
+	cand    uint32               // a game in front, not yet long enough
+	candAt  time.Time            // since when
 	notGame map[uint32]time.Time // looked at, not a game (looked at again after 10 s: a game may start in a small window)
 	known   map[string]bool      // Windows' own list of games (exe paths, lower case)
 	knownAt time.Time
@@ -116,6 +118,9 @@ func gameAutoStep() {
 	if pid == 0 || pid == windows.GetCurrentProcessId() {
 		return
 	}
+	if gmAuto.cand != 0 && pid != gmAuto.cand {
+		gmAuto.cand = 0 // it left the front before it settled
+	}
 	if gmAuto.notGame == nil || len(gmAuto.notGame) > 500 {
 		gmAuto.notGame = map[uint32]time.Time{}
 	}
@@ -130,6 +135,14 @@ func gameAutoStep() {
 		return
 	}
 	delete(gmAuto.notGame, pid)
+	if gmAuto.cand != pid {
+		gmAuto.cand, gmAuto.candAt = pid, time.Now()
+		return
+	}
+	if time.Since(gmAuto.candAt) < gameSettle*time.Second {
+		return
+	}
+	gmAuto.cand = 0
 	name := strings.TrimSuffix(exe, ".exe")
 	gmAuto.pid, gmAuto.name = pid, name
 	ev := map[string]any{"state": "start", "game": name}
@@ -146,10 +159,12 @@ func gameAutoStep() {
 			}
 			keep = gameLaunchers(ps, pid)
 		}
-		res := gameStart(gmOpts{Apps: withoutExes(apps, keep), Force: force, RAM: ram})
+		res := gameStart(gmOpts{Apps: withoutExes(apps, keep), Force: force})
 		gmAuto.started = res.Error == "" && res.State.Active
 		ev["started"] = gmAuto.started
-		ev["freed"] = res.State.Freed
+		if ram {
+			ev["freed"] = gameRAM(T("log.gmGameStart", name))
+		}
 	} else if ram {
 		ev["freed"] = gameRAM(T("log.gmGameStart", name))
 	}
@@ -158,7 +173,7 @@ func gameAutoStep() {
 
 func gameRAM(why string) int64 {
 	op := beginOp("memory", "", why, nil)
-	res := cleanMemory([]string{"workingset", "modified", "standby", "combine"})
+	res := cleanMemory(gameRAMRegions)
 	op.info("", T("log.ramFreed", sizeText(res.Freed)), map[string]any{"freed": res.Freed})
 	op.end("", nil)
 	return res.Freed

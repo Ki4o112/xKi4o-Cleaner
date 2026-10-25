@@ -383,7 +383,7 @@ func gameStart(o gmOpts) gmResult {
 	}
 	st.Closed = closed
 	if o.RAM {
-		res := cleanMemory([]string{"workingset", "modified", "standby", "combine"})
+		res := cleanMemory(gameRAMRegions)
 		st.Freed = res.Freed
 		op.info("", T("log.gmRAM"), map[string]any{"freed": res.Freed})
 	}

@@ -22,6 +22,11 @@ func TestGameVerdict(t *testing.T) {
 		{"vlc.exe", `C:\Program Files\VideoLAN\VLC\vlc.exe`, true, true, false},
 		{"notepad.exe", `C:\Windows\notepad.exe`, false, false, false},
 		{"xKi4oCleaner.exe", `C:\Tools\xKi4oCleaner.exe`, false, true, false},
+		{"FortniteLauncher.exe", `C:\Program Files\Epic Games\Fortnite\FortniteGame\Binaries\Win64\FortniteLauncher.exe`, false, false, false},
+		{"REDprelauncher.exe", `D:\SteamLibrary\steamapps\common\Cyberpunk 2077\REDprelauncher.exe`, true, false, false},
+		{"LeagueClientUx.exe", `C:\Riot Games\League of Legends\LeagueClientUx.exe`, false, true, false},
+		{"League of Legends.exe", `C:\Riot Games\League of Legends\Game\League of Legends.exe`, false, false, true},
+		{"PlayGTAV.exe", `D:\SteamLibrary\steamapps\common\Grand Theft Auto V\PlayGTAV.exe`, false, false, false},
 	}
 	for _, c := range cases {
 		if got := gameVerdict(c.exe, c.path, c.known, c.full3D); got != c.want {

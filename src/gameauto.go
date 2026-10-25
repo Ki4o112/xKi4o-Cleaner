@@ -31,10 +31,38 @@ var notGames = map[string]bool{
 	"startmenuexperiencehost.exe": true, "lockapp.exe": true, "dwm.exe": true, "presentmon.exe": true,
 }
 
+// launcherWords: parts of a name that make a launcher, an updater or a
+// setup, not the game (they live in the game folders too).
+var launcherWords = []string{"launcher", "bootstrap", "updater", "patcher", "installer", "setup", "crashhandler", "crashreport",
+	"leagueclient", "riotclient", "playgtav", "battleye", "redistributable", "vc_redist", "dxsetup", "uninst"}
+
+// isLauncher: the exe starts or updates a game; game mode never treats it as
+// the game and never closes it.
+func isLauncher(exe string) bool {
+	exe = strings.ToLower(exe)
+	if notGames[exe] {
+		return true
+	}
+	for _, w := range launcherWords {
+		if strings.Contains(exe, w) {
+			return true
+		}
+	}
+	return false
+}
+
+// gameSettle: how long a game must stay in front before game mode acts (a
+// launcher that shows a window and starts the game meanwhile is left alone).
+const gameSettle = 12 // seconds
+
+// gameRAMRegions: what is freed for a game — only the cache of files Windows
+// keeps; no running program (the launcher, the game) loses its memory.
+var gameRAMRegions = []string{"modified", "standby"}
+
 // gameVerdict decides from what is known of the program in front.
 func gameVerdict(exe, path string, windowsGame, fullScreen3D bool) bool {
 	exe = strings.ToLower(exe)
-	if notGames[exe] || strings.Contains(exe, "xki4ocleaner") {
+	if isLauncher(exe) || strings.Contains(exe, "xki4ocleaner") {
 		return false
 	}
 	if windowsGame || fullScreen3D {
@@ -76,7 +104,7 @@ func gameLaunchers(procs []gmProc, pid uint32) map[string]bool {
 func withoutExes(apps []string, keep map[string]bool) []string {
 	var out []string
 	for _, a := range apps {
-		if !keep[strings.ToLower(strings.TrimSpace(a))] {
+		if x := strings.ToLower(strings.TrimSpace(a)); !keep[x] && !isLauncher(x) {
 			out = append(out, a)
 		}
 	}

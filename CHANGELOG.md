@@ -3,6 +3,16 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.13.0 — 2026-10-25
+
+### English
+- Game mode by itself no longer freezes launchers: launchers and updaters are never taken for the game or closed, a game must stay in front for 12 seconds first, and freeing memory clears only Windows' file cache, so no running program loses its memory
+- Fixed the Save and Load buttons in Settings, and a new settings icon
+
+### Български
+- Режим „Игри“ вече не забива лаунчерите: лаунчерите и ъпдейтърите никога не се взимат за игра и не се затварят, играта трябва да е отпред 12 секунди, а освобождаването на паметта чисти само кеша на Windows, без да взима паметта на работещите програми
+- Поправени бутоните „Запиши“ и „Зареди“ в Настройки и нова иконка за настройките
+
 ## 4.12.0 — 2026-10-25
 
 ### English
