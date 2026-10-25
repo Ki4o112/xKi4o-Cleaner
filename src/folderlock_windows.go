@@ -166,12 +166,12 @@ func denyRemove(path string) error {
 	if _, gone := os.Lstat(path); gone != nil {
 		return nil
 	}
-	out, code, err := runQuiet(time.Minute, sys32("icacls.exe"), path, "/remove:d", everyoneSID)
+	_, code, err := runQuiet(time.Minute, sys32("icacls.exe"), path, "/remove:d", everyoneSID)
 	if err == nil && code == 0 {
 		return nil
 	}
 	_, _, _ = runQuiet(time.Minute, sys32("takeown.exe"), "/F", path, "/A")
-	out, code, err = runQuiet(time.Minute, sys32("icacls.exe"), path, "/remove:d", everyoneSID)
+	out, code, err := runQuiet(time.Minute, sys32("icacls.exe"), path, "/remove:d", everyoneSID)
 	if err == nil && code == 0 {
 		return nil
 	}

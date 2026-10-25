@@ -353,12 +353,12 @@ type profileStep struct {
 }
 
 type profilePlan struct {
-	OK      bool          `json:"ok"`
-	Path    string        `json:"path,omitempty"`
-	Error   string        `json:"error,omitempty"`
-	Steps   []profileStep `json:"steps"`
-	Same    int           `json:"same"`    // already as in the profile
-	Skipped []string      `json:"skipped"` // unknown here, not available or one-way
+	OK       bool           `json:"ok"`
+	Path     string         `json:"path,omitempty"`
+	Error    string         `json:"error,omitempty"`
+	Steps    []profileStep  `json:"steps"`
+	Same     int            `json:"same"`    // already as in the profile
+	Skipped  []string       `json:"skipped"` // unknown here, not available or one-way
 	Install  []string       `json:"install,omitempty"`
 	Settings map[string]any `json:"settings,omitempty"`
 }
