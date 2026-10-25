@@ -336,7 +336,11 @@ func memAutoStep(base *time.Time) {
 	if reason == "" {
 		return
 	}
-	res := cleanMemory(c.Regions)
+	regions := c.Regions
+	if gamePlaying() {
+		regions = gameRAMRegions // a game runs: only the file cache, its own memory stays (no stutter)
+	}
+	res := cleanMemory(regions)
 	emit("mem-auto", map[string]any{"reason": reason, "result": res})
 }
 

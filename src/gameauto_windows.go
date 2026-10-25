@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -85,6 +86,9 @@ func gameAutoStep() {
 					gpu = -1
 				}
 				s.add(l.CPU, gpu, l.GPU.Temp, l.MemLoad)
+				if v, ok := fpsLatest(); ok && v.PID == gmAuto.pid {
+					s.addFPS(v.FPS, v.Low1)
+				}
 			}
 			return
 		}
@@ -93,6 +97,7 @@ func gameAutoStep() {
 		var last *gameSession
 		if s := gmAuto.sess; s != nil && s.n > 0 {
 			s.Secs = int(time.Since(time.UnixMilli(s.Start)).Seconds())
+			s.Limit = gameLimit(*s)
 			saveGameSession(*s)
 			last = s
 		}
@@ -148,7 +153,7 @@ func gameAutoStep() {
 	ev := map[string]any{"state": "start", "game": name}
 	gmAuto.sess = &gameSession{Game: name, Start: time.Now().UnixMilli(), GPUMax: -1, GPUAvg: -1}
 	if g, _ := gmCfgCache.Load().(map[string]any); g["prio"] == true {
-		ev["prio"] = gameHighPriority(pid) // the priority ends with the game's process: nothing to put back
+		ev["prio"] = gameHighPriority(path)
 	}
 	if !active {
 		var keep map[string]bool
@@ -171,6 +176,14 @@ func gameAutoStep() {
 	emit("gm-auto", ev)
 }
 
+// gamePlaying: a game is in front (seen by game mode) or game mode is on.
+func gamePlaying() bool {
+	gmAuto.mu.Lock()
+	p := gmAuto.pid != 0
+	gmAuto.mu.Unlock()
+	return p || gameState().Active
+}
+
 func gameRAM(why string) int64 {
 	op := beginOp("memory", "", why, nil)
 	res := cleanMemory(gameRAMRegions)
@@ -179,14 +192,19 @@ func gameRAM(why string) int64 {
 	return res.Freed
 }
 
+// processAlive reads Windows' process list (as Task Manager does) instead of
+// opening the game's process: an anti-cheat watches who opens the game.
 func processAlive(pid uint32) bool {
-	h, err := windows.OpenProcess(windows.SYNCHRONIZE, false, pid)
+	raw, err := queryProcesses()
 	if err != nil {
-		return false
+		return true // unknown: the game is not ended on a failed read
 	}
-	defer windows.CloseHandle(h)
-	ev, _ := windows.WaitForSingleObject(h, 0)
-	return ev == uint32(windows.WAIT_TIMEOUT)
+	for _, p := range raw {
+		if p.pid == pid {
+			return true
+		}
+	}
+	return false
 }
 
 // windowsKnowsGame: the exe is in Game Bar's list of games (refreshed every 5 minutes).
@@ -213,7 +231,7 @@ func windowsKnowsGame(path string) bool {
 }
 
 // fullScreen3D: the program's window in front covers its whole screen and it
-// has DirectX, Vulkan or OpenGL loaded.
+// draws with the graphics card's 3D engine.
 func fullScreen3D(pid uint32) bool {
 	h, _, _ := procGetForegroundWindow.Call()
 	if h == 0 {
@@ -234,28 +252,10 @@ func fullScreen3D(pid uint32) bool {
 	if wr.Left > mi.Monitor.Left || wr.Top > mi.Monitor.Top || wr.Right < mi.Monitor.Right || wr.Bottom < mi.Monitor.Bottom {
 		return false
 	}
-	ph, err := windows.OpenProcess(windows.PROCESS_QUERY_INFORMATION|windows.PROCESS_VM_READ, false, pid)
-	if err != nil {
-		return false
-	}
-	defer windows.CloseHandle(ph)
-	mods := make([]windows.Handle, 1024)
-	var need uint32
-	if windows.EnumProcessModulesEx(ph, &mods[0], uint32(len(mods))*uint32(unsafe.Sizeof(mods[0])), &need, windows.LIST_MODULES_ALL) != nil {
-		return false
-	}
-	n := min(int(need/uint32(unsafe.Sizeof(mods[0]))), len(mods))
-	buf := make([]uint16, 260)
-	for _, m := range mods[:n] {
-		if windows.GetModuleBaseName(ph, m, &buf[0], uint32(len(buf))) != nil {
-			continue
-		}
-		switch strings.ToLower(windows.UTF16ToString(buf)) {
-		case "d3d9.dll", "d3d11.dll", "d3d12.dll", "vulkan-1.dll", "opengl32.dll":
-			return true
-		}
-	}
-	return false
+	// whether it draws in 3D comes from Windows' counters, not from opening
+	// the game: an anti-cheat watches who opens the game's process
+	u, ok := gpu3DOf(pid)
+	return ok && u >= 2
 }
 
 func gameSessionsPath() string { return dataDirPath("game-sessions.json") }
@@ -282,13 +282,76 @@ func gameSessions() []gameSession {
 	return []gameSession{}
 }
 
-// gameHighPriority gives the game the "high" priority class (an anti-cheat
-// may refuse: then nothing changes).
-func gameHighPriority(pid uint32) bool {
-	h, err := windows.OpenProcess(windows.PROCESS_SET_INFORMATION|windows.PROCESS_QUERY_LIMITED_INFORMATION, false, pid)
-	if err != nil {
-		return false
+// gameHighPriority asks Windows to start the game with "high" priority
+// (Image File Execution Options\<exe>\PerfOptions, CpuPriorityClass 3): Windows
+// applies it from the game's next start, and the app never opens the game's
+// process, which an anti-cheat could take for a cheat. "on": already set;
+// "next": set now, for the next start; "": not possible (no admin rights).
+func gameHighPriority(path string) string {
+	exe := filepath.Base(path)
+	if !app.admin || exe == "" || exe == "." || strings.ContainsAny(exe, `\/`) {
+		return ""
 	}
-	defer windows.CloseHandle(h)
-	return windows.SetPriorityClass(h, windows.HIGH_PRIORITY_CLASS) == nil
+	gamePrioMu.Lock()
+	defer gamePrioMu.Unlock()
+	k, _, err := registry.CreateKey(registry.LOCAL_MACHINE, ifeoKey+`\`+exe+`\PerfOptions`, registry.QUERY_VALUE|registry.SET_VALUE)
+	if err != nil {
+		return ""
+	}
+	defer k.Close()
+	if v, _, err := k.GetIntegerValue("CpuPriorityClass"); err == nil && v == 3 {
+		return "on"
+	}
+	if k.SetDWordValue("CpuPriorityClass", 3) != nil {
+		return ""
+	}
+	list := gamePrioRead()
+	if !slices.Contains(list, exe) {
+		list = append(list, exe)
+		b, _ := json.Marshal(list)
+		_ = os.WriteFile(gamePrioPath(), b, 0o644)
+	}
+	return "next"
+}
+
+var gamePrioMu sync.Mutex
+
+func gamePrioPath() string { return dataDirPath("game-priority.json") }
+
+func gamePrioRead() []string {
+	var l []string
+	if b, err := os.ReadFile(gamePrioPath()); err == nil {
+		_ = json.Unmarshal(b, &l)
+	}
+	return l
+}
+
+// gamePrioClear takes back every priority the app asked Windows for (the
+// option was turned off); keys that hold anything else stay.
+func gamePrioClear() {
+	defer recoverLog("game")
+	gamePrioMu.Lock()
+	defer gamePrioMu.Unlock()
+	list := gamePrioRead()
+	if len(list) == 0 || !app.admin {
+		return
+	}
+	for _, exe := range list {
+		if k, err := registry.OpenKey(registry.LOCAL_MACHINE, ifeoKey+`\`+exe+`\PerfOptions`, registry.SET_VALUE|registry.QUERY_VALUE); err == nil {
+			_ = k.DeleteValue("CpuPriorityClass")
+			n, _ := k.Stat()
+			k.Close()
+			if n != nil && n.ValueCount == 0 && n.SubKeyCount == 0 {
+				_ = registry.DeleteKey(registry.LOCAL_MACHINE, ifeoKey+`\`+exe+`\PerfOptions`)
+			}
+		}
+		if k, err := registry.OpenKey(registry.LOCAL_MACHINE, ifeoKey+`\`+exe, registry.QUERY_VALUE); err == nil {
+			n, _ := k.Stat()
+			k.Close()
+			if n != nil && n.ValueCount == 0 && n.SubKeyCount == 0 {
+				_ = registry.DeleteKey(registry.LOCAL_MACHINE, ifeoKey+`\`+exe)
+			}
+		}
+	}
+	_ = os.Remove(gamePrioPath())
 }

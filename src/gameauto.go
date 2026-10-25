@@ -7,7 +7,10 @@ package main
 // DirectX, Vulkan or OpenGL and is not a browser, video player or other
 // known non-game. Free of Windows calls.
 
-import "strings"
+import (
+	"strconv"
+	"strings"
+)
 
 // gameDirs: folders that only hold games (lower case, with backslashes).
 var gameDirs = []string{`\steamapps\common\`, `\epic games\`, `\gog galaxy\games\`, `\gog games\`, `\ea games\`,
@@ -122,7 +125,12 @@ type gameSession struct {
 	GPUAvg  int     `json:"gpuAvg"`
 	TempMax int     `json:"tempMax"` // graphics card °C, 0 unknown (NVIDIA only)
 	MemMax  uint32  `json:"memMax"`  // % of RAM in use
+	FPSAvg  float64 `json:"fpsAvg"`  // 0: the frame counter was off
+	FPSLow  float64 `json:"fpsLow"`  // the lowest 1% low seen
+	Limit   string  `json:"limit"`   // what held the game back: hot, ram, gpu, cpu, ok
 	n       int
+	fpsSum  float64
+	fpsN    int
 	cpuSum  float64
 	gpuSum  int
 	gpuN    int
@@ -141,6 +149,50 @@ func (s *gameSession) add(cpu float64, gpuUtil, gpuTemp int, mem uint32) {
 	}
 	s.TempMax = max(s.TempMax, gpuTemp)
 	s.MemMax = max(s.MemMax, mem)
+}
+
+func (s *gameSession) addFPS(fps, low float64) {
+	if fps <= 0 {
+		return
+	}
+	s.fpsN++
+	s.fpsSum += fps
+	s.FPSAvg = s.fpsSum / float64(s.fpsN)
+	if low > 0 && (s.FPSLow == 0 || low < s.FPSLow) {
+		s.FPSLow = low
+	}
+}
+
+// gameLimit: what held the game back, for the report after it.
+func gameLimit(s gameSession) string {
+	switch {
+	case s.TempMax >= 85:
+		return "hot"
+	case s.MemMax >= 90:
+		return "ram"
+	case s.GPUAvg >= 90:
+		return "gpu"
+	case s.CPUMax >= 85 && (s.GPUAvg < 0 || s.GPUAvg < 70):
+		return "cpu"
+	}
+	return "ok"
+}
+
+// gpuInstancePID: the process of a "GPU Engine" counter instance
+// ("pid_1234_luid_0x…_engtype_3D"); 0 when the name has none.
+func gpuInstancePID(name string) uint32 {
+	rest, ok := strings.CutPrefix(name, "pid_")
+	if !ok {
+		return 0
+	}
+	if i := strings.IndexByte(rest, '_'); i > 0 {
+		rest = rest[:i]
+	}
+	n, err := strconv.ParseUint(rest, 10, 32)
+	if err != nil {
+		return 0
+	}
+	return uint32(n)
 }
 
 // keepSessions: the newest first, at most 20.

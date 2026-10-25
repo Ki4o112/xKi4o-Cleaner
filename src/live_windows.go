@@ -242,22 +242,55 @@ func pdhRead() (util int, mem uint64, ok bool) {
 }
 
 func pdhValues(ctr uintptr) ([]float64, bool) {
+	vals, _, ok := pdhNamed(ctr)
+	return vals, ok
+}
+
+// gpu3DOf: how much the process draws with the 3D engine now, from Windows'
+// own counters (as Task Manager shows it): no handle to the process, which
+// an anti-cheat could take for a cheat looking into the game.
+func gpu3DOf(pid uint32) (float64, bool) {
+	pdh.once.Do(pdhStart)
+	if !pdh.ok {
+		return 0, false
+	}
+	pdh.mu.Lock()
+	defer pdh.mu.Unlock()
+	if r, _, _ := pdh.coll.Call(pdh.query); r != 0 {
+		return 0, false
+	}
+	vals, names, ok := pdhNamed(pdh.ctr)
+	if !ok {
+		return 0, false
+	}
+	var sum float64
+	for i, n := range names {
+		if gpuInstancePID(n) == pid {
+			sum += vals[i]
+		}
+	}
+	return sum, true
+}
+
+// pdhNamed: the values of a wildcard counter with their instance names.
+func pdhNamed(ctr uintptr) ([]float64, []string, bool) {
 	const pdhFmtDouble, pdhMoreData = 0x200, 0x800007D2
 	var size, count uint32
 	r, _, _ := pdh.get.Call(ctr, pdhFmtDouble, uintptr(unsafe.Pointer(&size)), uintptr(unsafe.Pointer(&count)), 0)
 	if uint32(r) != pdhMoreData || size == 0 {
-		return nil, uint32(r) == 0 // nothing is drawing: 0%
+		return nil, nil, uint32(r) == 0 // nothing is drawing: 0%
 	}
 	buf := make([]byte, size)
 	if r, _, _ := pdh.get.Call(ctr, pdhFmtDouble, uintptr(unsafe.Pointer(&size)), uintptr(unsafe.Pointer(&count)), uintptr(unsafe.Pointer(&buf[0]))); r != 0 {
-		return nil, false
+		return nil, nil, false
 	}
 	items := unsafe.Slice((*pdhItem)(unsafe.Pointer(&buf[0])), count)
-	vals := make([]float64, 0, count)
+	vals, names := make([]float64, 0, count), make([]string, 0, count)
 	for _, it := range items {
 		if it.status == 0 || it.status == 1 { // PDH_CSTATUS_VALID_DATA, NEW_DATA
 			vals = append(vals, it.value)
+			names = append(names, windows.UTF16PtrToString(it.name))
 		}
 	}
-	return vals, true
+	return vals, names, true
 }

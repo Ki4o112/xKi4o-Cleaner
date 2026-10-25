@@ -84,6 +84,21 @@ var fpsRun struct {
 	overlay atomic.Bool
 	text    atomic.Value // what the overlay shows
 	hwnd    atomic.Uintptr
+	last    atomic.Value // fpsSeen: the last reading, for the game's report
+}
+
+type fpsSeen struct {
+	v  fpsNow
+	at time.Time
+}
+
+// fpsLatest: the counter's reading of the last 3 seconds, if it runs.
+func fpsLatest() (fpsNow, bool) {
+	l, ok := fpsRun.last.Load().(fpsSeen)
+	if !ok || time.Since(l.at) > 3*time.Second {
+		return fpsNow{}, false
+	}
+	return l.v, true
 }
 
 func pmExe() string {
@@ -191,6 +206,7 @@ func fpsStart(overlay bool) fpsStatus {
 			v, ok := book.now(foregroundPID(), time.Now())
 			mu.Unlock()
 			if ok {
+				fpsRun.last.Store(fpsSeen{v, time.Now()})
 				fpsRun.text.Store(strings.Join([]string{nf0(v.FPS) + " FPS", "1% " + nf0(v.Low1)}, "\n"))
 				emit("fps", map[string]any{"state": "run", "now": v})
 			} else {

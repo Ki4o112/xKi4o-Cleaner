@@ -3,6 +3,18 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.14.0 — 2026-10-25
+
+### English
+- A report after every game: FPS, 1% low, load and temperature against the last time, and what held the game back
+- Safer next to anti-cheats: game mode no longer opens the game's process at all — 3D is read from Windows' counters, and high priority is set by Windows itself from the game's next start
+- Automatic memory cleaning no longer empties a running game's memory
+
+### Български
+- Отчет след всяка игра: FPS, 1% low, натоварване и температура спрямо миналия път и какво е спирало играта
+- По-безопасно с анти-чийтовете: режим „Игри“ вече изобщо не отваря процеса на играта — 3D се чете от броячите на Windows, а високият приоритет се задава от самия Windows от следващото пускане
+- Автоматичното чистене на паметта вече не изпразва паметта на пусната игра
+
 ## 4.13.0 — 2026-10-25
 
 ### English

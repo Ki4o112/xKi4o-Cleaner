@@ -397,6 +397,9 @@ func applySettings(m map[string]any) {
 	}
 	if g, ok := m["game"].(map[string]any); ok {
 		gmCfgCache.Store(g)
+		if g["prio"] != true {
+			go gamePrioClear() // the option turned off: Windows' own setting goes too
+		}
 	}
 	if raw, ok := m["mem"]; ok {
 		b, _ := json.Marshal(raw)

@@ -57,3 +57,33 @@ func TestGameLaunchersAreKept(t *testing.T) {
 		t.Fatalf("%v", k)
 	}
 }
+
+func TestGameReportBits(t *testing.T) {
+	for name, want := range map[string]uint32{"pid_1234_luid_0x00000000_0x0000D1A5_phys_0_eng_0_engtype_3D": 1234, "pid_7_x": 7, "luid_0x0": 0, "pid_x_1": 0, "pid_": 0} {
+		if got := gpuInstancePID(name); got != want {
+			t.Errorf("%s: %d, want %d", name, got, want)
+		}
+	}
+	for _, c := range []struct {
+		s    gameSession
+		want string
+	}{
+		{gameSession{TempMax: 88, GPUAvg: 99}, "hot"},
+		{gameSession{MemMax: 93, GPUAvg: 60}, "ram"},
+		{gameSession{GPUAvg: 97, CPUMax: 90}, "gpu"},
+		{gameSession{GPUAvg: 55, CPUMax: 92}, "cpu"},
+		{gameSession{GPUAvg: -1, CPUMax: 95}, "cpu"},
+		{gameSession{GPUAvg: 70, CPUMax: 60, MemMax: 60, TempMax: 70}, "ok"},
+	} {
+		if got := gameLimit(c.s); got != c.want {
+			t.Errorf("%+v: %s, want %s", c.s, got, c.want)
+		}
+	}
+	var s gameSession
+	s.addFPS(0, 0)
+	s.addFPS(100, 60)
+	s.addFPS(140, 80)
+	if s.FPSAvg != 120 || s.FPSLow != 60 {
+		t.Errorf("fps %v %v", s.FPSAvg, s.FPSLow)
+	}
+}
