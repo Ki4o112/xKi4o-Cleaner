@@ -3,6 +3,20 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.9.0 — 2026-10-25
+
+### English
+- Updates: pause Windows Update for 1–5 weeks, or take security updates only
+- Passwords: lock a folder with a password (hidden and closed until unlocked here)
+- Settings: move everything to another PC in one file — tweaks, your programs, settings
+- Game mode: high priority for the game while you play
+
+### Български
+- Обновления: пауза на Windows Update за 1–5 седмици или само обновления за сигурност
+- Пароли: заключи папка с парола (скрита и затворена, докато не я отключиш тук)
+- Настройки: пренеси всичко на друг компютър с един файл — туийкове, програмите ти, настройки
+- Режим „Игри“: висок приоритет на играта, докато играеш
+
 ## 4.8.0 — 2026-10-24
 
 ### English

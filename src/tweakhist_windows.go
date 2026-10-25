@@ -300,6 +300,9 @@ type tweakProfile struct {
 	Created string          `json:"created"`
 	Windows string          `json:"windows,omitempty"`
 	Tweaks  map[string]bool `json:"tweaks"`
+	// 4.9: a whole setup to carry to another PC (older files have neither)
+	Install  []string       `json:"install,omitempty"`  // winget ids from the Install tab
+	Settings map[string]any `json:"settings,omitempty"` // the page's choices (profileSettings)
 }
 
 const profileKind = "xki4o-tweak-profile"
@@ -317,14 +320,15 @@ type profileResult struct {
 
 // exportTweakProfile saves the current on/off state of the tweaks to a file
 // the user picks.
-func exportTweakProfile() profileResult {
-	path, ok := saveFileDialog(T("prof.saveTitle"), "xKi4o-tweaks.json")
+func exportTweakProfile(install []string, settings map[string]any) profileResult {
+	path, ok := saveFileDialog(T("prof.saveTitle"), "xKi4o-setup.json")
 	if !ok {
 		return profileResult{}
 	}
 	p := newProbe()
 	prof := tweakProfile{App: appName + " " + appVersion, Kind: profileKind, Version: 1,
-		Created: time.Now().Format(time.RFC3339), Windows: osName(), Tweaks: map[string]bool{}}
+		Created: time.Now().Format(time.RFC3339), Windows: osName(), Tweaks: map[string]bool{},
+		Install: cleanInstallIDs(install), Settings: profileSettings(settings)}
 	for _, t := range tweaks {
 		if !profileTweak(t) {
 			continue
@@ -355,6 +359,8 @@ type profilePlan struct {
 	Steps   []profileStep `json:"steps"`
 	Same    int           `json:"same"`    // already as in the profile
 	Skipped []string      `json:"skipped"` // unknown here, not available or one-way
+	Install  []string       `json:"install,omitempty"`
+	Settings map[string]any `json:"settings,omitempty"`
 }
 
 // importTweakProfile reads a profile the user picks and works out what would
@@ -379,7 +385,7 @@ func planProfileFile(path string) (plan profilePlan) {
 		return
 	}
 	var prof tweakProfile
-	if json.Unmarshal(b, &prof) != nil || prof.Kind != profileKind || prof.Tweaks == nil {
+	if json.Unmarshal(b, &prof) != nil || prof.Kind != profileKind || (prof.Tweaks == nil && len(prof.Install) == 0 && len(prof.Settings) == 0) {
 		plan.Error = T("prof.bad")
 		return
 	}
@@ -406,6 +412,7 @@ func planProfileFile(path string) (plan profilePlan) {
 			plan.Steps = append(plan.Steps, profileStep{ID: id, On: want})
 		}
 	}
+	plan.Install, plan.Settings = cleanInstallIDs(prof.Install), profileSettings(prof.Settings)
 	plan.OK = true
 	return
 }

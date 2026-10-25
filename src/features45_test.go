@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func TestParseSDRConfig(t *testing.T) {
 	b := []byte(`{"revision":1,"pops":{"fra":{"desc":"Frankfurt (Germany)","relays":[{"ipv4":"155.133.226.68","port_range":[27015,27060]}]},
@@ -86,5 +89,38 @@ func TestGameSessionStats(t *testing.T) {
 	}
 	if len(ss) != 20 || ss[0].Secs != 24 {
 		t.Fatalf("%d, newest %d", len(ss), ss[0].Secs)
+	}
+}
+
+func TestFolderLock(t *testing.T) {
+	l := newLock(`D:\Private`, "correct horse", 1)
+	if !l.check("correct horse") || l.check("correct hors") || l.check("") {
+		t.Fatal("password check")
+	}
+	if l2 := newLock(`D:\Private`, "correct horse", 1); l2.Salt == l.Salt || l2.Hash == l.Hash {
+		t.Fatal("each lock needs its own salt")
+	}
+	for p, want := range map[string]bool{`D:\Private`: true, `C:\Users\a\Documents\Taxes`: true, `C:\`: false, `D:\`: false,
+		`C:\Users\a`: false, `C:\Windows\Temp`: false, `C:\Program Files\App`: false, `C:\ProgramData\X`: false, `C:\Tools`: false} {
+		if got := lockTargetOK(p, false, `C:\Users\a`, `C:\Tools\xk`, `C:\Users\a\AppData\Local`); got != want {
+			t.Errorf("%s: %v, want %v", p, got, want)
+		}
+	}
+}
+
+func TestWUPause(t *testing.T) {
+	now := time.Date(2026, 10, 25, 10, 0, 0, 0, time.UTC)
+	v := wuPauseValues(now, 9)
+	if v["PauseUpdatesExpiryTime"] != "2026-11-29T10:00:00Z" || v["PauseQualityUpdatesStartTime"] != "2026-10-25T10:00:00Z" {
+		t.Fatalf("at most 5 weeks: %v", v)
+	}
+	if !wuPausedUntil("2026-11-01T00:00:00Z", now).Equal(time.Date(2026, 11, 1, 0, 0, 0, 0, time.UTC)) || !wuPausedUntil("2026-10-01T00:00:00Z", now).IsZero() || !wuPausedUntil("x", now).IsZero() {
+		t.Fatal("pause end")
+	}
+	if got := cleanInstallIDs([]string{"VideoLAN.VLC", "VideoLAN.VLC", "--all", "a b"}); len(got) != 1 {
+		t.Fatalf("%v", got)
+	}
+	if got := profileSettings(map[string]any{"uiMode": "easy", "dnsBackup": "x"}); len(got) != 1 || got["uiMode"] != "easy" {
+		t.Fatalf("%v", got)
 	}
 }

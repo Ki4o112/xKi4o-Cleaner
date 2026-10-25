@@ -273,6 +273,13 @@ func main() {
 			return true
 		},
 		"gameSessions": gameSessions,
+		// 4.9: Windows Update control, locked folders
+		"wuCtlState":     wuCtlState,
+		"wuPause":        wuPause,
+		"wuSecurityOnly": wuSecurityOnly,
+		"lockList":       lockList,
+		"lockFolder":     lockFolder,
+		"unlockFolder":   unlockFolder,
 		// Logs & error reports
 		"logOps":        logOps,
 		"logEntries":    logEntries,

@@ -173,3 +173,33 @@ func newestSince(sinces []string, current string) string {
 	}
 	return best
 }
+
+// profileKeys: the page's choices a setup file may carry to another PC
+// (never paths, logs or anything tied to this PC).
+var profileKeys = map[string]bool{"game": true, "remind": true, "uiMode": true, "cleanMode": true, "lang": true, "theme": true, "accent": true, "mem": true}
+
+func profileSettings(m map[string]any) map[string]any {
+	out := map[string]any{}
+	for k, v := range m {
+		if profileKeys[k] {
+			out[k] = v
+		}
+	}
+	if len(out) == 0 {
+		return nil
+	}
+	return out
+}
+
+// cleanInstallIDs: valid winget ids, each once.
+func cleanInstallIDs(ids []string) []string {
+	var out []string
+	seen := map[string]bool{}
+	for _, id := range ids {
+		if validWingetID(id) && !seen[id] && len(out) < 200 {
+			seen[id] = true
+			out = append(out, id)
+		}
+	}
+	return out
+}

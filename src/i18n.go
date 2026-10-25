@@ -480,6 +480,18 @@ var texts = map[string][2]string{ // [bg, en]
 	"rf.err.what":      {"Избери какво да търся — вид файлове или част от името", "Choose what to look for — a kind of file or part of the name"},
 	"rf.err.run":       {"Windows File Recovery спря: %s", "Windows File Recovery stopped: %s"},
 	"log.rfStart":      {"Търсене на изтрити файлове на %s (запазване на %s)", "Searching for deleted files on %s (saving to %s)"},
+	// 4.9: Windows Update control, locked folders
+	"log.wuPause":    {"Пауза на обновленията на Windows: %d седм. (0 = продължи)", "Windows updates paused: %d weeks (0 = resumed)"},
+	"log.wuSecOnly":  {"Само обновления за сигурност: %v", "Security updates only: %v"},
+	"log.lock":       {"Заключена папка: %s", "Folder locked: %s"},
+	"log.unlock":     {"Отключена папка: %s", "Folder unlocked: %s"},
+	"lk.err.folder":  {"Папката не съществува", "The folder does not exist"},
+	"lk.err.target":  {"Тази папка не може да се заключи (Windows, програма, целият профил или папката на xKi4o Cleaner)", "This folder cannot be locked (Windows, a program, a whole profile or xKi4o Cleaner's own folder)"},
+	"lk.err.short":   {"Паролата трябва да е поне 4 знака", "The password must be at least 4 characters"},
+	"lk.err.already": {"Папката вече е заключена", "The folder is locked already"},
+	"lk.err.unknown": {"Тази папка не е заключена от програмата", "This folder was not locked by the app"},
+	"lk.err.pw":      {"Грешна парола", "Wrong password"},
+	"lk.err.acl":     {"Windows не промени достъпа: %s", "Windows did not change the access: %s"},
 	// 4.7: startup watch
 	"log.suNew": {"Нова програма при стартиране: %s", "New startup program: %s"},
 	"su.newT":   {"Нова програма се пуска с Windows", "A new program starts with Windows"},

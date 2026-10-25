@@ -270,6 +270,14 @@ h1 { font-size: 23px; font-weight: 700; margin: 0; letter-spacing: -.02em; }
 .av-th { padding: 12px 16px; border-top: 1px solid var(--line-soft); } .av-th:first-child { border-top: 0; }
 .av-th .h { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; } .av-th .f { color: var(--muted); font-size: 12px; margin-top: 4px; overflow-wrap: anywhere; }
 .sg-row { padding: 12px 4px; } .sg-row:first-child { border-top: 0; } .sg-sz { color: var(--mint); margin-left: 6px; }
+/* 4.9 */
+.wc-box { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+.wc-card { padding: 14px 16px; border-radius: var(--r-l); background: var(--card); border: 1px solid var(--line-soft); box-shadow: inset 0 1px 0 rgba(255,255,255,.035); }
+.wc-card .t { font-weight: 700; } .wc-card .d { color: var(--muted); font-size: 12.5px; margin: 3px 0 10px; line-height: 1.5; }
+.wc-card .st { font-size: 12.5px; margin-bottom: 8px; } .wc-card .st b { color: var(--amber); }
+.wc-weeks { display: flex; flex-wrap: wrap; gap: 6px; }
+@media (max-width: 900px) { .wc-box { grid-template-columns: 1fr; } }
+.pw2 { display: grid; gap: 8px; margin-top: 10px; } .pw2 .search { margin-left: 0; flex: none; }
 /* 4.7 */
 .og-card { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; width: 100%; margin-bottom: 14px; padding: 16px 18px; border: 1px solid transparent; border-radius: var(--r-xl); text-align: left; color: #fff; font: inherit; cursor: pointer;
   background: linear-gradient(120deg, var(--blue-deep, var(--blue)), var(--blue) 55%, var(--blue-2)); box-shadow: 0 16px 40px -22px var(--blue-glow); overflow: hidden; transition: transform .35s var(--spring), box-shadow .35s; }
@@ -2800,6 +2808,10 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
         </form>
         <div id="pwRes"></div>
         <div class="note-line" data-i="pw.note"></div>
+        <div class="dh-head net-h2 pw-h2"><h3 data-i="lk.title"></h3><button class="btn small primary" id="lkAdd"><span data-icon="lock"></span><span data-i="lk.add"></span></button></div>
+        <div class="dh-sub" data-i="lk.sub"></div>
+        <div class="list" id="lkList"></div>
+        <div class="note-line" data-i="lk.note"></div>
         <div class="dh-head net-h2 pw-h2"><h3 data-i="wf.title"></h3><button class="btn icon-btn" id="wfRefresh" data-i-title="si.refresh"><span data-icon="refresh"></span></button></div>
         <div class="dh-sub" data-i="wf.sub"></div>
         <div class="list" id="wfList"></div>
@@ -2886,7 +2898,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
         <div><h1 data-i="wu.title"></h1><div class="sub" data-i="wu.sub"></div></div>
         <div class="head-r"><button class="btn small" id="wuSettings"><span data-icon="settings"></span><span data-i="wu.settings"></span></button><button class="btn primary" id="wuSearchBtn"><span data-icon="search"></span><span id="wuSearchTxt" data-i="wu.search"></span></button></div>
       </div>
-      <div class="scroll pad" id="wuBody"></div>
+      <div class="scroll pad"><div id="wuCtl"></div><div id="wuBody"></div></div>
     </section>
 
     <!-- =============== NETWORK =============== -->
@@ -2928,6 +2940,8 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
         <div class="list">
           <div class="item"><div class="i-ico" data-icon="globe"></div><div><div class="t" data-i="set.lang"></div><div class="d" data-i="set.langD"></div></div>
             <div class="seg blue" id="segLang"></div></div>
+          <div class="item"><div class="i-ico" data-icon="upload"></div><div><div class="t" data-i="mv.t"></div><div class="d" data-i="mv.d"></div></div>
+            <div class="row" style="gap:8px"><button class="btn small" id="mvExport"><span data-icon="download"></span><span data-i="mv.export"></span></button><button class="btn small" id="mvImport"><span data-icon="upload"></span><span data-i="mv.import"></span></button></div></div>
           <div class="item"><div class="i-ico" data-icon="sparkle"></div><div><div class="t" data-i="um.set"></div><div class="d" data-i="um.setD"></div></div>
             <div class="seg blue" id="segUi"></div></div>
           <div class="item"><div class="i-ico" data-icon="monitor"></div><div><div class="t" data-i="set.theme"></div><div class="d" data-i="set.themeD"></div></div>
@@ -3098,6 +3112,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
         <div class="list" style="margin-top:14px">
           <div class="item"><div class="i-ico" data-icon="gamepad"></div><div><div class="t" data-i="gm.auto"></div><div class="d" data-i="gm.autoD"></div></div><input type="checkbox" class="switch" id="gmAuto"></div>
           <div class="item"><div class="i-ico" data-icon="bolt"></div><div><div class="t" data-i="gm.ram"></div><div class="d" data-i="gm.ramD"></div></div><input type="checkbox" class="switch" id="gmRam" checked></div>
+          <div class="item"><div class="i-ico" data-icon="rocket"></div><div><div class="t" data-i="gm.prio"></div><div class="d" data-i="gm.prioD"></div></div><input type="checkbox" class="switch" id="gmPrio"></div>
           <div class="item"><div class="i-ico" data-icon="stop"></div><div><div class="t" data-i="gm.force"></div><div class="d" data-i="gm.forceD"></div></div><input type="checkbox" class="switch" id="gmForce"></div>
         </div>
         <div id="gmClosed"></div>
@@ -4126,6 +4141,17 @@ bg: {
   "bn.n.balCPU": "{0} спира {1} на {2} с около {3}%: процесорът подготвя ~{4} кадъра/с, а картата може ~{5}.",
   "bn.n.balGPU": "С {0} и {1} на {2} видеокартата определя FPS (~{4} кадъра/с), а процесорът има запас (~{3}) — това не е проблем.",
   "bn.n.balOK": "{0} и {1} са балансирани на {2} — няма ботълнек.", "bn.n.balUnknown": "За {0} няма публикувани тестове — изводът за ботълнек е пропуснат.",
+  "wc.pause": "Пауза на обновленията", "wc.pauseD": "Windows не тегли и не инсталира нищо, докато трае паузата. Най-много 5 седмици — после обновленията продължават сами.",
+  "wc.weeks": "{0} седм.", "wc.paused": "На пауза до <b>{0}</b>", "wc.resume": "Продължи сега", "wc.notPaused": "Обновленията вървят нормално.",
+  "wc.sec": "Само обновления за сигурност", "wc.secD": "Отлага големите версии на Windows (напр. 24H2 → 25H2) с година. Корекциите за сигурност идват както досега.",
+  "wc.home": "На Windows Home това не се спазва — там работи само паузата.", "wc.done": "Готово",
+  "gm.prio": "Висок приоритет на играта", "gm.prioD": "Засечената игра получава повече процесорно време от фоновите програми. Ако анти-чийтът не позволи, нищо не се променя.",
+  "mv.t": "Пренеси на друг компютър", "mv.d": "Един файл с туийковете, програмите от „Инсталирай“, които имаш, и настройките. На новия компютър: „Зареди“.",
+  "mv.export": "Запиши", "mv.import": "Зареди", "mv.saved": "Записано: {0} туийка, {1} програми и настройките", "mv.install": "Програми за инсталиране ({0})", "mv.settings": "Настройки: изглед, режим „Игри“, напомняне, език и тема",
+  "lk.title": "Заключени папки", "lk.add": "Заключи папка", "lk.sub": "Скрива папката и забранява достъпа до нея, докато не въведеш паролата тук.",
+  "lk.note": "Това не е криптиране: администратор може да я отключи и ръчно. За истинска защита ползвай BitLocker или архив с парола. Ако забравиш паролата: icacls \"папка\" /remove:d *S-1-1-0",
+  "lk.none": "Няма заключени папки.", "lk.pw": "Парола", "lk.pw2": "Повтори паролата", "lk.lock": "Заключи", "lk.unlock": "Отключи", "lk.mismatch": "Паролите не съвпадат",
+  "lk.locked": "Папката е заключена", "lk.unlocked": "Папката е отключена", "lk.lockT": "Заключи {0}", "lk.unlockT": "Отключи {0}", "lk.gone": "липсва",
   "rm.set": "Напомняне за боклуци", "rm.setD": "Казва ти, когато се съберат повече от избраното — най-много веднъж на 3 дни.", "rm.t": "Имаш {0} боклуци", "rm.d": "Да ги почистя ли? Безопасно е — само кеш и временни файлове.", "rm.go": "Почисти",
   "su.newT": "Нова програма се пуска с Windows", "su.newD": "{0} — провери дали я познаваш.", "su.review": "Провери",
   "og.t": "Оптимизирай за игри", "og.d": "Туийковете за игри, сам включващ се режим „Игри“ и почистване на кеша на шейдърите — с един бутон, всичко може да се върне.", "og.loading": "Подготвям…",
@@ -5128,6 +5154,17 @@ en: {
   "bn.n.balCPU": "{0} holds back {1} at {2} by about {3}%: the processor prepares ~{4} frames/s, the card could do ~{5}.",
   "bn.n.balGPU": "With {0} and {1} at {2} the graphics card sets the FPS (~{4} frames/s) and the processor has room (~{3}) — not a problem.",
   "bn.n.balOK": "{0} and {1} are balanced at {2} — no bottleneck.", "bn.n.balUnknown": "There are no published tests for {0} — the bottleneck verdict is skipped.",
+  "wc.pause": "Pause updates", "wc.pauseD": "Windows downloads and installs nothing while paused. At most 5 weeks — then updates go on by themselves.",
+  "wc.weeks": "{0} wk", "wc.paused": "Paused until <b>{0}</b>", "wc.resume": "Resume now", "wc.notPaused": "Updates run as usual.",
+  "wc.sec": "Security updates only", "wc.secD": "Defers the big Windows versions (e.g. 24H2 → 25H2) by a year. Security fixes come as before.",
+  "wc.home": "Windows Home does not follow this — only the pause works there.", "wc.done": "Done",
+  "gm.prio": "High priority for the game", "gm.prioD": "The detected game gets more processor time than background programs. If its anti-cheat refuses, nothing changes.",
+  "mv.t": "Move to another PC", "mv.d": "One file with the tweaks, the Install-tab programs you have and the settings. On the new PC: Load.",
+  "mv.export": "Save", "mv.import": "Load", "mv.saved": "Saved: {0} tweaks, {1} programs and the settings", "mv.install": "Programs to install ({0})", "mv.settings": "Settings: view, game mode, reminder, language and theme",
+  "lk.title": "Locked folders", "lk.add": "Lock a folder", "lk.sub": "Hides the folder and denies any access to it until you give the password here.",
+  "lk.note": "This is not encryption: an administrator can unlock it by hand. For real protection use BitLocker or a password-protected archive. If you forget the password: icacls \"folder\" /remove:d *S-1-1-0",
+  "lk.none": "No locked folders.", "lk.pw": "Password", "lk.pw2": "Repeat the password", "lk.lock": "Lock", "lk.unlock": "Unlock", "lk.mismatch": "The passwords do not match",
+  "lk.locked": "The folder is locked", "lk.unlocked": "The folder is unlocked", "lk.lockT": "Lock {0}", "lk.unlockT": "Unlock {0}", "lk.gone": "missing",
   "rm.set": "Junk reminder", "rm.setD": "Tells you when more than the chosen amount has piled up — at most once every 3 days.", "rm.t": "You have {0} of junk", "rm.d": "Clean it now? It is safe — only cache and temporary files.", "rm.go": "Clean",
   "su.newT": "A new program starts with Windows", "su.newD": "{0} — check that you know it.", "su.review": "Review",
   "og.t": "Optimize for games", "og.d": "The gaming tweaks, game mode that turns on by itself and a clean shader cache — one button, and all of it can be undone.", "og.loading": "Getting ready…",
@@ -5814,7 +5851,8 @@ function go(page, opt) {
   if (page === "nmerge") loadNm(true);
   if (page === "bench") loadBench();
   if (page === "ext") loadExt();
-  if (page === "pass") loadWifi(false);
+  if (page === "pass") { loadWifi(false); loadLocks(); }
+  if (page === "wupd") loadWuCtl();
   if (page === "av") loadAv(false);
   if (page === "network") { paintGpg(); requestAnimationFrame(() => $("#gpgGame")._place && $("#gpgGame")._place()); }
   if (page === "bsod") loadBsod(false);
@@ -7160,27 +7198,43 @@ $("#twHist").addEventListener("click", async () => {
     foot: `<span class="grow">${esc(t("tw.histFile"))}</span><button class="btn primary" id="hiClose">${esc(t("modal.closeBtn"))}</button>` });
   $("#hiClose").addEventListener("click", () => closeSheet(false));
 });
-$("#twExport").addEventListener("click", async () => {
-  let r = {}; try { r = (await api.exportTweakProfile()) || {}; } catch (e) {}
-  if (r.ok) toast(t("tw.exported", r.count), "download"); else if (r.error) toast(r.error, "alert", "warn");
-});
+// the programs of the Install tab that this PC has, and the page's choices, go with the tweaks
+async function setupExtras() {
+  if (!PR.apps) { try { PR.apps = ((await api.appsList()) || {}).apps || []; } catch (e) { PR.apps = []; } }
+  const install = []; IN_CAT.forEach(([, items]) => items.forEach(([id, name, m]) => { if (inHave(m || name)) install.push(id); }));
+  const st = {}; ["game", "remind", "uiMode", "cleanMode", "lang", "theme", "accent", "mem"].forEach(k => { if (S.settings[k] !== undefined) st[k] = S.settings[k]; });
+  return [install, st];
+}
+async function exportSetup() {
+  const [install, st] = await setupExtras();
+  let r = {}; try { r = (await api.exportTweakProfile(install, st)) || {}; } catch (e) {}
+  if (r.ok) toast(t("mv.saved", r.count, install.length), "download"); else if (r.error) toast(r.error, "alert", "warn");
+}
+$("#twExport").addEventListener("click", exportSetup);
+$("#mvExport").addEventListener("click", exportSetup);
+$("#mvImport").addEventListener("click", async () => { await loadTweaks(); $("#twImport").click(); });
 $("#twImport").addEventListener("click", async () => {
   if (TW.busy) return;
   let plan = {}; try { plan = (await api.importTweakProfile()) || {}; } catch (e) {}
   if (!plan.ok) { if (plan.error) toast(plan.error, "alert", "warn"); return; }
-  const steps = plan.steps || [];
+  const steps = plan.steps || [], inst = plan.install || [], sets = plan.settings || null;
   let body = `<div class="sh-note">${esc(t("tw.impText", plan.same || 0, (plan.skipped || []).length))}</div>`;
   body += steps.length ? steps.map(s => {
     const m = twMeta(s.id) || {};
     const warn = m.risk === "risky" ? `<span class="tw-b risky">${esc(t("tw.b.risky"))}</span>` : m.risk === "caution" ? `<span class="tw-b caution">${esc(t("tw.b.caution"))}</span>` : "";
     return `<div class="plan-row"><span class="tw-st ${s.on ? "on" : "off"}">${esc(t(s.on ? "tw.imp.on" : "tw.imp.off"))}</span><span>${esc(twName(s.id))}</span>${warn}${m.reboot ? `<span class="tw-b">${esc(t("tw.b.reboot"))}</span>` : ""}</div>`;
   }).join("") : `<div class="sh-empty">${esc(t("tw.impNone"))}</div>`;
+  if (inst.length) body += `<div class="pl-sec">${esc(t("mv.install", inst.length))}</div><div class="sh-note">${esc(inst.map(inName).join(", "))}</div>`;
+  if (sets) body += `<div class="pl-sec">${esc(t("mv.settings"))}</div>`;
+  const any = steps.length || inst.length || sets;
   openSheet({ title: t("tw.impTitle"), sub: plan.path || "", body,
-    foot: `<button class="btn" id="imCancel">${esc(t("modal.cancel"))}</button>` + (steps.length ? `<button class="btn primary" id="imOk">${esc(t("tw.impOk", steps.length))}</button>` : "") });
+    foot: `<button class="btn" id="imCancel">${esc(t("modal.cancel"))}</button>` + (any ? `<button class="btn primary" id="imOk">${esc(steps.length ? t("tw.impOk", steps.length) : t("mv.import"))}</button>` : "") });
   $("#imCancel").addEventListener("click", () => closeSheet(true));
-  if (!steps.length) return;
+  if (!any) return;
   $("#imOk").addEventListener("click", async () => {
     closeSheet(false);
+    if (sets) { Object.assign(S.settings, sets); if (sets.lang === "en" || sets.lang === "bg") L = sets.lang; storeSettings(); applyLang(); applyUiMode(); }
+    if (inst.length) inQueue(inst);
     let ok = 0, bad = 0;
     for (const s of steps) {
       const r = await runTweak(s.id, s.on, { source: "profile" }, true);
@@ -11695,6 +11749,59 @@ function renderPrograms() {
   });
 }
 
+/* ---- 4.9: Windows Update control (Updates page) ---- */
+const WC = { st: null, busy: false };
+async function loadWuCtl() { try { WC.st = await api.wuCtlState(); } catch (e) { WC.st = null; } paintWuCtl(); }
+function paintWuCtl() {
+  const box = $("#wuCtl"); if (!box) return;
+  const s = WC.st; if (!s) { box.innerHTML = ""; return; }
+  const until = s.pausedUntil ? new Date(s.pausedUntil).toLocaleDateString(locale(), { dateStyle: "long" }) : "";
+  box.innerHTML = `<div class="wc-box"><div class="wc-card"><div class="t">${esc(t("wc.pause"))}</div><div class="d">${esc(t("wc.pauseD"))}</div>
+      <div class="st">${until ? t("wc.paused", esc(until)) : esc(t("wc.notPaused"))}</div>
+      <div class="wc-weeks">${[1, 2, 3, 4, 5].map(w => `<button class="btn small" data-wcw="${w}" ${WC.busy ? "disabled" : ""}>${esc(t("wc.weeks", w))}</button>`).join("")}${until ? `<button class="btn small primary" data-wcw="0" ${WC.busy ? "disabled" : ""}>${esc(t("wc.resume"))}</button>` : ""}</div></div>
+    <div class="wc-card"><div class="item" style="padding:0;border:0;grid-template-columns:1fr auto"><div><div class="t">${esc(t("wc.sec"))}</div><div class="d">${esc(t("wc.secD"))}${s.home ? " " + esc(t("wc.home")) : ""}</div></div>
+      <input type="checkbox" class="switch" id="wcSec" ${s.securityOnly ? "checked" : ""} ${WC.busy ? "disabled" : ""} aria-label="${esc(t("wc.sec"))}"></div></div></div>`;
+  box.querySelectorAll("[data-wcw]").forEach(b => b.addEventListener("click", () => wuCtlDo(() => api.wuPause(+b.dataset.wcw))));
+  $("#wcSec").addEventListener("change", e => wuCtlDo(() => api.wuSecurityOnly(e.target.checked)));
+}
+async function wuCtlDo(f) {
+  if (WC.busy) return; WC.busy = true; paintWuCtl();
+  let r = null; try { r = await f(); } catch (e) { r = { error: String((e && e.message) || e) }; }
+  WC.busy = false; if (r && !r.error) { WC.st = r; toast(t("wc.done"), "check"); } else toast((r && r.error) || t("tw.failed"), "alert", "warn");
+  paintWuCtl();
+}
+
+/* ---- 4.9: locked folders (Passwords page) ---- */
+const LK = { list: null };
+async function loadLocks() { try { LK.list = ((await api.lockList()) || {}).list || []; } catch (e) { LK.list = []; } paintLocks(); }
+function paintLocks() {
+  const box = $("#lkList"); if (!box) return;
+  const ls = LK.list || [];
+  box.innerHTML = !ls.length ? `<div class="tw-empty">${esc(t("lk.none"))}</div>` : ls.map((l, i) => `<div class="item"><div class="i-ico">${ICONS.lock}</div><div style="min-width:0"><div class="t"><bdi>${esc(l.path)}</bdi></div>
+      <div class="d">${esc(new Date(l.at).toLocaleString(locale(), { dateStyle: "medium", timeStyle: "short" }))}${l.exists ? "" : " · " + esc(t("lk.gone"))}</div></div><button class="btn small" data-lku="${i}">${esc(t("lk.unlock"))}</button></div>`).join("");
+  box.querySelectorAll("[data-lku]").forEach(b => b.addEventListener("click", () => lockAsk(ls[+b.dataset.lku].path, false)));
+}
+function lockAsk(path, lock) {
+  const pwIn = (id, ph) => `<label class="search"><span>${ICONS.lock}</span><input id="${id}" type="password" autocomplete="new-password" placeholder="${esc(t(ph))}" aria-label="${esc(t(ph))}"></label>`;
+  openSheet({ title: t(lock ? "lk.lockT" : "lk.unlockT", baseName(path)), sub: path,
+    body: `<div class="pw2">${pwIn("lkPw", "lk.pw")}${lock ? pwIn("lkPw2", "lk.pw2") : ""}</div><div class="su-e" id="lkErr"></div>`,
+    foot: `<button class="btn" id="lkCancel">${esc(t("modal.cancel"))}</button><button class="btn primary" id="lkOk">${ICONS.lock}<span>${esc(t(lock ? "lk.lock" : "lk.unlock"))}</span></button>` });
+  setTimeout(() => $("#lkPw").focus(), 50);
+  $("#lkCancel").addEventListener("click", () => closeSheet(true));
+  const go2 = async () => {
+    const pw = $("#lkPw").value, err = $("#lkErr");
+    if (lock && pw !== $("#lkPw2").value) { err.textContent = t("lk.mismatch"); return; }
+    const ok = $("#lkOk"); ok.disabled = true;
+    let r = null; try { r = lock ? await api.lockFolder(path, pw) : await api.unlockFolder(path, pw); } catch (e) { r = { error: String(e) }; }
+    ok.disabled = false;
+    if (!r || !r.ok) { err.textContent = (r && r.error) || t("tw.failed"); return; }
+    LK.list = r.list || []; closeSheet(false); paintLocks(); toast(t(lock ? "lk.locked" : "lk.unlocked"), "lock");
+  };
+  $("#lkOk").addEventListener("click", go2);
+  $("#shBody").addEventListener("keydown", e => { if (e.key === "Enter") go2(); });
+}
+$("#lkAdd").addEventListener("click", async () => { let p = ""; try { p = await api.diskPickFolder(); } catch (e) {} if (p) lockAsk(p, true); });
+
 /* ---- 4.7: the junk reminder ---- */
 function rmCfg() { const r = S.settings.remind || (S.settings.remind = {}); if (typeof r.on !== "boolean") r.on = true; if (![2, 5, 10, 20].includes(r.gb)) r.gb = 5; return r; }
 function junkReminder() {
@@ -12101,7 +12208,7 @@ function renderGame() {
   btn.disabled = GM.busy || (!on && !pick.length && !cfg.ram);
   btn.className = "btn big " + (on ? "" : "primary");
   btn.innerHTML = GM.busy ? `<span class="spin"></span><span>${esc(t(on ? "gm.stopping" : "gm.starting"))}</span>` : on ? `${ICONS.undo}<span>${esc(t("gm.stop", (st.closed || []).length))}</span>` : `${ICONS.gamepad}<span>${esc(t("gm.start"))}</span>`;
-  $("#gmRam").checked = cfg.ram; $("#gmForce").checked = cfg.force; $("#gmAuto").checked = cfg.auto;
+  $("#gmRam").checked = cfg.ram; $("#gmForce").checked = cfg.force; $("#gmAuto").checked = cfg.auto; $("#gmPrio").checked = !!cfg.prio;
   $("#gmRam").disabled = $("#gmForce").disabled = on;
   const left = st.left || [];
   $("#gmClosed").innerHTML = on ? `<div class="section-t">${esc(t("gm.closedT"))}</div><div class="list">${(st.closed || []).map(c => `<div class="rc-row"><span>${isPath(c.path) ? ico("exe:" + c.path, "fic", ICONS.apps) : ICONS.apps}</span><div style="min-width:0"><div class="t">${esc(c.name || c.exe)}</div><div class="d path"><bdi>${esc(c.path)}</bdi></div></div><span class="tw-st reboot">${esc(t("gm.willReopen"))}</span></div>`).join("") || `<div class="tw-empty">${esc(t("gm.noneClosed"))}</div>`}</div>${left.length ? `<div class="rc-note">${esc(t("gm.left", left.join(", ")))}</div>` : ""}` : "";
@@ -12121,6 +12228,7 @@ function renderGame() {
   }));
 }
 $("#gmAuto").addEventListener("change", e => { gmCfg().auto = e.target.checked; storeSettings(); });
+$("#gmPrio").addEventListener("change", e => { gmCfg().prio = e.target.checked; storeSettings(); });
 // 4.4: a game started or closed (game mode on, or turned on by itself)
 on("gm-auto", d => {
   const g = d.game || "", freed = d.freed > 0 ? fmt(d.freed) : "";
@@ -12626,7 +12734,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "4.8.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "4.9.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -12810,8 +12918,8 @@ const Mock = (() => {
     },
     appliedTweaks: async () => Object.keys(twOn).filter(k => twOn[k] && mockApplied[k]),
     undoAllTweaks: async ids => { await new Promise(r => setTimeout(r, 900)); return ids.map(id => { twOn[id] = false; delete mockApplied[id]; mockHist.push({ id: Date.now() * 1000 + Math.random(), at: Date.now() / 1000, tweak: id, action: "revert", source: "undo-all", ok: true, state: "off" }); return { id, ok: true }; }); },
-    exportTweakProfile: async () => ({ ok: true, path: "C:\\Users\\demo\\Documents\\xKi4o-tweaks.json", count: 47 }),
-    importTweakProfile: async () => ({ ok: true, path: "C:\\Users\\demo\\Documents\\xKi4o-tweaks.json", steps: [{ id: "bing-off", on: true }, { id: "clock-seconds", on: true }, { id: "dark-mode", on: false }], same: 41, skipped: ["bitlocker-off", "debloat"] }),
+    exportTweakProfile: async (install, st) => { window.__setup = { install, st }; return { ok: true, path: "C:\\Users\\demo\\Documents\\xKi4o-setup.json", count: 47 }; },
+    importTweakProfile: async () => ({ ok: true, path: "C:\\Users\\demo\\Documents\\xKi4o-tweaks.json", steps: [{ id: "bing-off", on: true }, { id: "clock-seconds", on: true }, { id: "dark-mode", on: false }], same: 41, skipped: ["bitlocker-off", "debloat"] , install: q.get("imp") === "setup" ? ["VideoLAN.VLC", "7zip.7zip"] : undefined, settings: q.get("imp") === "setup" ? { uiMode: "easy", game: { auto: true, ram: true, apps: [] } } : undefined }),
     listStartup: async () => {
       await new Promise(r => setTimeout(r, 700));
       return { items: mockStartup.map(e => Object.assign({}, e)) };
@@ -12919,6 +13027,12 @@ const Mock = (() => {
       ];
       return { exts: xs, browsers: ["chrome", "edge", "brave", "firefox"], high: 2, medium: 2 };
     },
+    wuCtlState: async () => window.__wc || { securityOnly: false, home: false },
+    wuPause: async w => { window.__wc = Object.assign(await Mock.wuCtlState(), { pausedUntil: w ? Date.now() + w * 7 * 864e5 : 0 }); return window.__wc; },
+    wuSecurityOnly: async on => { window.__wc = Object.assign(await Mock.wuCtlState(), { securityOnly: on }); return window.__wc; },
+    lockList: async () => ({ ok: true, list: window.__locks || [] }),
+    lockFolder: async (p, pw) => { if (pw.length < 4) return { error: "The password must be at least 4 characters", list: window.__locks || [] }; window.__lockPw = pw; window.__locks = (window.__locks || []).concat({ path: p, at: Date.now(), exists: true }); return { ok: true, list: window.__locks }; },
+    unlockFolder: async (p, pw) => { if (pw !== window.__lockPw) return { error: "Wrong password", list: window.__locks }; window.__locks = window.__locks.filter(l => l.path !== p); return { ok: true, list: window.__locks }; },
     notify: async (a, b) => { window.__notified = (window.__notified || []).concat(a); return true; },
     gameSessions: async () => q.get("gs") === "none" ? [] : [{ game: "eldenring", start: Date.now() - 864e5, secs: 4320, cpuMax: 71, cpuAvg: 48, gpuMax: 99, gpuAvg: 94, tempMax: 79, memMax: 72 },
       { game: "cs2", start: Date.now() - 2 * 864e5, secs: 2710, cpuMax: 88, cpuAvg: 61, gpuMax: 76, gpuAvg: 58, tempMax: 66, memMax: 55 }],
@@ -13275,11 +13389,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "4.8.0", latest: nw ? "4.9.0" : "4.8.0", newer: nw, name: "xKi4o Cleaner 4.9.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.9.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "4.9.0", latest: nw ? "4.10.0" : "4.9.0", newer: nw, name: "xKi4o Cleaner 4.10.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.10.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 4.8.0 — 2026-10-24\n\n### English\n- What's new shows every version you skipped\n\n### Български\n- „Какво ново“ показва всички пропуснати версии\n\n## 4.7.0 — 2026-10-24\n\n### English\n- Optimize for games, last games, junk reminder\n\n### Български\n- Оптимизирай за игри, последни игри, напомняне за боклуци\n\n## 4.6.0 — 2026-10-24\n\n### English\n- Easy and Full view\n\n### Български\n- Лесен и пълен изглед\n\n## 4.5.0 — 2026-10-24\n\n### English\n- Virus scanner, ping to game servers, What can I delete?\n\n### Български\n- Скенер за вируси, пинг до сървърите на игрите, Какво да изтрия?\n\n## 4.4.0 — 2026-10-20\n\n### English\n- Game mode turns on by itself when a game starts\n\n### Български\n- Режим „Игри“ се включва сам при пускане на игра\n\n## 4.3.0 — 2026-10-20\n\n### English\n- Install programs in one go, Passwords, Blue screens, Recover files, frame counter\n\n### Български\n- Инсталиране наведнъж, Пароли, Сини екрани, Изтрити файлове, брояч на кадри\n\n## 4.2.1 — 2026-10-20\n\n### English\n- Bottleneck check from published test data\n\n### Български\n- Бенчмарк: ботълнек по публикувани тестове\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 4.9.0 — 2026-10-25\n\n### English\n- Locked folders, Windows Update pause\n\n### Български\n- Заключени папки, пауза на обновленията\n\n## 4.8.0 — 2026-10-24\n\n### English\n- What's new shows every version you skipped\n\n### Български\n- „Какво ново“ показва всички пропуснати версии\n\n## 4.7.0 — 2026-10-24\n\n### English\n- Optimize for games, last games, junk reminder\n\n### Български\n- Оптимизирай за игри, последни игри, напомняне за боклуци\n\n## 4.6.0 — 2026-10-24\n\n### English\n- Easy and Full view\n\n### Български\n- Лесен и пълен изглед\n\n## 4.5.0 — 2026-10-24\n\n### English\n- Virus scanner, ping to game servers, What can I delete?\n\n### Български\n- Скенер за вируси, пинг до сървърите на игрите, Какво да изтрия?\n\n## 4.4.0 — 2026-10-20\n\n### English\n- Game mode turns on by itself when a game starts\n\n### Български\n- Режим „Игри“ се включва сам при пускане на игра\n\n## 4.3.0 — 2026-10-20\n\n### English\n- Install programs in one go, Passwords, Blue screens, Recover files, frame counter\n\n### Български\n- Инсталиране наведнъж, Пароли, Сини екрани, Изтрити файлове, брояч на кадри\n\n## 4.2.1 — 2026-10-20\n\n### English\n- Bottleneck check from published test data\n\n### Български\n- Бенчмарк: ботълнек по публикувани тестове\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders

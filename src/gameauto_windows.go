@@ -132,8 +132,11 @@ func gameAutoStep() {
 	delete(gmAuto.notGame, pid)
 	name := strings.TrimSuffix(exe, ".exe")
 	gmAuto.pid, gmAuto.name = pid, name
-	gmAuto.sess = &gameSession{Game: name, Start: time.Now().UnixMilli(), GPUMax: -1, GPUAvg: -1}
 	ev := map[string]any{"state": "start", "game": name}
+	gmAuto.sess = &gameSession{Game: name, Start: time.Now().UnixMilli(), GPUMax: -1, GPUAvg: -1}
+	if g, _ := gmCfgCache.Load().(map[string]any); g["prio"] == true {
+		ev["prio"] = gameHighPriority(pid) // the priority ends with the game's process: nothing to put back
+	}
 	if !active {
 		var keep map[string]bool
 		if raw, err := queryProcesses(); err == nil {
@@ -262,4 +265,15 @@ func gameSessions() []gameSession {
 		return ss
 	}
 	return []gameSession{}
+}
+
+// gameHighPriority gives the game the "high" priority class (an anti-cheat
+// may refuse: then nothing changes).
+func gameHighPriority(pid uint32) bool {
+	h, err := windows.OpenProcess(windows.PROCESS_SET_INFORMATION|windows.PROCESS_QUERY_LIMITED_INFORMATION, false, pid)
+	if err != nil {
+		return false
+	}
+	defer windows.CloseHandle(h)
+	return windows.SetPriorityClass(h, windows.HIGH_PRIORITY_CLASS) == nil
 }
