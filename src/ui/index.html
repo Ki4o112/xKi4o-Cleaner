@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="noir">
+<html lang="en" data-theme="carbon">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -2322,6 +2322,55 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
 .section-t::before { content: ""; width: 4px; height: 12px; border-radius: 2px; background: linear-gradient(var(--blue), var(--blue-2)); opacity: .8; }
 .btn:not(:disabled):active { transform: scale(.97); }
 @media (prefers-reduced-motion: reduce) { .og-card, .um-card, .btn { transition: none !important; } .og-card::after { display: none; } }
+
+/* ================= 4.10: the Carbon look — near black, big rounded cards, a lime accent, a map-like grid */
+:root[data-theme="carbon"] {
+  --bg: #080809; --panel: #101011; --card: #151516; --card-2: #1b1b1d; --card-hi: #232325;
+  --line: #29292c; --line-soft: #1e1e21; --text: #f4f4f1; --muted: #9c9c97; --faint: #67675f;
+  --well: #0c0c0d; --well-2: #09090a; --input-hi: #111112; --line-hi: #37373b; --chip: #212123;
+  --hero-a: #19191b; --hero-b: #131314; --glass: rgba(21,21,22,.97); --veil: rgba(0,0,0,.68);
+  --edge: rgba(255,255,255,.06); --switch-off: #2b2b2e;
+  --skel-hi: #2d2d31; --cb-line: #3b3b41; --cb-bg: #0f0f10; --cb-hover: rgba(var(--blue-rgb), .75);
+  --used-a: #4a4a52; --used-b: #6c6c76; --file-a: #55555c; --file-b: #7a7a84;
+  --r-xl: 30px; --r-l: 22px; --r-m: 16px; --r-s: 12px;
+  --on-accent: #0c0e06;
+}
+:root[data-theme="carbon"] body {
+  background: radial-gradient(1000px 520px at 88% -18%, rgba(var(--blue-rgb), .10), transparent 62%), radial-gradient(800px 500px at -12% 118%, rgba(255,255,255,.035), transparent 60%), var(--bg);
+}
+:root[data-theme="carbon"] .side { background: #0e0e0f; border: 1px solid var(--edge); }
+:root[data-theme="carbon"] .main { border: 1px solid var(--edge);
+  background: linear-gradient(rgba(255,255,255,.016) 1px, transparent 1px) 0 0 / 46px 46px, linear-gradient(90deg, rgba(255,255,255,.016) 1px, transparent 1px) 0 0 / 46px 46px, linear-gradient(180deg, #0f0f10, #0b0b0c 70%); }
+/* the side menu: round icons, the page you are on a lime disc */
+:root[data-theme="carbon"] .nav .ico { border-radius: 50%; background: rgba(255,255,255,.03); box-shadow: inset 0 0 0 1px var(--edge); }
+:root[data-theme="carbon"] .nav button[aria-current="page"] .ico { background: var(--blue); color: var(--on-accent); box-shadow: 0 0 0 4px rgba(var(--blue-rgb), .14), 0 8px 22px -8px var(--blue-glow); }
+:root[data-theme="carbon"] .nav-ind { background: linear-gradient(90deg, rgba(var(--blue-rgb), .13), rgba(var(--blue-rgb), .03)); border-color: rgba(var(--blue-rgb), .28); border-radius: 999px; }
+:root[data-theme="carbon"] .nav button { border-radius: 999px; }
+/* buttons and switches: pills; the accent carries dark text */
+:root[data-theme="carbon"] .btn { border-radius: 999px; }
+:root[data-theme="carbon"] .btn.primary { background: linear-gradient(180deg, var(--blue-2), var(--blue)); color: var(--on-accent); box-shadow: 0 10px 28px -12px var(--blue-glow), inset 0 1px 0 rgba(255,255,255,.35); }
+:root[data-theme="carbon"] .btn.primary:hover:not([disabled]) { background: linear-gradient(180deg, var(--blue-light), var(--blue-2)); }
+:root[data-theme="carbon"] .btn.primary svg { color: var(--on-accent); }
+:root[data-theme="carbon"] .seg, :root[data-theme="carbon"] .seg button, :root[data-theme="carbon"] .mode-sw, :root[data-theme="carbon"] .mode-sw::before, :root[data-theme="carbon"] .mode-sw button,
+:root[data-theme="carbon"] .search input, :root[data-theme="carbon"] .cmd-btn, :root[data-theme="carbon"] .chip, :root[data-theme="carbon"] .tw-cat { border-radius: 999px; }
+:root[data-theme="carbon"] .seg.blue button[aria-pressed="true"], :root[data-theme="carbon"] .mode-sw button[aria-pressed="true"], :root[data-theme="carbon"] .tw-cat[aria-pressed="true"],
+:root[data-theme="carbon"] .fbtn[aria-current="page"], :root[data-theme="carbon"] .um-card em, :root[data-theme="carbon"] .letter, :root[data-theme="carbon"] .g-ico,
+:root[data-theme="carbon"] .toast.info .ti, :root[data-theme="carbon"] .pal-it[aria-selected="true"] .pi { color: var(--on-accent); }
+:root[data-theme="carbon"] .og-card { color: var(--on-accent); background: linear-gradient(120deg, var(--blue-deep), var(--blue) 50%, var(--blue-light)); }
+:root[data-theme="carbon"] .og-ic { background: rgba(0,0,0,.12); }
+:root[data-theme="carbon"] .switch:checked { background: var(--blue); }
+/* cards: one soft light from the top-left, a hairline edge */
+:root[data-theme="carbon"] .hc, :root[data-theme="carbon"] .panel, :root[data-theme="carbon"] .list, :root[data-theme="carbon"] .bx-tile, :root[data-theme="carbon"] .qf-card {
+  background: radial-gradient(120% 140% at 0% 0%, rgba(255,255,255,.04), transparent 55%), var(--card); border: 1px solid var(--edge); }
+:root[data-theme="carbon"] .hm-hero.hh { background: radial-gradient(130% 90% at 100% 0%, rgba(var(--blue-rgb), .12), transparent 55%), linear-gradient(160deg, var(--card-2), var(--card) 65%); }
+:root[data-theme="carbon"] .hc:hover { border-color: rgba(var(--blue-rgb), .4); box-shadow: 0 18px 40px -26px rgba(var(--blue-rgb), .8); }
+/* page titles: big, the PC's name as a pill above */
+:root[data-theme="carbon"] h1 { font-size: 28px; font-weight: 800; letter-spacing: -.03em; }
+:root[data-theme="carbon"] .head .kick { display: inline-block; padding: 3px 10px; margin-bottom: 6px; border-radius: 999px; background: var(--chip); border: 1px solid var(--edge); color: var(--muted); font-size: 11px; }
+:root[data-theme="carbon"] .section-t::before { background: var(--blue); }
+:root[data-theme="carbon"] { --gauge: var(--blue); --chart-a: var(--blue-light); }
+:root[data-theme="carbon"] .gcard.on, :root[data-theme="carbon"] .gcard.on *:not(.g-ico):not(.g-ico *) { color: var(--on-accent) !important; }
+:root[data-theme="carbon"] .gcard.on .g-ico { background: var(--on-accent); color: var(--blue-2); }
 </style>
 </head>
 <body class="booting">
@@ -3862,7 +3911,7 @@ bg: {
   "hp.copied": "Данните за компютъра са копирани — постави ги в доклада.", "hp.opened": "Отворена е страницата за доклад.", "hp.fail": "Страницата не можа да се отвори.",
   "hp.preT": "Готови пакети", "hp.preV": "Основен · Игри · Поверителност · Максимален", "hp.preD": "Подбрани настройки за Windows с един клик — всяка може да се върне.",
   "hp.preBtn": "Към Tweaker", "hp.pcT": "Този компютър", "hp.pcLoading": "Четат се данните за хардуера…", "hp.pcBtn": "Подробности", "set.theme": "Тема",
-  "set.themeD": "Графит е новият неутрален вид; Океан е тъмносиният от предишните версии", "set.th.noir": "Графит", "set.th.ocean": "Океан",
+  "set.themeD": "Carbon е новият вид; Графит и Океан са от предишните версии", "set.th.noir": "Графит", "set.th.ocean": "Океан",
   "hm.doAllS": "Направи всичко ({0})",
   "hc.stick1": "1 модул", "hc.sticks": "{0} модула",
   "nav.gpu": "Видеокарта", "gp.title": "Видеокарта", "gp.sub": "Сензори, проверки и драйвери — връщане на по-стара версия или премахване като DDU", "gp.refresh": "Прочети отново",
@@ -4881,7 +4930,7 @@ en: {
   "hp.report": "Report a problem", "hp.copied": "The PC's details were copied — paste them into the report.", "hp.opened": "The report page was opened.",
   "hp.fail": "The page could not be opened.", "hp.preT": "Ready-made packs", "hp.preV": "Essential · Gaming · Privacy · Ultimate",
   "hp.preD": "Picked Windows tweaks in one click — each one can be undone.", "hp.preBtn": "Open Tweaker", "hp.pcT": "This PC", "hp.pcLoading": "Reading the hardware details…",
-  "hp.pcBtn": "Details", "set.theme": "Theme", "set.themeD": "Graphite is the new neutral look; Ocean is the deep blue of earlier versions", "set.th.noir": "Graphite",
+  "hp.pcBtn": "Details", "set.theme": "Theme", "set.themeD": "Carbon is the new look; Graphite and Ocean are from earlier versions", "set.th.noir": "Graphite",
   "set.th.ocean": "Ocean",
   "hm.doAllS": "Do it all ({0})",
   "hc.stick1": "1 stick", "hc.sticks": "{0} sticks",
@@ -5747,7 +5796,7 @@ const S = {
   info: null, drive: null, busy: false, cleaning: false, analyzed: false,
   data: {}, checked: {}, rowState: {}, filter: "all", pending: false, excl: {}, lastReport: null, dryRun: false, sessionPick: {},
   settings: { lang: "en", restorePoint: true, motion: true, choices: {}, dismMode: "standard", mem: { auto: false, threshold: 90, interval: 0, regions: MEM_REGIONS.filter(r => r.def).map(r => r.id) }, extras2: {},
-    sort: "group", hideEmpty: true, accent: "emerald", theme: "noir", forceClose: true },
+    sort: "group", hideEmpty: true, accent: "lime", theme: "carbon", forceClose: true },
   query: "",
 };
 let saveT = 0;
@@ -9657,6 +9706,7 @@ $("#easyMore").addEventListener("click", () => { S.settings.cleanMode = "detaile
 
 /* Accent colours */
 const ACCENTS = {
+  lime: ["#b8e62e", "#cbf45a", "#c2ee44", "#e6ffa8", "#93c014"],
   emerald: ["#0c9364", "#34d399", "#13a873", "#a7f3d0", "#06734d"],
   blue: ["#2f6bff", "#5a8cff", "#4a80ff", "#a9c1ff", "#2052e8"], violet: ["#7c5cff", "#9b85ff", "#8a6dff", "#c3b5ff", "#6240e8"],
   teal: ["#0fb5a8", "#3fd0c4", "#25c2b5", "#8ce9e0", "#0a968b"], green: ["#22b45e", "#4fd18b", "#35c26f", "#9be8bb", "#18934b"],
@@ -9675,12 +9725,13 @@ function applyAccent(id) {
   $$("#swatches .sw-btn").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.acc === id)));
 }
 // the look: Graphite (neutral black, the default from 3.1) or Ocean (the deep blue of 1.x–3.0)
+const themeOf = th => ["ocean", "noir"].includes(th) ? th : "carbon";
 function applyTheme(th) {
-  document.documentElement.setAttribute("data-theme", th === "ocean" ? "ocean" : "noir");
-  const el = $("#segTheme"); if (el && el._set) el._set(th === "ocean" ? "ocean" : "noir");
+  document.documentElement.setAttribute("data-theme", themeOf(th));
+  const el = $("#segTheme"); if (el && el._set) el._set(themeOf(th));
 }
 function setupThemeSeg() {
-  makeSeg($("#segTheme"), [{ v: "noir", label: t("set.th.noir") }, { v: "ocean", label: t("set.th.ocean") }], S.settings.theme === "ocean" ? "ocean" : "noir",
+  makeSeg($("#segTheme"), [{ v: "carbon", label: "Carbon" }, { v: "noir", label: t("set.th.noir") }, { v: "ocean", label: t("set.th.ocean") }], themeOf(S.settings.theme),
     v => { S.settings.theme = v; applyTheme(v); storeSettings(); requestAnimationFrame(() => { if (S.page === "home") { paintLive(); } }); });
 }
 function setupSwatches() {
@@ -12384,8 +12435,11 @@ async function init() {
     if (st.remind && typeof st.remind === "object") s.remind = st.remind;
     if (typeof st.accent === "string" && ACCENTS[st.accent]) s.accent = st.accent;
     // 3.1: the new look once for everyone; an accent picked earlier (not the old default) stays
-    if (st.theme === "noir" || st.theme === "ocean") s.theme = st.theme;
+    if (st.theme === "noir" || st.theme === "ocean" || st.theme === "carbon") s.theme = st.theme;
     else if (Object.keys(st).length) { s.theme = "noir"; if (!st.accent || st.accent === "blue") s.accent = "emerald"; S.themeMoved = true; }
+    // 4.10: the Carbon look once for everyone (Ocean stays as it is); an accent picked by hand stays
+    if (st.carbonSeen === true) s.carbonSeen = true;
+    else { if (s.theme !== "ocean") { s.theme = "carbon"; if (!st.accent || st.accent === "emerald" || st.accent === "blue") s.accent = "lime"; } s.carbonSeen = true; S.themeMoved = true; }
     if (typeof st.pulse === "boolean") s.pulse = st.pulse;
     if (typeof st.autoDisk === "boolean") s.autoDisk = st.autoDisk;
     if (typeof st.classicFrame === "boolean") s.classicFrame = st.classicFrame;
@@ -12735,7 +12789,7 @@ const Mock = (() => {
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
   const later = (ms, f) => setTimeout(f, ms);
   return {
-    appInfo: async () => ({ version: "4.9.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
+    appInfo: async () => ({ version: "4.10.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
     getSettings: async () => settings, saveSettings: async s => { settings = s; return true; },
     startAnalyze: async () => {
       const ids = Object.keys(data); let i = 0;
@@ -13390,11 +13444,11 @@ const Mock = (() => {
     restoreFiles: async ids => { await new Promise(r => setTimeout(r, 400)); const res = ids.map(id => { const f = mockRecycled.find(x => x.id === id); if (!f || !f.inBin || f.restored) return { id, ok: false, error: "The item is no longer in the Recycle Bin." }; f.restored = Date.now(); return { id, ok: true }; }); mockOp("restore", "", "Restoring files from the Recycle Bin", "ok", res.map(r => ["info", (mockRecycled.find(x => x.id === r.id) || {}).path || "", "Back in its place"]), "Restored: " + res.filter(r => r.ok).length + " of " + res.length, true); return res; },
     openRecycleBin: async () => true,
     checkUpdate: async () => { await new Promise(r => setTimeout(r, 500)); const nw = scen === "update";
-      return { current: "4.9.0", latest: nw ? "4.10.0" : "4.9.0", newer: nw, name: "xKi4o Cleaner 4.10.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.10.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
+      return { current: "4.10.0", latest: nw ? "4.11.0" : "4.10.0", newer: nw, name: "xKi4o Cleaner 4.11.0", page: "https://github.com/Ki4o112/xKi4o-Cleaner/releases/tag/v4.11.0", published: new Date(Date.now() - 2 * 3600e3).toISOString(), size: 5.4 * MB, canInstall: nw, checked: Date.now(),
         notes: "### English\n- **Faster scans** of big folders.\n- The Disk Analyzer remembers the open folders.\n- Fixed: `Large files` could miss files on network drives.\n\n### Български\n- **По-бързо сканиране** на големи папки.\n- Анализът на диска помни отворените папки.\n- Поправено: `Големи файлове` можеше да пропусне файлове на мрежови дискове." }; },
     installUpdate: async () => { for (let i = 1; i <= 10; i++) { await new Promise(r => setTimeout(r, 120)); window.__ev("update-progress", { done: i * 0.54 * MB, total: 5.4 * MB }); } window.__updated = true; return { ok: true, restart: true }; },
     openReleasePage: async () => true,
-    changelog: async () => "# Changelog\n\n## 4.9.0 — 2026-10-25\n\n### English\n- Locked folders, Windows Update pause\n\n### Български\n- Заключени папки, пауза на обновленията\n\n## 4.8.0 — 2026-10-24\n\n### English\n- What's new shows every version you skipped\n\n### Български\n- „Какво ново“ показва всички пропуснати версии\n\n## 4.7.0 — 2026-10-24\n\n### English\n- Optimize for games, last games, junk reminder\n\n### Български\n- Оптимизирай за игри, последни игри, напомняне за боклуци\n\n## 4.6.0 — 2026-10-24\n\n### English\n- Easy and Full view\n\n### Български\n- Лесен и пълен изглед\n\n## 4.5.0 — 2026-10-24\n\n### English\n- Virus scanner, ping to game servers, What can I delete?\n\n### Български\n- Скенер за вируси, пинг до сървърите на игрите, Какво да изтрия?\n\n## 4.4.0 — 2026-10-20\n\n### English\n- Game mode turns on by itself when a game starts\n\n### Български\n- Режим „Игри“ се включва сам при пускане на игра\n\n## 4.3.0 — 2026-10-20\n\n### English\n- Install programs in one go, Passwords, Blue screens, Recover files, frame counter\n\n### Български\n- Инсталиране наведнъж, Пароли, Сини екрани, Изтрити файлове, брояч на кадри\n\n## 4.2.1 — 2026-10-20\n\n### English\n- Bottleneck check from published test data\n\n### Български\n- Бенчмарк: ботълнек по публикувани тестове\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
+    changelog: async () => "# Changelog\n\n## 4.10.0 — 2026-10-25\n\n### English\n- New Carbon look\n\n### Български\n- Нов вид Carbon\n\n## 4.9.0 — 2026-10-25\n\n### English\n- Locked folders, Windows Update pause\n\n### Български\n- Заключени папки, пауза на обновленията\n\n## 4.8.0 — 2026-10-24\n\n### English\n- What's new shows every version you skipped\n\n### Български\n- „Какво ново“ показва всички пропуснати версии\n\n## 4.7.0 — 2026-10-24\n\n### English\n- Optimize for games, last games, junk reminder\n\n### Български\n- Оптимизирай за игри, последни игри, напомняне за боклуци\n\n## 4.6.0 — 2026-10-24\n\n### English\n- Easy and Full view\n\n### Български\n- Лесен и пълен изглед\n\n## 4.5.0 — 2026-10-24\n\n### English\n- Virus scanner, ping to game servers, What can I delete?\n\n### Български\n- Скенер за вируси, пинг до сървърите на игрите, Какво да изтрия?\n\n## 4.4.0 — 2026-10-20\n\n### English\n- Game mode turns on by itself when a game starts\n\n### Български\n- Режим „Игри“ се включва сам при пускане на игра\n\n## 4.3.0 — 2026-10-20\n\n### English\n- Install programs in one go, Passwords, Blue screens, Recover files, frame counter\n\n### Български\n- Инсталиране наведнъж, Пароли, Сини екрани, Изтрити файлове, брояч на кадри\n\n## 4.2.1 — 2026-10-20\n\n### English\n- Bottleneck check from published test data\n\n### Български\n- Бенчмарк: ботълнек по публикувани тестове\n\n## 4.2.0 — 2026-10-20\n\n### English\n- Benchmark: recommendations and a clear bottleneck verdict\n- Clean: a simple view\n\n### Български\n- Бенчмарк: препоръки и ясен извод за ботълнек\n- Почистване: лесен изглед\n\n## 4.1.0 — 2026-10-19\n\n### English\n- Benchmark: graphics card test and analysis\n\n### Български\n- Бенчмарк: тест на видеокартата и анализ\n\n## 4.0.0 — 2026-10-19\n\n### English\n- New Benchmark page\n- New Browser extensions page\n- PC report\n- Internet speed test\n\n### Български\n- Нов раздел Бенчмарк\n- Нов раздел Разширения на браузъра\n- Доклад за компютъра\n- Тест на скоростта на интернета\n\n## 3.9.1 — 2026-10-19\n\n### English\n- Merge connections: clear message on Windows older than 10\n\n### Български\n- Обединяване: ясно съобщение на Windows по-стар от 10\n\n## 3.9.0 — 2026-10-18\n\n### English\n- Merge connections: each network's share, and Evenly sharing\n\n### Български\n- Обединяване: дял на всяка мрежа и разпределяне „Поравно“\n\n## 3.8.0 — 2026-10-18\n\n### English\n- Merge connections: Download net-merge installs it from here\n\n### Български\n- Обединяване: „Свали net-merge“ го инсталира направо от програмата\n\n## 3.7.0 — 2026-10-18\n\n### English\n- New Merge connections page (net-merge)\n- Help for the Windows Defender false positive\n\n### Български\n- Нов раздел „Обединяване на мрежи“ (net-merge)\n- Помощ при фалшива тревога на Windows Defender\n\n## 3.6.0 — 2026-10-18\n\n### English\n- New opening animation\n\n### Български\n- Ново отваряне на програмата\n\n## 3.5.0 — 2026-10-18\n\n### English\n- New loading screen\n- Only the app's newest 3 restore points are kept\n\n### Български\n- Нов екран при зареждане\n- Пазят се само последните 3 точки за възстановяване на програмата\n\n## 3.4.0 — 2026-10-18\n\n### English\n- Added Quick fixes on the Repair page\n- Added a connection check on the Network page\n\n### Български\n- Добавени „Бързи поправки“ в раздел „Поправка“\n- Добавена проверка на връзката в раздел „Мрежа“\n\n## 3.3.0 — 2026-10-18\n\n### English\n- Added the Updates page: Windows and driver updates, installed from the app\n- Longer, smoother loading animation\n\n### Български\n- Добавен раздел „Обновления“: обновления на Windows и драйвери, инсталирани от програмата\n- По-дълга и по-плавна анимация при зареждане\n\n## 3.2.0 — 2026-10-18\n\n### English\n- Added the Graphics card page: live sensors, checks and details\n- Added removing the graphics driver like DDU, with a copy to put it back\n\n### Български\n- Добавен раздел „Видеокарта“: сензори на живо, проверки и подробности\n- Добавено премахване на драйвера на видеокартата като DDU, с копие за връщане\n\n## 3.1.0 — 2026-10-17\n\n### English\n- New look: the Graphite theme, the Inter font and an emerald accent\n- PC health is now a dashboard with live processor, graphics card, memory, drive and network\n\n### Български\n- Нов вид: тема Графит, шрифт Inter и изумруден акцент\n- „Здраве на компютъра“ вече е табло с процесор, видеокарта, памет, диск и мрежа на живо\n\n## 3.0.1 — 2026-10-17\n\n### English\n- Added presets in the Tweaker: Essential, Gaming, Privacy and Ultimate\n\n### Български\n- Добавени пресети в Tweaker: Основен, Игри, Поверителност и Максимален\n\n## 3.0.0 — 2026-10-17\n\n### English\n- Added System info: processor, graphics, memory, motherboard, drives, monitors, security and battery, with tips\n- Added the right-click menu: hide entries that programs added, and show them again\n- Added 18 tweaks; new tweaks are shown first and marked New\n\n### Български\n- Добавена информация за системата: процесор, видеокарта, памет, дънна платка, дискове, монитори, защита и батерия, със съвети\n- Добавено контекстно меню: скриване на записите, които програмите са добавили, и връщането им\n- Добавени 18 туийка; новите излизат най-отгоре с надпис „Ново“\n\n## 2.10.0 — 2026-10-16\n\n### English\n- Added optimization for HDDs (defragmentation), not only TRIM for SSDs\n- Added the details of each disk: what it reports and what can help\n\n### Български\n- Добавена оптимизация и за HDD дисковете (дефрагментация), не само TRIM за SSD\n- Добавени подробности за всеки диск: какво отчита и какво може да помогне\n\n## 2.9.1 — 2026-10-16\n\n### English\n- Fixed shortcuts that Windows still opens being listed as broken\n\n### Български\n- Поправено: преки пътища, които Windows още отваря, се показваха като счупени\n\n## 2.9.0 — 2026-10-16\n\n### English\n- Added a new logo\n- Added the app's own title bar with a button that hides the app in the tray\n\n### Български\n- Добавено ново лого\n- Добавена собствена заглавна лента с бутон, който скрива програмата в трея\n\n## 2.8.1 — 2026-10-16\n\n### English\n- Fixed working shortcuts called broken when made by a 32-bit setup\n\n### Български\n- Поправено: работещи преки пътища се показваха като счупени\n\n## 2.8.0 — 2026-10-16\n\n### English\n- Fixed Edge not updating through winget\n- Added 13 tweaks\n\n### Български\n- Поправено обновяването на Edge през winget\n- Добавени 13 туийка\n\n## 2.7.0 — 2026-10-16\n\n### English\n- **PC health** start page and **Programs**: an uninstaller with leftovers, updates through winget.\n- Disk health, game mode, empty folders and broken shortcuts.\n\n### Български\n- Начален екран **Здраве на компютъра** и **Програми**: деинсталатор с остатъците, обновления през winget.\n- Здраве на дисковете, режим „Игри“, празни папки и счупени преки пътища.\n\n## 2.6.1 — 2026-10-15\n\n### English\n- **Updates from GitHub** with the list of what is new.\n- Windows logs: the SYSTEM-only update logs are left out.\n\n### Български\n- **Ъпдейти от GitHub** със списък какво е новото.\n- Логове на Windows: логовете на ъпдейтите, които са само на SYSTEM, се пропускат.\n\n## 2.6.0 — 2026-10-15\n\n### English\n- Background jobs.\n\n### Български\n- Фонови задачи.\n",
   };
 })();
 // ---- 2.7 demo data: programs, Store apps, winget, disk health, game mode, empty folders

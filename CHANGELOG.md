@@ -3,6 +3,16 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.10.0 — 2026-10-25
+
+### English
+- New look, Carbon: near-black, big rounded cards, a lime accent and round icons in the menu
+- Graphite and Ocean are still in Settings → Theme; an accent you picked yourself stays
+
+### Български
+- Нов вид Carbon: почти черно, големи заоблени карти, лайм зелен акцент и кръгли иконки в менюто
+- Графит и Океан са в Настройки → Тема; акцент, който си избрал сам, остава
+
 ## 4.9.0 — 2026-10-25
 
 ### English
