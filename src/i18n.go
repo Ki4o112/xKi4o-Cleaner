@@ -504,6 +504,10 @@ var texts = map[string][2]string{ // [bg, en]
 	"log.avScan":   {"Сканиране за вируси (%s)", "Virus scan (%s)"},
 	"log.avDone":   {"Намерени заплахи: %d", "Threats found: %d"},
 	"log.avRemove": {"Премахване на активните заплахи", "Removing the active threats"},
+	"log.avFix":    {"Изключване на подозрително: %s", "Turning off a suspicious item: %s"},
+	"av.err.db":    {"Базата на ClamAV не се изтегли: %s", "The ClamAV database did not download: %s"},
+	"av.err.fix":   {"Не стана", "It did not work"},
+	"av.quarDone":  {"Неуспешни (файлът е зает): %d", "Failed (the file is in use): %d"},
 	"gp.err.dns":   {"Адресът не се намери", "The address was not found"},
 	// 4.4: game mode by itself
 	"log.gmGameStart": {"Пусната игра: %s — освобождаване на паметта", "A game started: %s — freeing memory"},

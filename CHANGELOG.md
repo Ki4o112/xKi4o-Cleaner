@@ -3,6 +3,16 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.11.0 — 2026-10-25
+
+### English
+- Viruses: when Windows Defender is gone or off, scan with ClamAV (free, open source), installed from the page; what it finds goes to quarantine
+- Viruses: a check of the places malware hides in — startup programs, the hosts file and the proxy
+
+### Български
+- Вируси: когато Windows Defender липсва или е изключен, сканирай с ClamAV (безплатен, с отворен код), инсталира се от страницата; намереното отива под карантина
+- Вируси: проверка на местата, където се крият вируси — програми при стартиране, файлът hosts и проксито
+
 ## 4.10.0 — 2026-10-25
 
 ### English

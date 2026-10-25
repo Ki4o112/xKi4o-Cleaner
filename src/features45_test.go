@@ -124,3 +124,30 @@ func TestWUPause(t *testing.T) {
 		t.Fatalf("%v", got)
 	}
 }
+
+func TestClamHelpers(t *testing.T) {
+	for line, want := range map[string][3]string{
+		`C:\Users\a\Downloads\x.exe: Win.Trojan.Agent-1 FOUND`: {`C:\Users\a\Downloads\x.exe`, "Win.Trojan.Agent-1", "found"},
+		`C:\a b\c.txt: OK`:                             {`C:\a b\c.txt`, "", "ok"},
+		`LibClamAV Warning: something`:                 {"", "", ""},
+		`----------- SCAN SUMMARY -----------`:         {"", "", ""},
+		`C:\x.zip: Can't open file or directory ERROR`: {"", "", ""},
+	} {
+		p, sig, found, ok := parseClamLine(line)
+		st := map[bool]string{true: "found"}[found] + map[bool]string{true: "ok"}[ok]
+		if p != want[0] || sig != want[1] || st != want[2] {
+			t.Errorf("%q → %q %q %q", line, p, sig, st)
+		}
+	}
+	h := hostsRedirects("# x\n127.0.0.1 localhost\n0.0.0.0 ads.example.com\n::1 localhost\n10.1.2.3 www.google.com # evil\n  \n")
+	if len(h) != 1 || h[0] != "10.1.2.3 www.google.com" {
+		t.Errorf("hosts %q", h)
+	}
+	d := clamQuickDirs(`C:\Users\a`, `C:\Users\a\AppData\Local\Temp`, `C:\ProgramData`, `C:\Windows`)
+	if len(d) != 7 {
+		t.Errorf("quick dirs %d %q", len(d), d)
+	}
+	if n := quarName(`C:\x\bad:name.exe`, 5); n != "bad_name.exe.5.quar" && n != "x_bad_name.exe.5.quar" {
+		t.Errorf("quar %q", n)
+	}
+}

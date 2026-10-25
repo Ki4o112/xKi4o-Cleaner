@@ -262,11 +262,14 @@ func main() {
 		"recoverStop":    recoverStop,
 		"recoverOpen":    recoverOpen,
 		// 4.5: virus scan (Defender's engine), game server ping
-		"avState":  avStateRead,
-		"avScan":   avScan,
-		"avStop":   avStop,
-		"avRemove": avRemove,
-		"gamePing": gamePing,
+		"avState":     avStateRead,
+		"avScan":      avScan,
+		"avStop":      avStop,
+		"avRemove":    avRemove,
+		"avCheck":     avCheck,
+		"avFix":       avFix,
+		"clamInstall": clamInstall,
+		"gamePing":    gamePing,
 		// 4.7: the junk reminder, game sessions
 		"notify": func(title, text string) bool {
 			app.w.Dispatch(func() { trayNotify(title, text) })

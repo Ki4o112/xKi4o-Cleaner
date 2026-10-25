@@ -21,6 +21,9 @@ type avState struct {
 	Running bool       `json:"running"`
 	Threats []avThreat `json:"threats"` // what Defender found in the last 30 days
 	Error   string     `json:"error,omitempty"`
+	Engine  string     `json:"engine"` // defender, clam, or "" (ClamAV is not installed yet)
+	Clam    bool       `json:"clam"`   // ClamAV is installed
+	ClamDB  int64      `json:"clamDb"` // its database updated (unix ms)
 }
 
 var avRun struct {
@@ -57,8 +60,27 @@ func avStateRead() avState {
 	avRun.mu.Lock()
 	st.Running = avRun.cancel != nil
 	avRun.mu.Unlock()
-	st.Threats = avThreatsSince(time.Now().Add(-30 * 24 * time.Hour).UnixMilli())
+	avClam.defOn.Store(st.On && fileExists(mpCmdRun()))
+	st.Engine, st.Clam, st.ClamDB = avEngine(), clamExe("clamscan.exe") != "", clamDBTime()
+	if st.Engine == "defender" {
+		st.Threats = avThreatsSince(time.Now().Add(-30 * 24 * time.Hour).UnixMilli())
+	} else {
+		avClam.mu.Lock()
+		st.Threats = append([]avThreat{}, avClam.threats...)
+		avClam.mu.Unlock()
+	}
 	return st
+}
+
+// avEngine: Defender while it works; ClamAV when Defender is gone or off.
+func avEngine() string {
+	switch {
+	case avClam.defOn.Load():
+		return "defender"
+	case clamExe("clamscan.exe") != "":
+		return "clam"
+	}
+	return ""
 }
 
 func mpCmdRun() string {
@@ -68,7 +90,8 @@ func mpCmdRun() string {
 // avScan: kind "quick", "full" or "folder" (with path). The page gets "av"
 // events: run (seconds so far), then end with the detections of this scan.
 func avScan(kind, path string) bool {
-	if !app.admin || !fileExists(mpCmdRun()) {
+	eng := avEngine()
+	if !app.admin || eng == "" {
 		return false
 	}
 	args := []string{"-Scan", "-ScanType", "1"}
@@ -90,6 +113,10 @@ func avScan(kind, path string) bool {
 	avRun.cancel = cancel
 	avRun.mu.Unlock()
 	app.working.Store(true)
+	if eng == "clam" {
+		go clamScan(ctx, cancel, kind, path)
+		return true
+	}
 	go func() {
 		defer recoverLog("antivirus")
 		defer app.working.Store(false)
@@ -136,6 +163,9 @@ func avStop() bool {
 	avRun.mu.Unlock()
 	if c != nil {
 		c()
+		if avEngine() != "defender" {
+			return true
+		}
 		_, _, _ = runQuiet(30*time.Second, mpCmdRun(), "-Scan", "-Cancel")
 	}
 	return true
@@ -143,6 +173,10 @@ func avStop() bool {
 
 // avRemove asks Defender to remove every threat that is still active.
 func avRemove() avState {
+	if avEngine() == "clam" {
+		clamRemove()
+		return avStateRead()
+	}
 	op := beginOp("antivirus", "", T("log.avRemove"), nil)
 	_, code, err := runPS(10*time.Minute, "Remove-MpThreat -ErrorAction Stop")
 	if err != nil || code != 0 {
