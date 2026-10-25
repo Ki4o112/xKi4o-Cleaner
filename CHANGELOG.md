@@ -3,6 +3,14 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.12.0 — 2026-10-25
+
+### English
+- A livelier Carbon look: a slow aurora behind the page, a light on the cards that follows the cursor, glowing titles, menu and progress bars
+
+### Български
+- По-жив вид Carbon: бавно сияние зад страницата, светлина по картите, която следва мишката, светещи заглавия, меню и ленти за напредък
+
 ## 4.11.0 — 2026-10-25
 
 ### English
