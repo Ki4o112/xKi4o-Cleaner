@@ -66,6 +66,9 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 <img src="docs/screenshots/updates.png" width="430" alt="Updates">
 <img src="docs/screenshots/network.png" width="430" alt="Network and DNS">
 <img src="docs/screenshots/merge.png" width="430" alt="Merge connections">
+<img src="docs/screenshots/game.png" width="430" alt="Game mode">
+<img src="docs/screenshots/viruses.png" width="430" alt="Virus scanner">
+<img src="docs/screenshots/passwords.png" width="430" alt="Passwords">
 </p>
 
 ## Is it safe?
