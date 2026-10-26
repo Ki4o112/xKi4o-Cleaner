@@ -11,6 +11,7 @@ package main
 import (
 	"sync/atomic"
 	"syscall"
+	"time"
 	"unsafe"
 
 	"golang.org/x/sys/windows"
@@ -373,6 +374,33 @@ func winTray(hint bool) bool {
 		_, _, _ = procShowWindow.Call(app.hwnd, swHide)
 	})
 	return true
+}
+
+// trayStart hides the window from the start (started with Windows). Right
+// after sign-in the taskbar may not be there yet: the icon is tried again
+// every 2 seconds (and Explorer's "TaskbarCreated" adds it too); after a
+// minute without it the window shows, so the app is never out of reach.
+func trayStart() {
+	win.inTray.Store(true)
+	_, _, _ = procShowWindow.Call(app.hwnd, swHide)
+	if trayAdd(false) {
+		return
+	}
+	go func() {
+		for i := 0; i < 30; i++ {
+			time.Sleep(2 * time.Second)
+			ok := make(chan bool, 1)
+			app.w.Dispatch(func() { ok <- !win.inTray.Load() || trayAdd(false) })
+			if <-ok {
+				return
+			}
+		}
+		app.w.Dispatch(func() {
+			win.inTray.Store(false)
+			_, _, _ = procShowWindow.Call(app.hwnd, swShow)
+			bringToFront(app.hwnd)
+		})
+	}()
 }
 
 // winShow brings the window back from the tray (or from behind others).

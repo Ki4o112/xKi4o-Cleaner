@@ -505,6 +505,7 @@ var texts = map[string][2]string{ // [bg, en]
 	"log.avDone":    {"Намерени заплахи: %d", "Threats found: %d"},
 	"log.avRemove":  {"Премахване на активните заплахи", "Removing the active threats"},
 	"log.boot":      {"Пускане с Windows: %s", "Start with Windows: %s"},
+	"boot.err.lnk":  {"Прекият път в папката Startup не се създаде", "The shortcut in the Startup folder was not made"},
 	"boot.on":       {"включено", "on"},
 	"boot.off":      {"изключено", "off"},
 	"boot.taskDesc": {"Пуска xKi4o Cleaner в трея при влизане в Windows, за да следи режим „Игри“ и паметта.", "Starts xKi4o Cleaner in the notification area at sign-in, so game mode and the memory cleaning keep watching."},

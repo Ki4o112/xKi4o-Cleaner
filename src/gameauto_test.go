@@ -90,7 +90,7 @@ func TestGameReportBits(t *testing.T) {
 
 func TestBootTaskXML(t *testing.T) {
 	x := bootTaskXML(`C:\Tools & Apps\xKi4oCleaner.exe`, "S-1-5-21-1", "desc")
-	for _, want := range []string{"<LogonTrigger>", "<UserId>S-1-5-21-1</UserId>", "<RunLevel>HighestAvailable</RunLevel>", "<Arguments>--tray</Arguments>",
+	for _, want := range []string{"<Triggers />", "<UserId>S-1-5-21-1</UserId>", "<RunLevel>HighestAvailable</RunLevel>", "<Arguments>--tray</Arguments>",
 		"<ExecutionTimeLimit>PT0S</ExecutionTimeLimit>", "<DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>", `C:\Tools &amp; Apps\xKi4oCleaner.exe`} {
 		if !strings.Contains(x, want) {
 			t.Errorf("missing %s", want)

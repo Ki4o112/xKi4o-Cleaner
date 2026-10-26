@@ -3,6 +3,16 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.15.1 — 2026-10-26
+
+### English
+- Start with Windows works on every PC: a shortcut in the Startup folder starts the app in the tray with no rights prompt, and it shows in Task Manager → Startup apps, where it can be turned off too
+- If the taskbar is not ready yet right after sign-in, the tray icon is tried again instead of the window showing
+
+### Български
+- Пускането с Windows работи на всеки компютър: пряк път в папката Startup пуска програмата в трея без въпрос за права и се вижда в Task Manager → Автоматично стартиращи приложения, откъдето може и да се изключи
+- Ако лентата на задачите още не е готова веднага след влизане, иконата в трея се опитва пак, вместо да се показва прозорецът
+
 ## 4.15.0 — 2026-10-25
 
 ### English

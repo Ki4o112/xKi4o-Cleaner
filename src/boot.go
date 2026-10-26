@@ -1,14 +1,20 @@
 package main
 
-// Start with Windows: a scheduled task starts the app at sign-in, hidden in
-// the notification area, so game mode and the automatic memory cleaning go
-// on watching. A task (not the Run key): the app asks for administrator
-// rights, which Windows never grants to a Run-key program at sign-in, while a
-// task with the highest rights starts it with no question. Free of Windows calls.
+// Start with Windows: the app starts at sign-in, hidden in the notification
+// area, so game mode and the automatic memory cleaning go on watching.
+// Windows never starts a program that asks for administrator rights from the
+// Run key or the Startup folder, so a shortcut in the Startup folder runs a
+// scheduled task (schtasks /run) that starts the app with the highest rights
+// and no question. The shortcut is what Task Manager's Startup apps list
+// shows: turning it off there turns the start off. Free of Windows calls.
 
 const bootTaskName = `xKi4o Cleaner\Start with Windows`
 
-// bootTaskXML: the task for this user and this copy of the app.
+// bootLnkArgs: what the Startup shortcut gives schtasks.exe.
+func bootLnkArgs() string { return `/run /tn "` + bootTaskName + `"` }
+
+// bootTaskXML: the task for this user and this copy of the app (no trigger:
+// the Startup shortcut runs it).
 func bootTaskXML(exe, user, desc string) string {
 	userID := ""
 	if user != "" {
@@ -17,7 +23,7 @@ func bootTaskXML(exe, user, desc string) string {
 	return `<?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo><Author>xKi4o Cleaner</Author><Description>` + xmlEscape(desc) + `</Description></RegistrationInfo>
-  <Triggers><LogonTrigger><Enabled>true</Enabled>` + userID + `<Delay>PT15S</Delay></LogonTrigger></Triggers>
+  <Triggers />
   <Principals><Principal id="Author">` + userID + `<LogonType>InteractiveToken</LogonType><RunLevel>HighestAvailable</RunLevel></Principal></Principals>
   <Settings>
     <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>

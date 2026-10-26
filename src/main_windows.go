@@ -131,9 +131,8 @@ func main() {
 	app.w = w
 	defer w.Destroy()
 	applyFrame(app.hwnd, ownFrame) // now the page leaves its top edge for resizing
-	if slices.Contains(os.Args[1:], "--tray") && trayAdd(false) {
-		win.inTray.Store(true) // started with Windows: straight to the notification area
-		_, _, _ = procShowWindow.Call(app.hwnd, swHide)
+	if slices.Contains(os.Args[1:], "--tray") {
+		trayStart() // started with Windows: straight to the notification area
 	} else {
 		bringToFront(app.hwnd)
 	}
