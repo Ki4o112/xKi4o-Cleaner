@@ -3,6 +3,14 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.15.2 — 2026-10-27
+
+### English
+- Windows Defender quarantined the app because of how 4.15.1 started with Windows (a Startup shortcut that ran an elevated task, which looks like malware getting round UAC). That is gone: a plain sign-in task, like other tools that need administrator rights use, and only when you turn it on in Settings. After updating, turn Start with Windows on again if you want it
+
+### Български
+- Windows Defender слагаше програмата под карантина заради начина, по който 4.15.1 тръгваше с Windows (пряк път в Startup, който пуска задача с администраторски права — прилича на вирус, който заобикаля UAC). Това е махнато: обикновена задача при влизане, както правят други програми с администраторски права, и само ако я включиш от Настройки. След обновлението включи „Пускай с Windows“ пак, ако го искаш
+
 ## 4.15.1 — 2026-10-26
 
 ### English
