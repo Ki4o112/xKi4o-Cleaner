@@ -5,6 +5,18 @@ import (
 	"testing"
 )
 
+func TestBigWindow3D(t *testing.T) {
+	for _, c := range []struct {
+		full       bool
+		share, gpu float64
+		want       bool
+	}{{true, 1, 3, true}, {false, 0.8, 40, true}, {false, 0.8, 10, false}, {false, 0.3, 90, false}, {true, 1, 0, false}} {
+		if got := bigWindow3D(c.full, c.share, c.gpu); got != c.want {
+			t.Errorf("bigWindow3D(%v) = %v", c, got)
+		}
+	}
+}
+
 func TestGameVerdict(t *testing.T) {
 	cases := []struct {
 		exe, path     string
@@ -26,6 +38,12 @@ func TestGameVerdict(t *testing.T) {
 		{"REDprelauncher.exe", `D:\SteamLibrary\steamapps\common\Cyberpunk 2077\REDprelauncher.exe`, true, false, false},
 		{"LeagueClientUx.exe", `C:\Riot Games\League of Legends\LeagueClientUx.exe`, false, true, false},
 		{"League of Legends.exe", `C:\Riot Games\League of Legends\Game\League of Legends.exe`, false, false, true},
+		{"cod.exe", `C:\Program Files (x86)\Call of Duty\_retail_\cod.exe`, false, false, true},
+		{"cod.exe", `E:\Mine\COD\cod.exe`, false, false, true},
+		{"Marathon-Win64-Shipping.exe", `F:\x\Marathon-Win64-Shipping.exe`, false, false, true},
+		{"somegame.exe", `D:\Games\SomeGame\somegame.exe`, false, false, true},
+		{"BlizzardError.exe", `C:\Program Files (x86)\Call of Duty\BlizzardError.exe`, false, false, false},
+		{"blender.exe", `C:\Program Files\Blender\blender.exe`, false, true, false},
 		{"PlayGTAV.exe", `D:\SteamLibrary\steamapps\common\Grand Theft Auto V\PlayGTAV.exe`, false, false, false},
 	}
 	for _, c := range cases {

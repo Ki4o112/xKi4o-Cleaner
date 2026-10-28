@@ -3,6 +3,14 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.15.3 — 2026-10-28
+
+### English
+- Game mode now notices every game it can, also one played in a window, one an anti-cheat protects (Call of Duty) and one in any folder (Battle.net, own launchers, D:\Games). The memory is freed for each one
+
+### Български
+- Game mode вече засича всяка игра: и в прозорец, и защитена от anti-cheat (Call of Duty), и в каквато и да е папка (Battle.net, собствени лаунчъри, D:\Games). Паметта се освобождава за всяка от тях
+
 ## 4.15.2 — 2026-10-27
 
 ### English

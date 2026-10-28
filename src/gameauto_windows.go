@@ -132,7 +132,7 @@ func gameAutoStep() {
 	if at, ok := gmAuto.notGame[pid]; ok && time.Since(at) < 10*time.Second {
 		return
 	}
-	path := processPath(pid)
+	path := gamePath(pid)
 	exe := strings.ToLower(path[strings.LastIndex(path, `\`)+1:])
 	isGame := gameVerdict(exe, path, windowsKnowsGame(path), fullScreen3D(pid))
 	if !isGame {
@@ -230,8 +230,8 @@ func windowsKnowsGame(path string) bool {
 	return gmAuto.known[strings.ToLower(path)]
 }
 
-// fullScreen3D: the program's window in front covers its whole screen and it
-// draws with the graphics card's 3D engine.
+// fullScreen3D: the program's window in front draws with the graphics card's
+// 3D engine and fills the screen, or is a big window (a game played windowed).
 func fullScreen3D(pid uint32) bool {
 	h, _, _ := procGetForegroundWindow.Call()
 	if h == 0 {
@@ -249,13 +249,19 @@ func fullScreen3D(pid uint32) bool {
 	if r, _, _ := procGetMonitorInfoW.Call(mon, uintptr(unsafe.Pointer(&mi))); r == 0 {
 		return false
 	}
-	if wr.Left > mi.Monitor.Left || wr.Top > mi.Monitor.Top || wr.Right < mi.Monitor.Right || wr.Bottom < mi.Monitor.Bottom {
-		return false
-	}
+	full := wr.Left <= mi.Monitor.Left && wr.Top <= mi.Monitor.Top && wr.Right >= mi.Monitor.Right && wr.Bottom >= mi.Monitor.Bottom
 	// whether it draws in 3D comes from Windows' counters, not from opening
 	// the game: an anti-cheat watches who opens the game's process
 	u, ok := gpu3DOf(pid)
-	return ok && u >= 2
+	return ok && bigWindow3D(full, windowShare(wr, mi.Monitor), u)
+}
+
+func windowShare(w, m rect) float64 {
+	ma := float64(m.Right-m.Left) * float64(m.Bottom-m.Top)
+	if ma <= 0 {
+		return 0
+	}
+	return float64(w.Right-w.Left) * float64(w.Bottom-w.Top) / ma
 }
 
 func gameSessionsPath() string { return dataDirPath("game-sessions.json") }
@@ -354,4 +360,43 @@ func gamePrioClear() {
 		}
 	}
 	_ = os.Remove(gamePrioPath())
+}
+
+// gamePath: the exe of the program in front. When Windows refuses to open it
+// (an anti-cheat protects the game, as Call of Duty's does), the path comes
+// from Windows' process list by PID instead.
+func gamePath(pid uint32) string {
+	if p := processPath(pid); p != "" {
+		return p
+	}
+	const systemProcessIDInformation = 88
+	buf := make([]uint16, 1024)
+	info := struct {
+		PID    uintptr
+		Length uint16
+		Max    uint16
+		_      uint32
+		Buffer *uint16
+	}{PID: uintptr(pid), Max: uint16(len(buf) * 2), Buffer: &buf[0]}
+	st, _, _ := procNtQuerySystemInformation.Call(systemProcessIDInformation, uintptr(unsafe.Pointer(&info)), unsafe.Sizeof(info), 0)
+	if st != 0 || info.Length == 0 {
+		return ""
+	}
+	return dosPath(windows.UTF16ToString(buf[:info.Length/2]))
+}
+
+// dosPath turns \Device\HarddiskVolume3\x into C:\x.
+func dosPath(nt string) string {
+	for c := 'A'; c <= 'Z'; c++ {
+		drive := string(c) + ":"
+		var b [260]uint16
+		d, _ := windows.UTF16PtrFromString(drive)
+		if n, err := windows.QueryDosDevice(d, &b[0], uint32(len(b))); err == nil && n > 0 {
+			dev := windows.UTF16ToString(b[:])
+			if dev != "" && strings.HasPrefix(strings.ToLower(nt), strings.ToLower(dev)+`\`) {
+				return drive + nt[len(dev):]
+			}
+		}
+	}
+	return nt
 }

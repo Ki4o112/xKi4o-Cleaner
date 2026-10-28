@@ -15,7 +15,32 @@ import (
 // gameDirs: folders that only hold games (lower case, with backslashes).
 var gameDirs = []string{`\steamapps\common\`, `\epic games\`, `\gog galaxy\games\`, `\gog games\`, `\ea games\`,
 	`\ubisoft game launcher\games\`, `\xboxgames\`, `\riot games\`, `\rockstar games\`, `\battlestate games\`,
-	`\wargaming.net\games\`, `\amazon games\library\`, `\itch\apps\`}
+	`\wargaming.net\games\`, `\amazon games\library\`, `\itch\apps\`, `\origin games\`, `\call of duty\`,
+	`\overwatch\`, `\world of warcraft\`, `\diablo iv\`, `\starcraft ii\`, `\hearthstone\`, `\hoyoplay\games\`,
+	`\genshin impact\`, `\arena breakout infinite\`, `\the finals\`, `\respawn\`, `:\games\`}
+
+// bigWindow3D: a full-screen window that draws in 3D, or a window of at least
+// 60% of the screen that keeps the 3D engine busy (a game played windowed).
+func bigWindow3D(full bool, share, gpu3D float64) bool {
+	return (full && gpu3D >= 2) || (share >= 0.6 && gpu3D >= 25)
+}
+
+// gameExes: popular games whose folder is anywhere (Battle.net, their own
+// launchers, a folder the user chose).
+var gameExes = map[string]bool{
+	"cod.exe": true, "cod_hq.exe": true, "modernwarfare.exe": true, "blackopscoldwar.exe": true, "vanguard.exe": true,
+	"blackops4.exe": true, "blackops3.exe": true, "iw7_ship.exe": true, "s2_sp64_ship.exe": true, "s2_mp64_ship.exe": true,
+	"cs2.exe": true, "csgo.exe": true, "valorant-win64-shipping.exe": true, "r5apex.exe": true, "r5apex_dx12.exe": true,
+	"gta5.exe": true, "gta5_enhanced.exe": true, "rdr2.exe": true, "overwatch.exe": true, "rainbowsix.exe": true,
+	"rainbowsix_vulkan.exe": true, "rocketleague.exe": true, "dota2.exe": true, "eldenring.exe": true,
+	"minecraft.windows.exe": true, "robloxplayerbeta.exe": true, "wow.exe": true, "diablo iv.exe": true,
+	"genshinimpact.exe": true, "zenlesszonezero.exe": true, "starrail.exe": true, "pubg.exe": true,
+	"tslgame.exe": true, "escapefromtarkov.exe": true, "destiny2.exe": true, "warframe.x64.exe": true, "bf2042.exe": true,
+	"bf6.exe": true, "marvel-win64-shipping.exe": true, "deltaforceclient-win64-shipping.exe": true,
+}
+
+// gameExeEnds: how Unreal Engine names a game's exe.
+var gameExeEnds = []string{"-win64-shipping.exe", "-wingdk-shipping.exe", "-win32-shipping.exe"}
 
 // notGames: launchers, their helpers and crash reporters (they live in the
 // game folders too), and programs that fill the screen with 3D but are no
@@ -28,6 +53,9 @@ var notGames = map[string]bool{
 	"rockstarlauncher.exe": true, "socialclubhelper.exe": true, "unitycrashhandler64.exe": true, "unitycrashhandler32.exe": true,
 	"crashreportclient.exe": true, "crashpad_handler.exe": true, "easyanticheat.exe": true, "easyanticheat_eos_setup.exe": true,
 	"chrome.exe": true, "msedge.exe": true, "firefox.exe": true, "brave.exe": true, "opera.exe": true, "vivaldi.exe": true,
+	"blender.exe": true, "photoshop.exe": true, "adobe premiere pro.exe": true, "afterfx.exe": true, "resolve.exe": true,
+	"unity.exe": true, "unrealeditor.exe": true, "ue4editor.exe": true, "godot.exe": true, "3dsmax.exe": true, "maya.exe": true,
+	"c4d.exe": true, "lightroom.exe": true, "capcut.exe": true,
 	"vlc.exe": true, "mpc-hc64.exe": true, "mpc-hc.exe": true, "mpc-be64.exe": true, "potplayermini64.exe": true, "mpv.exe": true,
 	"microsoft.media.player.exe": true, "wmplayer.exe": true, "powerpnt.exe": true, "obs64.exe": true, "explorer.exe": true,
 	"xki4ocleaner.exe": true, "msedgewebview2.exe": true, "applicationframehost.exe": true, "searchhost.exe": true,
@@ -36,7 +64,7 @@ var notGames = map[string]bool{
 
 // launcherWords: parts of a name that make a launcher, an updater or a
 // setup, not the game (they live in the game folders too).
-var launcherWords = []string{"launcher", "bootstrap", "updater", "patcher", "installer", "setup", "crashhandler", "crashreport",
+var launcherWords = []string{"launcher", "bootstrap", "updater", "patcher", "installer", "setup", "crashhandler", "crashreport", "blizzarderror", "crashsender",
 	"leagueclient", "riotclient", "playgtav", "battleye", "redistributable", "vc_redist", "dxsetup", "uninst"}
 
 // isLauncher: the exe starts or updates a game; game mode never treats it as
@@ -68,8 +96,13 @@ func gameVerdict(exe, path string, windowsGame, fullScreen3D bool) bool {
 	if isLauncher(exe) || strings.Contains(exe, "xki4ocleaner") {
 		return false
 	}
-	if windowsGame || fullScreen3D {
+	if windowsGame || fullScreen3D || gameExes[exe] {
 		return true
+	}
+	for _, e := range gameExeEnds {
+		if strings.HasSuffix(exe, e) {
+			return true
+		}
 	}
 	p := strings.ToLower(strings.ReplaceAll(path, "/", `\`))
 	for _, d := range gameDirs {
