@@ -366,7 +366,7 @@ func TestStartupDelay(t *testing.T) {
 	if err := os.WriteFile(exe, b, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	k, err := registry.OpenKey(registry.CURRENT_USER, `Software\Microsoft\Windows\CurrentVersion\Run`, registry.SET_VALUE)
+	k, _, err := registry.CreateKey(registry.CURRENT_USER, `Software\Microsoft\Windows\CurrentVersion\Run`, registry.SET_VALUE) // (GitHub's runner has none)
 	if err != nil {
 		t.Fatal(err)
 	}
