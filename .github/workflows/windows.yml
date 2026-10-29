@@ -1,0 +1,25 @@
+name: Windows tests
+
+# The tests that call Windows itself (process list, registry, scheduled
+# tasks, counters, windows, WMI) on a real Windows machine. The runner is a
+# throwaway VM, so the tests that change the PC run too (XKI4O_WRITE_TESTS).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Test on Windows
+        env:
+          XKI4O_WRITE_TESTS: "1"
+        run: go test -count=1 -timeout 30m -v ./src
