@@ -3,6 +3,7 @@
 package main
 
 import (
+	"encoding/json"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -151,5 +152,59 @@ func TestGameNotifyCard(t *testing.T) {
 	}
 	if gameNote.hwnd.Load() != 0 {
 		t.Fatal("it did not go away")
+	}
+}
+
+// The start-time script's way of reading events, on a log every Windows
+// has (the start log itself is empty on Windows Server).
+func TestBootPerfScriptShape(t *testing.T) {
+	script := strings.Replace(bootPerfScript, `LogName = 'Microsoft-Windows-Diagnostics-Performance/Operational'; Id = 100,101,102,103`, `LogName = 'System'; Id = 6005,6006,6013,7036,7040`, 1)
+	script = strings.Replace(script, "-MaxEvents 400", "-MaxEvents 5", 1)
+	if script == bootPerfScript {
+		t.Fatal("the script changed: update this test")
+	}
+	out, _, err := runPS(60*time.Second, script)
+	var recs []bootRec
+	if jerr := json.Unmarshal([]byte(strings.TrimSpace(out)), &recs); jerr != nil {
+		t.Fatalf("%v %v: %q", err, jerr, out)
+	}
+	if len(recs) == 0 {
+		t.Skip("no such events here")
+	}
+	for _, r := range recs {
+		t.Logf("%d at %v: %v", r.ID, time.UnixMilli(r.T), r.D)
+		if r.T < time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC).UnixMilli() || r.T > time.Now().Add(time.Hour).UnixMilli() || r.D == nil {
+			t.Fatalf("bad record %+v", r)
+		}
+	}
+}
+
+// Going back to a restore point that does not exist is refused before
+// Windows is asked anything.
+func TestRestoreToPointGuard(t *testing.T) {
+	was := app.admin
+	defer func() { app.admin = was }()
+	app.admin = false
+	if got := restoreToPoint(1); got != T("blocked.admin") {
+		t.Fatalf("no admin: %q", got)
+	}
+	app.admin = true
+	if got := restoreToPoint(-12345); got != T("rc.err.noPoint") {
+		t.Fatalf("unknown point: %q", got)
+	}
+}
+
+// The full maintenance runs end to end (Windows Update only as administrator).
+func TestAutoMaintenance(t *testing.T) {
+	initPaths()
+	logInit(t.TempDir())
+	was := app.admin
+	defer func() { app.admin = was }()
+	app.admin = false
+	start := time.Now()
+	m := autoMaintenance(123)
+	t.Logf("%+v in %v: %s", m, time.Since(start).Round(time.Millisecond), strings.Join(maintLines(m, T), " · "))
+	if m.Freed != 123 || m.RAM < 0 {
+		t.Fatalf("%+v", m)
 	}
 }

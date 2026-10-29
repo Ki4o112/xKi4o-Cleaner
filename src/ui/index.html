@@ -908,6 +908,23 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .plan-row .tw-st { flex: none; }
 
 /* ================= Startup Manager ================= */
+.bp-card { background: var(--card); border: 1px solid var(--edge); border-radius: var(--r-l); padding: 16px 18px; margin-top: 12px; }
+.bp-card:empty { display: none; }
+.bp-top { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.bp-big { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+.bp-big small { font-size: 14px; font-weight: 600; color: var(--muted); margin-left: 4px; }
+.bp-meta { color: var(--muted); font-size: 12px; display: grid; gap: 2px; min-width: 0; }
+.bp-bars { display: flex; gap: 4px; align-items: flex-end; height: 40px; margin-left: auto; }
+.bp-bars i { width: 9px; border-radius: 3px 3px 1px 1px; background: var(--blue); opacity: .55; }
+.bp-bars i:last-child { opacity: 1; }
+.bp-v { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: var(--card-2); }
+.bp-v.good { color: var(--green, #3ee8b0); } .bp-v.slow { color: var(--red, #ff6b6b); }
+.bp-h { font-weight: 700; font-size: 13px; margin: 14px 0 4px; }
+.bp-row { display: flex; gap: 10px; align-items: center; padding: 7px 0; border-top: 1px solid var(--line-soft); font-size: 13px; min-width: 0; }
+.bp-row:first-of-type { border-top: 0; }
+.bp-row .n { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.bp-row .m { color: var(--muted); font-size: 12px; flex: none; }
+.bp-empty { color: var(--muted); font-size: 13px; }
 .su-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
 .su-stat { background: var(--card); border-radius: var(--r-l); padding: 14px 16px; border: 1px solid var(--edge); cursor: pointer; transition: background .2s, transform .25s var(--spring); text-align: left; }
 .su-stat:hover { background: var(--card-2); }
@@ -1618,6 +1635,9 @@ body.dock-on .toasts { bottom: 84px; }
 .dh-card.bad .dh-r { color: #ffb3bc; }
 .dh-note { color: var(--faint); font-size: 12px; }
 .dh-note.ok { color: var(--muted); }
+.dh-note.warn { color: var(--amber, #f5b84a); margin-top: 6px; }
+.linkish { background: none; border: 0; padding: 0; color: var(--blue-hi, #6fb3ff); font: inherit; font-weight: 600; cursor: pointer; text-decoration: underline; }
+.dh-trim { margin: 0; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
 .rc-cards.five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 @media (max-width: 1180px) { .rc-cards.five { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
@@ -2764,6 +2784,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
       </div>
       <div class="tw-body" id="suBody">
         <div class="su-stats" id="suStats"></div>
+        <div class="bp-card" id="suBoot"></div>
         <div class="notice info" id="suAdmin" hidden><p data-i="su.noadmin"></p></div>
         <div class="notice info" id="suTasksErr" hidden><p id="suTasksErrText"></p></div>
         <div class="tw-tools">
@@ -3056,6 +3077,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
           <div class="item"><div class="i-ico" data-icon="clean"></div><div><div class="t" data-i="rm.set"></div><div class="d" data-i="rm.setD"></div></div>
             <div class="mv-btns" style="gap:10px;align-items:center"><select class="sel" id="rmGb" aria-label="GB"></select><input type="checkbox" class="switch" id="rmToggle" checked aria-label="reminder"></div></div>
           <div class="item"><div class="i-ico" data-icon="pie"></div><div><div class="t" data-i="set.autoDisk"></div><div class="d" data-i="set.autoDiskD"></div></div><input type="checkbox" class="switch" id="autoDiskToggle" checked></div>
+          <div class="item"><div class="i-ico" data-icon="cpu"></div><div><div class="t" data-i="set.bgTame"></div><div class="d" data-i="set.bgTameD"></div><div class="w" id="bgTameStatus"></div></div><input type="checkbox" class="switch" id="bgTameToggle" checked></div>
           <div class="item"><div class="i-ico" data-icon="window"></div><div><div class="t" data-i="set.frame"></div><div class="d" data-i="set.frameD"></div></div><input type="checkbox" class="switch" id="frameToggle"></div>
         </div>
         <div class="section-t" data-i="set.safety"></div>
@@ -3072,6 +3094,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
             <div class="seg blue" id="segAuto"></div></div>
           <div class="item" id="autoMovedRow" hidden><div class="i-ico" data-icon="alert"></div><div><div class="t" id="autoMovedT"></div><div class="d" id="autoMovedD"></div></div><button class="btn small" id="autoFix" data-i="auto.fix"></button></div>
           <div class="item"><div class="i-ico" data-icon="list"></div><div><div class="t" data-i="auto.what"></div><div class="d" id="autoWhat"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="btn small" id="autoSee" data-i="auto.see"></button><button class="btn small" id="autoNow" data-i="auto.now"></button></div></div>
+          <div class="item"><div class="i-ico" data-icon="sparkle"></div><div><div class="t" data-i="auto.maint"></div><div class="d" data-i="auto.maintD"></div></div><input type="checkbox" class="switch" id="autoMaintToggle" checked></div>
         </div>
         <div class="section-t" data-i="upd.sec"></div>
         <div class="list">
@@ -3540,6 +3563,78 @@ bg: {
   "tw.legacyText": "Този туийк е премахнат в 2.4, защото Windows не позволява надеждна проверка и точно връщане на тези мрежови настройки. Може само да се изключи — със стойностите по подразбиране на Windows.",
   "su.title": "Стартиране", "su.sub": "Какво тръгва заедно с Windows — изключва се обратимо, без да се трие", "su.log": "Лог", "su.refresh": "Обнови списъка",
   "su.search": "Търси по име, издател или файл…", "su.noadmin": "Без администраторски права могат да се променят само записите на текущия потребител.",
+  "rc.backTo": "Върни до тук",
+  "rc.backTitle": "Връщане на компютъра към {0}?",
+  "rc.backText": "Windows ще върне системните файлове, настройките, драйверите и програмите към състоянието от тогава. Компютърът ще се рестартира и това отнема няколко минути.",
+  "rc.backL1": "Личните ти файлове (документи, снимки, игри) остават.",
+  "rc.backL2": "Програмите, инсталирани след тази точка, ще изчезнат.",
+  "rc.backL3": "Запиши отворените файлове — рестартът е след 5 секунди.",
+  "rc.backOk": "Върни и рестартирай",
+  "rc.backStarted": "Windows започна връщането — компютърът се рестартира.",
+  "dh.lowFree": "Свободни са само {0}% — под 15% SSD-то се забавя.",
+  "dh.lowFreeHdd": "Свободни са само {0}% — под 10% дискът се забавя.",
+  "dh.lowFreeGo": "Освободи място",
+  "dh.trimOffT": "TRIM е изключен.",
+  "dh.trimOffD": "Без него Windows не казва на SSD-то кое място е свободно и то се бави с времето. По подразбиране в Windows е включен.",
+  "dh.trimOn": "Включи TRIM",
+  "dh.trimDone": "TRIM е включен.",
+  "dh.trimFail": "TRIM не можа да се включи.",
+  "set.bgTame": "Тежките фонови задачи на Windows изчакват, докато работиш",
+  "set.bgTameD": "Индексирането, инсталирането на ъпдейти, телеметрията, сканирането по график и синхронизирането на OneDrive вървят с най-нисък приоритет, докато ползваш компютъра или играеш. Щом го оставиш за 3 минути, си връщат обичайния. Нищо не се спира и не се изключва.",
+  "set.bgTameNow": "Сега изчакват: {0}",
+  "set.bgTameNone": "Сега няма тежки фонови задачи.",
+  "set.bgTameIdle": "Компютърът не се ползва — фоновите задачи вървят нормално.",
+  "auto.maint": "Пълна поддръжка с автоматичното чистене",
+  "auto.maintD": "След чистенето: освобождава кеша в паметта, проверява дисковете, програмите и Windows за ъпдейти и показва нотификация с резултата.",
+  "auto.maintDone": "Поддръжката е готова: {0}",
+  "bat.now": "Сега",
+  "bat.charging": "Зарежда се с {0} W",
+  "bat.toFull": "пълна след {0}",
+  "bat.plugged": "На захранване",
+  "bat.draws": "Харчи {0} W",
+  "bat.onBat": "На батерия",
+  "bat.left": "остават ~{0}",
+  "bat.hm": "{0} ч {1} мин",
+  "bat.m": "{0} мин",
+  "bat.cycles": "Цикли на зареждане",
+  "bat.report": "Подробен отчет от Windows",
+  "bat.v.good": "Батерията е в добро състояние.",
+  "bat.v.worn": "Батерията е износена — държи по-малко от 80% от новия си капацитет. Нормално е след 2–3 години.",
+  "bat.v.replace": "Батерията държи под 60% от новия си капацитет — помисли за смяна.",
+  "th.title": "Температура и скорост",
+  "th.limit": "Позволена скорост",
+  "th.perf": "Скорост спрямо базовата",
+  "th.temp": "Температура",
+  "th.last": "Последно забавяне",
+  "th.never": "Не е засечено, откакто програмата върви",
+  "th.ev": "{0} — до {1}% ({2})",
+  "th.held": "През последните минути процесорът се забавя {0}% от времето, в което работи — причина: {1}.",
+  "th.fine": "Процесорът работи с пълната си скорост.",
+  "th.toast": "Процесорът се забавя до {0}% — {1}",
+  "th.r.heat": "прегряване",
+  "th.r.battery": "работа на батерия",
+  "th.r.power": "ограничение на захранването",
+  "th.tip.heat": "Почисти праха от вентилаторите, не го дръж върху меко и пробвай охлаждаща подложка.",
+  "th.tip.battery": "Включи зарядното или избери режим за най-добра производителност.",
+  "th.tip.power": "Избери режим за най-добра производителност.",
+  "bp.title": "Колко бързо тръгва Windows",
+  "bp.last": "Последно стартиране",
+  "bp.main": "до работния плот {0}",
+  "bp.post": "после стартиращите програми {0}",
+  "bp.avg": "средно {0} за последните {1}",
+  "bp.none": "Windows още не е записал време за стартиране (записва го след рестарт; дневникът Diagnostics-Performance трябва да е включен).",
+  "bp.slowT": "Кое забавя стартирането",
+  "bp.slowNone": "Windows не е засякъл нищо, което да забавя стартирането.",
+  "bp.k.app": "програма",
+  "bp.k.driver": "драйвер",
+  "bp.k.service": "услуга",
+  "bp.times": "{0} пъти · общо +{1}",
+  "bp.off": "Изключи",
+  "bp.isOff": "изключена",
+  "bp.loading": "Чета дневника на Windows…",
+  "bp.good": "Бързо",
+  "bp.ok": "Нормално",
+  "bp.slow": "Бавно",
   "su.note": "Изключването става като в Диспечера на задачите (StartupApproved) или чрез настройката на задачата в Task Scheduler — самият запис остава и може да се включи отново по всяко време. Колко по-бързо ще стартира Windows зависи от компютъра и не може да се обещае предварително.",
   "su.stat.all": "Всички", "su.stat.on": "Включени", "su.stat.off": "Изключени", "su.stat.check": "За проверка", "su.srcAll": "Всички източници", "su.src.reg": "Регистър",
   "su.src.folder": "Startup папка", "su.src.task": "Task Scheduler", "su.scope.user": "текущ потребител", "su.scope.machine": "всички потребители",
@@ -4593,6 +4688,78 @@ en: {
   "tw.legacyText": "This tweak was removed in 2.4 because Windows does not allow these network settings to be checked and restored exactly. It can only be turned off — with the Windows defaults.",
   "su.title": "Startup", "su.sub": "What starts with Windows — turned off reversibly, nothing deleted", "su.log": "Log", "su.refresh": "Refresh the list",
   "su.search": "Search by name, publisher or file…", "su.noadmin": "Without administrator rights only the current user's entries can be changed.",
+  "rc.backTo": "Go back to this",
+  "rc.backTitle": "Bring the PC back to {0}?",
+  "rc.backText": "Windows brings the system files, settings, drivers and programs back to how they were then. The PC restarts and it takes a few minutes.",
+  "rc.backL1": "Your own files (documents, photos, games) stay.",
+  "rc.backL2": "Programs installed after this point will be gone.",
+  "rc.backL3": "Save what is open — the restart is in 5 seconds.",
+  "rc.backOk": "Go back and restart",
+  "rc.backStarted": "Windows started going back — the PC restarts.",
+  "dh.lowFree": "Only {0}% is free — under 15% an SSD slows down.",
+  "dh.lowFreeHdd": "Only {0}% is free — under 10% a hard disk slows down.",
+  "dh.lowFreeGo": "Free up space",
+  "dh.trimOffT": "TRIM is off.",
+  "dh.trimOffD": "Without it Windows does not tell the SSD which space is free and it gets slower over time. Windows has it on by default.",
+  "dh.trimOn": "Turn TRIM on",
+  "dh.trimDone": "TRIM is on.",
+  "dh.trimFail": "TRIM could not be turned on.",
+  "set.bgTame": "Windows' heavy background work waits while you use the PC",
+  "set.bgTameD": "Indexing, installing updates, telemetry, scheduled scans and OneDrive sync run at the lowest priority while you use the PC or play. Once it is left alone for 3 minutes they get their usual priority back. Nothing is stopped or turned off.",
+  "set.bgTameNow": "Waiting now: {0}",
+  "set.bgTameNone": "No heavy background work right now.",
+  "set.bgTameIdle": "The PC is not in use — background work runs as usual.",
+  "auto.maint": "Full maintenance with the automatic cleaning",
+  "auto.maintD": "After the cleaning: frees the memory cache, checks the drives, programs and Windows for updates, and shows a notification with the result.",
+  "auto.maintDone": "Maintenance is done: {0}",
+  "bat.now": "Now",
+  "bat.charging": "Charging at {0} W",
+  "bat.toFull": "full in {0}",
+  "bat.plugged": "Plugged in",
+  "bat.draws": "Using {0} W",
+  "bat.onBat": "On battery",
+  "bat.left": "~{0} left",
+  "bat.hm": "{0} h {1} min",
+  "bat.m": "{0} min",
+  "bat.cycles": "Charge cycles",
+  "bat.report": "Windows' detailed report",
+  "bat.v.good": "The battery is in good shape.",
+  "bat.v.worn": "The battery is worn — it holds less than 80% of what it did new. Normal after 2–3 years.",
+  "bat.v.replace": "The battery holds under 60% of what it did new — think about replacing it.",
+  "th.title": "Heat and speed",
+  "th.limit": "Speed allowed",
+  "th.perf": "Speed against the base",
+  "th.temp": "Temperature",
+  "th.last": "Last slowdown",
+  "th.never": "None since the app started",
+  "th.ev": "{0} — to {1}% ({2})",
+  "th.held": "In the last minutes the processor held itself back {0}% of the time it was busy — because of {1}.",
+  "th.fine": "The processor runs at its full speed.",
+  "th.toast": "The processor slows down to {0}% — {1}",
+  "th.r.heat": "heat",
+  "th.r.battery": "running on battery",
+  "th.r.power": "a power limit",
+  "th.tip.heat": "Clean the dust from the fans, keep it off soft surfaces and try a cooling pad.",
+  "th.tip.battery": "Plug in the charger or choose the best performance mode.",
+  "th.tip.power": "Choose the best performance power mode.",
+  "bp.title": "How fast Windows starts",
+  "bp.last": "Last start",
+  "bp.main": "to the desktop {0}",
+  "bp.post": "then the startup programs {0}",
+  "bp.avg": "{0} on average over the last {1}",
+  "bp.none": "Windows has not written a start time yet (it does after a restart; the Diagnostics-Performance log must be on).",
+  "bp.slowT": "What slows the start",
+  "bp.slowNone": "Windows has found nothing that slows the start.",
+  "bp.k.app": "app",
+  "bp.k.driver": "driver",
+  "bp.k.service": "service",
+  "bp.times": "{0} times · +{1} in all",
+  "bp.off": "Turn off",
+  "bp.isOff": "turned off",
+  "bp.loading": "Reading Windows' log…",
+  "bp.good": "Fast",
+  "bp.ok": "Normal",
+  "bp.slow": "Slow",
   "su.note": "Turning off works like Task Manager (StartupApproved) or through the task's own setting in Task Scheduler — the entry itself stays and can be turned on again any time. How much faster Windows starts depends on the PC and cannot be promised in advance.",
   "su.stat.all": "All", "su.stat.on": "On", "su.stat.off": "Off", "su.stat.check": "Worth a look", "su.srcAll": "All sources", "su.src.reg": "Registry",
   "su.src.folder": "Startup folder", "su.src.task": "Task Scheduler", "su.scope.user": "current user", "su.scope.machine": "all users", "su.scope.m32": "all users, 32-bit",
@@ -5988,14 +6155,14 @@ function go(page, opt) {
   if (page === "programs") { if (opt && opt.prTab) { PR.tab = opt.prTab; setupPrTabs(); } loadPrograms(); requestAnimationFrame(() => $("#prTab")._place && $("#prTab")._place()); }
   if (page === "game") { loadGame(); loadFps(); loadSessions(); }
   if (page === "startup") { SUN.n = 0; $("#suBadge").hidden = true; }
-  if (page === "settings") paintRm();
+  if (page === "settings") { paintRm(); paintBgTame(); }
   if (page === "tidy") { loadTidy(); requestAnimationFrame(() => $("#tdTab")._place && $("#tdTab")._place()); }
   if (page === "memory") { paintMem(); requestAnimationFrame(() => { $("#segThr")._place(); $("#segInt")._place(); }); }
   if (page === "settings") requestAnimationFrame(() => { $("#segLang")._place(); $("#segTheme")._place && $("#segTheme")._place(); });
   if (page === "clean") requestAnimationFrame(() => $("#segSort")._place && $("#segSort")._place());
   if (page === "tweaks") { loadTweaks(); requestAnimationFrame(() => $("#twFilter")._place && $("#twFilter")._place()); }
-  if (page === "startup") loadStartup();
-  if (page === "sysinfo") loadSysInfo(false);
+  if (page === "startup") { loadStartup(); loadBoot(); }
+  if (page === "sysinfo") { loadSysInfo(false); loadSiLive(); }
   if (page === "gpu") loadGpu(false);
   if (page === "network") loadNet(false);
   if (page === "wupd") loadWu();
@@ -7424,6 +7591,7 @@ function suIcon(e) {
 }
 function renderStartup() {
   const list = $("#suList"); if (!list) return;
+  renderBoot();
   const all = SU.items;
   const counts = { all: all.length, on: all.filter(e => e.enabled).length, off: all.filter(e => !e.enabled).length, check: all.filter(e => (e.warnings || []).length || !e.exists || e.invalid).length };
   $("#suStats").innerHTML = ["all", "on", "off", "check"].map(k => `<button class="su-stat" data-show="${k}" aria-pressed="${SU.show === k}"><div class="k">${esc(t("su.stat." + k))}</div><div class="v">${SU.loaded ? counts[k] : "—"}</div></button>`).join("");
@@ -7482,6 +7650,40 @@ function renderStartup() {
     if (sw) sw.addEventListener("change", () => toggleStartup(e, sw.checked));
   });
 }
+/* how fast Windows starts (Windows' own measurements) */
+const BP = { v: null, loading: false };
+async function loadBoot(force) {
+  if (BP.loading || (BP.v && !force)) { renderBoot(); return; }
+  BP.loading = true; renderBoot();
+  try { BP.v = await api.bootPerf(!!force); } catch (e) { BP.v = { boots: [], slow: [], error: String(e && e.message || e) }; }
+  BP.loading = false; renderBoot();
+}
+const bpSecs = ms => (ms / 1000).toFixed(ms < 10000 ? 1 : 0) + " s";
+function renderBoot() {
+  const el = $("#suBoot"); if (!el) return;
+  const v = BP.v;
+  if (!v) { el.innerHTML = BP.loading ? `<div class="bp-empty">${esc(t("bp.loading"))}</div>` : ""; return; }
+  const boots = v.boots || [], slow = v.slow || [];
+  let top;
+  if (!boots.length) top = `<div class="bp-empty">${esc(v.error || t("bp.none"))}</div>`;
+  else {
+    const b = boots[0], avg = boots.reduce((a, x) => a + x.total, 0) / boots.length, max = Math.max(...boots.map(x => x.total));
+    const cls = b.total <= 30000 ? "good" : b.total <= 60000 ? "ok" : "slow";
+    top = `<div class="bp-top"><div><div class="k" style="color:var(--muted);font-size:12px;font-weight:600">${esc(t("bp.last"))} <span class="bp-v ${cls}">${esc(t("bp." + cls))}</span></div><div class="bp-big">${esc(bpSecs(b.total))}</div></div>
+      <div class="bp-meta">${b.main ? `<span>${esc(t("bp.main", bpSecs(b.main)))}</span>` : ""}${b.post ? `<span>${esc(t("bp.post", bpSecs(b.post)))}</span>` : ""}${boots.length > 1 ? `<span>${esc(t("bp.avg", bpSecs(avg), boots.length))}</span>` : ""}</div>
+      <div class="bp-bars" aria-hidden="true">${boots.slice().reverse().map(x => `<i style="height:${Math.max(8, Math.round(x.total / max * 40))}px" title="${esc(bpSecs(x.total))}"></i>`).join("")}</div></div>`;
+  }
+  const rows = slow.map((x, i) => {
+    const e = x.kind === "app" && x.exe ? SU.items.find(s => s.exe && s.exe.toLowerCase().split("\\").pop() === x.exe) : null;
+    const ctl = e ? (e.enabled ? `<button class="btn small" data-bpoff="${i}">${esc(t("bp.off"))}</button>` : `<span class="m">${esc(t("bp.isOff"))}</span>`) : "";
+    return `<div class="bp-row"><span class="tw-b">${esc(t("bp.k." + x.kind))}</span><span class="n" title="${esc(x.name)}">${esc(x.name)}</span><span class="m">${esc(t("bp.times", x.times, bpSecs(x.delay)))}</span>${ctl}</div>`;
+  }).join("");
+  el.innerHTML = `<div class="bp-h" style="margin-top:0">${esc(t("bp.title"))}</div>${top}<div class="bp-h">${esc(t("bp.slowT"))}</div>${rows || `<div class="bp-empty">${esc(t("bp.slowNone"))}</div>`}`;
+  el.querySelectorAll("[data-bpoff]").forEach(btn => btn.addEventListener("click", () => {
+    const x = slow[+btn.dataset.bpoff], e = SU.items.find(s => s.exe && s.exe.toLowerCase().split("\\").pop() === x.exe);
+    if (e) toggleStartup(e, false);
+  }));
+}
 function toggleStartup(e, enable) {
   if (SU.busy) { renderStartup(); return; }
   const risky = !enable && (e.kind === "security" || e.kind === "windows" || e.kind === "driver");
@@ -7512,7 +7714,7 @@ $("#suSort").addEventListener("change", e => { SU.sort = e.target.value; renderS
 let suSearchT = 0;
 $("#suSearch").addEventListener("input", e => { clearTimeout(suSearchT); suSearchT = setTimeout(() => { SU.q = e.target.value.trim().toLowerCase(); renderStartup(); }, 90); });
 $("#suSearch").addEventListener("keydown", e => { if (e.key === "Escape" && e.target.value) { e.stopPropagation(); e.target.value = ""; SU.q = ""; renderStartup(); } });
-$("#suRefresh").addEventListener("click", () => loadStartup(true));
+$("#suRefresh").addEventListener("click", () => { loadStartup(true); loadBoot(true); });
 $("#suLogBtn").addEventListener("click", openStartupLog);
 async function openStartupLog() {
   let log = []; try { log = (await api.startupLog()) || []; } catch (e) {}
@@ -10492,7 +10694,7 @@ function renderRestore() {
     const rp = RC.rp, pts = (rp && rp.points) || [];
     const delBusy = !!jobOf("rpdel"), adminOK = !S.info || S.info.admin;
     sec.innerHTML = `<div class="rc-head"><h3>${esc(t("rc.points"))}</h3><div class="grow"><button class="btn small primary" id="rcRp" ${S.busy || jobOf("rp") ? "disabled" : ""}>${ICONS.shield}<span>${esc(t("set.rpBtn"))}</span></button><button class="btn small" id="rcRstrui">${ICONS.undo}<span>${esc(t("rc.rstrui"))}</span></button><button class="btn small danger" id="rcRpDel" ${pts.length && !delBusy && adminOK && !RC.rpLoading ? "" : "disabled"} title="${esc(adminOK ? t("rc.delAllT") : t("rc.needAdmin"))}">${delBusy ? '<span class="spin"></span>' : ICONS.trash}<span>${esc(delBusy ? t("rc.deleting") : t("rc.delAll"))}</span></button></div></div>
-      <div class="list">${RC.rpLoading ? `<div class="tw-empty"><span class="spin"></span> ${esc(t("rc.loadingPts"))}</div>` : rp && rp.error ? `<div class="tw-empty">${esc(rp.error)}</div>` : pts.length ? pts.map(p => `<div class="rc-row"><span class="ico2">${ICONS.shield}</span><div style="min-width:0"><div class="t">${esc(p.desc || t("rc.t.point"))}</div><div class="d">${esc(new Date(p.time).toLocaleString(locale()))}</div></div><span class="chip">${esc(t(RP_TYPE[p.type] || "rc.t.point"))}</span></div>`).join("") : `<div class="tw-empty">${esc(t("rc.noPoints"))}</div>`}</div>
+      <div class="list">${RC.rpLoading ? `<div class="tw-empty"><span class="spin"></span> ${esc(t("rc.loadingPts"))}</div>` : rp && rp.error ? `<div class="tw-empty">${esc(rp.error)}</div>` : pts.length ? pts.map(p => `<div class="rc-row"><span class="ico2">${ICONS.shield}</span><div style="min-width:0"><div class="t">${esc(p.desc || t("rc.t.point"))}</div><div class="d">${esc(new Date(p.time).toLocaleString(locale()))}</div></div><div class="acts"><span class="chip">${esc(t(RP_TYPE[p.type] || "rc.t.point"))}</span><button class="btn small" data-rprest="${p.seq}" ${adminOK && !S.busy ? "" : "disabled"}>${ICONS.undo}<span>${esc(t("rc.backTo"))}</span></button></div></div>`).join("") : `<div class="tw-empty">${esc(t("rc.noPoints"))}</div>`}</div>
       <div class="rc-note" id="rcRpStatus">${esc(t("rc.pointsNote"))}</div>`;
     $("#rcRp").addEventListener("click", makeRestorePoint);
     $("#rcRpDel").addEventListener("click", () => {
@@ -10503,6 +10705,16 @@ function renderRestore() {
         ok: () => rpDeleteAll(!!($("#rcKeepNew") && $("#rcKeepNew").checked)) });
     });
     $("#rcRstrui").addEventListener("click", () => api.openSystemRestore());
+    sec.querySelectorAll("[data-rprest]").forEach(b => b.addEventListener("click", () => {
+      const p = pts.find(x => x.seq === +b.dataset.rprest); if (!p) return;
+      const when = new Date(p.time).toLocaleString(locale());
+      confirmBox({ title: t("rc.backTitle", when), text: t("rc.backText"), okText: t("rc.backOk"), danger: true,
+        list: [t("rc.backL1"), t("rc.backL2"), t("rc.backL3")],
+        ok: async () => {
+          let err = ""; try { err = await api.restoreToPoint(p.seq); } catch (e) { err = String(e && e.message || e); }
+          if (err) toast(err, "alert", "warn"); else toast(t("rc.backStarted"), "undo");
+        } });
+    }));
   } else if (RC.tab === "tweaks") {
     const tw = ov.tweaks || [];
     sec.innerHTML = `<div class="rc-head"><h3>${esc(t("rc.tweaks"))}</h3><div class="grow">${ov.undo ? `<button class="btn small" id="rcUndo">${ICONS.undo}<span>${esc(t("rc.undoLast", twName(ov.undo.tweak)))}</span></button>` : ""}<button class="btn small primary" id="rcTwAll" ${tw.length && !TW.busy ? "" : "disabled"}>${ICONS.refresh}<span>${esc(t("rc.twAll", tw.length))}</span></button></div></div>
@@ -10890,17 +11102,50 @@ function renderSysInfo() {
   ]) + tips.sec.join("")));
   // battery
   if (v.battery) {
-    const bt = v.battery;
+    const bt = Object.assign({}, v.battery, SI.bat && SI.bat.ok ? SI.bat : {});
+    const hm = m => m >= 60 ? t("bat.hm", Math.floor(m / 60), m % 60) : t("bat.m", m);
+    const now = !SI.bat || !SI.bat.ok ? "" : bt.onAC ? (bt.charging ? t("bat.charging", bt.gets ? nf(1).format(bt.gets / 1000) : "—") + (bt.mins ? " · " + t("bat.toFull", hm(bt.mins)) : "") : t("bat.plugged"))
+      : (bt.draw ? t("bat.draws", nf(1).format(bt.draw / 1000)) : t("bat.onBat")) + (bt.mins ? " · " + t("bat.left", hm(bt.mins)) : "");
+    const verdict = bt.verdict ? `<div class="si-tip ${bt.verdict === "good" ? "info" : ""}">${ICONS[bt.verdict === "good" ? "info" : "alert"]}<span>${esc(t("bat.v." + bt.verdict))}</span></div>` : "";
     cards.push(siCard("battery", t("si.bat"), siKV([
       [t("si.k.charge"), bt.charge ? bt.charge + "%" : ""],
+      [t("bat.now"), now],
       [t("si.k.health"), bt.health ? bt.health + "%" : t("si.unknown")],
       [t("si.k.cap"), bt.full && bt.design ? t("si.capV", nf(1).format(bt.full / 1000), nf(1).format(bt.design / 1000)) : ""],
-    ]) + (bt.health ? `<div class="si-bar ${bt.health < 70 ? "warn" : ""}"><i style="width:${bt.health}%"></i></div>` : "") + tips.bat.join("")));
+      [t("bat.cycles"), bt.cycles ? nfi(bt.cycles) : ""],
+    ]) + (bt.health ? `<div class="si-bar ${bt.health < 70 ? "warn" : ""}"><i style="width:${bt.health}%"></i></div>` : "") + (SI.bat && SI.bat.ok ? verdict : tips.bat.join(""))
+      + `<div style="margin-top:10px"><button class="btn small" id="batReport">${ICONS.report || ""}<span>${esc(t("bat.report"))}</span></button></div>`));
+  }
+  // heat and speed: does the processor slow itself down
+  const th = SI.th;
+  if (th && th.ok && th.now) {
+    const n = th.now, held = th.share >= 0.4, last = (th.events || []).slice(-1)[0];
+    const why = last ? last.reason : n.temp >= 90 ? "heat" : n.bat ? "battery" : "power";
+    cards.push(siCard("cpu", t("th.title"), siKV([
+      [t("th.limit"), Math.round(n.limit) + "%"],
+      [t("th.perf"), n.perf ? Math.round(n.perf) + "%" : ""],
+      [t("th.temp"), n.temp > 0 ? Math.round(n.temp) + " °C" : ""],
+      [t("th.last"), last ? t("th.ev", new Date(last.at).toLocaleString(locale(), { dateStyle: "short", timeStyle: "short" }), Math.round(last.limit), t("th.r." + last.reason)) : t("th.never")],
+    ]) + `<div class="si-tip ${held ? "" : "info"}">${ICONS[held ? "alert" : "info"]}<span>${esc(held ? t("th.held", Math.round(th.share * 100), t("th.r." + why)) + " " + t("th.tip." + why) : t("th.fine"))}</span></div>`));
   }
   html += `<div class="si-grid">${cards.join("")}</div>`;
   body.innerHTML = html;
   body.querySelectorAll("[data-sigo]").forEach(x => x.addEventListener("click", () => go(x.dataset.sigo)));
+  const br = $("#batReport");
+  if (br) br.addEventListener("click", async () => {
+    br.disabled = true; let err = ""; try { err = await api.batteryReport(); } catch (e) { err = String(e && e.message || e); }
+    br.disabled = false; if (err) toast(err, "alert", "warn");
+  });
 }
+// the battery's live numbers and the processor's limit (every 10 s on the page)
+async function loadSiLive() {
+  const [b, th] = await Promise.all([SI.v && !SI.v.battery ? null : api.batteryInfo().catch(() => null), api.throttleState().catch(() => null)]);
+  if (b) SI.bat = b;
+  if (th) SI.th = th;
+  if (S.page === "sysinfo" && SI.v) renderSysInfo();
+}
+setInterval(() => { if (S.page === "sysinfo" && !document.hidden) loadSiLive(); }, 10000);
+on("throttle", ev => { toast(t("th.toast", Math.round(ev.limit), t("th.r." + ev.reason)), "alert", "warn"); if (S.page === "sysinfo") loadSiLive(); });
 // a short line on Home: what this PC is
 function renderHomePC() {
   const el = $("#hmPC"); if (!el) return;
@@ -11132,7 +11377,7 @@ $("#autoNow").addEventListener("click", async () => {
   toast(t(ok ? "auto.started" : "status.busy"), ok ? "calendar" : "alert", ok ? "" : "warn");
 });
 on("auto-clean", d => {
-  toast(d && d.freed > 0 ? t("auto.done", fmt(d.freed)) : t("auto.doneZero"), "sparkle");
+  toast(d && d.maintText ? t("auto.maintDone", d.maintText) : d && d.freed > 0 ? t("auto.done", fmt(d.freed)) : t("auto.doneZero"), "sparkle");
   loadAuto();
   if (S.analyzed && !S.busy && !S.cleaning && !jobOf("scan")) { S.quietScan = true; analyze(); }
 });
@@ -11379,6 +11624,14 @@ $("#updPill").addEventListener("click", updShow);
 $("#updCheck").addEventListener("click", () => { if (UPD.info && UPD.info.newer) updShow(); else updCheck(true); });
 $("#updNews").addEventListener("click", () => showNews((S.info && S.info.version) || "", false));
 $("#updToggle").addEventListener("change", e => { S.settings.updates = e.target.checked; storeSettings(); });
+$("#bgTameToggle").addEventListener("change", e => { S.settings.bgTame = e.target.checked; storeSettings(); setTimeout(paintBgTame, 300); });
+$("#autoMaintToggle").addEventListener("change", e => { S.settings.autoMaint = e.target.checked; storeSettings(); });
+async function paintBgTame() {
+  const el = $("#bgTameStatus"); if (!el) return;
+  let v = null; try { v = await api.bgTameState(); } catch (e) {}
+  const names = v && v.tamed && v.tamed.length ? v.tamed.map(n => n.replace(/\.exe$/i, "")).join(", ") : "";
+  el.textContent = !v || !v.on ? "" : names ? t("set.bgTameNow", names) : t(v.now ? "set.bgTameNone" : "set.bgTameIdle");
+}
 
 /* =====================================================================
    Start
@@ -11750,11 +12003,22 @@ function paintDiskHealth() {
       <div class="dh-k">${esc([kind, d.size ? fmt(d.size) : "", (d.letters || []).length ? d.letters.map(l => l + ":").join(" ") : ""].filter(Boolean).join(" · "))}</div></div>
       <span class="dh-v ${d.verdict}">${esc(t("dh.v." + d.verdict))}</span></div>
       <div class="dh-sts">${st("dh.temp", d.temp != null && d.temp > 0 ? d.temp + " °C" : "—", tempCls)}${st("dh.wear", d.wear != null ? d.wear + "%" : "—", wearCls)}${st("dh.on", dhHours(d.hours))}${st("dh.errs", d.readUnc == null && d.writeUnc == null ? "—" : nfi(errs), errs ? "warn" : "")}</div>
-      ${(d.reasons || []).length ? `<ul class="dh-r">${d.reasons.map(r => `<li>${esc(t(r))}</li>`).join("")}</ul>` : d.noData ? `<div class="dh-note">${esc(t("dh.noData"))}</div>` : `<div class="dh-note ok">${esc(t("dh.okNote"))}</div>`}
+      ${(d.reasons || []).length ? `<ul class="dh-r">${d.reasons.map(r => `<li>${esc(t(r))}</li>`).join("")}</ul>` : d.noData ? `<div class="dh-note">${esc(t("dh.noData"))}</div>` : d.lowFree ? "" : `<div class="dh-note ok">${esc(t("dh.okNote"))}</div>`}
+      ${d.lowFree ? `<div class="dh-note warn">${esc(t(d.media === "HDD" ? "dh.lowFreeHdd" : "dh.lowFree", d.freePct))} <button class="linkish" data-dhclean>${esc(t("dh.lowFreeGo"))}</button></div>` : ""}
       <div class="dh-foot"><button class="btn small" data-dhmore="${esc(d.id)}">${ICONS.info}<span>${esc(t((d.reasons || []).length ? "dh.whatHelps" : "dh.detailsBtn"))}</span></button></div>
       </div>`;
   }).join("");
   el.querySelectorAll("[data-dhmore]").forEach(b => b.addEventListener("click", () => openDiskDetails(b.dataset.dhmore)));
+  el.querySelectorAll("[data-dhclean]").forEach(b => b.addEventListener("click", () => go("clean")));
+  if (v.trim === "off") {
+    el.insertAdjacentHTML("afterbegin", `<div class="notice warn dh-trim" style="grid-column:1/-1"><p><b>${esc(t("dh.trimOffT"))}</b> ${esc(t("dh.trimOffD"))}</p><button class="btn small primary" id="dhTrimOn" ${S.info && !S.info.admin ? "disabled" : ""}>${esc(t("dh.trimOn"))}</button></div>`);
+    $("#dhTrimOn").addEventListener("click", async e => {
+      e.currentTarget.disabled = true;
+      let ok = false; try { ok = await api.trimEnable(); } catch (x) {}
+      toast(t(ok ? "dh.trimDone" : "dh.trimFail"), ok ? "check" : "alert", ok ? "" : "warn");
+      if (ok) { HM.dh.trim = "on"; paintDiskHealth(); }
+    });
+  }
 }
 
 /* The details of one disk: what it reports, what Windows logged about it,
@@ -12652,6 +12916,8 @@ async function init() {
   $("#rpKeepToggle").checked = S.settings.rpKeep !== false;
   $("#forceToggle").checked = S.settings.forceClose !== false;
   $("#updToggle").checked = S.settings.updates !== false;
+  $("#bgTameToggle").checked = S.settings.bgTame !== false;
+  $("#autoMaintToggle").checked = S.settings.autoMaint !== false;
   $("#motionToggle").checked = S.settings.motion;
   $("#pulseToggle").checked = S.settings.pulse !== false;
   $("#autoDiskToggle").checked = S.settings.autoDisk !== false;
@@ -13170,6 +13436,15 @@ const Mock = (() => {
     undoAllTweaks: async ids => { await new Promise(r => setTimeout(r, 900)); return ids.map(id => { twOn[id] = false; delete mockApplied[id]; mockHist.push({ id: Date.now() * 1000 + Math.random(), at: Date.now() / 1000, tweak: id, action: "revert", source: "undo-all", ok: true, state: "off" }); return { id, ok: true }; }); },
     exportTweakProfile: async (install, st) => { window.__setup = { install, st }; return { ok: true, path: "C:\\Users\\demo\\Documents\\xKi4o-setup.json", count: 47 }; },
     importTweakProfile: async () => ({ ok: true, path: "C:\\Users\\demo\\Documents\\xKi4o-tweaks.json", steps: [{ id: "bing-off", on: true }, { id: "clock-seconds", on: true }, { id: "dark-mode", on: false }], same: 41, skipped: ["bitlocker-off", "debloat"] , install: q.get("imp") === "setup" ? ["VideoLAN.VLC", "7zip.7zip"] : undefined, settings: q.get("imp") === "setup" ? { uiMode: "easy", game: { auto: true, ram: true, apps: [] } } : undefined }),
+    bootPerf: async () => {
+      await new Promise(r => setTimeout(r, 250));
+      if (scen === "noboot") return { boots: [], slow: [], checked: Date.now() };
+      const d = Date.now(), day = 864e5;
+      return { checked: d, boots: [42100, 38900, 51200, 40300, 39800].map((v, i) => ({ at: d - i * day, total: v, main: Math.round(v * 0.4), post: Math.round(v * 0.6) })),
+        slow: [{ kind: "app", name: "Spotify", exe: "spotify.exe", times: 4, delay: 21500, last: d },
+          { kind: "service", name: "SysMain", times: 2, delay: 4200, last: d - day },
+          { kind: "driver", name: "Realtek Audio", times: 1, delay: 1800, last: d - 2 * day }] };
+    },
     listStartup: async () => {
       await new Promise(r => setTimeout(r, 700));
       return { items: mockStartup.map(e => Object.assign({}, e)) };
@@ -13634,6 +13909,16 @@ const Mock = (() => {
       const u = mockHist.slice().reverse().find(h => h.ok && !h.undone && (h.action === "apply" || h.action === "revert"));
       return { tweaks: tw, startup: su, files: mockRecycled.map(x => Object.assign({}, x)), undo: u || null, admin: scen !== "noadmin" };
     },
+    restoreToPoint: async seq => { await new Promise(r => setTimeout(r, 300)); window.__restoredTo = seq; return mockPoints.some(p => p.seq === seq) ? "" : "That restore point is gone."; },
+    batteryInfo: async () => { await new Promise(r => setTimeout(r, 200)); return scen === "nobat" ? { ok: false } : { ok: true, charge: 64, onAC: false, charging: false, cycles: 412, remaining: 29800, full: 44100, design: 57000, health: 77, draw: 11800, gets: 0, mins: 151, verdict: "worn" }; },
+    batteryReport: async () => { window.__batReport = true; return ""; },
+    throttleState: async () => {
+      const now = Date.now(), hot = scen === "hot";
+      const samples = Array.from({ length: 30 }, (_, i) => ({ at: now - (30 - i) * 5000, cpu: 70, limit: hot && i > 12 ? 58 : 100, perf: hot && i > 12 ? 62 : 108, temp: hot ? 94 : 61, bat: false }));
+      return { ok: true, now: samples[samples.length - 1], share: hot ? 0.6 : 0, samples, events: hot ? [{ at: now - 90000, secs: 85, limit: 58, temp: 94, reason: "heat" }] : [] };
+    },
+    bgTameState: async () => ({ on: S.settings.bgTame !== false, now: S.settings.bgTame !== false, tamed: S.settings.bgTame !== false ? ["searchindexer.exe", "tiworker.exe"] : [] }),
+    trimEnable: async () => { window.__trimOn = true; return true; },
     restorePointList: async () => { await new Promise(r => setTimeout(r, 600)); return { points: mockPoints.map(p => Object.assign({}, p)) }; },
     deleteRestorePoints: async keep => {
       await new Promise(r => setTimeout(r, 1200));
@@ -13788,7 +14073,12 @@ Object.assign(Mock, (() => {
     },
     wingetStop: async () => true,
     openAppInstaller: async () => true,
-    diskHealth: async () => { await new Promise(r => setTimeout(r, 300)); return { disks: health(), checked: Date.now() }; },
+    diskHealth: async () => {
+      await new Promise(r => setTimeout(r, 300));
+      const disks = health(); disks.forEach(d => { d.freePct = 41; });
+      if (scen === "full") { disks[0].freePct = 9; disks[0].lowFree = true; }
+      return { disks, checked: Date.now(), trim: scen === "notrim" && !window.__trimOn ? "off" : "on" };
+    },
     gameApps: async () => [
       { exe: "chrome.exe", name: "Google Chrome", path: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", mem: 1.6 * GB, count: 8, window: true, running: true },
       { exe: "discord.exe", name: "Discord", path: "C:\\Users\\demo\\AppData\\Local\\Discord\\app-1.0.9187\\Discord.exe", mem: 520 * MB, count: 4, window: true, running: true },

@@ -9,6 +9,7 @@ package main
 import (
 	"encoding/json"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 	"unsafe"
@@ -194,4 +195,36 @@ func shellNotifyCreated(path string) {
 	if b, err := windows.UTF16PtrFromString(recycleBinOf(path)); err == nil {
 		_, _, _ = procSHChangeNotify.Call(shcneUpdateDir, shcnfPathW, uintptr(unsafe.Pointer(b)), 0)
 	}
+}
+
+// restoreToPoint asks Windows to bring the system back to a restore point
+// (the same as System Restore does) and restarts the PC, where Windows does
+// the work. Personal files stay as they are. "" = started.
+func restoreToPoint(seq int) string {
+	if !app.admin {
+		return T("blocked.admin")
+	}
+	var p *restorePoint
+	l := restorePointList()
+	for i := range l.Points {
+		if l.Points[i].Seq == seq {
+			p = &l.Points[i]
+		}
+	}
+	if p == nil {
+		return T("rc.err.noPoint")
+	}
+	op := beginOp("restore", p.Desc, T("log.rpRestore", p.Desc), map[string]any{"seq": seq, "time": p.Time})
+	out, _, err := runPS(2*time.Minute, `$r = Invoke-CimMethod -Namespace root/default -ClassName SystemRestore -MethodName Restore -Arguments @{ SequenceNumber = [uint32]`+strconv.Itoa(seq)+` }; [int]$r.ReturnValue`)
+	if code := strings.TrimSpace(out); err != nil || code != "0" {
+		msg := T("rc.err.restore", code)
+		op.fail("", msg, nil)
+		op.end("", nil)
+		return msg
+	}
+	op.end(T("log.rpRestart"), nil)
+	if !restartPC() {
+		return T("rc.err.restart")
+	}
+	return ""
 }

@@ -326,6 +326,7 @@ func main() {
 		// Restore Center
 		"restoreOverview":     restoreOverview,
 		"restorePointList":    restorePointList,
+		"restoreToPoint":      restoreToPoint,
 		"restoreFiles":        restoreFiles,
 		"openRecycleBin":      openRecycleBin,
 		"deleteRestorePoints": deleteRestorePoints,

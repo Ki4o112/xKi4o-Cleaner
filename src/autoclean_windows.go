@@ -246,6 +246,7 @@ func runAutoClean(source string) {
 		m := autoMaintenance(sum.freed)
 		ev["maint"] = m
 		text := strings.Join(maintLines(m, T), " · ")
+		ev["maintText"] = text
 		shown := false
 		if app.w != nil {
 			done := make(chan bool, 1)

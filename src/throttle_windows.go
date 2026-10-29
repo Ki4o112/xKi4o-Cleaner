@@ -153,7 +153,7 @@ func throttleLoop() {
 		}
 		th.mu.Unlock()
 		if notify {
-			logEvent("system", "warn", "", T("th.log", int(ev.Limit), T("th.r."+ev.Reason)), map[string]any{"limit": ev.Limit, "temp": ev.TempC, "reason": ev.Reason})
+			logEvent("optimize", "warn", "", T("th.log", int(ev.Limit), T("th.r."+ev.Reason)), map[string]any{"limit": ev.Limit, "temp": ev.TempC, "reason": ev.Reason})
 			emit("throttle", ev)
 			if app.w != nil {
 				app.w.Dispatch(func() { trayNotify(T("th.nTitle", int(ev.Limit)), T("th.tip."+ev.Reason)) })
