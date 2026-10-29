@@ -2,8 +2,8 @@
 1 24 "app.manifest"
 
 1 VERSIONINFO
-FILEVERSION     4,17,0,0
-PRODUCTVERSION  4,17,0,0
+FILEVERSION     4,18,0,0
+PRODUCTVERSION  4,18,0,0
 FILEFLAGSMASK   0x3fL
 FILEFLAGS       0x0L
 FILEOS          0x40004L
@@ -16,12 +16,12 @@ BEGIN
     BEGIN
       VALUE "CompanyName",      "xKi4o"
       VALUE "FileDescription",  L"xKi4o Cleaner \x2014 made by xKi4o"
-      VALUE "FileVersion",      "4.17.0.0"
+      VALUE "FileVersion",      "4.18.0.0"
       VALUE "InternalName",     "xKi4oCleaner"
       VALUE "LegalCopyright",   L"\x00A9 2026 xKi4o. All rights reserved."
       VALUE "OriginalFilename", "xKi4oCleaner.exe"
       VALUE "ProductName",      "xKi4o Cleaner"
-      VALUE "ProductVersion",   "4.17.0.0"
+      VALUE "ProductVersion",   "4.18.0.0"
       VALUE "Comments",         "Made by xKi4o"
       VALUE "Author",           "xKi4o"
     END

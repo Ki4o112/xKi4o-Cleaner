@@ -3,6 +3,28 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.18.0 — 2026-10-29
+
+### English
+- Home: modes — Balanced, Games, Saver set the power plan, background work and game mode in one click; cards for the Windows start, heat and the battery; how much the app has freed in all
+- Processes: priority (now or remembered for the program), Efficiency mode and pause. Games are never touched, so no anti-cheat flags the app
+- Game mode switches to the best performance power plan while you play and gives yours back after
+- Memory: who uses it, and a warning when a program keeps growing (a leak)
+- Duplicates: similar photos — resized, re-saved or edited copies, with pictures
+- Startup: a program can start 30 s to 5 min after signing in, so the desktop is ready sooner
+- Speed test: ping under load (bufferbloat), graded A to D with what helps
+- Passwords: a strong password generator
+
+### Български
+- Начало: режими — Баланс, Игри, Пестене сменят захранването, фоновите задачи и game mode с едно натискане; карти за тръгването на Windows, температурата и батерията; колко е освободила програмата общо
+- Процеси: приоритет (сега или запомнен за програмата), Efficiency mode и пауза. Игрите не се докосват, за да не засече програмата anti-cheat
+- Game mode превключва на режим за най-добра производителност по време на игра и връща твоя след нея
+- Памет: кой я използва и предупреждение, когато програма расте постоянно (изтичане)
+- Дубликати: подобни снимки — смалени, презаписани или обработени копия, със снимки
+- Стартиране: програма може да тръгва 30 s до 5 мин след влизането, за да е готов работният плот по-бързо
+- Тест за скорост: пинг при натоварване (bufferbloat) с оценка от A до D и какво помага
+- Пароли: генератор на силни пароли
+
 ## 4.17.0 — 2026-10-29
 
 ### English

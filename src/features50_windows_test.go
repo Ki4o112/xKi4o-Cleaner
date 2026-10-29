@@ -402,7 +402,7 @@ func TestStartupDelay(t *testing.T) {
 		t.Fatal("no task")
 	}
 	out, _, _ := runQuiet(30*time.Second, sys32("schtasks.exe"), "/Query", "/TN", task, "/XML")
-	if !strings.Contains(out, "PT60S") || !strings.Contains(out, "LeastPrivilege") {
+	if !(strings.Contains(out, "PT60S") || strings.Contains(out, "PT1M")) || !strings.Contains(out, "LeastPrivilege") { // Windows writes 60 s as PT1M
 		t.Fatalf("task xml %s", out)
 	}
 	e, n := find()
