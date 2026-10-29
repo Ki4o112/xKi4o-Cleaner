@@ -46,7 +46,8 @@ func bootGet() bootState {
 		_ = os.Remove(bootLnk()) // the 4.15.1 shortcut
 		bootApprovedClear()
 	}
-	app.trayClose.Store(st.On)
+	bootOn.Store(st.On)
+	app.trayClose.Store(st.On || startTray.Load())
 	return st
 }
 

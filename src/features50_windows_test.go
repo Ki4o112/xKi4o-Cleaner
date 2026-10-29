@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 	"time"
+	"unsafe"
 
 	"golang.org/x/sys/windows"
 	"golang.org/x/sys/windows/registry"
@@ -450,5 +451,54 @@ func TestPowerProfile(t *testing.T) {
 	}
 	if r := powerProfile("nope"); r.OK {
 		t.Fatal("an unknown mode")
+	}
+}
+
+// The real app on this PC: started with Windows (--tray) or with "start in
+// the tray" on, its window stays hidden even after the page has loaded; a
+// plain start shows it.
+func TestStartsInTray(t *testing.T) {
+	changesThisPC(t)
+	if os.Getenv("XKI4O_APP_TESTS") != "1" {
+		t.Skip("starts the whole app: only with XKI4O_APP_TESTS=1")
+	}
+	exe := filepath.Join(t.TempDir(), "xKi4oCleaner.exe")
+	build := exec.Command("go", "build", "-o", exe, ".")
+	build.Env = append(os.Environ(), "CGO_ENABLED=0")
+	if out, err := build.CombinedOutput(); err != nil {
+		t.Fatalf("build: %v\n%s", err, out)
+	}
+	data := t.TempDir()
+	cls, _ := windows.UTF16PtrFromString("webview")
+	title, _ := windows.UTF16PtrFromString(appName)
+	run := func(settings string, args ...string) (found, visible bool) {
+		_ = os.MkdirAll(filepath.Join(data, "xKi4oCleaner"), 0o755)
+		_ = os.WriteFile(filepath.Join(data, "xKi4oCleaner", "settings.json"), []byte(settings), 0o644)
+		cmd := exec.Command(exe, args...)
+		cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data)
+		if err := cmd.Start(); err != nil {
+			t.Fatal(err)
+		}
+		defer func() { _ = cmd.Process.Kill(); _ = cmd.Wait(); time.Sleep(time.Second) }()
+		var h uintptr
+		for i := 0; i < 60 && h == 0; i++ {
+			time.Sleep(500 * time.Millisecond)
+			h, _, _ = procFindWindowW.Call(uintptr(unsafe.Pointer(cls)), uintptr(unsafe.Pointer(title)))
+		}
+		if h == 0 {
+			return false, false
+		}
+		time.Sleep(12 * time.Second) // the page loads and says it is ready
+		v, _, _ := procIsWindowVisible.Call(h)
+		return true, v != 0
+	}
+	if found, vis := run(`{"lang":"en"}`, "--tray"); !found || vis {
+		t.Errorf("started with Windows: window found %v, visible %v", found, vis)
+	}
+	if found, vis := run(`{"lang":"en","startTray":true}`); !found || vis {
+		t.Errorf("start in the tray on: window found %v, visible %v", found, vis)
+	}
+	if found, vis := run(`{"lang":"en"}`); !found || !vis {
+		t.Errorf("a plain start: window found %v, visible %v", found, vis)
 	}
 }

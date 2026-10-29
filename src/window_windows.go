@@ -387,10 +387,10 @@ func winTray(hint bool) bool {
 // after sign-in the taskbar may not be there yet: the icon is tried again
 // every 2 seconds (and Explorer's "TaskbarCreated" adds it too); after a
 // minute without it the window shows, so the app is never out of reach.
-func trayStart() {
+func trayStart(hint bool) {
 	win.inTray.Store(true)
 	_, _, _ = procShowWindow.Call(app.hwnd, swHide)
-	if trayAdd(false) {
+	if trayAdd(hint) {
 		return
 	}
 	go func() {
@@ -589,3 +589,8 @@ func signalRunningCopy() bool {
 	}
 	return true
 }
+
+var (
+	startTray atomic.Bool // Settings: the app starts hidden in the notification area
+	bootOn    atomic.Bool // it starts with Windows
+)

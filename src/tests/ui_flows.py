@@ -586,6 +586,12 @@ async def main():
         await pg.click("[data-pf=balanced]")
         check("modes: back to Balanced gives game mode back as it was", await wait_for(pg, "window.__profile === 'balanced' && gmCfg().auto === false"))
         await pg.close()
+        # settings: start in the tray
+        pg = await page(b, "?lang=en", start="settings")
+        check("settings: start in the tray is off by default", not await pg.evaluate("document.querySelector('#startTrayToggle').checked"))
+        await pg.click("#startTrayToggle")
+        check("settings: start in the tray is saved", await wait_for(pg, "S.settings.startTray === true"))
+        await pg.close()
         # passwords: the generator
         pg = await page(b, "?lang=en", start="pass")
         v1 = await pg.text_content("#pgOut")

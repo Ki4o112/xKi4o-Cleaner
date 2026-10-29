@@ -3148,6 +3148,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
           <div class="item"><div class="i-ico" data-icon="upload"></div><div><div class="t" data-i="mv.t"></div><div class="d" data-i="mv.d"></div></div>
             <div class="mv-btns"><button class="btn small" id="mvExport"><span data-icon="download"></span><span data-i="mv.export"></span></button><button class="btn small" id="mvImport"><span data-icon="upload"></span><span data-i="mv.import"></span></button></div></div>
           <div class="item"><div class="i-ico" data-icon="power"></div><div><div class="t" data-i="boot.t"></div><div class="d" data-i="boot.d"></div><div class="su-e" id="bootErr" hidden></div></div><input type="checkbox" class="switch" id="bootToggle" aria-label="Start with Windows"></div>
+          <div class="item"><div class="i-ico" data-icon="window"></div><div><div class="t" data-i="set.startTray"></div><div class="d" data-i="set.startTrayD"></div></div><input type="checkbox" class="switch" id="startTrayToggle"></div>
           <div class="item"><div class="i-ico" data-icon="sparkle"></div><div><div class="t" data-i="um.set"></div><div class="d" data-i="um.setD"></div></div>
             <div class="seg blue" id="segUi"></div></div>
           <div class="item"><div class="i-ico" data-icon="monitor"></div><div><div class="t" data-i="set.theme"></div><div class="d" data-i="set.themeD"></div></div>
@@ -3763,6 +3764,10 @@ bg: {
   "pg.s1": "Средна (~{0} бита).",
   "pg.s2": "Силна (~{0} бита).",
   "pg.s3": "Много силна (~{0} бита) — не може да се отгатне.",
+  "set.startTray": "Тръгвай скрита в трея",
+  "set.startTrayD": "Програмата се отваря само като иконка долу до часовника — без целия прозорец, и при старт на Windows, и когато я пуснеш сам. Отваря се с клик на иконката.",
+  "set.startTrayOn": "Следващия път програмата ще тръгне в трея",
+  "set.startTrayOff": "Програмата ще се отваря на цял прозорец (при старт на Windows пак тръгва в трея)",
   "pc.more": "Приоритет и още",
   "pc.title": "{0}",
   "pc.subMany": "{0} процеса",
@@ -4985,6 +4990,10 @@ en: {
   "pg.s1": "Fair (~{0} bits).",
   "pg.s2": "Strong (~{0} bits).",
   "pg.s3": "Very strong (~{0} bits) — it cannot be guessed.",
+  "set.startTray": "Start hidden in the tray",
+  "set.startTrayD": "The app opens only as an icon by the clock — without the whole window, both when Windows starts and when you start it yourself. Click the icon to open it.",
+  "set.startTrayOn": "Next time the app starts in the tray",
+  "set.startTrayOff": "The app opens in its full window (with Windows it still starts in the tray)",
   "pc.more": "Priority and more",
   "pc.title": "{0}",
   "pc.subMany": "{0} processes",
@@ -12084,6 +12093,7 @@ $("#updPill").addEventListener("click", updShow);
 $("#updCheck").addEventListener("click", () => { if (UPD.info && UPD.info.newer) updShow(); else updCheck(true); });
 $("#updNews").addEventListener("click", () => showNews((S.info && S.info.version) || "", false));
 $("#updToggle").addEventListener("change", e => { S.settings.updates = e.target.checked; storeSettings(); });
+$("#startTrayToggle").addEventListener("change", e => { S.settings.startTray = e.target.checked; storeSettings(); toast(t(e.target.checked ? "set.startTrayOn" : "set.startTrayOff"), "window"); });
 $("#bgTameToggle").addEventListener("change", e => { S.settings.bgTame = e.target.checked; storeSettings(); setTimeout(paintBgTame, 300); });
 $("#autoMaintToggle").addEventListener("change", e => { S.settings.autoMaint = e.target.checked; storeSettings(); });
 async function paintBgTame() {
@@ -13423,6 +13433,7 @@ async function init() {
   $("#forceToggle").checked = S.settings.forceClose !== false;
   $("#updToggle").checked = S.settings.updates !== false;
   $("#bgTameToggle").checked = S.settings.bgTame !== false;
+  $("#startTrayToggle").checked = S.settings.startTray === true;
   $("#autoMaintToggle").checked = S.settings.autoMaint !== false;
   $("#motionToggle").checked = S.settings.motion;
   $("#pulseToggle").checked = S.settings.pulse !== false;

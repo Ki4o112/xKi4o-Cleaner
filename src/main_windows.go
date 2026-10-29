@@ -131,8 +131,8 @@ func main() {
 	app.w = w
 	defer w.Destroy()
 	applyFrame(app.hwnd, ownFrame) // now the page leaves its top edge for resizing
-	if slices.Contains(os.Args[1:], "--tray") {
-		trayStart() // started with Windows: straight to the notification area
+	if boot := slices.Contains(os.Args[1:], "--tray"); boot || startTray.Load() {
+		trayStart(!boot) // started with Windows (or the option is on): straight to the notification area
 	} else {
 		bringToFront(app.hwnd)
 	}
@@ -389,7 +389,11 @@ func main() {
 		"winTray":     winTray,
 		"winFrame":    winFrame,
 		"winReady": func() map[string]any {
-			w.Dispatch(func() { bringToFront(app.hwnd) }) // the page is there: in front, even if loading took a while
+			w.Dispatch(func() {
+				if !win.inTray.Load() { // started in the tray: it stays there
+					bringToFront(app.hwnd) // the page is there: in front, even if loading took a while
+				}
+			})
 			return map[string]any{"own": win.own.Load(), "max": win.max.Load(), "active": true}
 		},
 	}
@@ -426,6 +430,8 @@ func applySettings(m map[string]any) {
 		setLang(l)
 	}
 	updOff.Store(m["updates"] == false)
+	startTray.Store(m["startTray"] == true)
+	app.trayClose.Store(startTray.Load() || bootOn.Load()) // closing hides it in the tray
 	bgOff.Store(m["bgTame"] == false)
 	if g, ok := m["game"].(map[string]any); ok {
 		gmCfgCache.Store(g)

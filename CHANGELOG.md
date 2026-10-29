@@ -14,6 +14,8 @@ a new version before it updates, and once after updating.
 - Startup: a program can start 30 s to 5 min after signing in, so the desktop is ready sooner
 - Speed test: ping under load (bufferbloat), graded A to D with what helps
 - Passwords: a strong password generator
+- Settings: start hidden in the tray (by the clock) instead of the whole window
+- Fixed: started with Windows, the app showed its whole window once the page had loaded instead of staying in the tray
 
 ### Български
 - Начало: режими — Баланс, Игри, Пестене сменят захранването, фоновите задачи и game mode с едно натискане; карти за тръгването на Windows, температурата и батерията; колко е освободила програмата общо
@@ -24,6 +26,8 @@ a new version before it updates, and once after updating.
 - Стартиране: програма може да тръгва 30 s до 5 мин след влизането, за да е готов работният плот по-бързо
 - Тест за скорост: пинг при натоварване (bufferbloat) с оценка от A до D и какво помага
 - Пароли: генератор на силни пароли
+- Настройки: тръгване скрита в трея (до часовника) вместо на цял прозорец
+- Оправено: при старт с Windows програмата показваше целия прозорец, щом се зареди, вместо да остане в трея
 
 ## 4.17.0 — 2026-10-29
 
