@@ -55,7 +55,7 @@ func TestSimilarPictures(t *testing.T) {
 	_ = os.MkdirAll(filepath.Join(root, "b"), 0o755)
 	savePic(t, filepath.Join(root, "a", "big.png"), testPicture(800, 600, 0))
 	savePic(t, filepath.Join(root, "b", "small copy.jpg"), testPicture(320, 240, 0)) // resized, another format
-	savePic(t, filepath.Join(root, "b", "other.jpg"), func() image.Image {          // something else
+	savePic(t, filepath.Join(root, "b", "other.jpg"), func() image.Image {           // something else
 		img := image.NewRGBA(image.Rect(0, 0, 400, 300))
 		for y := 0; y < 300; y++ {
 			for x := 0; x < 400; x++ {

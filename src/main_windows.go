@@ -195,6 +195,7 @@ func main() {
 		"batteryReport":        batteryReport,
 		"trimEnable":           trimEnable,
 		"bgTameState":          bgTameState,
+		"startupDelay":         startupDelay,
 		"setStartup":           setStartup,
 		"restoreStartup":       restoreStartup,
 		"startupLog":           startupLogList,

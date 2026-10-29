@@ -340,3 +340,78 @@ func TestGamePower(t *testing.T) {
 		t.Fatalf("power mode after %s, want %s", ov, ov0)
 	}
 }
+
+// Delayed start end to end: a Run entry becomes a sign-in task with a
+// delay, the page shows it once, and taking it back restores the entry.
+func TestStartupDelay(t *testing.T) {
+	changesThisPC(t)
+	initPaths()
+	logInit(t.TempDir())
+	was := app.admin
+	defer func() { app.admin = was }()
+	app.admin = isElevated()
+	if !app.admin {
+		t.Skip("needs administrator rights")
+	}
+	dir := t.TempDir()
+	exe := filepath.Join(dir, "xki4o-delay-probe.exe")
+	b, _ := os.ReadFile(sys32("ping.exe"))
+	if err := os.WriteFile(exe, b, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	k, err := registry.OpenKey(registry.CURRENT_USER, `Software\Microsoft\Windows\CurrentVersion\Run`, registry.SET_VALUE)
+	if err != nil {
+		t.Fatal(err)
+	}
+	const name = "xKi4oDelayProbe"
+	if err := k.SetStringValue(name, `"`+exe+`" -n 1 127.0.0.1`); err != nil {
+		t.Fatal(err)
+	}
+	defer func() { _ = k.DeleteValue(name); k.Close(); _ = os.Remove(delaysPath()) }()
+	key := "reg|user|" + name
+	find := func() (startupEntry, int) {
+		n := 0
+		var e startupEntry
+		for _, x := range listStartup().Items {
+			if x.Key == key {
+				e = x
+			}
+			if strings.Contains(x.Key, "xKi4oDelayProbe") {
+				n++
+			}
+		}
+		return e, n
+	}
+	e, _ := find()
+	t.Logf("entry %+v", e)
+	if !e.Enabled || e.Kind != "app" || !e.Exists {
+		t.Fatalf("entry %+v", e)
+	}
+	if r := startupDelay(key, 60); !r.OK {
+		t.Fatalf("delay: %+v", r)
+	}
+	task := delayTaskName(name)
+	if _, code, _ := runQuiet(30*time.Second, sys32("schtasks.exe"), "/Query", "/TN", task); code != 0 {
+		t.Fatal("no task")
+	}
+	out, _, _ := runQuiet(30*time.Second, sys32("schtasks.exe"), "/Query", "/TN", task, "/XML")
+	if !strings.Contains(out, "PT60S") || !strings.Contains(out, "LeastPrivilege") {
+		t.Fatalf("task xml %s", out)
+	}
+	e, n := find()
+	if e.Delayed != 60 || !e.Enabled || n != 1 {
+		t.Fatalf("shown %+v (%d entries)", e, n)
+	}
+	if on, _, _, _ := approvedState(registry.CURRENT_USER, `Run`, name); on {
+		t.Fatal("the entry itself stayed on")
+	}
+	if r := startupDelay(key, 0); !r.OK {
+		t.Fatalf("undo: %+v", r)
+	}
+	if _, code, _ := runQuiet(30*time.Second, sys32("schtasks.exe"), "/Query", "/TN", task); code == 0 {
+		t.Fatal("the task stayed")
+	}
+	if e, _ := find(); e.Delayed != 0 || !e.Enabled {
+		t.Fatalf("after undo %+v", e)
+	}
+}

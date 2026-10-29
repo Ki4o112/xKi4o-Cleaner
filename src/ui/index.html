@@ -933,6 +933,19 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .sim-m { color: var(--muted); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sim-c .ibtn { position: absolute; right: 12px; top: 12px; background: rgba(0,0,0,.55); }
 .sim-c .dg-keep { justify-self: start; }
+.sp-bloat { grid-column: 1 / -1; display: flex; gap: 14px; align-items: center; padding: 12px 14px; border-radius: var(--r-l); background: var(--card-2); border: 1px solid var(--edge); }
+.sp-bloat .t { font-weight: 600; font-size: 13px; }
+.sp-bloat .d { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.sp-grade { flex: none; width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; font-weight: 900; font-size: 22px; color: #0b0b0b; background: var(--mint, #3ee8b0); }
+.sp-bloat.gB .sp-grade { background: #b8e986; } .sp-bloat.gC .sp-grade { background: var(--amber); } .sp-bloat.gD .sp-grade { background: var(--red, #ff6b6b); }
+.tw-b.delay { display: inline-flex; gap: 4px; align-items: center; color: var(--blue-hi, #c8f560); }
+.tw-b.delay svg { width: 11px; height: 11px; }
+.ibtn.on { color: var(--blue-hi, #c8f560); }
+.su-delays { display: grid; gap: 8px; }
+.su-dl { display: flex; justify-content: space-between; gap: 12px; align-items: center; text-align: left; padding: 12px 14px; border-radius: 12px; background: var(--card-2); border: 1px solid var(--edge); color: inherit; font: inherit; cursor: pointer; }
+.su-dl span { color: var(--muted); font-size: 12px; }
+.su-dl.on { border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue) inset; }
+.su-dl:hover { background: var(--card); }
 /* ================= Startup Manager ================= */
 .bp-card { background: var(--card); border: 1px solid var(--edge); border-radius: var(--r-l); padding: 16px 18px; margin-top: 12px; }
 .bp-card:empty { display: none; }
@@ -3668,6 +3681,34 @@ bg: {
   "dup.simM": "Изглеждат еднакво — провери, преди да триеш",
   "dup.best": "Най-голяма",
   "dup.keepBig": "Запази най-голямата",
+  "hm.boot": "Тръгване на Windows",
+  "hm.bootD": "Най-много бави: {0} (+{1})",
+  "hm.bootD0": "Нищо не бави тръгването",
+  "hm.bootBtn": "Стартиране",
+  "hm.heat": "Температура и скорост",
+  "hm.heatHeld": "Процесорът се забавя {0}% от времето",
+  "hm.heatOK": "Пълна скорост ({0}%)",
+  "hm.heatBtn": "Подробно",
+  "hm.bat": "Батерия",
+  "hm.batHealth": "Здраве {0}%",
+  "isp.bloatT": "Пинг при натоварване:",
+  "isp.bloat.A": "отличен", "isp.bloat.B": "добър", "isp.bloat.C": "лош за игри", "isp.bloat.D": "много лош (bufferbloat)",
+  "isp.loaded": "Докато се сваля: {0} ms, докато се качва: {1} ms (без натоварване {2} ms).",
+  "isp.bloatD.A": "Игрите и разговорите няма да лагват, дори когато някой сваля.",
+  "isp.bloatD.B": "Малко лаг, когато линията е пълна — повечето хора не го усещат.",
+  "isp.bloatD.C": "Когато някой сваля или качва, игрите и разговорите ще лагват. Помага „SQM“ / „Smart Queue“ в рутера.",
+  "isp.bloatD.D": "Рутерът задържа данните и пингът скача много, щом линията се напълни. Включи „SQM“ / „Smart Queue“ / QoS в рутера.",
+  "su.delayT": "Тръгва по-късно",
+  "su.delayTitle": "Кога да тръгва {0}",
+  "su.delaySub": "Програмата тръгва малко след влизането в Windows — работният плот е готов по-бързо",
+  "su.now": "Веднага с Windows", "su.nowD": "Както досега",
+  "su.dlD": "след влизането",
+  "su.sec": "{0} s", "su.min": "{0} мин",
+  "su.delayNote": "Записът на програмата се изключва и задача в Task Scheduler (без администраторски права) я пуска след избраното време. Връща се оттук по всяко време.",
+  "su.delayedB": "след {0}",
+  "su.delayDone": "{0} ще тръгва {1} след влизането",
+  "su.delayOff": "{0} тръгва веднага с Windows",
+  "bp.later": "По-късно",
   "pc.more": "Приоритет и още",
   "pc.title": "{0}",
   "pc.subMany": "{0} процеса",
@@ -3893,7 +3934,7 @@ bg: {
   "hm.doAllOk": "Започни", "hm.r.rp": "Точка за възстановяване (последната е от преди повече от 2 седмици)",
   "hm.r.clean": "Почистване на боклуците · {0} (само безопасните категории, отворените програми се пропускат)", "hm.r.ram": "Освобождаване на паметта",
   "hm.r.upd": "Обнови {0} програми през winget", "hm.r.updW": "Инсталира нови версии — по избор, затова не е отметнато.", "hm.queued": "На опашка: {0} стъпки",
-  "hm.note": "Оценката се смята от: боклуците, паметта, свободното място, здравето на дисковете, точките за възстановяване, грешките в дневника и чакащите обновления.",
+  "hm.note": "Оценката се смята от: боклуците, паметта, свободното място, здравето на дисковете, точките за възстановяване, грешките в дневника, колко бавно тръгва Windows, прегряването и износването на батерията.",
   "dh.title": "Здраве на дисковете", "dh.sub": "Какво отчитат самите дискове (S.M.A.R.T.): температура, износване на SSD, работни часове и грешки. Само се чете — нищо не се променя.",
   "dh.refresh": "Прочети отново", "dh.disk": "Диск {0}", "dh.none": "Не са намерени дискове.", "dh.temp": "Температура", "dh.wear": "Износване", "dh.on": "Работил",
   "dh.errs": "Грешки", "dh.hours": "{0} ч.", "dh.days": "{0} дни", "dh.years": "{0} г.", "dh.v.good": "Добро", "dh.v.warn": "Внимание", "dh.v.bad": "Лошо",
@@ -4845,6 +4886,34 @@ en: {
   "dup.simM": "They look the same — check before deleting",
   "dup.best": "Biggest",
   "dup.keepBig": "Keep the biggest",
+  "hm.boot": "Windows start",
+  "hm.bootD": "Slows it most: {0} (+{1})",
+  "hm.bootD0": "Nothing slows the start",
+  "hm.bootBtn": "Startup",
+  "hm.heat": "Heat and speed",
+  "hm.heatHeld": "The processor slows down {0}% of the time",
+  "hm.heatOK": "Full speed ({0}%)",
+  "hm.heatBtn": "Details",
+  "hm.bat": "Battery",
+  "hm.batHealth": "Health {0}%",
+  "isp.bloatT": "Ping under load:",
+  "isp.bloat.A": "excellent", "isp.bloat.B": "good", "isp.bloat.C": "bad for games", "isp.bloat.D": "very bad (bufferbloat)",
+  "isp.loaded": "While downloading: {0} ms, while uploading: {1} ms (idle {2} ms).",
+  "isp.bloatD.A": "Games and calls will not lag, even while someone downloads.",
+  "isp.bloatD.B": "A little lag when the line is full — most people do not notice it.",
+  "isp.bloatD.C": "When someone downloads or uploads, games and calls will lag. “SQM” / “Smart Queue” in the router helps.",
+  "isp.bloatD.D": "The router holds data back and the ping jumps a lot once the line is full. Turn on “SQM” / “Smart Queue” / QoS in the router.",
+  "su.delayT": "Start later",
+  "su.delayTitle": "When {0} starts",
+  "su.delaySub": "The program starts a little after signing in to Windows — the desktop is ready sooner",
+  "su.now": "Right away with Windows", "su.nowD": "As before",
+  "su.dlD": "after signing in",
+  "su.sec": "{0} s", "su.min": "{0} min",
+  "su.delayNote": "The program's entry is turned off and a task in Task Scheduler (without administrator rights) starts it after the chosen time. It can be taken back here any time.",
+  "su.delayedB": "after {0}",
+  "su.delayDone": "{0} will start {1} after signing in",
+  "su.delayOff": "{0} starts right away with Windows",
+  "bp.later": "Later",
   "pc.more": "Priority and more",
   "pc.title": "{0}",
   "pc.subMany": "{0} processes",
@@ -5062,7 +5131,7 @@ en: {
   "hm.doAllD": "The chosen steps go into the queue and run one after another (see the bar at the bottom). Nothing personal is deleted.", "hm.doAllOk": "Start",
   "hm.r.rp": "A restore point (the last one is more than 2 weeks old)", "hm.r.clean": "Clean the junk · {0} (safe categories only; open apps are skipped)",
   "hm.r.ram": "Free up memory", "hm.r.upd": "Update {0} programs with winget", "hm.r.updW": "Installs new versions — optional, so it is not ticked.", "hm.queued": "Queued: {0} steps",
-  "hm.note": "The score comes from: junk, memory, free space, disk health, restore points, errors in the log and pending updates.", "dh.title": "Disk health",
+  "hm.note": "The score comes from: junk, memory, free space, disk health, restore points, errors in the log, how slowly Windows starts, overheating and battery wear.", "dh.title": "Disk health",
   "dh.sub": "What the drives report about themselves (S.M.A.R.T.): temperature, SSD wear, power-on time and errors. Read-only — nothing is changed.", "dh.refresh": "Read again",
   "dh.disk": "Disk {0}", "dh.none": "No disks found.", "dh.temp": "Temperature", "dh.wear": "Wear", "dh.on": "Powered on", "dh.errs": "Errors", "dh.hours": "{0} h",
   "dh.days": "{0} days", "dh.years": "{0} yrs", "dh.v.good": "Good", "dh.v.warn": "Caution", "dh.v.bad": "Bad", "dh.v.unknown": "No data",
@@ -7790,6 +7859,7 @@ function renderStartup() {
     if (!e.exists || e.invalid) badges.push(`<span class="tw-b risky">${esc(t(e.invalid ? "su.invalid" : "su.missing"))}</span>`);
     if ((e.warnings || []).length) badges.push(`<span class="tw-b caution">${esc(t("su.check"))}</span>`);
     if (e.signed === "NotSigned") badges.push(`<span class="tw-b">${esc(t("su.unsigned"))}</span>`);
+    if (e.delayed) badges.push(`<span class="tw-b delay">${ICONS.clock}${esc(t("su.delayedB", suDelayText(e.delayed)))}</span>`);
     const warn = (e.warnings || []).map(w => t("su.w." + w)).join(" ");
     const det = SU.open[e.key] ? `<dl class="su-det">
       <dt>${esc(t("su.d.command"))}</dt><dd>${esc(e.command || "—")}</dd>
@@ -7809,6 +7879,7 @@ function renderStartup() {
         <div class="su-m"><span class="pub">${esc(e.publisher || t("su.noPub"))}</span><span class="exe"><bdi>${esc(e.exe || e.command || "")}</bdi></span></div>
         ${warn ? `<div class="su-w">${esc(warn)}</div>` : ""}${SU.err[e.key] ? `<div class="su-e">${esc(SU.err[e.key])}</div>` : ""}</div>
       <div class="su-ctl">
+        ${suCanDelay(e) ? `<button class="ibtn ${e.delayed ? "on" : ""}" data-sudelay title="${esc(t("su.delayT"))}" aria-label="${esc(t("su.delayT"))}" ${canToggle ? "" : "disabled"}>${ICONS.clock}</button>` : ""}
         <button class="ibtn" data-sudet title="${esc(t("su.details"))}" aria-label="${esc(t("su.details"))}">${ICONS.list}</button>
         <button class="ibtn" data-suopen ${e.exists || e.lnk ? "" : "disabled"} title="${esc(t("pv.open"))}" aria-label="${esc(t("pv.open"))}">${ICONS.open}</button>
         ${SU.busy === e.key ? '<span class="spin" style="margin:0 15px"></span>' : `<input type="checkbox" class="switch" data-susw ${e.enabled ? "checked" : ""} ${canToggle ? "" : "disabled"} aria-label="${esc(e.name)}">`}
@@ -7817,6 +7888,7 @@ function renderStartup() {
   list.querySelectorAll("[data-su]").forEach(row => {
     const key = row.dataset.su, e = SU.items.find(x => x.key === key);
     row.querySelector("[data-sudet]").addEventListener("click", () => { SU.open[key] = !SU.open[key]; renderStartup(); });
+    const dl = row.querySelector("[data-sudelay]"); if (dl) dl.addEventListener("click", () => suDelayMenu(e));
     row.querySelector("[data-suopen]").addEventListener("click", () => api.showInFolder(e.exists ? e.exe : e.lnk));
     const sw = row.querySelector("[data-susw]");
     if (sw) sw.addEventListener("change", () => toggleStartup(e, sw.checked));
@@ -7847,13 +7919,37 @@ function renderBoot() {
   }
   const rows = slow.map((x, i) => {
     const e = x.kind === "app" && x.exe ? SU.items.find(s => s.exe && s.exe.toLowerCase().split("\\").pop() === x.exe) : null;
-    const ctl = e ? (e.enabled ? `<button class="btn small" data-bpoff="${i}">${esc(t("bp.off"))}</button>` : `<span class="m">${esc(t("bp.isOff"))}</span>`) : "";
+    const ctl = e ? (e.delayed ? `<span class="m">${esc(t("su.delayedB", suDelayText(e.delayed)))}</span>` : e.enabled ? `${suCanDelay(e) ? `<button class="btn small" data-bpdl="${i}">${ICONS.clock}<span>${esc(t("bp.later"))}</span></button>` : ""}<button class="btn small" data-bpoff="${i}">${esc(t("bp.off"))}</button>` : `<span class="m">${esc(t("bp.isOff"))}</span>`) : "";
     return `<div class="bp-row"><span class="tw-b">${esc(t("bp.k." + x.kind))}</span><span class="n" title="${esc(x.name)}">${esc(x.name)}</span><span class="m">${esc(t("bp.times", x.times, bpSecs(x.delay)))}</span>${ctl}</div>`;
   }).join("");
   el.innerHTML = `<div class="bp-h" style="margin-top:0">${esc(t("bp.title"))}</div>${top}<div class="bp-h">${esc(t("bp.slowT"))}</div>${rows || `<div class="bp-empty">${esc(t("bp.slowNone"))}</div>`}`;
+  el.querySelectorAll("[data-bpdl]").forEach(btn => btn.addEventListener("click", () => {
+    const x = slow[+btn.dataset.bpdl], e = SU.items.find(s => s.exe && s.exe.toLowerCase().split("\\").pop() === x.exe);
+    if (e) suDelayMenu(e);
+  }));
   el.querySelectorAll("[data-bpoff]").forEach(btn => btn.addEventListener("click", () => {
     const x = slow[+btn.dataset.bpoff], e = SU.items.find(s => s.exe && s.exe.toLowerCase().split("\\").pop() === x.exe);
     if (e) toggleStartup(e, false);
+  }));
+}
+/* delayed start: the program starts a little after signing in */
+const SU_DELAYS = [0, 30, 60, 120, 300];
+const suDelayText = s => s >= 60 ? t("su.min", s / 60) : t("su.sec", s);
+const suCanDelay = e => (e.source === "registry" || e.source === "folder") && (e.kind === "app" || !e.kind) && e.exists && !e.invalid && (e.enabled || e.delayed);
+function suDelayMenu(e) {
+  openSheet({ title: t("su.delayTitle", e.name), sub: t("su.delaySub"),
+    body: `<div class="su-delays">${SU_DELAYS.map(s => `<button class="su-dl ${(e.delayed || 0) === s ? "on" : ""}" data-dl="${s}"><b>${esc(s ? suDelayText(s) : t("su.now"))}</b><span>${esc(t(s ? "su.dlD" : "su.nowD"))}</span></button>`).join("")}</div>
+      <div class="f-note" style="margin-top:12px">${esc(t("su.delayNote"))}</div>`,
+    foot: `<span class="grow"></span><button class="btn" id="suDlNo">${esc(t("modal.cancel"))}</button>` });
+  $("#suDlNo").addEventListener("click", () => closeSheet(true));
+  $$("#shBody [data-dl]").forEach(b => b.addEventListener("click", async () => {
+    const s = +b.dataset.dl; if (s === (e.delayed || 0)) { closeSheet(false); return; }
+    $$("#shBody [data-dl]").forEach(x => { x.disabled = true; }); b.innerHTML = '<span class="spin"></span>';
+    let r = null; try { r = await api.startupDelay(e.key, s); } catch (x) { r = { ok: false, error: String(x && x.message || x) }; }
+    closeSheet(false);
+    if (r && r.ok) { e.delayed = s; e.enabled = true; toast(s ? t("su.delayDone", e.name, suDelayText(s)) : t("su.delayOff", e.name), "clock"); }
+    else toast((r && r.error) || t("tw.failed"), "alert", "warn");
+    renderStartup(); BP.v && renderBoot();
   }));
 }
 function toggleStartup(e, enable) {
@@ -7865,6 +7961,7 @@ function toggleStartup(e, enable) {
 }
 async function runStartup(e, enable) {
   SU.busy = e.key; delete SU.err[e.key]; renderStartup();
+  if (!enable && e.delayed) { try { await api.startupDelay(e.key, 0); e.delayed = 0; } catch (x) {} }
   let r; try { r = await api.setStartup(e.key, enable); } catch (x) { r = { ok: false, error: String(x && x.message || x) }; }
   SU.busy = null;
   if (r && r.ok) {
@@ -10167,7 +10264,9 @@ function renderSp() {
     <div class="sp-t"><span class="l">${ICONS.upload}${esc(t("isp.up"))}</span><b>${esc(spFmt(r.up))}</b><small>Mbit/s</small></div>
     <div class="sp-t"><span class="l">${esc(t("isp.ping"))}</span><b>${esc(nf(0).format(r.ping || 0))}</b><small>ms</small></div>
     <div class="sp-t"><span class="l">${esc(t("isp.jitter"))}</span><b>${esc(nf(1).format(r.jitter || 0))}</b><small>ms</small></div>
-    <div class="sp-t"><span class="l">${esc(t("isp.server"))}</span><b>${esc(r.server || "—")}</b><small>Cloudflare</small></div>`;
+    <div class="sp-t"><span class="l">${esc(t("isp.server"))}</span><b>${esc(r.server || "—")}</b><small>Cloudflare</small></div>
+    ${r.grade ? `<div class="sp-bloat g${r.grade}"><span class="sp-grade">${esc(r.grade)}</span><div><div class="t">${esc(t("isp.bloatT"))} <b>${esc(t("isp.bloat." + r.grade))}</b></div>
+      <div class="d">${esc(t("isp.loaded", nf(0).format(r.pingDown || 0), nf(0).format(r.pingUp || 0), nf(0).format(r.ping || 0)))} ${esc(t("isp.bloatD." + r.grade))}</div></div></div>` : ""}`;
 }
 async function spRun() {
   if (SP.run) { try { await api.speedStop(); } catch (e) {} return; }
@@ -11949,6 +12048,9 @@ function homeLoad(force) {
   want("probs", 30e3, () => api.logProblems(120));
   want("upd", 1800e3, () => api.wingetUpdates(!!force));
   want("bench", 120e3, () => api.benchHistory().then(h => ({ list: h || [] })));
+  want("boot", 600e3, () => api.bootPerf(!!force));
+  want("th", 30e3, () => api.throttleState());
+  want("bat", 60e3, () => api.batteryInfo());
   renderHome();
 }
 // what pulls the score down: [{ id, sev: "warn" | "bad", pts }]
@@ -11971,6 +12073,11 @@ function homeIssues() {
   if (errs) add("probs", errs >= 5 ? "bad" : "warn", Math.min(15, errs * 3));
   const lb = HM.bench && HM.bench.list && HM.bench.list[0];
   if (lb && (lb.notes || []).some(n => n.tone === "bad")) add("bench", "warn", 6);
+  const bt = HM.boot && HM.boot.boots && HM.boot.boots[0];
+  if (bt && bt.total > 90000) add("boot", "warn", 6); else if (bt && bt.total > 60000) add("boot", "warn", 3);
+  const th = HM.th;
+  if (th && th.ok && th.share >= 0.4) add("heat", (th.now && th.now.temp >= 95) ? "bad" : "warn", 8);
+  if (HM.bat && HM.bat.ok && HM.bat.verdict === "replace") add("bat", "warn", 4);
   return out;
 }
 function homeErrors() { return (Array.isArray(HM.probs) ? HM.probs : []).filter(e => e.level === "error" && Date.now() - (e.t || 0) < 7 * 86400e3); }
@@ -12030,6 +12137,16 @@ function renderHome() {
   cards.push(["bench", "bench", t("hm.bench"), lb ? nf(0).format(lb.score) + " " + t("bn.points") : HM.bench ? t("hm.bench0") : "…",
     lb ? [lbBal && lbBal !== "unknown" ? t("hm.benchBal." + lbBal) : "", lbFix ? t("hm.benchFix", lbFix) : lb.notes ? t("hm.benchOK") : ""].filter(Boolean).join(" · ") || fmtDateTime(lb.at) : t("hm.bench0D"),
     [t(lb ? "hm.benchBtn" : "hm.benchRun"), () => go("bench")]]);
+  // how fast Windows starts
+  const bp = HM.boot, b0 = bp && bp.boots && bp.boots[0], slow0 = bp && bp.slow && bp.slow[0];
+  cards.push(["boot", "rocket", t("hm.boot"), b0 ? bpSecs(b0.total) : bp ? "—" : "…", b0 ? (slow0 ? t("hm.bootD", slow0.name, bpSecs(slow0.delay)) : t("hm.bootD0")) : bp ? t("bp.none") : "", [t("hm.bootBtn"), () => go("startup")]]);
+  // heat and speed
+  const th = HM.th, tn = th && th.now;
+  if (th && th.ok && tn) cards.push(["heat", "cpu", t("hm.heat"), tn.temp > 0 ? Math.round(tn.temp) + " °C" : Math.round(tn.limit) + "%",
+    th.share >= 0.4 ? t("hm.heatHeld", Math.round(th.share * 100)) : tn.temp > 0 ? t("hm.heatOK", Math.round(tn.limit)) : t("th.fine"), [t("hm.heatBtn"), () => go("sysinfo")]]);
+  // the battery (laptops)
+  const bat = HM.bat;
+  if (bat && bat.ok) cards.push(["bat", "battery", t("hm.bat"), bat.charge + "%", [bat.health ? t("hm.batHealth", bat.health) : "", bat.mins && !bat.onAC ? t("bat.left", bat.mins >= 60 ? t("bat.hm", Math.floor(bat.mins / 60), bat.mins % 60) : t("bat.m", bat.mins)) : bat.onAC ? t("bat.plugged") : ""].filter(Boolean).join(" · "), [t("hm.heatBtn"), () => go("sysinfo")]]);
   $("#hmCards").innerHTML = cards.map((c, i) => `<div class="hm-card ${sev(c[0])}" data-hm="${c[0]}"><div class="hm-top"><span class="hm-ic">${ICONS[c[1]]}</span><span class="hm-t">${esc(c[2])}</span>${dot(c[0])}</div>
     <div class="hm-val">${esc(c[3])}</div><div class="hm-d" title="${esc(c[4])}">${esc(c[4])}</div><button class="btn small" data-hmact="${i}" ${c[5][2] ? "disabled" : ""}>${esc(c[5][0])}</button></div>`).join("");
   $$("#hmCards [data-hmact]").forEach(b => b.addEventListener("click", () => cards[+b.dataset.hmact][5][1]()));
@@ -13724,6 +13841,7 @@ const Mock = (() => {
       await new Promise(r => setTimeout(r, 700));
       return { items: mockStartup.map(e => Object.assign({}, e)) };
     },
+    startupDelay: async (key, secs) => { await new Promise(r => setTimeout(r, 300)); const e = mockStartup.find(x => x.key === key); if (!e) return { ok: false, error: "Unknown entry." }; e.delayed = secs; e.enabled = true; window.__delay = { key, secs }; return { ok: true }; },
     setStartup: async (key, en) => {
       await new Promise(r => setTimeout(r, 450));
       const e = mockStartup.find(x => x.key === key); if (!e) return { ok: false, error: "Unknown entry." };
@@ -13893,7 +14011,7 @@ const Mock = (() => {
         window.__ev("speed-progress", { phase: ph, mbps: top * Math.min(1, p / 60), pct: p }); await wait(60);
       }
       if (q.get("sp") === "fail") return { error: "Could not reach the test server: no connection", down: 0, up: 0 };
-      return { down: 912.4, up: 48.7, ping: 6.2, jitter: 0.8, server: "SOF", at: Date.now() / 1000 };
+      return { down: 912.4, up: 48.7, ping: 6.2, jitter: 0.8, server: "SOF", at: Date.now() / 1000, pingDown: 18, pingUp: q.get("sp") === "bloat" ? 240 : 41, grade: q.get("sp") === "bloat" ? "D" : "B" };
     },
     speedStop: async () => { window.__speedStop = true; return true; },
     // ---- 3.7: net-merge + Defender help

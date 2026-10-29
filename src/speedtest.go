@@ -24,10 +24,14 @@ type speedResult struct {
 	Up     float64 `json:"up"`     // Mbit/s
 	Ping   float64 `json:"ping"`   // ms, the median
 	Jitter float64 `json:"jitter"` // ms
-	Server string  `json:"server,omitempty"`
-	Error  string  `json:"error,omitempty"`
-	Stop   bool    `json:"stopped,omitempty"`
-	At     int64   `json:"at"`
+	// the ping while the line is full (bufferbloat): during the download and the upload
+	PingDown float64 `json:"pingDown,omitempty"`
+	PingUp   float64 `json:"pingUp,omitempty"`
+	Grade    string  `json:"grade,omitempty"` // A..D, as the usual bufferbloat tests grade it
+	Server   string  `json:"server,omitempty"`
+	Error    string  `json:"error,omitempty"`
+	Stop     bool    `json:"stopped,omitempty"`
+	At       int64   `json:"at"`
 }
 
 var speed struct {
@@ -97,10 +101,46 @@ func runSpeed(ctx context.Context, client *http.Client, base string, phase time.
 			res.Jitter = j / float64(len(lat)-1)
 		}
 	}
+	var loaded []float64 // the pings of the phase running now
+	var lmu sync.Mutex
 	measure := func(name string, streams int, one func(ctx context.Context, n *atomic.Int64) error) float64 {
 		var n atomic.Int64
 		pctx, cancel := context.WithTimeout(ctx, phase)
 		defer cancel()
+		lmu.Lock()
+		loaded = nil
+		lmu.Unlock()
+		pingDone := make(chan struct{})
+		go func() { // a small request now and then, behind the full line
+			defer close(pingDone)
+			tk := time.NewTicker(300 * time.Millisecond)
+			defer tk.Stop()
+			t0 := time.Now()
+			for {
+				select {
+				case <-pctx.Done():
+					return
+				case <-tk.C:
+				}
+				if time.Since(t0) < time.Second {
+					continue
+				}
+				req, _ := http.NewRequestWithContext(pctx, http.MethodGet, base+"/__down?bytes=0", nil)
+				s := time.Now()
+				resp, err := client.Do(req)
+				if err != nil {
+					continue
+				}
+				_, _ = io.Copy(io.Discard, resp.Body)
+				resp.Body.Close()
+				if pctx.Err() == nil {
+					lmu.Lock()
+					loaded = append(loaded, float64(time.Since(s).Microseconds())/1000)
+					lmu.Unlock()
+				}
+			}
+		}()
+		defer func() { <-pingDone }()
 		var wg sync.WaitGroup
 		var firstErr atomic.Value
 		for i := 0; i < streams; i++ {
@@ -173,6 +213,7 @@ func runSpeed(ctx context.Context, client *http.Client, base string, phase time.
 			}
 		}
 	})
+	res.PingDown = median(loaded)
 	if ctx.Err() == nil {
 		res.Up = measure("up", 4, func(c context.Context, n *atomic.Int64) error {
 			const size = 10_000_000
@@ -188,6 +229,8 @@ func runSpeed(ctx context.Context, client *http.Client, base string, phase time.
 			return nil
 		})
 	}
+	res.PingUp = median(loaded)
+	res.Grade = bloatGrade(res.Ping, res.PingDown, res.PingUp)
 	res.Stop = ctx.Err() != nil
 	if res.Down > 0 || res.Up > 0 {
 		res.Error = ""
@@ -223,4 +266,31 @@ func speedStop() bool {
 		speed.cancel()
 	}
 	return true
+}
+
+func median(v []float64) float64 {
+	if len(v) == 0 {
+		return 0
+	}
+	c := append([]float64(nil), v...)
+	sort.Float64s(c)
+	return c[len(c)/2]
+}
+
+// bloatGrade: how much the ping grows when the line is full (the worse of
+// download and upload): A under 30 ms, B under 60, C under 200, D above.
+func bloatGrade(idle, down, up float64) string {
+	if idle <= 0 || down <= 0 && up <= 0 {
+		return ""
+	}
+	worst := math.Max(down, up) - idle
+	switch {
+	case worst < 30:
+		return "A"
+	case worst < 60:
+		return "B"
+	case worst < 200:
+		return "C"
+	}
+	return "D"
 }

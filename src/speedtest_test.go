@@ -37,7 +37,13 @@ func TestSpeedAgainstLocalServer(t *testing.T) {
 	if r.Error != "" || r.Down <= 0 || r.Up <= 0 || r.Ping < 0 || r.Server != "SOF" {
 		t.Fatalf("%+v", r)
 	}
-	t.Logf("local: down %.0f up %.0f Mbit/s ping %.2f ms", r.Down, r.Up, r.Ping)
+	t.Logf("local: down %.0f up %.0f Mbit/s ping %.2f ms, loaded %.2f / %.2f ms, grade %s", r.Down, r.Up, r.Ping, r.PingDown, r.PingUp, r.Grade)
+	if r.PingDown < 0 || r.PingUp < 0 {
+		t.Fatalf("loaded pings %+v", r)
+	}
+	if bloatGrade(10, 25, 20) != "A" || bloatGrade(10, 60, 20) != "B" || bloatGrade(10, 150, 20) != "C" || bloatGrade(10, 30, 400) != "D" || bloatGrade(0, 30, 40) != "" {
+		t.Fatal("grades")
+	}
 	// cancelled: stops at once and says so
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()

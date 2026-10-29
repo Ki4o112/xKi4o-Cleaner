@@ -61,6 +61,7 @@ type startupEntry struct {
 	Changed   int64    `json:"changed,omitempty"` // when Windows recorded it was turned off
 	Invalid   bool     `json:"invalid,omitempty"` // the command cannot be read
 	Lnk       string   `json:"lnk,omitempty"`     // the shortcut file (Startup folders)
+	Delayed   int      `json:"delayed,omitempty"` // starts that many seconds after sign-in (the app's delay)
 }
 
 type startupList struct {
@@ -318,7 +319,7 @@ func listStartup() (res startupList) {
 		describeStartup(&items[i], sigs)
 	}
 	sort.SliceStable(items, func(a, b int) bool { return strings.ToLower(items[a].Name) < strings.ToLower(items[b].Name) })
-	res.Items = items
+	res.Items = delayMark(items)
 	return res
 }
 
