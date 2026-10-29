@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
+	"time"
 )
 
 // Settings live in %LOCALAPPDATA%\xKi4oCleaner\settings.json: the restore
@@ -26,7 +27,7 @@ func getSettings() map[string]any {
 
 // Keys the backend owns: the page has a copy of the settings and saves it
 // whole, so these are always taken from the file, never from the page.
-var backendKeys = []string{"dnsBackup", "autoClean", "autoCleanDay", "autoCleanLast", "gpuWUPrev", "nmBalance"}
+var backendKeys = []string{"dnsBackup", "autoClean", "autoCleanDay", "autoCleanLast", "gpuWUPrev", "nmBalance", "lifetime"}
 
 func readSettingsLocked() map[string]any {
 	m := map[string]any{}
@@ -77,4 +78,20 @@ func writeSettingsLocked(m map[string]any) bool {
 		return false
 	}
 	return os.Rename(tmp, p) == nil
+}
+
+// addLifetime counts what every cleaning freed, for "freed in all" on Home.
+func addLifetime(freed int64) {
+	if freed <= 0 {
+		return
+	}
+	updateSettings(func(m map[string]any) {
+		lt, _ := m["lifetime"].(map[string]any)
+		if lt == nil {
+			lt = map[string]any{"since": time.Now().Unix()}
+		}
+		lt["freed"] = num(lt["freed"]) + float64(freed)
+		lt["cleans"] = num(lt["cleans"]) + 1
+		m["lifetime"] = lt
+	})
 }

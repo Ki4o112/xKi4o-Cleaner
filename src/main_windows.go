@@ -686,6 +686,9 @@ func startClean(ids []string, opts CleanOpts) bool {
 		}
 		op.end(T(sumKey, sizeText(sum.freed), sum.files), map[string]any{"freed": sum.freed, "files": sum.files, "locked": sum.locked,
 			"denied": sum.denied, "failed": sum.failed, "ram": sum.ram, "driveDelta": int64(drive.Free) - before})
+		if !opts.DryRun {
+			addLifetime(sum.freed)
+		}
 		emit("clean-done", map[string]any{"op": op.id,
 			"freed": sum.freed, "files": sum.files, "locked": sum.locked, "denied": sum.denied, "failed": sum.failed,
 			"ram": sum.ram, "drive": drive, "driveDelta": int64(drive.Free) - before,

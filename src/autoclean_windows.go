@@ -236,6 +236,7 @@ func runAutoClean(source string) {
 	app.working.Store(false)
 	app.busy.Store(false)
 	op.end(T("log.cleanSum", sizeText(sum.freed), sum.files), map[string]any{"freed": sum.freed, "files": sum.files, "locked": sum.locked, "failed": sum.failed})
+	addLifetime(sum.freed)
 	state := "ok"
 	if s := opState(op); s != "" {
 		state = s

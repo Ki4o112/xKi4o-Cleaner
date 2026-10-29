@@ -959,6 +959,15 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .pf.on { border-color: var(--blue); background: linear-gradient(145deg, color-mix(in srgb, var(--blue) 16%, var(--card)), var(--card)); box-shadow: 0 14px 30px -18px var(--blue-glow); }
 .pf.on .pf-ic { background: var(--blue); color: #0b0b0b; }
 @media (max-width: 760px) { .pf-bar { grid-template-columns: 1fr; } }
+.pg-box { background: var(--card); border: 1px solid var(--edge); border-radius: var(--r-l); padding: 16px; margin-bottom: 8px; }
+.pg-out { display: flex; gap: 10px; align-items: center; }
+.pg-out code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; font: 600 17px/1.4 ui-monospace, "Cascadia Code", Consolas, monospace; letter-spacing: .04em; padding: 10px 12px; border-radius: 10px; background: var(--card-2); user-select: all; }
+.pg-meter { height: 6px; border-radius: 99px; background: var(--card-2); margin: 12px 0 6px; overflow: hidden; }
+.pg-meter i { display: block; height: 100%; border-radius: inherit; transition: width .4s var(--spring); background: var(--red, #ff6b6b); }
+.pg-meter i.l1 { background: var(--amber); } .pg-meter i.l2 { background: #b8e986; } .pg-meter i.l3 { background: var(--mint, #3ee8b0); }
+.pg-opts { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-top: 10px; }
+.pg-len { display: flex; gap: 8px; align-items: center; font-size: 13px; }
+.pg-len input { width: 160px; accent-color: var(--blue); }
 /* ================= Startup Manager ================= */
 .bp-card { background: var(--card); border: 1px solid var(--edge); border-radius: var(--r-l); padding: 16px 18px; margin-top: 12px; }
 .bp-card:empty { display: none; }
@@ -2991,6 +3000,19 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
         </form>
         <div id="pwRes"></div>
         <div class="note-line" data-i="pw.note"></div>
+        <div class="dh-head net-h2 pw-h2"><h3 data-i="pg.title"></h3></div>
+        <div class="dh-sub" data-i="pg.sub"></div>
+        <div class="pg-box">
+          <div class="pg-out"><code id="pgOut"></code><button class="btn icon-btn" id="pgNew" data-i-title="pg.new"><span data-icon="refresh"></span></button><button class="btn primary" id="pgCopy"><span data-icon="copy"></span><span data-i="pg.copy"></span></button></div>
+          <div class="pg-meter"><i id="pgBar"></i></div><div class="f-note" id="pgStrength"></div>
+          <div class="pg-opts">
+            <label class="pg-len"><span data-i="pg.len"></span> <b id="pgLenV"></b><input type="range" id="pgLen" min="8" max="64" value="20"></label>
+            <label class="chk"><input type="checkbox" class="cb" id="pgDigits" checked><span data-i="pg.digits"></span></label>
+            <label class="chk"><input type="checkbox" class="cb" id="pgSyms" checked><span data-i="pg.syms"></span></label>
+            <label class="chk"><input type="checkbox" class="cb" id="pgClear" checked><span data-i="pg.clear"></span></label>
+            <button class="btn small" id="pgCheck"><span data-i="pg.check"></span></button>
+          </div>
+        </div>
         <div class="dh-head net-h2 pw-h2"><h3 data-i="lk.title"></h3><button class="btn small primary" id="lkAdd"><span data-icon="lock"></span><span data-i="lk.add"></span></button></div>
         <div class="dh-sub" data-i="lk.sub"></div>
         <div class="list" id="lkList"></div>
@@ -3730,6 +3752,17 @@ bg: {
   "pf.saver": "Пестене", "pf.saverD": "Най-малко ток — за батерията на лаптопа",
   "pf.done": "Режим „{0}“ е включен",
   "pf.partly": "Режим „{0}“ — Windows не прие всичко.",
+  "hh.saved": "Освободено общо",
+  "hh.savedV": "{0} от {1} почиствания",
+  "pg.title": "Генератор на пароли",
+  "pg.sub": "Силна случайна парола, направена тук на компютъра — никъде не се изпраща. Различна за всеки сайт.",
+  "pg.new": "Нова парола", "pg.copy": "Копирай", "pg.copied": "Паролата е копирана",
+  "pg.len": "Дължина", "pg.digits": "Цифри", "pg.syms": "Символи", "pg.clear": "Без объркващи (0 и O, 1 и l)",
+  "pg.check": "Провери я в списъка",
+  "pg.s0": "Слаба (~{0} бита) — направи я по-дълга.",
+  "pg.s1": "Средна (~{0} бита).",
+  "pg.s2": "Силна (~{0} бита).",
+  "pg.s3": "Много силна (~{0} бита) — не може да се отгатне.",
   "pc.more": "Приоритет и още",
   "pc.title": "{0}",
   "pc.subMany": "{0} процеса",
@@ -4941,6 +4974,17 @@ en: {
   "pf.saver": "Saver", "pf.saverD": "The least power — for a laptop's battery",
   "pf.done": "“{0}” mode is on",
   "pf.partly": "“{0}” mode — Windows did not take all of it.",
+  "hh.saved": "Freed in all",
+  "hh.savedV": "{0} in {1} cleanings",
+  "pg.title": "Password generator",
+  "pg.sub": "A strong random password, made here on the PC — it is not sent anywhere. Use a different one for every site.",
+  "pg.new": "New password", "pg.copy": "Copy", "pg.copied": "The password is copied",
+  "pg.len": "Length", "pg.digits": "Digits", "pg.syms": "Symbols", "pg.clear": "No look-alikes (0 and O, 1 and l)",
+  "pg.check": "Check it against the list",
+  "pg.s0": "Weak (~{0} bits) — make it longer.",
+  "pg.s1": "Fair (~{0} bits).",
+  "pg.s2": "Strong (~{0} bits).",
+  "pg.s3": "Very strong (~{0} bits) — it cannot be guessed.",
   "pc.more": "Priority and more",
   "pc.title": "{0}",
   "pc.subMany": "{0} processes",
@@ -6344,6 +6388,7 @@ function applyLang() {
   paintNp(); paintQf();
   setupAutoSeg(); renderAuto();
   moveNav();
+  if (typeof pgPaint === "function") pgPaint();
 }
 
 /* =====================================================================
@@ -6881,6 +6926,7 @@ function summaryText(d, cats) {
 }
 on("clean-done", d => {
   alive();
+  if (d && !d.dryRun && d.freed > 0) { const lt = S.settings.lifetime || (S.settings.lifetime = { since: Date.now() / 1000 }); lt.freed = (lt.freed || 0) + d.freed; lt.cleans = (lt.cleans || 0) + 1; }
   if (!S.cleaning && !S.busy && S.lastReport) return; // already finished
   S.cleaning = false; setBusy(false);
   $("#cleanProg").hidden = true;
@@ -9352,6 +9398,31 @@ function paintPw() {
   if (r.error) { b.innerHTML = `<div class="pw-res">${ICONS.alert}<span>${esc(r.error)}</span></div>`; return; }
   b.innerHTML = r.count > 0 ? `<div class="pw-res bad">${ICONS.alert}<span>${esc(t("pw.bad", nfi(r.count)))}</span></div>` : `<div class="pw-res good">${ICONS.check}<span>${esc(t("pw.good"))}</span></div>`;
 }
+/* password generator: random from the browser engine's cryptographic source, never sent anywhere */
+const PG = { v: "" };
+function pgMake() {
+  const len = +$("#pgLen").value, clear = $("#pgClear").checked;
+  let sets = ["abcdefghijkmnopqrstuvwxyz", "ABCDEFGHJKLMNPQRSTUVWXYZ"];
+  if (!clear) sets = ["abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+  if ($("#pgDigits").checked) sets.push(clear ? "23456789" : "0123456789");
+  if ($("#pgSyms").checked) sets.push("!@#$%^&*-_=+?.:;~");
+  const all = sets.join("");
+  const pick = s => { const lim = 256 - 256 % s.length, b = new Uint8Array(1); do crypto.getRandomValues(b); while (b[0] >= lim); return s[b[0] % s.length]; };
+  let out;
+  do { out = Array.from({ length: len }, () => pick(all)).join(""); } while (!sets.every(s => [...out].some(c => s.includes(c)))); // every kind at least once
+  PG.v = out;
+  const bits = Math.round(len * Math.log2(all.length));
+  $("#pgOut").textContent = out; $("#pgLenV").textContent = len;
+  const lvl = bits >= 100 ? 3 : bits >= 70 ? 2 : bits >= 50 ? 1 : 0;
+  $("#pgBar").style.width = Math.min(100, bits / 128 * 100) + "%"; $("#pgBar").className = "l" + lvl;
+  PG.bits = bits; PG.lvl = lvl; pgPaint();
+}
+function pgPaint() { const el = $("#pgStrength"); if (el && PG.bits) el.textContent = t("pg.s" + PG.lvl, PG.bits); }
+["#pgLen", "#pgDigits", "#pgSyms", "#pgClear"].forEach(s => $(s).addEventListener("input", pgMake));
+$("#pgNew").addEventListener("click", pgMake);
+$("#pgCopy").addEventListener("click", async () => { const ok = await copyToClipboard(PG.v); toast(t(ok ? "pg.copied" : "hp.fail"), ok ? "copy" : "alert", ok ? "" : "warn"); });
+$("#pgCheck").addEventListener("click", () => { $("#pwIn").value = PG.v; $("#pwForm").requestSubmit(); });
+pgMake();
 $("#pwForm").addEventListener("submit", async e => {
   e.preventDefault();
   const v = $("#pwIn").value; if (!v || PW.busy) return;
@@ -12264,6 +12335,8 @@ function homeStatus() {
     out.push([av.length ? "ok" : "warn", t("hh.prot"), bits.join(" · ")]);
   } else out.push(["off", t("hh.prot"), t("hh.reading")]);
   out.push([inf.admin === false ? "warn" : "ok", t("hh.rights"), t(inf.admin === false ? "hh.adminN" : "hh.adminY")]);
+  const lt = S.settings.lifetime;
+  if (lt && lt.freed > 0) out.push(["ok", t("hh.saved"), t("hh.savedV", fmt(lt.freed), nfi(lt.cleans || 1))]);
   const rp = HM.rp;
   if (!rp) out.push(["off", t("hm.rp"), t("hh.reading")]);
   else if (rp.noAdmin) out.push(["off", t("hm.rp"), t("rc.needAdmin")]);
