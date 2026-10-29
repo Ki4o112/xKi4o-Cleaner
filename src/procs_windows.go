@@ -196,6 +196,7 @@ type procRow struct {
 	Window   bool    `json:"window,omitempty"`
 	Closable bool    `json:"closable"`
 	Why      string  `json:"why,omitempty"`
+	Paused   bool    `json:"paused,omitempty"` // paused by the app
 }
 
 type procView struct {
@@ -277,7 +278,7 @@ func procList() procView {
 	for _, p := range raw {
 		io := p.readBytes + p.writeBytes + p.otherBytes
 		r := procRow{PID: p.pid, PPID: p.ppid, Name: p.name, Threads: p.threads, Handles: p.handles, Session: p.session,
-			Mem: p.privateWS, WS: p.workingSet, Commit: p.privateBytes, Start: startID(p.created), Window: windowed[p.pid]}
+			Mem: p.privateWS, WS: p.workingSet, Commit: p.privateBytes, Start: startID(p.created), Window: windowed[p.pid], Paused: isPaused(p.pid, startID(p.created))}
 		if r.Mem == 0 { // older Windows and Wine do not fill it
 			r.Mem = p.workingSet
 		}

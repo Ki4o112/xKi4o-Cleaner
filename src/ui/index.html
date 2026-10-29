@@ -907,6 +907,11 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .plan-row:first-child { border-top: 0; }
 .plan-row .tw-st { flex: none; }
 
+.pc-sec { padding: 14px 0; border-top: 1px solid var(--line-soft); }
+.pc-sec:first-child { border-top: 0; padding-top: 0; }
+.pc-h { font-weight: 700; font-size: 13px; margin-bottom: 8px; }
+.pc-seg { width: 100%; }
+.pc-seg button { flex: 1; }
 /* ================= Startup Manager ================= */
 .bp-card { background: var(--card); border: 1px solid var(--edge); border-radius: var(--r-l); padding: 16px 18px; margin-top: 12px; }
 .bp-card:empty { display: none; }
@@ -3149,7 +3154,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
       <div class="head">
         <div class="head-ico" data-icon="cpu"></div>
         <div><h1 data-i="pm.title"></h1><div class="sub" data-i="pm.sub"></div></div>
-        <div class="head-r"><span class="pm-paused" id="pmPaused" hidden data-i="pm.pausedNote"></span><button class="btn small" id="pmPause"><span data-icon="stop"></span><span id="pmPauseTxt" data-i="pm.pause"></span></button></div>
+        <div class="head-r"><span class="pm-paused" id="pmPaused" hidden data-i="pm.pausedNote"></span><button class="btn small" id="pmRules"><span data-icon="list"></span><span data-i="pc.rules"></span></button><button class="btn small" id="pmPause"><span data-icon="stop"></span><span id="pmPauseTxt" data-i="pm.pause"></span></button></div>
       </div>
       <div class="tw-body" id="pmBody">
         <div class="pm-stats" id="pmStats"></div>
@@ -3617,6 +3622,39 @@ bg: {
   "th.tip.heat": "Почисти праха от вентилаторите, не го дръж върху меко и пробвай охлаждаща подложка.",
   "th.tip.battery": "Включи зарядното или избери режим за най-добра производителност.",
   "th.tip.power": "Избери режим за най-добра производителност.",
+  "pc.more": "Приоритет и още",
+  "pc.title": "{0}",
+  "pc.subMany": "{0} процеса",
+  "pc.prio": "Приоритет",
+  "pc.l.idle": "Нисък", "pc.l.below": "Под норм.", "pc.l.normal": "Нормален", "pc.l.above": "Над норм.", "pc.l.high": "Висок",
+  "pc.remember": "Запомни за {0} — Windows ще го пуска с този приоритет всеки път",
+  "pc.prioNote": "Промяната е само докато програмата върви. Високият приоритет не я ускорява сам по себе си — само я слага пред останалите.",
+  "pc.ruleNow": "Windows го пуска винаги с приоритет „{0}“.",
+  "pc.prioDone": "{0}: приоритет „{1}“",
+  "pc.eco": "Efficiency mode",
+  "pc.ecoD": "Като в Task Manager: Windows я пуска бавно и пестеливо, на най-нисък приоритет. За програми във фона, които не трябва да пречат.",
+  "pc.ecoOn": "{0}: Efficiency mode е включен",
+  "pc.ecoOff": "{0}: Efficiency mode е изключен",
+  "pc.pause": "Пауза",
+  "pc.resume": "Продължаване",
+  "pc.pauseD": "Спира програмата изцяло, без да я затваря — нищо не се губи. Докато е на пауза, не отговаря. Програмата я пуска сама, когато се затвори.",
+  "pc.pauseBtn": "Пауза",
+  "pc.resumeBtn": "Продължи",
+  "pc.paused": "{0} е на пауза",
+  "pc.resumed": "{0} продължава",
+  "pc.pausedB": "на пауза",
+  "pc.rules": "Приоритети",
+  "pc.rulesT": "Запомнени приоритети",
+  "pc.rulesSub": "Програми, които Windows пуска винаги с избрания приоритет",
+  "pc.rulesNone": "Няма запомнени приоритети. Задават се от бутона до всяка програма.",
+  "pc.ruleAlways": "Винаги с приоритет „{0}“",
+  "pc.forget": "Махни",
+  "pc.forgot": "{0} вече тръгва с обичайния приоритет",
+  "pc.gameNote": "Това е игра. Програмата не докосва процеса ѝ, за да не я засече anti-cheat — приоритетът се записва и Windows го дава сам при следващото пускане на играта.",
+  "pc.prioGame": "Приоритет при следващото пускане",
+  "pc.gameNone": "Сега играта тръгва с обичайния приоритет.",
+  "pc.remembered": "{0} ще тръгва винаги с приоритет „{1}“",
+  "pm.p.idle": "нисък", "pm.p.below": "под нормалния", "pm.p.normal": "нормален", "pm.p.above": "над нормалния", "pm.p.high": "висок",
   "bp.title": "Колко бързо тръгва Windows",
   "bp.last": "Последно стартиране",
   "bp.main": "до работния плот {0}",
@@ -4742,6 +4780,39 @@ en: {
   "th.tip.heat": "Clean the dust from the fans, keep it off soft surfaces and try a cooling pad.",
   "th.tip.battery": "Plug in the charger or choose the best performance mode.",
   "th.tip.power": "Choose the best performance power mode.",
+  "pc.more": "Priority and more",
+  "pc.title": "{0}",
+  "pc.subMany": "{0} processes",
+  "pc.prio": "Priority",
+  "pc.l.idle": "Low", "pc.l.below": "Below", "pc.l.normal": "Normal", "pc.l.above": "Above", "pc.l.high": "High",
+  "pc.remember": "Remember for {0} — Windows starts it with this priority every time",
+  "pc.prioNote": "The change lasts while the program runs. A high priority does not make it faster by itself — it only puts it before the others.",
+  "pc.ruleNow": "Windows always starts it with “{0}” priority.",
+  "pc.prioDone": "{0}: “{1}” priority",
+  "pc.eco": "Efficiency mode",
+  "pc.ecoD": "As in Task Manager: Windows runs it slowly and sparingly, at the lowest priority. For background programs that should not get in the way.",
+  "pc.ecoOn": "{0}: Efficiency mode is on",
+  "pc.ecoOff": "{0}: Efficiency mode is off",
+  "pc.pause": "Pause",
+  "pc.resume": "Resume",
+  "pc.pauseD": "Stops the program completely without closing it — nothing is lost. While paused it does not answer. The app resumes it by itself when it closes.",
+  "pc.pauseBtn": "Pause",
+  "pc.resumeBtn": "Resume",
+  "pc.paused": "{0} is paused",
+  "pc.resumed": "{0} runs again",
+  "pc.pausedB": "paused",
+  "pc.rules": "Priorities",
+  "pc.rulesT": "Remembered priorities",
+  "pc.rulesSub": "Programs Windows always starts with the chosen priority",
+  "pc.rulesNone": "No remembered priorities. They are set from the button next to each program.",
+  "pc.ruleAlways": "Always with “{0}” priority",
+  "pc.forget": "Remove",
+  "pc.forgot": "{0} starts with the usual priority again",
+  "pc.gameNote": "This is a game. The app does not touch its process, so no anti-cheat flags it — the priority is saved and Windows gives it by itself the next time the game starts.",
+  "pc.prioGame": "Priority from the next start",
+  "pc.gameNone": "The game starts with the usual priority now.",
+  "pc.remembered": "{0} will always start with “{1}” priority",
+  "pm.p.idle": "low", "pm.p.below": "below normal", "pm.p.normal": "normal", "pm.p.above": "above normal", "pm.p.high": "high",
   "bp.title": "How fast Windows starts",
   "bp.last": "Last start",
   "bp.main": "to the desktop {0}",
@@ -10600,9 +10671,9 @@ function renderProcs() {
       : sysK ? `<span class="pm-av sys">${ICONS.system}</span>` : `<span class="pm-av" style="--av:${avColor(g.name)}">${esc((title[0] || "?").toUpperCase())}</span>`;
     const car = !kid && many ? `<button class="pm-car" data-car="${esc(g.key)}" aria-expanded="${PM.open.has(g.key)}" aria-label="${esc(t("pm.expand"))}">${ICONS.caret}</button>` : `<span style="width:18px;flex:none"></span>`;
     const act = g.closable ? `<button class="btn small" data-end="${esc(g.key)}" ${kid ? `data-pid="${r0.pid}"` : ""}>${esc(t("pm.end"))}</button>` : `<span class="pm-lock" title="${esc(g.why || t("pm.locked"))}">${ICONS.lock}</span>`;
-    return `<div class="pm-row ${kid ? "kid" : ""}"><div>${car}${av}<div class="pm-nm"><div class="a"><span title="${esc(g.path || r0.name)}">${esc(title)}</span>${many && !kid ? `<span class="badge-s">${g.rows.length}</span>` : ""}</div><div class="b">${esc(sub || "")}</div></div></div>
+    return `<div class="pm-row ${kid ? "kid" : ""}"><div>${car}${av}<div class="pm-nm"><div class="a"><span title="${esc(g.path || r0.name)}">${esc(title)}</span>${many && !kid ? `<span class="badge-s">${g.rows.length}</span>` : ""}${g.rows.some(r => r.paused) ? `<span class="tw-b caution">${esc(t("pc.pausedB"))}</span>` : ""}</div><div class="b">${esc(sub || "")}</div></div></div>
       <div class="heat" style="${pmHeat(g.cpu, maxCpu)}">${nf(1).format(g.cpu)}%</div><div class="heat" style="${pmHeat(g.mem, maxMem)}">${fmt(g.mem)}</div><div>${esc(fmtRate(g.io))}</div><div>${many && !kid ? "" : r0.pid}</div>
-      <div class="pm-acts">${act}<button class="ibtn" data-loc="${r0.pid}" title="${esc(t("da.explorer"))}" aria-label="${esc(t("da.explorer"))}" ${g.path ? "" : "disabled"}>${ICONS.open}</button></div></div>`;
+      <div class="pm-acts">${g.closable ? `<button class="ibtn" data-more="${esc(g.key)}" ${kid ? `data-pid="${r0.pid}"` : ""} title="${esc(t("pc.more"))}" aria-label="${esc(t("pc.more"))}">${ICONS.tweaks}</button>` : ""}${act}<button class="ibtn" data-loc="${r0.pid}" title="${esc(t("da.explorer"))}" aria-label="${esc(t("da.explorer"))}" ${g.path ? "" : "disabled"}>${ICONS.open}</button></div></div>`;
   };
   const totCpu = v.rows.reduce((s, r) => s + r.cpu, 0);
   let html = `<div class="pm-head">${head("name", t("pm.colName"))}${head("cpu", "CPU", Math.round(Math.max(v.cpu, totCpu)) + "%")}${head("mem", t("pm.colMem"), Math.round(v.memTotal ? v.memUsed / v.memTotal * 100 : 0) + "%")}${head("io", t("pm.colIO"))}${head("pid", "PID")}<span></span></div><div class="pm-body">`;
@@ -10618,6 +10689,11 @@ function renderProcs() {
   body.querySelectorAll("[data-sort]").forEach(b => b.addEventListener("click", () => { const k = b.dataset.sort; if (PM.sort === k) PM.desc = !PM.desc; else { PM.sort = k; PM.desc = k !== "name" && k !== "pid"; } renderProcs(); }));
   body.querySelectorAll("[data-car]").forEach(b => b.addEventListener("click", () => { const k = b.dataset.car; if (PM.open.has(k)) PM.open.delete(k); else PM.open.add(k); renderProcs(); }));
   body.querySelectorAll("[data-loc]").forEach(b => b.addEventListener("click", () => api.procOpenLocation(+b.dataset.loc)));
+  body.querySelectorAll("[data-more]").forEach(b => b.addEventListener("click", () => {
+    const g = groups.find(x => x.key === b.dataset.more); if (!g) return;
+    const rows = b.dataset.pid ? g.rows.filter(r => r.pid === +b.dataset.pid) : g.rows.filter(r => r.closable);
+    pcOpen(rows, b.dataset.pid ? (rows[0] && (rows[0].desc || rows[0].name)) || g.name : g.desc || g.name);
+  }));
   body.querySelectorAll("[data-end]").forEach(b => b.addEventListener("click", () => {
     const g = groups.find(x => x.key === b.dataset.end); if (!g) return;
     const rows = b.dataset.pid ? g.rows.filter(r => r.pid === +b.dataset.pid) : g.rows.filter(r => r.closable);
@@ -10627,6 +10703,67 @@ function renderProcs() {
 // table stays still while the mouse button is down on it (a click is never lost)
 $("#pmTable").addEventListener("pointerdown", () => { PM.hold = true; });
 document.addEventListener("pointerup", () => { if (PM.hold) { PM.hold = false; } });
+/* priority, Efficiency mode and pause for a program's processes */
+const PC_LEVELS = ["idle", "below", "normal", "above", "high"];
+async function pcOpen(rows, name) {
+  if (!rows.length) return;
+  const targets = rows.map(r => ({ pid: r.pid, start: r.start }));
+  let st = null; try { st = await api.procCtlState(targets[0]); } catch (e) {}
+  st = st || { can: false, why: t("tw.failed") };
+  const admin = !!(S.info && S.info.admin), paused = rows.some(r => r.paused);
+  openSheet({ title: t("pc.title", name), sub: rows.length > 1 ? t("pc.subMany", rows.length) : rows[0].name,
+    body: st.can && st.game ? `<div class="notice info" style="margin:0 0 14px"><p>${esc(t("pc.gameNote"))}</p></div><div class="pc-sec" style="border:0;padding-top:0"><div class="pc-h">${esc(t("pc.prioGame"))}</div><div class="seg blue pc-seg" id="pcSeg"></div><input type="checkbox" id="pcRemember" checked hidden>
+        <div class="f-note">${esc(st.rule ? t("pc.ruleNow", t("pm.p." + st.rule)) : t("pc.gameNone"))}</div>${st.rule ? `<button class="btn small" id="pcForget" style="margin-top:10px">${esc(t("pc.forget"))}</button>` : ""}</div>`
+    : st.can ? `<div class="pc-sec"><div class="pc-h">${esc(t("pc.prio"))}</div><div class="seg blue pc-seg" id="pcSeg"></div>
+        <label class="chk" style="margin-top:10px"><input type="checkbox" class="cb" id="pcRemember" ${st.rule ? "checked" : ""} ${admin ? "" : "disabled"}><span>${esc(t("pc.remember", rows[0].name))}</span></label>
+        <div class="f-note">${esc(t(st.rule ? "pc.ruleNow" : "pc.prioNote", st.rule ? t("pm.p." + st.rule) : ""))}</div></div>
+      <div class="pc-sec"><div class="item" style="padding:0;border:0;display:flex;justify-content:space-between;gap:16px"><div><div class="t">${esc(t("pc.eco"))}</div><div class="d">${esc(t("pc.ecoD"))}</div></div><input type="checkbox" class="switch" id="pcEco" ${st.eco ? "checked" : ""}></div></div>
+      <div class="pc-sec"><div class="item" style="padding:0;border:0;display:flex;justify-content:space-between;gap:16px"><div><div class="t">${esc(t(paused ? "pc.resume" : "pc.pause"))}</div><div class="d">${esc(t("pc.pauseD"))}</div></div><button class="btn small" id="pcPause">${esc(t(paused ? "pc.resumeBtn" : "pc.pauseBtn"))}</button></div></div>`
+      : `<div class="tw-empty">${esc(st.why || t("pm.locked"))}</div>`,
+    foot: `<span class="grow"></span><button class="btn primary" id="pcClose">${esc(t("modal.close"))}</button>` });
+  $("#pcClose").addEventListener("click", () => closeSheet(false));
+  if (!st.can) return;
+  const done = (r, okText) => {
+    if (r && r.done && !r.failed) toast(okText, "check");
+    else toast((r && r.error) || t("tw.failed"), "alert", "warn");
+    if (S.page === "procs") { clearTimeout(PM.timer); PM.timer = 0; startProcs(); }
+  };
+  let cur = st.prio || "normal";
+  makeSeg($("#pcSeg"), PC_LEVELS.map(v => ({ v, label: t("pc.l." + v) })), cur, async v => {
+    cur = v; let r = null; try { r = await api.procPriority(targets, v, !!$("#pcRemember").checked); } catch (e) {}
+    done(r, st.game ? t("pc.remembered", rows[0].name, t("pm.p." + v)) : t("pc.prioDone", name, t("pm.p." + v)));
+  });
+  requestAnimationFrame(() => $("#pcSeg")._place && $("#pcSeg")._place());
+  $("#pcRemember").addEventListener("change", async e => {
+    if (e.target.checked) { let r = null; try { r = await api.procPriority(targets, cur, true); } catch (x) {} done(r, t("pc.remembered", rows[0].name, t("pm.p." + cur))); st.rule = cur; }
+    if (!e.target.checked && st.rule) { let ok = false; try { ok = await api.prioForget(rows[0].name); } catch (x) {} toast(t(ok ? "pc.forgot" : "tw.failed", rows[0].name), ok ? "undo" : "alert", ok ? "" : "warn"); st.rule = ""; }
+  });
+  const fg = $("#pcForget");
+  if (fg) fg.addEventListener("click", async () => { let ok = false; try { ok = await api.prioForget(rows[0].name); } catch (x) {} toast(t(ok ? "pc.forgot" : "tw.failed", rows[0].name), ok ? "undo" : "alert", ok ? "" : "warn"); closeSheet(false); });
+  if (st.game) return;
+  $("#pcEco").addEventListener("change", async e => {
+    let r = null; try { r = await api.procEco(targets, e.target.checked); } catch (x) {}
+    done(r, t(e.target.checked ? "pc.ecoOn" : "pc.ecoOff", name));
+  });
+  $("#pcPause").addEventListener("click", async () => {
+    let r = null; try { r = await api.procPause(targets, !paused); } catch (x) {}
+    closeSheet(false); done(r, t(paused ? "pc.resumed" : "pc.paused", name));
+  });
+}
+$("#pmRules").addEventListener("click", async () => {
+  let rules = []; try { rules = (await api.prioRules()) || []; } catch (e) {}
+  const admin = !!(S.info && S.info.admin);
+  openSheet({ title: t("pc.rulesT"), sub: t("pc.rulesSub"),
+    body: rules.length ? `<div class="list">${rules.map((r, i) => `<div class="item"><div><div class="t">${esc(r.exe)}</div><div class="d">${esc(t("pc.ruleAlways", t("pm.p." + r.level)))}</div></div><button class="btn small" data-forget="${i}" ${admin ? "" : "disabled"}>${esc(t("pc.forget"))}</button></div>`).join("")}</div>` : `<div class="tw-empty">${esc(t("pc.rulesNone"))}</div>`,
+    foot: `<span class="grow"></span><button class="btn primary" id="pcRulesOk">${esc(t("modal.ok"))}</button>` });
+  $("#pcRulesOk").addEventListener("click", () => closeSheet(false));
+  $$("#shBody [data-forget]").forEach(b => b.addEventListener("click", async () => {
+    const r = rules[+b.dataset.forget]; b.disabled = true;
+    let ok = false; try { ok = await api.prioForget(r.exe); } catch (e) {}
+    toast(t(ok ? "pc.forgot" : "tw.failed", r.exe), ok ? "undo" : "alert", ok ? "" : "warn");
+    if (ok) b.closest(".item").remove();
+  }));
+});
 async function pmEnd(rows, name, force) {
   if (!rows.length) return;
   const targets = rows.map(r => ({ pid: r.pid, start: r.start }));
@@ -13217,6 +13354,7 @@ const Mock = (() => {
   mockOp("files", "", "Deleting large files (to the Recycle Bin)", "cut", [["info", "D:\\Videos\\raw.mov", "Moved to the Recycle Bin"]], "", false, 900e3);
   mockEnts[0] = [{ id: 1, t: Date.now() - 7300e3, kind: "app", level: "info", msg: "The app started (version 2.5.0)", data: { os: "Windows 11 Pro 24H2", admin: true } }];
   const P0 = (name, n, o) => Array.from({ length: n }, (_, i) => Object.assign({ name, pid: 1000 + Math.floor(Math.random() * 30000), ppid: 4, start: 1760000000000000 + i * 1000, threads: 12 + i, handles: 300 + i * 20, session: 1, kind: "background", closable: true, cpu0: .2, mem: 40 * MB, ws: 60 * MB, priv: 50 * MB, io0: 1024 * 30 }, o, { mem: (o.mem || 40 * MB) * (i ? .35 : 1) }));
+  let mockPrioRules = [{ exe: "obs64.exe", level: "above" }];
   const mockProcs = [].concat(
     P0("chrome.exe", 8, { desc: "Google Chrome", company: "Google LLC", path: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", kind: "app", cpu0: 1.8, mem: 520 * MB, io0: 1024 * 400 }),
     P0("Discord.exe", 4, { desc: "Discord", company: "Discord Inc.", path: "C:\\Users\\demo\\AppData\\Local\\Discord\\app-1.0.9187\\Discord.exe", kind: "app", cpu0: .9, mem: 310 * MB }),
@@ -13858,6 +13996,12 @@ const Mock = (() => {
       const cpu = Math.min(100, rows.reduce((s, r) => s + r.cpu, 0));
       return { rows, cpu, cores: 12, memTotal: 16 * GB, memUsed: 10.4 * GB, memLoad: 65, threads: 3412, handles: 128734 };
     },
+    procCtlState: async tg => { const p = mockProcs.find(x => x.pid === tg.pid); if (!p) return { can: false, why: "It has closed meanwhile." }; if (!p.closable) return { can: false, why: p.why || "Windows needs it." }; const r = mockPrioRules.find(x => x.exe.toLowerCase() === p.name.toLowerCase()); return { can: true, game: /shipping|cod\.exe|cs2/i.test(p.name), prio: /shipping|cod\.exe|cs2/i.test(p.name) ? (r ? r.level : "") : p.prio || "normal", eco: !!p.eco, paused: !!p.paused, rule: r ? r.level : "" }; },
+    procPriority: async (targets, level, remember) => { window.__prio = { targets, level, remember }; targets.forEach(tg => { const p = mockProcs.find(x => x.pid === tg.pid); if (p) p.prio = level; }); const p0 = mockProcs.find(x => x.pid === targets[0].pid); if (remember && p0) { mockPrioRules = mockPrioRules.filter(r => r.exe.toLowerCase() !== p0.name.toLowerCase()); mockPrioRules.push({ exe: p0.name, level }); } return { done: targets.length, failed: 0 }; },
+    procEco: async (targets, on) => { targets.forEach(tg => { const p = mockProcs.find(x => x.pid === tg.pid); if (p) { p.eco = on; p.prio = on ? "idle" : "normal"; } }); return { done: targets.length, failed: 0 }; },
+    procPause: async (targets, pause) => { targets.forEach(tg => { const p = mockProcs.find(x => x.pid === tg.pid); if (p) p.paused = pause; }); return { done: targets.length, failed: 0 }; },
+    prioRules: async () => JSON.parse(JSON.stringify(mockPrioRules)),
+    prioForget: async exe => { const n = mockPrioRules.length; mockPrioRules = mockPrioRules.filter(r => r.exe.toLowerCase() !== exe.toLowerCase()); return mockPrioRules.length < n; },
     procEnd: async (targets, force) => {
       await new Promise(r => setTimeout(r, force ? 300 : 900));
       const res = targets.map(tg => {

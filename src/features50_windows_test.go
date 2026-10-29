@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"golang.org/x/sys/windows"
+	"golang.org/x/sys/windows/registry"
 )
 
 // The exe of a game an anti-cheat protects comes from the process list.
@@ -206,5 +207,111 @@ func TestAutoMaintenance(t *testing.T) {
 	t.Logf("%+v in %v: %s", m, time.Since(start).Round(time.Millisecond), strings.Join(maintLines(m, T), " · "))
 	if m.Freed != 123 || m.RAM < 0 {
 		t.Fatalf("%+v", m)
+	}
+}
+
+// Priority, Efficiency mode and pause on a program that is not the app's
+// own (started through cmd, which then ends).
+func TestProcControls(t *testing.T) {
+	initPaths()
+	logInit(t.TempDir())
+	dir := t.TempDir()
+	fake := filepath.Join(dir, "xki4o-prio-probe.exe")
+	b, err := os.ReadFile(sys32("ping.exe"))
+	if err != nil {
+		t.Skip(err)
+	}
+	if err := os.WriteFile(fake, b, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := exec.Command(sys32("cmd.exe"), "/c", "start", "", "/min", fake, "-n", "60", "127.0.0.1").Run(); err != nil {
+		t.Skip(err)
+	}
+	var tg procTarget
+	for i := 0; i < 50 && tg.PID == 0; i++ {
+		time.Sleep(100 * time.Millisecond)
+		raw, _ := queryProcesses()
+		for _, p := range raw {
+			if strings.EqualFold(p.name, "xki4o-prio-probe.exe") {
+				tg = procTarget{PID: p.pid, Start: startID(p.created)}
+			}
+		}
+	}
+	if tg.PID == 0 {
+		t.Skip("the probe did not start")
+	}
+	defer func() {
+		if h, err := windows.OpenProcess(windows.PROCESS_TERMINATE, false, tg.PID); err == nil {
+			_ = windows.TerminateProcess(h, 1)
+			windows.CloseHandle(h)
+		}
+	}()
+	st := procCtlState(tg)
+	t.Logf("state %+v", st)
+	if !st.Can || st.Game || st.Prio != "normal" {
+		t.Fatalf("state %+v", st)
+	}
+	if r := procPriority([]procTarget{tg}, "below", false); r.Done != 1 {
+		t.Fatalf("priority %+v", r)
+	}
+	if st := procCtlState(tg); st.Prio != "below" {
+		t.Fatalf("after priority %+v", st)
+	}
+	if r := procEco([]procTarget{tg}, true); r.Done != 1 {
+		t.Fatalf("eco %+v", r)
+	}
+	if st := procCtlState(tg); !st.Eco || st.Prio != "idle" {
+		t.Fatalf("after eco %+v", st)
+	}
+	if r := procEco([]procTarget{tg}, false); r.Done != 1 {
+		t.Fatalf("eco off %+v", r)
+	}
+	if st := procCtlState(tg); st.Eco || st.Prio != "normal" {
+		t.Fatalf("after eco off %+v", st)
+	}
+	if r := procPause([]procTarget{tg}, true); r.Done != 1 || !procCtlState(tg).Paused {
+		t.Fatalf("pause %+v", r)
+	}
+	if r := procPause([]procTarget{tg}, false); r.Done != 1 || procCtlState(tg).Paused {
+		t.Fatalf("resume %+v", r)
+	}
+	if r := procPriority([]procTarget{{PID: tg.PID, Start: tg.Start + 1}}, "high", false); r.Done != 0 {
+		t.Fatal("a process that is not the one shown")
+	}
+	if r := procPriority([]procTarget{{PID: windows.GetCurrentProcessId(), Start: 0}}, "high", false); r.Done != 0 {
+		t.Fatal("the app itself")
+	}
+}
+
+// A remembered priority goes into Windows' own per-program setting and
+// comes out again without leaving keys behind.
+func TestPrioRemember(t *testing.T) {
+	changesThisPC(t)
+	initPaths()
+	was := app.admin
+	defer func() { app.admin = was }()
+	app.admin = isElevated()
+	if !app.admin {
+		t.Skip("needs administrator rights")
+	}
+	exe := "xki4o-prio-rule-test.exe"
+	if err := prioRemember(exe, "above"); err != nil {
+		t.Fatal(err)
+	}
+	found := false
+	for _, r := range prioRules() {
+		if r.Exe == exe && r.Level == "above" {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatalf("rules %+v", prioRules())
+	}
+	if !prioForget(exe) {
+		t.Fatal("forget")
+	}
+	if k, err := registry.OpenKey(registry.LOCAL_MACHINE, ifeoKey+`\`+exe, registry.QUERY_VALUE); err == nil {
+		k.Close()
+		t.Fatal("the key stayed")
 	}
 }

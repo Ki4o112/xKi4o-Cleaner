@@ -313,6 +313,12 @@ func main() {
 		"saveTextFile":  saveTextFile,
 		// Process Manager
 		"procList":         procList,
+		"procPriority":     procPriority,
+		"procEco":          procEco,
+		"procPause":        procPause,
+		"procCtlState":     procCtlState,
+		"prioRules":        prioRules,
+		"prioForget":       prioForget,
 		"procEnd":          procEnd,
 		"procOpenLocation": procOpenLocation,
 		"sysVitals":        sysVitals,
@@ -399,6 +405,7 @@ func main() {
 	}
 	recoverStop()
 	bgTameStep(false) // the held-back processes get their priority back
+	resumeAllPaused()
 	if win.inTray.Load() {
 		trayRemove()
 	}
