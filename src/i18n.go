@@ -177,6 +177,8 @@ var texts = map[string][2]string{ // [bg, en]
 	"rc.err.done":      {"Вече е върнат.", "Already restored."},
 	"rc.err.unknown":   {"Непознат запис.", "Unknown entry."},
 	"rc.err.read":      {"Списъкът с точки за възстановяване не можа да се прочете.", "The list of restore points could not be read."},
+	"upd.nTitle":       {"Има нова версия: %s", "A new version is out: %s"},
+	"upd.nText":        {"Сега е %s. Натисни тук, за да видиш какво ново и да обновиш.", "You have %s. Click here to see what's new and update."},
 	"upd.err.none":     {"Още няма публикувана версия в GitHub.", "No version has been published on GitHub yet."},
 	"upd.err.limit":    {"GitHub е натоварен в момента (твърде много заявки) — опитай по-късно.", "GitHub is busy right now (too many requests) — try again later."},
 	"upd.err.nothing":  {"Няма по-нова версия за инсталиране.", "There is no newer version to install."},
@@ -514,6 +516,9 @@ var texts = map[string][2]string{ // [bg, en]
 	"av.quarDone":   {"Неуспешни (файлът е зает): %d", "Failed (the file is in use): %d"},
 	"gp.err.dns":    {"Адресът не се намери", "The address was not found"},
 	// 4.4: game mode by itself
+	"gn.freed":        {"Освободени %s RAM", "%s of RAM freed"},
+	"gn.on":           {"%s · Game mode е включен", "%s · Game mode is on"},
+	"gn.ready":        {"%s · паметта е готова за играта", "%s · the memory is ready for the game"},
 	"log.gmGameStart": {"Пусната игра: %s — освобождаване на паметта", "A game started: %s — freeing memory"},
 	"log.gmGameEnd":   {"Затворена игра: %s — освобождаване на паметта", "A game closed: %s — freeing memory"},
 }

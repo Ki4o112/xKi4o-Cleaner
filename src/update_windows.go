@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"golang.org/x/sys/windows"
@@ -124,3 +125,38 @@ func openReleasePage(u string) bool {
 	shellOpen(u)
 	return true
 }
+
+// updOff: the update check is turned off in Settings.
+var updOff atomic.Bool
+
+// updateLoop looks for a new version every 3 hours while the app runs (the
+// page looks once when it opens), also while it waits in the tray. A new one
+// is told once: a Windows notification, and the page shows the update.
+func updateLoop() {
+	defer recoverLog("update check")
+	told := ""
+	for {
+		time.Sleep(updEvery)
+		upd.mu.Lock()
+		busy := upd.busy
+		upd.mu.Unlock()
+		if updOff.Load() || busy {
+			continue
+		}
+		v := checkUpdate()
+		if !v.Newer || v.Latest == told {
+			continue
+		}
+		told = v.Latest
+		emit("upd-found", v)
+		if app.w != nil {
+			app.w.Dispatch(func() {
+				if trayNotify(T("upd.nTitle", v.Latest), T("upd.nText", appVersion)) {
+					win.noteUpd.Store(true)
+				}
+			})
+		}
+	}
+}
+
+const updEvery = 3 * time.Hour

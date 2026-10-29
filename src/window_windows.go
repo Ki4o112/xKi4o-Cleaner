@@ -48,19 +48,20 @@ var (
 )
 
 const (
-	wmSize          = 0x0005
-	wmActivate      = 0x0006
-	wmClose         = 0x0010
-	wmNull          = 0x0000
-	wmContextMenu   = 0x007B
-	wmNCCalcSize    = 0x0083
-	wmNCHitTest     = 0x0084
-	wmNCLButtonDown = 0x00A1
-	wmSysCommand    = 0x0112
-	wmLButtonUp     = 0x0202
-	wmLButtonDblClk = 0x0203
-	wmRButtonUp     = 0x0205
-	wmTray          = 0x8000 + 77 // WM_APP + 77: the tray icon's messages
+	wmSize              = 0x0005
+	wmActivate          = 0x0006
+	wmClose             = 0x0010
+	wmNull              = 0x0000
+	wmContextMenu       = 0x007B
+	wmNCCalcSize        = 0x0083
+	wmNCHitTest         = 0x0084
+	wmNCLButtonDown     = 0x00A1
+	wmSysCommand        = 0x0112
+	wmLButtonUp         = 0x0202
+	wmLButtonDblClk     = 0x0203
+	wmRButtonUp         = 0x0205
+	wmTray              = 0x8000 + 77 // WM_APP + 77: the tray icon's messages
+	ninBalloonUserClick = 0x0405      // the notification was clicked
 
 	htClient   = 1
 	htCaption  = 2
@@ -90,6 +91,7 @@ var win struct {
 	msgTBar  uint32 // "TaskbarCreated": Explorer restarted, the tray icon must be added again
 	msgAuto  uint32 // "clean now", sent by the copy the automatic cleaning task started
 	trayIcon uintptr
+	noteUpd  atomic.Bool // the last Windows notification is about a new version
 }
 
 func registerWindowMessages() {
@@ -222,6 +224,11 @@ func winHook(hwnd, msg, wp, lp uintptr) (uintptr, bool) {
 			winShow()
 		case wmRButtonUp, wmContextMenu:
 			trayMenu(hwnd)
+		case ninBalloonUserClick:
+			winShow()
+			if win.noteUpd.Load() {
+				emit("upd-open", nil) // the page opens the update
+			}
 		}
 		return 0, true
 	}
@@ -496,6 +503,7 @@ func trayNotify(title, text string) bool {
 	if !win.inTray.Load() || app.hwnd == 0 {
 		return false
 	}
+	win.noteUpd.Store(false)
 	d := trayData()
 	d.UFlags = nifInfo
 	copyUTF16(d.SzInfoTitle[:], title)

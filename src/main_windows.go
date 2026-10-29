@@ -139,6 +139,7 @@ func main() {
 	go bootGet()     // closing goes to the tray when the app starts with Windows
 	go memAutoLoop() // started after app.w is set, so its events can reach the page
 	go gameAutoLoop()
+	go updateLoop()
 	go startupWatchLoop()
 	w.SetSize(min(int(980*scale), width), min(int(660*scale), height), webview2.HintMin)
 
@@ -405,6 +406,7 @@ func applySettings(m map[string]any) {
 	if l, ok := m["lang"].(string); ok {
 		setLang(l)
 	}
+	updOff.Store(m["updates"] == false)
 	if g, ok := m["game"].(map[string]any); ok {
 		gmCfgCache.Store(g)
 		if g["prio"] != true {

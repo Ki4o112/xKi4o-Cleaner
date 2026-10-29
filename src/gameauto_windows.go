@@ -173,6 +173,13 @@ func gameAutoStep() {
 	} else if ram {
 		ev["freed"] = gameRAM(T("log.gmGameStart", name))
 	}
+	if f, _ := ev["freed"].(int64); f > 0 {
+		sub := T("gn.ready", name)
+		if gmAuto.started {
+			sub = T("gn.on", name)
+		}
+		gameNotify(T("gn.freed", sizeText(f)), sub)
+	}
 	emit("gm-auto", ev)
 }
 

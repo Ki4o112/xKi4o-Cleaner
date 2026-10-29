@@ -335,7 +335,7 @@ async def main():
         await pg.evaluate("(() => { const o = LG.v.ops.find(x => x.state === 'error'); document.querySelector(`#lgOps [data-op=\"${o.id}\"]`).click(); })()")
         await wait_for(pg, "document.querySelector('#lgDet .st-pill.error')")
         await pg.click("#lgCopy")
-        ok = await wait_for(pg, "(window.__copied || '').includes('Ultimate Performance') && window.__copied.includes('Version 4.15.3')", 3000)
+        ok = await wait_for(pg, "(window.__copied || '').includes('Ultimate Performance') && window.__copied.includes('Version 4.16.0')", 3000)
         check("logs: 'Copy report' puts a full report on the clipboard", ok, await pg.evaluate("(window.__copied || '').slice(0, 200)"))
         await pg.select_option("#lgKind", "dupes")
         n = await wait_for(pg, "LG.v.ops.length > 0 && LG.v.ops.every(o => o.kind === 'dupes')")
@@ -445,6 +445,11 @@ async def main():
         ok = await wait_for(pg, "document.getElementById('updProgT').textContent.includes('restarting') && window.__updated === true", 5000)
         check("updates: 'Update now' downloads with progress, then restarts", ok, await pg.text_content("#updProgT"))
         await pg.close()
+        pg = await page(b, "?lang=en")
+        await pg.wait_for_timeout(6000)
+        await pg.evaluate("closeSheet && closeSheet(false); window.__ev('upd-found', {current: '4.16.0', latest: '9.9.9', newer: true, canInstall: true, notes: '### English\\n- Shiny', checked: 1})")
+        check("updates: a version the background check finds opens the update", await wait_for(pg, "(document.querySelector('#shBody .upd-notes') || {}).textContent && document.querySelector('#shBody .upd-notes').textContent.includes('Shiny')", 5000))
+        await pg.close()
         pg = await page(b, "?lang=bg&s=update")
         await wait_for(pg, "!!document.querySelector('#shBody .upd-notes')", 9000)
         notes = await pg.text_content("#shBody .upd-notes")
@@ -453,7 +458,7 @@ async def main():
         await pg.click("#updToggle")
         check("updates: the check can be turned off (and it is saved)", await wait_for(pg, "S.settings.updates === false"))
         await pg.click("#updNews")
-        check("updates: 'What's new' shows this version's changes", await wait_for(pg, "(document.querySelector('#shBody .upd-notes') || {}).textContent && document.querySelector('#shBody .upd-notes').textContent.includes('засича всяка игра')"))
+        check("updates: 'What's new' shows this version's changes", await wait_for(pg, "(document.querySelector('#shBody .upd-notes') || {}).textContent && document.querySelector('#shBody .upd-notes').textContent.includes('колко памет е освободена')"))
         check("no page errors (updates)", not pg.errs, pg.errs)
         # 22. PC health: a score, the cards, and "Do all recommended" through the queue
         await pg.close()
@@ -998,7 +1003,7 @@ async def main():
         pg = await page(b, "?lang=en&fast=1&last=4.3.0", start=None)
         ok = await wait_for(pg, "!!document.querySelector('#shBody .upd-notes')", 9000)
         heads = await pg.evaluate("[...document.querySelectorAll('#shBody .upd-v')].map(h => h.textContent)") if ok else []
-        check("what's new: from 4.3.0 every newer version, newest first", heads[:2] == ["4.15.3", "4.15.2"] and heads[-1] == "4.4.0" and "4.3.0" not in heads, heads)
+        check("what's new: from 4.3.0 every newer version, newest first", heads[:2] == ["4.16.0", "4.15.3"] and heads[-1] == "4.4.0" and "4.3.0" not in heads, heads)
         check("what's new: the title says from which version", "from 4.3.0" in (await pg.text_content("#shTitle") or ""))
         await pg.close()
         # 4.7: junk reminder, new startup program, Optimize for games, last games, hardware rank

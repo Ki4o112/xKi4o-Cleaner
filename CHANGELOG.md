@@ -3,6 +3,16 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.16.0 — 2026-10-29
+
+### English
+- When a game starts and game mode frees the memory, a small card shows over the game for a few seconds: how much was freed and that game mode is on. It never takes the focus from the game
+- The app looks for a new version every 3 hours, also while it waits in the tray. When one is out you get a Windows notification; click it to see what's new and update
+
+### Български
+- Когато пуснеш игра и game mode освободи паметта, над играта за няколко секунди се показва малка карта: колко памет е освободена и че game mode е включен. Не взима фокуса от играта
+- Програмата проверява за нова версия на всеки 3 часа, и докато е в трея. Щом излезе нова, получаваш нотификация от Windows; натисни я, за да видиш какво ново и да обновиш
+
 ## 4.15.3 — 2026-10-28
 
 ### English
