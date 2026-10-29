@@ -320,6 +320,13 @@ func TestPrioRemember(t *testing.T) {
 // user's own back after.
 func TestGamePower(t *testing.T) {
 	changesThisPC(t)
+	orig := activeScheme()
+	defer func() { _ = runTool(sys32("powercfg.exe"), "-setactive", orig) }()
+	if orig != balancedPlan { // start from Balanced, as most PCs are
+		if err := runTool(sys32("powercfg.exe"), "-setactive", balancedPlan); err != nil {
+			t.Skip(err)
+		}
+	}
 	before := activeScheme()
 	ov0, hasOv := overlayGet()
 	t.Logf("plan %s, power mode %s (%v)", before, ov0, hasOv)
