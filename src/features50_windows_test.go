@@ -422,3 +422,32 @@ func TestStartupDelay(t *testing.T) {
 		t.Fatalf("after undo %+v", e)
 	}
 }
+
+// The app's modes set Windows' power plan (or power mode).
+func TestPowerProfile(t *testing.T) {
+	changesThisPC(t)
+	initPaths()
+	logInit(t.TempDir())
+	orig := activeScheme()
+	defer func() { _ = runTool(sys32("powercfg.exe"), "-setactive", orig) }()
+	out, _, _ := runQuiet(20*time.Second, sys32("powercfg.exe"), "/list")
+	t.Logf("plans:\n%s", out)
+	r := powerProfile("games")
+	t.Logf("games %+v", r)
+	if !r.OK || r.Plan == balancedPlan && !strings.Contains(strings.ToLower(out), highPerfPlan) && r.Mode != bestPerfOverlay {
+		if !r.OK || (r.Plan != highPerfPlan && r.Plan != ultimateOurs && r.Plan != ultimateStdPlan && r.Mode != bestPerfOverlay) {
+			t.Fatalf("games %+v", r)
+		}
+	}
+	if r := powerProfile("balanced"); !r.OK || r.Plan != balancedPlan {
+		t.Fatalf("balanced %+v", r)
+	}
+	if strings.Contains(strings.ToLower(out), powerSaverPlan) {
+		if r := powerProfile("saver"); !r.OK || r.Plan != powerSaverPlan {
+			t.Fatalf("saver %+v", r)
+		}
+	}
+	if r := powerProfile("nope"); r.OK {
+		t.Fatal("an unknown mode")
+	}
+}

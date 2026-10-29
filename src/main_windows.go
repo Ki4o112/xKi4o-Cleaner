@@ -196,6 +196,7 @@ func main() {
 		"trimEnable":           trimEnable,
 		"bgTameState":          bgTameState,
 		"startupDelay":         startupDelay,
+		"powerProfile":         powerProfile,
 		"setStartup":           setStartup,
 		"restoreStartup":       restoreStartup,
 		"startupLog":           startupLogList,

@@ -88,3 +88,70 @@ func gamePowerBack(st gmState) {
 		}
 	}
 }
+
+const (
+	powerSaverPlan      = "a1841308-3593-4b1d-8d8a-d6b4c5ce1c8c"
+	bestEfficiencyOvl   = "961cc777-2547-4f9d-8174-7d86181b8a7a"
+	balancedOverlayNone = "00000000-0000-0000-0000-000000000000"
+)
+
+type powerModeResult struct {
+	OK    bool   `json:"ok"`
+	Plan  string `json:"plan,omitempty"`  // the plan now
+	Mode  string `json:"mode,omitempty"`  // the power mode now (laptops)
+	Error string `json:"error,omitempty"` // what could not be set
+}
+
+// powerProfile puts Windows' power setting for the app's modes: games (the
+// best performance there is), balanced (Windows' default) or saver (the
+// least power).
+func powerProfile(name string) powerModeResult {
+	op := beginOp("optimize", name, T("log.profile", T("pf."+name)), nil)
+	out, _, _ := runQuiet(20*time.Second, sys32("powercfg.exe"), "/list")
+	list := strings.ToLower(out)
+	has := func(g string) bool { return strings.Contains(list, g) }
+	var plans []string
+	ovl := ""
+	switch name {
+	case "games":
+		plans, ovl = []string{ultimateOurs, ultimateStdPlan, highPerfPlan}, bestPerfOverlay
+	case "balanced":
+		plans, ovl = []string{balancedPlan}, balancedOverlayNone
+	case "saver":
+		plans, ovl = []string{powerSaverPlan}, bestEfficiencyOvl
+	default:
+		op.end("", nil)
+		return powerModeResult{Error: T("pf.err")}
+	}
+	r := powerModeResult{OK: true}
+	set := false
+	for _, p := range plans {
+		if has(p) {
+			if err := runTool(sys32("powercfg.exe"), "-setactive", p); err != nil {
+				r.OK, r.Error = false, err.Error()
+			}
+			set = true
+			break
+		}
+	}
+	if !set && name != "balanced" { // only Balanced on this PC: the power mode does it
+		if err := runTool(sys32("powercfg.exe"), "-setactive", balancedPlan); err == nil {
+			set = true
+		}
+	}
+	if _, ok := overlayGet(); ok {
+		// the power mode goes with the plan only on Balanced (Windows ignores it otherwise)
+		if activeScheme() == balancedPlan && !overlaySet(ovl) && name != "balanced" {
+			r.OK, r.Error = false, T("pf.err")
+		}
+	} else if !set {
+		r.OK, r.Error = false, T("pf.err")
+	}
+	r.Plan = activeScheme()
+	r.Mode, _ = overlayGet()
+	if !r.OK {
+		op.fail("", r.Error, nil)
+	}
+	op.end("", map[string]any{"plan": r.Plan, "mode": r.Mode})
+	return r
+}

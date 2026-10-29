@@ -946,6 +946,20 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .su-dl span { color: var(--muted); font-size: 12px; }
 .su-dl.on { border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue) inset; }
 .su-dl:hover { background: var(--card); }
+.pf-bar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
+.pf { position: relative; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; gap: 2px 12px; align-items: center; text-align: left; padding: 14px 16px; border-radius: var(--r-l); background: var(--card); border: 1px solid var(--edge); color: inherit; font: inherit; cursor: pointer; transition: background .2s, transform .25s var(--spring), border-color .2s; }
+.pf:hover:not(:disabled) { background: var(--card-2); }
+.pf:active:not(:disabled) { transform: scale(.98); }
+.pf:disabled { cursor: default; opacity: .7; }
+.pf .pf-ic { grid-row: 1 / 3; width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: var(--card-2); }
+.pf .pf-ic svg { width: 20px; height: 20px; }
+.pf .pf-t { font-weight: 700; }
+.pf .pf-d { color: var(--muted); font-size: 12px; }
+.pf .pf-on, .pf .spin { position: absolute; right: 12px; top: 12px; }
+.pf .pf-on svg { width: 16px; height: 16px; color: var(--blue-hi, #c8f560); }
+.pf.on { border-color: var(--blue); background: linear-gradient(145deg, color-mix(in srgb, var(--blue) 16%, var(--card)), var(--card)); box-shadow: 0 14px 30px -18px var(--blue-glow); }
+.pf.on .pf-ic { background: var(--blue); color: #0b0b0b; }
+@media (max-width: 760px) { .pf-bar { grid-template-columns: 1fr; } }
 /* ================= Startup Manager ================= */
 .bp-card { background: var(--card); border: 1px solid var(--edge); border-radius: var(--r-l); padding: 16px 18px; margin-top: 12px; }
 .bp-card:empty { display: none; }
@@ -2630,6 +2644,8 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
             <div class="hc-chart"><canvas id="hcNetC"></canvas></div><span class="hc-go" data-icon="chev"></span>
           </button>
         </div>
+        <div class="hm-h" data-i="pf.title"></div>
+        <div class="pf-bar" id="hmProfile"></div>
         <div class="hm-h" data-i="hm.lowT"></div>
         <div class="hm-low">
           <div class="hm-cards" id="hmCards"></div>
@@ -3709,6 +3725,12 @@ bg: {
   "su.delayDone": "{0} ще тръгва {1} след влизането",
   "su.delayOff": "{0} тръгва веднага с Windows",
   "bp.later": "По-късно",
+  "pf.title": "Режим на работа",
+  "pf.balanced": "Баланс", "pf.balancedD": "Обичайното на Windows — тихо и пестеливо",
+  "pf.games": "Игри", "pf.gamesD": "Най-добра производителност, фонът изчаква, Game mode сам",
+  "pf.saver": "Пестене", "pf.saverD": "Най-малко ток — за батерията на лаптопа",
+  "pf.done": "Режим „{0}“ е включен",
+  "pf.partly": "Режим „{0}“ — Windows не прие всичко.",
   "pc.more": "Приоритет и още",
   "pc.title": "{0}",
   "pc.subMany": "{0} процеса",
@@ -4914,6 +4936,12 @@ en: {
   "su.delayDone": "{0} will start {1} after signing in",
   "su.delayOff": "{0} starts right away with Windows",
   "bp.later": "Later",
+  "pf.title": "Mode",
+  "pf.balanced": "Balanced", "pf.balancedD": "Windows' usual — quiet and thrifty",
+  "pf.games": "Games", "pf.gamesD": "Best performance, background waits, game mode by itself",
+  "pf.saver": "Saver", "pf.saverD": "The least power — for a laptop's battery",
+  "pf.done": "“{0}” mode is on",
+  "pf.partly": "“{0}” mode — Windows did not take all of it.",
   "pc.more": "Priority and more",
   "pc.title": "{0}",
   "pc.subMany": "{0} processes",
@@ -12080,6 +12108,30 @@ function homeIssues() {
   if (HM.bat && HM.bat.ok && HM.bat.verdict === "replace") add("bat", "warn", 4);
   return out;
 }
+/* the app's modes: one click sets the power plan, background work and game mode together */
+const PF = ["balanced", "games", "saver"];
+const PF_ICON = { balanced: "tweaks", games: "gamepad", saver: "battery" };
+function renderProfile() {
+  const el = $("#hmProfile"); if (!el) return;
+  const cur = S.settings.profile || "balanced", busy = PF.busy;
+  el.innerHTML = PF.map(p => `<button class="pf ${cur === p ? "on" : ""}" data-pf="${p}" ${busy || (S.info && !S.info.admin) ? "disabled" : ""}><span class="pf-ic">${ICONS[PF_ICON[p]] || ICONS.sparkle}</span><span class="pf-t">${esc(t("pf." + p))}</span><span class="pf-d">${esc(t("pf." + p + "D"))}</span>${busy === p ? '<span class="spin"></span>' : cur === p ? `<span class="pf-on">${ICONS.check}</span>` : ""}</button>`).join("");
+  el.querySelectorAll("[data-pf]").forEach(b => b.addEventListener("click", () => setProfile(b.dataset.pf)));
+}
+async function setProfile(p) {
+  if (PF.busy || (S.settings.profile || "balanced") === p) return;
+  PF.busy = p; renderProfile();
+  let r = null; try { r = await api.powerProfile(p); } catch (e) { r = { ok: false, error: String(e && e.message || e) }; }
+  PF.busy = "";
+  const g = gmCfg(), prev = S.settings.profile || "balanced";
+  if (prev === "balanced") g.autoBefore = !!g.auto; // what the user had, for coming back
+  if (p === "games") { S.settings.bgTame = true; g.auto = true; g.ram = true; g.power = true; }
+  else if (p === "saver") { S.settings.bgTame = true; g.auto = false; }
+  else g.auto = !!g.autoBefore;
+  S.settings.profile = p; storeSettings();
+  if (r && r.ok) toast(t("pf.done", t("pf." + p)), PF_ICON[p] && ICONS[PF_ICON[p]] ? PF_ICON[p] : "check");
+  else toast(t("pf.partly", t("pf." + p)) + (r && r.error ? " " + r.error : ""), "alert", "warn");
+  renderProfile(); if (typeof renderGame === "function" && S.page === "game") renderGame();
+}
 function homeErrors() { return (Array.isArray(HM.probs) ? HM.probs : []).filter(e => e.level === "error" && Date.now() - (e.t || 0) < 7 * 86400e3); }
 function homeUpdates() { return ((HM.upd && HM.upd.updates) || []).filter(u => !u.explicit && !u.cut); }
 function homeScore() { return Math.max(0, 100 - homeIssues().reduce((s, x) => s + x.pts, 0)); }
@@ -12100,6 +12152,7 @@ function renderHome() {
     <ul class="hh-list">${hh.map(r => `<li><span class="hm-dot ${r[0]}"></span><b>${esc(r[1])}</b><span title="${esc(r[2])}">${esc(r[2])}</span></li>`).join("")}</ul>
     <div class="hm-acts"><button class="btn primary" id="hmDoAll" ${recs.length && ready ? "" : "disabled"}>${ICONS.sparkle}<span>${esc(recs.length ? t("hm.doAllS", recs.length) : t("hm.nothing"))}</span></button><button class="btn icon-btn" id="hmRefresh" title="${esc(t("hm.refresh"))}" aria-label="${esc(t("hm.refresh"))}">${ICONS.refresh}</button></div>`;
   $("#hmDoAll").addEventListener("click", homeDoAll);
+  renderProfile();
   paintHomeDisk(); qsSync();
   $("#hmRefresh").addEventListener("click", () => { homeLoad(true); if (!S.busy && !jobOf("scan")) softRescan(); });
   const dot = id => `<span class="hm-dot ${sev(id)}"></span>`;
@@ -14308,6 +14361,7 @@ const Mock = (() => {
       const u = mockHist.slice().reverse().find(h => h.ok && !h.undone && (h.action === "apply" || h.action === "revert"));
       return { tweaks: tw, startup: su, files: mockRecycled.map(x => Object.assign({}, x)), undo: u || null, admin: scen !== "noadmin" };
     },
+    powerProfile: async p => { await new Promise(r => setTimeout(r, 400)); window.__profile = p; return { ok: true, plan: p === "games" ? "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c" : "381b4222-f694-41f0-9685-ff5bb260df2e" }; },
     restoreToPoint: async seq => { await new Promise(r => setTimeout(r, 300)); window.__restoredTo = seq; return mockPoints.some(p => p.seq === seq) ? "" : "That restore point is gone."; },
     batteryInfo: async () => { await new Promise(r => setTimeout(r, 200)); return scen === "nobat" ? { ok: false } : { ok: true, charge: 64, onAC: false, charging: false, cycles: 412, remaining: 24000, full: 37210, design: 56000, health: 66, draw: 11800, gets: 0, mins: 122, verdict: "worn" }; },
     batteryReport: async () => { window.__batReport = true; return ""; },
