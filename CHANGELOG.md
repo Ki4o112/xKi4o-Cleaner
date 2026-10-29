@@ -3,6 +3,28 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.17.0 — 2026-10-29
+
+### English
+- Startup: how long Windows takes to start and what slows it, with a button to turn an app off
+- Windows' heavy background work waits while you use the PC or play (Settings)
+- Heat and speed: tells when the processor slows itself down, why, and what helps
+- Battery: cycles, usage now, time left, wear and Windows' battery report
+- Disks: a warning when an SSD is nearly full; TRIM back on with one click
+- Automatic cleaning can do full maintenance and tells the result
+- Go back to any restore point with one click
+- Fixed: duplicates in a folder with a short Windows name could not be deleted
+
+### Български
+- Стартиране: колко бързо тръгва Windows и кое го бави, с бутон за изключване
+- Тежките фонови задачи на Windows изчакват, докато работиш или играеш (Настройки)
+- Температура и скорост: казва кога процесорът се забавя, защо и какво помага
+- Батерия: цикли, колко харчи, колко остава, износване и отчетът на Windows
+- Дискове: предупреждение при почти пълно SSD; TRIM се включва с едно натискане
+- Автоматичното чистене може да прави пълна поддръжка и казва резултата
+- Връщане до всяка точка за възстановяване с едно натискане
+- Оправено: дубликати в папка с кратко име на Windows не можеха да се изтрият
+
 ## 4.16.0 — 2026-10-29
 
 ### English

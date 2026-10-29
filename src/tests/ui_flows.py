@@ -57,6 +57,9 @@ async def native_page(b, q=""):
 SPILL = """[...document.querySelectorAll('#hmScore, #hmBody .hc, #hmBody .hm-card, #hmBody .hm-x, #hmQS, #hmHelp')].flatMap(c => { const r = c.getBoundingClientRect();
   return [...c.querySelectorAll('*')].filter(e => !e.closest('.hh-art')).filter(e => { const q = e.getBoundingClientRect(); return q.width > 0 && (q.right > r.right + 1 || q.left < r.left - 1); }).map(e => (c.id || c.className) + ' > ' + (e.id || e.className.baseVal || e.className || e.tagName)); })"""
 
+def window_none(v):
+    return v is None
+
 async def wait_for(pg, js, timeout=8000):
     try:
         await pg.wait_for_function(js, timeout=timeout); return True
@@ -335,7 +338,7 @@ async def main():
         await pg.evaluate("(() => { const o = LG.v.ops.find(x => x.state === 'error'); document.querySelector(`#lgOps [data-op=\"${o.id}\"]`).click(); })()")
         await wait_for(pg, "document.querySelector('#lgDet .st-pill.error')")
         await pg.click("#lgCopy")
-        ok = await wait_for(pg, "(window.__copied || '').includes('Ultimate Performance') && window.__copied.includes('Version 4.16.0')", 3000)
+        ok = await wait_for(pg, "(window.__copied || '').includes('Ultimate Performance') && window.__copied.includes('Version 4.17.0')", 3000)
         check("logs: 'Copy report' puts a full report on the clipboard", ok, await pg.evaluate("(window.__copied || '').slice(0, 200)"))
         await pg.select_option("#lgKind", "dupes")
         n = await wait_for(pg, "LG.v.ops.length > 0 && LG.v.ops.every(o => o.kind === 'dupes')")
@@ -450,6 +453,70 @@ async def main():
         await pg.evaluate("closeSheet && closeSheet(false); window.__ev('upd-found', {current: '4.16.0', latest: '9.9.9', newer: true, canInstall: true, notes: '### English\\n- Shiny', checked: 1})")
         check("updates: a version the background check finds opens the update", await wait_for(pg, "(document.querySelector('#shBody .upd-notes') || {}).textContent && document.querySelector('#shBody .upd-notes').textContent.includes('Shiny')", 5000))
         await pg.close()
+        # 4.17: how fast Windows starts, on the Startup page; what slows it can be turned off there
+        pg = await page(b, "?lang=en", start="startup")
+        ok = await wait_for(pg, "document.querySelector('#suBoot') && document.querySelector('#suBoot').textContent.includes('42 s')")
+        check("startup: the last start time and what slows it", ok and "SysMain" in await pg.text_content("#suBoot"), await pg.text_content("#suBoot"))
+        await wait_for(pg, "SU.loaded")
+        await pg.evaluate("SU.items.find(e => e.name === 'Spotify').enabled = true; renderStartup()")
+        btn = await pg.query_selector("#suBoot [data-bpoff]")
+        check("startup: a slowing app that starts with Windows has a turn-off button", btn is not None)
+        if btn:
+            await btn.click()
+            check("startup: turning it off from the start report", await wait_for(pg, "SU.items.find(e => e.name === 'Spotify').enabled === false && document.querySelector('#suBoot').textContent.includes('turned off')"))
+        await pg.close()
+        pg = await page(b, "?lang=en&s=noboot", start="startup")
+        check("startup: no start time recorded yet says so", await wait_for(pg, "document.querySelector('#suBoot').textContent.includes('has not written a start time')"))
+        await pg.close()
+        # the battery in detail and the processor's heat, on System information
+        pg = await page(b, "?lang=en&s=laptop", start="sysinfo")
+        ok = await wait_for(pg, "document.querySelector('#siBody').textContent.includes('Charge cycles')", 9000)
+        txt = await pg.text_content("#siBody")
+        check("sysinfo: battery cycles, draw and time left", ok and "412" in txt and "Using 11.8 W" in txt and "2 h 2 min" in txt and "66%" in txt and "A new one will last longer" in txt, txt[-900:])
+        await pg.click("#batReport")
+        check("sysinfo: Windows' battery report opens", await wait_for(pg, "window.__batReport === true"))
+        check("sysinfo: the processor runs at full speed", "runs at its full speed" in txt)
+        await pg.close()
+        pg = await page(b, "?lang=en&s=hot", start="sysinfo")
+        ok = await wait_for(pg, "document.querySelector('#siBody').textContent.includes('held itself back')", 9000)
+        txt = await pg.text_content("#siBody")
+        check("sysinfo: throttling from heat is told with what helps", ok and "58%" in txt and "94 °C" in txt and "cooling pad" in txt, txt[-700:])
+        await pg.evaluate("window.__ev('throttle', {at: Date.now(), secs: 60, limit: 55, temp: 95, reason: 'heat'})")
+        check("throttling: a notice when it starts", await wait_for(pg, "[...document.querySelectorAll('.toast')].some(x => x.textContent.includes('slows down to 55%'))", 3000))
+        await pg.close()
+        # disks: little free space and TRIM turned off
+        pg = await page(b, "?lang=en&s=notrim", start="optimize")
+        check("disks: TRIM turned off is shown", await wait_for(pg, "!!document.querySelector('#dhTrimOn')", 9000))
+        await pg.click("#dhTrimOn")
+        check("disks: TRIM is turned on with one click", await wait_for(pg, "window.__trimOn === true && !document.querySelector('#dhTrimOn')"))
+        await pg.close()
+        pg = await page(b, "?lang=en&s=full", start="optimize")
+        check("disks: a nearly full SSD is told", await wait_for(pg, "document.querySelector('#dhGrid').textContent.includes('Only 9% is free')", 9000))
+        await pg.click("#dhGrid [data-dhclean]")
+        check("disks: the free-space link goes to Cleanup", await wait_for(pg, "S.page === 'clean'"))
+        await pg.close()
+        # settings: background work waits, full maintenance
+        pg = await page(b, "?lang=en", start="settings")
+        check("settings: what background work waits now", await wait_for(pg, "document.querySelector('#bgTameStatus').textContent.includes('searchindexer')"))
+        await pg.click("#bgTameToggle")
+        check("settings: background waiting can be turned off", await wait_for(pg, "S.settings.bgTame === false && document.querySelector('#bgTameStatus').textContent === ''"))
+        await pg.click("#autoMaintToggle")
+        check("settings: full maintenance can be turned off", await wait_for(pg, "S.settings.autoMaint === false"))
+        await pg.evaluate("window.__ev('auto-clean', {freed: 1e9, files: 10, maintText: '1.0 GB freed · the drives are fine'})")
+        check("maintenance: its result is shown", await wait_for(pg, "[...document.querySelectorAll('.toast')].some(x => x.textContent.includes('Maintenance is done: 1.0 GB freed'))", 3000))
+        await pg.close()
+        # going back to a restore point: asked first, then Windows does it
+        pg = await page(b, "?lang=en", start="restore")
+        await wait_for(pg, "!S.busy", 20000)  # the opening scan
+        await pg.evaluate("RC.tab = 'points'; renderRestore(); loadRP()")
+        ok = await wait_for(pg, "document.querySelectorAll('[data-rprest]:not([disabled])').length > 0", 9000)
+        check("restore: every point has a go-back button", ok)
+        if ok:
+            await pg.click("[data-rprest]")
+            check("restore: going back is confirmed first", await wait_for(pg, "document.querySelector('#veil.on') && document.querySelector('#mTitle').textContent.includes('Bring the PC back')") and window_none(await pg.evaluate("window.__restoredTo")))
+            await pg.click("#mOk")
+            check("restore: then Windows is asked to go back", await wait_for(pg, "typeof window.__restoredTo === 'number'"))
+        await pg.close()
         pg = await page(b, "?lang=bg&s=update")
         await wait_for(pg, "!!document.querySelector('#shBody .upd-notes')", 9000)
         notes = await pg.text_content("#shBody .upd-notes")
@@ -458,7 +525,7 @@ async def main():
         await pg.click("#updToggle")
         check("updates: the check can be turned off (and it is saved)", await wait_for(pg, "S.settings.updates === false"))
         await pg.click("#updNews")
-        check("updates: 'What's new' shows this version's changes", await wait_for(pg, "(document.querySelector('#shBody .upd-notes') || {}).textContent && document.querySelector('#shBody .upd-notes').textContent.includes('колко памет е освободена')"))
+        check("updates: 'What's new' shows this version's changes", await wait_for(pg, "(document.querySelector('#shBody .upd-notes') || {}).textContent && document.querySelector('#shBody .upd-notes').textContent.includes('кое го бави')"))
         check("no page errors (updates)", not pg.errs, pg.errs)
         # 22. PC health: a score, the cards, and "Do all recommended" through the queue
         await pg.close()
@@ -1003,7 +1070,7 @@ async def main():
         pg = await page(b, "?lang=en&fast=1&last=4.3.0", start=None)
         ok = await wait_for(pg, "!!document.querySelector('#shBody .upd-notes')", 9000)
         heads = await pg.evaluate("[...document.querySelectorAll('#shBody .upd-v')].map(h => h.textContent)") if ok else []
-        check("what's new: from 4.3.0 every newer version, newest first", heads[:2] == ["4.16.0", "4.15.3"] and heads[-1] == "4.4.0" and "4.3.0" not in heads, heads)
+        check("what's new: from 4.3.0 every newer version, newest first", heads[:2] == ["4.17.0", "4.16.0"] and heads[-1] == "4.4.0" and "4.3.0" not in heads, heads)
         check("what's new: the title says from which version", "from 4.3.0" in (await pg.text_content("#shTitle") or ""))
         await pg.close()
         # 4.7: junk reminder, new startup program, Optimize for games, last games, hardware rank

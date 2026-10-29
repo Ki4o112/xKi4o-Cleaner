@@ -141,7 +141,8 @@ func throttleLoop() {
 			}
 			th.cur = nil
 		}
-		notify := thWorth(th.samples) && s.At-th.noticed > thNoticeMs
+		// on battery a slower processor is expected: shown on the page, not notified
+		notify := thWorth(th.samples) && s.At-th.noticed > thNoticeMs && thReason(s) != "battery"
 		var ev thEvent
 		if notify {
 			th.noticed = s.At
