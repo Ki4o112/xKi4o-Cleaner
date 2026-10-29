@@ -126,7 +126,7 @@ func TestCatalogCleansOnlyCaches(t *testing.T) {
 			if !safeTarget(tg.Path) {
 				t.Errorf("%s: unsafe target %s", id, tg.Path)
 			}
-			in := strings.HasPrefix(strings.ToLower(tg.Path), strings.ToLower(root)) ||
+			in := strings.HasPrefix(strings.ToLower(fullNames(tg.Path)), strings.ToLower(fullNames(root))) ||
 				strings.HasPrefix(strings.ToLower(tg.Path), strings.ToLower(amd))
 			if !in {
 				t.Errorf("%s: target outside the test folders: %s", id, tg.Path)

@@ -241,7 +241,51 @@ func runAutoClean(source string) {
 		state = s
 	}
 	saveAutoLast(autoLast{At: time.Now().Unix(), Freed: sum.freed, Files: sum.files, Skipped: sum.locked + sum.denied, State: state})
-	emit("auto-clean", map[string]any{"freed": sum.freed, "files": sum.files})
+	ev := map[string]any{"freed": sum.freed, "files": sum.files}
+	if getSettings()["autoMaint"] != false {
+		m := autoMaintenance(sum.freed)
+		ev["maint"] = m
+		text := strings.Join(maintLines(m, T), " · ")
+		shown := false
+		if app.w != nil {
+			done := make(chan bool, 1)
+			app.w.Dispatch(func() { done <- trayNotify(T("am.title"), text) })
+			select {
+			case shown = <-done:
+			case <-time.After(3 * time.Second):
+			}
+		}
+		if !shown && source == "task" && app.w == nil {
+			// the copy the task started has no window: the card, then it ends
+			gameNotify(T("am.title"), text)
+			time.Sleep(gnShow + time.Second)
+		}
+	}
+	emit("auto-clean", ev)
+}
+
+// autoMaintenance: after the cleaning, the rest of the weekly look-over —
+// the memory Windows only caches, the drives' health, programs and Windows
+// updates waiting. It only reads, except the freed cache.
+func autoMaintenance(freed int64) maintSum {
+	op := beginOp("schedule", "", T("log.autoMaint"), nil)
+	m := maintSum{Freed: freed}
+	m.RAM = cleanMemory(gameRAMRegions).Freed
+	for _, d := range diskHealthList(true).Disks {
+		if d.Verdict == "warn" || d.Verdict == "bad" || d.LowFree {
+			m.Disks++
+		}
+	}
+	if l := wingetUpdates(true); l.Available {
+		m.AppUpd = len(l.Updates)
+	}
+	if app.admin {
+		if w := wuSearch(); w.Error == "" {
+			m.WinUpd, m.Reboot = len(w.Updates), w.Reboot
+		}
+	}
+	op.end(strings.Join(maintLines(m, T), " · "), map[string]any{"maint": m})
+	return m
 }
 
 func saveAutoLast(l autoLast) {

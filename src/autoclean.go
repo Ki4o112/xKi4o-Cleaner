@@ -113,3 +113,33 @@ func taskCommand(x string) string {
 	v := x[i+len("<Command>") : j]
 	return strings.NewReplacer("&quot;", `"`, "&apos;", "'", "&lt;", "<", "&gt;", ">", "&amp;", "&").Replace(strings.Trim(strings.TrimSpace(v), `"`))
 }
+
+// maintSum: what the full maintenance after an automatic cleaning found.
+type maintSum struct {
+	Freed  int64 `json:"freed"`
+	RAM    int64 `json:"ram"`
+	Disks  int   `json:"disks"`  // drives that want a look
+	AppUpd int   `json:"appUpd"` // programs with a newer version
+	WinUpd int   `json:"winUpd"` // Windows updates waiting
+	Reboot bool  `json:"reboot"`
+}
+
+// maintLines: the notification's text, one short part per finding.
+func maintLines(m maintSum, tr func(string, ...any) string) []string {
+	out := []string{tr("am.freed", sizeText(m.Freed+m.RAM))}
+	if m.Disks > 0 {
+		out = append(out, tr("am.disks", m.Disks))
+	} else {
+		out = append(out, tr("am.disksOK"))
+	}
+	if m.AppUpd > 0 {
+		out = append(out, tr("am.apps", m.AppUpd))
+	}
+	if m.WinUpd > 0 {
+		out = append(out, tr("am.win", m.WinUpd))
+	}
+	if m.Reboot {
+		out = append(out, tr("am.reboot"))
+	}
+	return out
+}

@@ -33,6 +33,35 @@ type diskHealth struct {
 	Verdict  string   `json:"verdict"`            // good, warn, bad, unknown
 	Reasons  []string `json:"reasons"`            // text keys; the first one is the main reason
 	NoData   bool     `json:"noData"`             // the drive gives no counters (USB enclosures often)
+	FreePct  *int     `json:"freePct,omitempty"`  // the fullest of its drive letters
+	LowFree  bool     `json:"lowFree,omitempty"`  // so full it slows down
+}
+
+// lowFree: an SSD slows down under about 15% free space (it has no room left
+// to sort its cells), a hard disk under 10% (the files get scattered).
+func lowFree(solid bool, pct int) bool {
+	if solid {
+		return pct < 15
+	}
+	return pct < 10
+}
+
+// trimState reads "fsutil behavior query DisableDeleteNotify": "on" when
+// Windows tells the SSD which space is free (TRIM), "off", or "" (unknown).
+func trimState(out string) string {
+	for _, l := range strings.Split(out, "\n") {
+		if strings.Contains(l, "ReFS") || !strings.Contains(l, "DisableDeleteNotify") || !strings.Contains(l, "=") {
+			continue
+		}
+		v := strings.TrimSpace(l[strings.Index(l, "=")+1:])
+		switch {
+		case strings.HasPrefix(v, "0"):
+			return "on"
+		case strings.HasPrefix(v, "1"):
+			return "off"
+		}
+	}
+	return ""
 }
 
 func (d diskHealth) solid() bool {

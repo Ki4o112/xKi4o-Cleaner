@@ -450,6 +450,7 @@ type diskView struct {
 // protectedPath: Windows' own folders and files, and other users' data.
 // They are marked in the list and cannot be deleted from the app.
 func protectedPath(p string) bool {
+	p = fullNames(p)
 	l := strings.ToLower(filepath.Clean(p))
 	vol := strings.ToLower(filepath.VolumeName(l)) + `\`
 	rel := strings.TrimPrefix(l, vol)
@@ -817,4 +818,22 @@ func recycle(p string) error {
 		return errors.New(T("da.err.aborted"))
 	}
 	return nil
+}
+
+// fullNames: the path with its short 8.3 names (C:\Users\JOHNSM~1, as some
+// TEMP settings give) written out in full; the path as it was when that fails.
+func fullNames(p string) string {
+	if !strings.Contains(p, "~") {
+		return p
+	}
+	u, err := windows.UTF16PtrFromString(p)
+	if err != nil {
+		return p
+	}
+	buf := make([]uint16, windows.MAX_LONG_PATH)
+	n, err := windows.GetLongPathName(u, &buf[0], uint32(len(buf)))
+	if err != nil || n == 0 || int(n) > len(buf) {
+		return p
+	}
+	return windows.UTF16ToString(buf[:n])
 }

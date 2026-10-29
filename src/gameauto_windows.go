@@ -376,6 +376,12 @@ func gamePath(pid uint32) string {
 	if p := processPath(pid); p != "" {
 		return p
 	}
+	return pathFromList(pid)
+}
+
+// pathFromList: the exe of a process from Windows' process list, without
+// opening the process.
+func pathFromList(pid uint32) string {
 	const systemProcessIDInformation = 88
 	buf := make([]uint16, 1024)
 	info := struct {

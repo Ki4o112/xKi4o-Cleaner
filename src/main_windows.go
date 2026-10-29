@@ -140,6 +140,8 @@ func main() {
 	go memAutoLoop() // started after app.w is set, so its events can reach the page
 	go gameAutoLoop()
 	go updateLoop()
+	go throttleLoop()
+	go bgTameLoop()
 	go startupWatchLoop()
 	w.SetSize(min(int(980*scale), width), min(int(660*scale), height), webview2.HintMin)
 
@@ -187,6 +189,12 @@ func main() {
 		"previewItem":          previewItem,
 		"showInFolder":         showInFolder,
 		"listStartup":          listStartup,
+		"bootPerf":             bootPerfRead,
+		"throttleState":        throttleState,
+		"batteryInfo":          batteryInfo,
+		"batteryReport":        batteryReport,
+		"trimEnable":           trimEnable,
+		"bgTameState":          bgTameState,
 		"setStartup":           setStartup,
 		"restoreStartup":       restoreStartup,
 		"startupLog":           startupLogList,
@@ -389,6 +397,7 @@ func main() {
 		fpsStop()
 	}
 	recoverStop()
+	bgTameStep(false) // the held-back processes get their priority back
 	if win.inTray.Load() {
 		trayRemove()
 	}
@@ -407,6 +416,7 @@ func applySettings(m map[string]any) {
 		setLang(l)
 	}
 	updOff.Store(m["updates"] == false)
+	bgOff.Store(m["bgTame"] == false)
 	if g, ok := m["game"].(map[string]any); ok {
 		gmCfgCache.Store(g)
 		if g["prio"] != true {

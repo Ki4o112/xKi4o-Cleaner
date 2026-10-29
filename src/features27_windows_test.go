@@ -348,7 +348,7 @@ func TestShellResolve(t *testing.T) {
 		t.Logf("Windows could not make a shortcut (%v): the app's own one is used", err)
 		makeLnk(t, ok, target)
 	}
-	if got, works, why := shellResolveWhy(ok, 1500*time.Millisecond); !works || !strings.EqualFold(got, target) {
+	if got, works, why := shellResolveWhy(ok, 1500*time.Millisecond); !works || !strings.EqualFold(fullNames(got), fullNames(target)) {
 		t.Errorf("a working shortcut: %q %v (%s)", got, works, why)
 	}
 	// the app's own minimal shortcut (the parser tests use it)

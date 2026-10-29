@@ -273,15 +273,18 @@ func gpu3DOf(pid uint32) (float64, bool) {
 }
 
 // pdhNamed: the values of a wildcard counter with their instance names.
-func pdhNamed(ctr uintptr) ([]float64, []string, bool) {
+func pdhNamed(ctr uintptr) ([]float64, []string, bool) { return pdhArray(pdh.get, ctr) }
+
+// pdhArray reads a wildcard counter with get (PdhGetFormattedCounterArrayW).
+func pdhArray(get *windows.LazyProc, ctr uintptr) ([]float64, []string, bool) {
 	const pdhFmtDouble, pdhMoreData = 0x200, 0x800007D2
 	var size, count uint32
-	r, _, _ := pdh.get.Call(ctr, pdhFmtDouble, uintptr(unsafe.Pointer(&size)), uintptr(unsafe.Pointer(&count)), 0)
+	r, _, _ := get.Call(ctr, pdhFmtDouble, uintptr(unsafe.Pointer(&size)), uintptr(unsafe.Pointer(&count)), 0)
 	if uint32(r) != pdhMoreData || size == 0 {
 		return nil, nil, uint32(r) == 0 // nothing is drawing: 0%
 	}
 	buf := make([]byte, size)
-	if r, _, _ := pdh.get.Call(ctr, pdhFmtDouble, uintptr(unsafe.Pointer(&size)), uintptr(unsafe.Pointer(&count)), uintptr(unsafe.Pointer(&buf[0]))); r != 0 {
+	if r, _, _ := get.Call(ctr, pdhFmtDouble, uintptr(unsafe.Pointer(&size)), uintptr(unsafe.Pointer(&count)), uintptr(unsafe.Pointer(&buf[0]))); r != 0 {
 		return nil, nil, false
 	}
 	items := unsafe.Slice((*pdhItem)(unsafe.Pointer(&buf[0])), count)

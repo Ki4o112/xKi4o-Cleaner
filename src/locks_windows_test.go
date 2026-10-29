@@ -158,10 +158,16 @@ func TestBlockerFlow(t *testing.T) {
 	if len(res) != 1 {
 		t.Fatalf("close result: %+v", res)
 	}
+	// Windows' Restart Manager closes a console program politely too (Wine
+	// does not): give its exit a moment to reach the test
+	wait := time.After(0)
+	if res[0].Closed {
+		wait = time.After(5 * time.Second)
+	}
 	select {
 	case <-done:
 		t.Log("helper closed politely")
-	default:
+	case <-wait:
 		if res[0].Closed || res[0].Note == "" {
 			t.Fatalf("still running but reported closed: %+v", res[0])
 		}

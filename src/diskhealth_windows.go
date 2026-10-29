@@ -29,6 +29,7 @@ ConvertTo-Json -InputObject @($out) -Compress -Depth 3`
 type dhView struct {
 	Disks   []diskHealth `json:"disks"`
 	Error   string       `json:"error,omitempty"`
+	Trim    string       `json:"trim,omitempty"` // on, off ("" = unknown or no SSD)
 	Checked int64        `json:"checked"`
 }
 
@@ -68,6 +69,26 @@ func diskHealthList(fresh bool) dhView {
 			}
 		}
 		assessDisk(d)
+		for _, l := range d.Letters {
+			var free, total, all uint64
+			root, _ := windows.UTF16PtrFromString(l + `:\`)
+			if windows.GetDiskFreeSpaceEx(root, &free, &total, &all) == nil && total > 0 {
+				p := int(all * 100 / total)
+				if d.FreePct == nil || p < *d.FreePct {
+					d.FreePct = &p
+				}
+			}
+		}
+		if d.FreePct != nil {
+			d.LowFree = lowFree(d.solid(), *d.FreePct)
+		}
+	}
+	for _, d := range ds {
+		if d.solid() {
+			out, _, _ := runQuiet(15*time.Second, sys32("fsutil.exe"), "behavior", "query", "DisableDeleteNotify")
+			v.Trim = trimState(out)
+			break
+		}
 	}
 	sort.SliceStable(ds, func(i, j int) bool { return ds[i].ID < ds[j].ID })
 	if ds != nil {
@@ -268,4 +289,19 @@ func openDrive(letter string) bool {
 	}
 	shellOpen(strings.ToUpper(letter) + `:\`)
 	return true
+}
+
+// trimEnable turns TRIM back on (Windows' default for SSDs).
+func trimEnable() bool {
+	op := beginOp("optimize", "", T("log.trimOn"), nil)
+	_, code, err := runQuiet(15*time.Second, sys32("fsutil.exe"), "behavior", "set", "DisableDeleteNotify", "0")
+	ok := err == nil && code == 0
+	if !ok {
+		op.fail("", T("log.trimFail"), nil)
+	}
+	op.end("", nil)
+	dhCache.mu.Lock()
+	dhCache.v.Checked = 0
+	dhCache.mu.Unlock()
+	return ok
 }

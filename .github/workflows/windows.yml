@@ -22,4 +22,11 @@ jobs:
       - name: Test on Windows
         env:
           XKI4O_WRITE_TESTS: "1"
-        run: go test -count=1 -timeout 30m -v ./src
+        shell: bash
+        run: |
+          set -o pipefail
+          go test -count=1 -timeout 30m -v ./src 2>&1 | tee test.log
+      - name: What failed
+        if: failure()
+        shell: bash
+        run: grep -n -B12 -E -- "^--- FAIL|^panic:" test.log | tail -c 60000

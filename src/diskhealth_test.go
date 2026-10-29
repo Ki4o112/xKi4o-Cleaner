@@ -188,3 +188,18 @@ func TestAdviseDisk(t *testing.T) {
 		t.Errorf("healthy: %s", got)
 	}
 }
+
+func TestFreeAndTrim(t *testing.T) {
+	if !lowFree(true, 12) || lowFree(true, 20) || !lowFree(false, 8) || lowFree(false, 12) {
+		t.Fatal("thresholds")
+	}
+	if trimState("NTFS DisableDeleteNotify = 0  (Allowed)\r\nReFS DisableDeleteNotify = 0  (Allowed)\r\n") != "on" {
+		t.Fatal("on")
+	}
+	if trimState("NTFS DisableDeleteNotify = 1  (Disabled)\r\n") != "off" || trimState("") != "" {
+		t.Fatal("off/unknown")
+	}
+	if trimState("DisableDeleteNotify = 0\r\n") != "on" { // older Windows: no file system named
+		t.Fatal("old form")
+	}
+}

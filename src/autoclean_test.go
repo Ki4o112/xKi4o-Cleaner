@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/xml"
+	"fmt"
 	"strings"
 	"testing"
 	"time"
@@ -110,5 +111,16 @@ func TestAutoTaskXML(t *testing.T) {
 	}
 	if taskCommand("<Exec><Command>\"C:\\a b\\x.exe\"</Command></Exec>") != `C:\a b\x.exe` || taskCommand("nothing") != "" {
 		t.Error("taskCommand")
+	}
+}
+
+func TestMaintLines(t *testing.T) {
+	tr := func(k string, a ...any) string { return k + fmt.Sprint(a...) }
+	got := strings.Join(maintLines(maintSum{Freed: 1 << 30, RAM: 0, Disks: 1, AppUpd: 3, Reboot: true}, tr), "|")
+	if got != "am.freed1.0 GB|am.disks1|am.apps3|am.reboot" {
+		t.Fatal(got)
+	}
+	if got := strings.Join(maintLines(maintSum{}, tr), "|"); got != "am.freed0 B|am.disksOK" {
+		t.Fatal(got)
 	}
 }

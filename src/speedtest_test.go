@@ -33,7 +33,8 @@ func TestSpeedAgainstLocalServer(t *testing.T) {
 	}))
 	defer srv.Close()
 	r := runSpeed(context.Background(), srv.Client(), srv.URL, 1500*time.Millisecond)
-	if r.Error != "" || r.Down <= 0 || r.Up <= 0 || r.Ping <= 0 || r.Server != "SOF" {
+	// a local ping can read 0: Go's clock on Windows ticks in about 0.5 ms
+	if r.Error != "" || r.Down <= 0 || r.Up <= 0 || r.Ping < 0 || r.Server != "SOF" {
 		t.Fatalf("%+v", r)
 	}
 	t.Logf("local: down %.0f up %.0f Mbit/s ping %.2f ms", r.Down, r.Up, r.Ping)

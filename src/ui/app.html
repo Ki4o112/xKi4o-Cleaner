@@ -907,6 +907,23 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .plan-row .tw-st { flex: none; }
 
 /* ================= Startup Manager ================= */
+.bp-card { background: var(--card); border: 1px solid var(--edge); border-radius: var(--r-l); padding: 16px 18px; margin-top: 12px; }
+.bp-card:empty { display: none; }
+.bp-top { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.bp-big { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+.bp-big small { font-size: 14px; font-weight: 600; color: var(--muted); margin-left: 4px; }
+.bp-meta { color: var(--muted); font-size: 12px; display: grid; gap: 2px; min-width: 0; }
+.bp-bars { display: flex; gap: 4px; align-items: flex-end; height: 40px; margin-left: auto; }
+.bp-bars i { width: 9px; border-radius: 3px 3px 1px 1px; background: var(--blue); opacity: .55; }
+.bp-bars i:last-child { opacity: 1; }
+.bp-v { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: var(--card-2); }
+.bp-v.good { color: var(--green, #3ee8b0); } .bp-v.slow { color: var(--red, #ff6b6b); }
+.bp-h { font-weight: 700; font-size: 13px; margin: 14px 0 4px; }
+.bp-row { display: flex; gap: 10px; align-items: center; padding: 7px 0; border-top: 1px solid var(--line-soft); font-size: 13px; min-width: 0; }
+.bp-row:first-of-type { border-top: 0; }
+.bp-row .n { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.bp-row .m { color: var(--muted); font-size: 12px; flex: none; }
+.bp-empty { color: var(--muted); font-size: 13px; }
 .su-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
 .su-stat { background: var(--card); border-radius: var(--r-l); padding: 14px 16px; border: 1px solid var(--edge); cursor: pointer; transition: background .2s, transform .25s var(--spring); text-align: left; }
 .su-stat:hover { background: var(--card-2); }
@@ -2763,6 +2780,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
       </div>
       <div class="tw-body" id="suBody">
         <div class="su-stats" id="suStats"></div>
+        <div class="bp-card" id="suBoot"></div>
         <div class="notice info" id="suAdmin" hidden><p data-i="su.noadmin"></p></div>
         <div class="notice info" id="suTasksErr" hidden><p id="suTasksErrText"></p></div>
         <div class="tw-tools">
@@ -3539,6 +3557,24 @@ bg: {
   "tw.legacyText": "Този туийк е премахнат в 2.4, защото Windows не позволява надеждна проверка и точно връщане на тези мрежови настройки. Може само да се изключи — със стойностите по подразбиране на Windows.",
   "su.title": "Стартиране", "su.sub": "Какво тръгва заедно с Windows — изключва се обратимо, без да се трие", "su.log": "Лог", "su.refresh": "Обнови списъка",
   "su.search": "Търси по име, издател или файл…", "su.noadmin": "Без администраторски права могат да се променят само записите на текущия потребител.",
+  "bp.title": "Колко бързо тръгва Windows",
+  "bp.last": "Последно стартиране",
+  "bp.main": "до работния плот {0}",
+  "bp.post": "после стартиращите програми {0}",
+  "bp.avg": "средно {0} за последните {1}",
+  "bp.none": "Windows още не е записал време за стартиране (записва го след рестарт; дневникът Diagnostics-Performance трябва да е включен).",
+  "bp.slowT": "Кое забавя стартирането",
+  "bp.slowNone": "Windows не е засякъл нищо, което да забавя стартирането.",
+  "bp.k.app": "програма",
+  "bp.k.driver": "драйвер",
+  "bp.k.service": "услуга",
+  "bp.times": "{0} пъти · общо +{1}",
+  "bp.off": "Изключи",
+  "bp.isOff": "изключена",
+  "bp.loading": "Чета дневника на Windows…",
+  "bp.good": "Бързо",
+  "bp.ok": "Нормално",
+  "bp.slow": "Бавно",
   "su.note": "Изключването става като в Диспечера на задачите (StartupApproved) или чрез настройката на задачата в Task Scheduler — самият запис остава и може да се включи отново по всяко време. Колко по-бързо ще стартира Windows зависи от компютъра и не може да се обещае предварително.",
   "su.stat.all": "Всички", "su.stat.on": "Включени", "su.stat.off": "Изключени", "su.stat.check": "За проверка", "su.srcAll": "Всички източници", "su.src.reg": "Регистър",
   "su.src.folder": "Startup папка", "su.src.task": "Task Scheduler", "su.scope.user": "текущ потребител", "su.scope.machine": "всички потребители",
@@ -4592,6 +4628,24 @@ en: {
   "tw.legacyText": "This tweak was removed in 2.4 because Windows does not allow these network settings to be checked and restored exactly. It can only be turned off — with the Windows defaults.",
   "su.title": "Startup", "su.sub": "What starts with Windows — turned off reversibly, nothing deleted", "su.log": "Log", "su.refresh": "Refresh the list",
   "su.search": "Search by name, publisher or file…", "su.noadmin": "Without administrator rights only the current user's entries can be changed.",
+  "bp.title": "How fast Windows starts",
+  "bp.last": "Last start",
+  "bp.main": "to the desktop {0}",
+  "bp.post": "then the startup programs {0}",
+  "bp.avg": "{0} on average over the last {1}",
+  "bp.none": "Windows has not written a start time yet (it does after a restart; the Diagnostics-Performance log must be on).",
+  "bp.slowT": "What slows the start",
+  "bp.slowNone": "Windows has found nothing that slows the start.",
+  "bp.k.app": "app",
+  "bp.k.driver": "driver",
+  "bp.k.service": "service",
+  "bp.times": "{0} times · +{1} in all",
+  "bp.off": "Turn off",
+  "bp.isOff": "turned off",
+  "bp.loading": "Reading Windows' log…",
+  "bp.good": "Fast",
+  "bp.ok": "Normal",
+  "bp.slow": "Slow",
   "su.note": "Turning off works like Task Manager (StartupApproved) or through the task's own setting in Task Scheduler — the entry itself stays and can be turned on again any time. How much faster Windows starts depends on the PC and cannot be promised in advance.",
   "su.stat.all": "All", "su.stat.on": "On", "su.stat.off": "Off", "su.stat.check": "Worth a look", "su.srcAll": "All sources", "su.src.reg": "Registry",
   "su.src.folder": "Startup folder", "su.src.task": "Task Scheduler", "su.scope.user": "current user", "su.scope.machine": "all users", "su.scope.m32": "all users, 32-bit",
@@ -5993,7 +6047,7 @@ function go(page, opt) {
   if (page === "settings") requestAnimationFrame(() => { $("#segLang")._place(); $("#segTheme")._place && $("#segTheme")._place(); });
   if (page === "clean") requestAnimationFrame(() => $("#segSort")._place && $("#segSort")._place());
   if (page === "tweaks") { loadTweaks(); requestAnimationFrame(() => $("#twFilter")._place && $("#twFilter")._place()); }
-  if (page === "startup") loadStartup();
+  if (page === "startup") { loadStartup(); loadBoot(); }
   if (page === "sysinfo") loadSysInfo(false);
   if (page === "gpu") loadGpu(false);
   if (page === "network") loadNet(false);
@@ -7423,6 +7477,7 @@ function suIcon(e) {
 }
 function renderStartup() {
   const list = $("#suList"); if (!list) return;
+  renderBoot();
   const all = SU.items;
   const counts = { all: all.length, on: all.filter(e => e.enabled).length, off: all.filter(e => !e.enabled).length, check: all.filter(e => (e.warnings || []).length || !e.exists || e.invalid).length };
   $("#suStats").innerHTML = ["all", "on", "off", "check"].map(k => `<button class="su-stat" data-show="${k}" aria-pressed="${SU.show === k}"><div class="k">${esc(t("su.stat." + k))}</div><div class="v">${SU.loaded ? counts[k] : "—"}</div></button>`).join("");
@@ -7481,6 +7536,40 @@ function renderStartup() {
     if (sw) sw.addEventListener("change", () => toggleStartup(e, sw.checked));
   });
 }
+/* how fast Windows starts (Windows' own measurements) */
+const BP = { v: null, loading: false };
+async function loadBoot(force) {
+  if (BP.loading || (BP.v && !force)) { renderBoot(); return; }
+  BP.loading = true; renderBoot();
+  try { BP.v = await api.bootPerf(!!force); } catch (e) { BP.v = { boots: [], slow: [], error: String(e && e.message || e) }; }
+  BP.loading = false; renderBoot();
+}
+const bpSecs = ms => (ms / 1000).toFixed(ms < 10000 ? 1 : 0) + " s";
+function renderBoot() {
+  const el = $("#suBoot"); if (!el) return;
+  const v = BP.v;
+  if (!v) { el.innerHTML = BP.loading ? `<div class="bp-empty">${esc(t("bp.loading"))}</div>` : ""; return; }
+  const boots = v.boots || [], slow = v.slow || [];
+  let top;
+  if (!boots.length) top = `<div class="bp-empty">${esc(v.error || t("bp.none"))}</div>`;
+  else {
+    const b = boots[0], avg = boots.reduce((a, x) => a + x.total, 0) / boots.length, max = Math.max(...boots.map(x => x.total));
+    const cls = b.total <= 30000 ? "good" : b.total <= 60000 ? "ok" : "slow";
+    top = `<div class="bp-top"><div><div class="k" style="color:var(--muted);font-size:12px;font-weight:600">${esc(t("bp.last"))} <span class="bp-v ${cls}">${esc(t("bp." + cls))}</span></div><div class="bp-big">${esc(bpSecs(b.total))}</div></div>
+      <div class="bp-meta">${b.main ? `<span>${esc(t("bp.main", bpSecs(b.main)))}</span>` : ""}${b.post ? `<span>${esc(t("bp.post", bpSecs(b.post)))}</span>` : ""}${boots.length > 1 ? `<span>${esc(t("bp.avg", bpSecs(avg), boots.length))}</span>` : ""}</div>
+      <div class="bp-bars" aria-hidden="true">${boots.slice().reverse().map(x => `<i style="height:${Math.max(8, Math.round(x.total / max * 40))}px" title="${esc(bpSecs(x.total))}"></i>`).join("")}</div></div>`;
+  }
+  const rows = slow.map((x, i) => {
+    const e = x.kind === "app" && x.exe ? SU.items.find(s => s.exe && s.exe.toLowerCase().split("\\").pop() === x.exe) : null;
+    const ctl = e ? (e.enabled ? `<button class="btn small" data-bpoff="${i}">${esc(t("bp.off"))}</button>` : `<span class="m">${esc(t("bp.isOff"))}</span>`) : "";
+    return `<div class="bp-row"><span class="tw-b">${esc(t("bp.k." + x.kind))}</span><span class="n" title="${esc(x.name)}">${esc(x.name)}</span><span class="m">${esc(t("bp.times", x.times, bpSecs(x.delay)))}</span>${ctl}</div>`;
+  }).join("");
+  el.innerHTML = `<div class="bp-h" style="margin-top:0">${esc(t("bp.title"))}</div>${top}<div class="bp-h">${esc(t("bp.slowT"))}</div>${rows || `<div class="bp-empty">${esc(t("bp.slowNone"))}</div>`}`;
+  el.querySelectorAll("[data-bpoff]").forEach(btn => btn.addEventListener("click", () => {
+    const x = slow[+btn.dataset.bpoff], e = SU.items.find(s => s.exe && s.exe.toLowerCase().split("\\").pop() === x.exe);
+    if (e) toggleStartup(e, false);
+  }));
+}
 function toggleStartup(e, enable) {
   if (SU.busy) { renderStartup(); return; }
   const risky = !enable && (e.kind === "security" || e.kind === "windows" || e.kind === "driver");
@@ -7511,7 +7600,7 @@ $("#suSort").addEventListener("change", e => { SU.sort = e.target.value; renderS
 let suSearchT = 0;
 $("#suSearch").addEventListener("input", e => { clearTimeout(suSearchT); suSearchT = setTimeout(() => { SU.q = e.target.value.trim().toLowerCase(); renderStartup(); }, 90); });
 $("#suSearch").addEventListener("keydown", e => { if (e.key === "Escape" && e.target.value) { e.stopPropagation(); e.target.value = ""; SU.q = ""; renderStartup(); } });
-$("#suRefresh").addEventListener("click", () => loadStartup(true));
+$("#suRefresh").addEventListener("click", () => { loadStartup(true); loadBoot(true); });
 $("#suLogBtn").addEventListener("click", openStartupLog);
 async function openStartupLog() {
   let log = []; try { log = (await api.startupLog()) || []; } catch (e) {}
@@ -13169,6 +13258,15 @@ const Mock = (() => {
     undoAllTweaks: async ids => { await new Promise(r => setTimeout(r, 900)); return ids.map(id => { twOn[id] = false; delete mockApplied[id]; mockHist.push({ id: Date.now() * 1000 + Math.random(), at: Date.now() / 1000, tweak: id, action: "revert", source: "undo-all", ok: true, state: "off" }); return { id, ok: true }; }); },
     exportTweakProfile: async (install, st) => { window.__setup = { install, st }; return { ok: true, path: "C:\\Users\\demo\\Documents\\xKi4o-setup.json", count: 47 }; },
     importTweakProfile: async () => ({ ok: true, path: "C:\\Users\\demo\\Documents\\xKi4o-tweaks.json", steps: [{ id: "bing-off", on: true }, { id: "clock-seconds", on: true }, { id: "dark-mode", on: false }], same: 41, skipped: ["bitlocker-off", "debloat"] , install: q.get("imp") === "setup" ? ["VideoLAN.VLC", "7zip.7zip"] : undefined, settings: q.get("imp") === "setup" ? { uiMode: "easy", game: { auto: true, ram: true, apps: [] } } : undefined }),
+    bootPerf: async () => {
+      await new Promise(r => setTimeout(r, 250));
+      if (scen === "noboot") return { boots: [], slow: [], checked: Date.now() };
+      const d = Date.now(), day = 864e5;
+      return { checked: d, boots: [42100, 38900, 51200, 40300, 39800].map((v, i) => ({ at: d - i * day, total: v, main: Math.round(v * 0.4), post: Math.round(v * 0.6) })),
+        slow: [{ kind: "app", name: "Spotify", exe: "spotify.exe", times: 4, delay: 21500, last: d },
+          { kind: "service", name: "SysMain", times: 2, delay: 4200, last: d - day },
+          { kind: "driver", name: "Realtek Audio", times: 1, delay: 1800, last: d - 2 * day }] };
+    },
     listStartup: async () => {
       await new Promise(r => setTimeout(r, 700));
       return { items: mockStartup.map(e => Object.assign({}, e)) };
