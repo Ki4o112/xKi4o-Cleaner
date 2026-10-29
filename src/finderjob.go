@@ -72,6 +72,8 @@ func (j *finderJob) start(kind string, o findOpts, fs finderFS, emit func(string
 			}()
 			if kind == "large" {
 				large = findLarge(o, fs, &j.stop, st)
+			} else if o.Similar {
+				dupes = findSimilar(o, fs, &j.stop, st)
 			} else {
 				dupes = findDupes(o, fs, &j.stop, st)
 			}

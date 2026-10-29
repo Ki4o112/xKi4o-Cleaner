@@ -911,6 +911,27 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .pc-h { font-weight: 700; font-size: 13px; margin-bottom: 8px; }
 .pc-seg { width: 100%; }
 .pc-seg button { flex: 1; }
+.mu-panel { grid-column: 1 / -1; }
+.mu-h { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.mu-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; padding: 8px 0; border-top: 1px solid var(--line-soft); }
+.mu-row:first-of-type { border-top: 0; }
+.mu-n { font-weight: 600; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.mu-v { font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums; }
+.mu-v small { color: var(--muted); font-weight: 600; margin-left: 6px; font-size: 11px; }
+.mu-bar { grid-column: 1 / -1; height: 5px; border-radius: 99px; background: var(--card-2); overflow: hidden; }
+.mu-bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--blue-deep), var(--blue-hi)); transition: width .6s var(--spring); }
+.mu-leak { margin: 0 0 10px; }
+.sim-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; padding: 10px 14px 14px; }
+.sim-c { position: relative; display: grid; gap: 4px; padding: 8px; border-radius: 12px; background: var(--card-2); border: 1px solid transparent; cursor: pointer; min-width: 0; }
+.sim-c.picked { border-color: var(--red, #ff6b6b); background: color-mix(in srgb, var(--red, #ff6b6b) 10%, var(--card-2)); }
+.sim-img { position: relative; display: grid; place-items: center; height: 120px; border-radius: 8px; overflow: hidden; background: #0a0a0a; }
+.sim-img img { width: 100%; height: 100%; object-fit: cover; }
+.sim-best { position: absolute; left: 6px; top: 6px; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 99px; background: var(--blue); color: #0b0b0b; }
+.sim-n { display: flex; gap: 6px; align-items: center; min-width: 0; font-size: 12px; }
+.sim-n b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.sim-m { color: var(--muted); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sim-c .ibtn { position: absolute; right: 12px; top: 12px; background: rgba(0,0,0,.55); }
+.sim-c .dg-keep { justify-self: start; }
 /* ================= Startup Manager ================= */
 .bp-card { background: var(--card); border: 1px solid var(--edge); border-radius: var(--r-l); padding: 16px 18px; margin-top: 12px; }
 .bp-card:empty { display: none; }
@@ -2743,6 +2764,11 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
             <div class="opt-list" id="regions"></div>
             <div class="note-line" data-i="mem.note"></div>
           </div>
+          <div class="panel mu-panel">
+            <div class="mu-h"><h3 data-i="mu.title"></h3><button class="btn small" id="muProcs"><span data-icon="cpu"></span><span data-i="mu.all"></span></button></div>
+            <div class="sub" data-i="mu.sub" style="margin:-4px 0 10px"></div>
+            <div id="muList"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -3243,6 +3269,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
         <div class="list" style="margin-top:14px">
           <div class="item"><div class="i-ico" data-icon="gamepad"></div><div><div class="t" data-i="gm.auto"></div><div class="d" data-i="gm.autoD"></div></div><input type="checkbox" class="switch" id="gmAuto"></div>
           <div class="item"><div class="i-ico" data-icon="bolt"></div><div><div class="t" data-i="gm.ram"></div><div class="d" data-i="gm.ramD"></div></div><input type="checkbox" class="switch" id="gmRam" checked></div>
+          <div class="item"><div class="i-ico" data-icon="power"></div><div><div class="t" data-i="gm.power"></div><div class="d" data-i="gm.powerD"></div></div><input type="checkbox" class="switch" id="gmPower" checked></div>
           <div class="item"><div class="i-ico" data-icon="rocket"></div><div><div class="t" data-i="gm.prio"></div><div class="d" data-i="gm.prioD"></div></div><input type="checkbox" class="switch" id="gmPrio"></div>
           <div class="item"><div class="i-ico" data-icon="stop"></div><div><div class="t" data-i="gm.force"></div><div class="d" data-i="gm.forceD"></div></div><input type="checkbox" class="switch" id="gmForce"></div>
         </div>
@@ -3621,6 +3648,25 @@ bg: {
   "th.tip.heat": "Почисти праха от вентилаторите, не го дръж върху меко и пробвай охлаждаща подложка.",
   "th.tip.battery": "Включи зарядното или избери режим за най-добра производителност.",
   "th.tip.power": "Избери режим за най-добра производителност.",
+  "gm.power": "Най-добра производителност по време на игра",
+  "gm.powerD": "Превключва на режим High performance (или „Най-добра производителност“ на лаптопите) и връща твоя режим, щом играта свърши.",
+  "mu.title": "Кой използва паметта",
+  "mu.sub": "Програмите с най-много памет сега. Ако някоя расте постоянно, без да спира, програмата ти казва.",
+  "mu.all": "Всички процеси",
+  "mu.grows": "расте",
+  "mu.leakT": "Расте постоянно:",
+  "mu.leakItem": "{0} (+{1})",
+  "mu.leakD": "Програма, която само трупа памет, обикновено има бъг — рестартирай я и паметта се връща.",
+  "dup.m.same": "Еднакви файлове",
+  "dup.m.sim": "Подобни снимки",
+  "dup.simNote": "Търси снимки, които изглеждат еднакво, но не са един и същ файл — смалено копие, друг формат, презаписана или леко обработена снимка (JPG, PNG, GIF). Най-голямата остава избрана за запазване.",
+  "dup.ph.look": "Разглеждам снимките…",
+  "dup.ph.similar": "Сравнявам снимките…",
+  "dup.looking": "Разгледани {0} от {1}",
+  "dup.simT": "{0} подобни снимки",
+  "dup.simM": "Изглеждат еднакво — провери, преди да триеш",
+  "dup.best": "Най-голяма",
+  "dup.keepBig": "Запази най-голямата",
   "pc.more": "Приоритет и още",
   "pc.title": "{0}",
   "pc.subMany": "{0} процеса",
@@ -4779,6 +4825,25 @@ en: {
   "th.tip.heat": "Clean the dust from the fans, keep it off soft surfaces and try a cooling pad.",
   "th.tip.battery": "Plug in the charger or choose the best performance mode.",
   "th.tip.power": "Choose the best performance power mode.",
+  "gm.power": "Best performance while you play",
+  "gm.powerD": "Switches to the High performance plan (or “Best performance” on laptops) and gives your own back when the game ends.",
+  "mu.title": "Who uses the memory",
+  "mu.sub": "The programs with the most memory now. If one keeps growing without stopping, the app tells you.",
+  "mu.all": "All processes",
+  "mu.grows": "growing",
+  "mu.leakT": "Keeps growing:",
+  "mu.leakItem": "{0} (+{1})",
+  "mu.leakD": "A program that only piles up memory usually has a bug — restart it and the memory comes back.",
+  "dup.m.same": "Identical files",
+  "dup.m.sim": "Similar photos",
+  "dup.simNote": "Looks for photos that look the same but are not the same file — a smaller copy, another format, a re-saved or slightly edited photo (JPG, PNG, GIF). The biggest one is the one to keep.",
+  "dup.ph.look": "Looking at the photos…",
+  "dup.ph.similar": "Comparing the photos…",
+  "dup.looking": "Looked at {0} of {1}",
+  "dup.simT": "{0} similar photos",
+  "dup.simM": "They look the same — check before deleting",
+  "dup.best": "Biggest",
+  "dup.keepBig": "Keep the biggest",
   "pc.more": "Priority and more",
   "pc.title": "{0}",
   "pc.subMany": "{0} processes",
@@ -6227,7 +6292,7 @@ function go(page, opt) {
   if (page === "startup") { SUN.n = 0; $("#suBadge").hidden = true; }
   if (page === "settings") { paintRm(); paintBgTame(); }
   if (page === "tidy") { loadTidy(); requestAnimationFrame(() => $("#tdTab")._place && $("#tdTab")._place()); }
-  if (page === "memory") { paintMem(); requestAnimationFrame(() => { $("#segThr")._place(); $("#segInt")._place(); }); }
+  if (page === "memory") { paintMem(); renderMemUsers(); pollMemUsers(); requestAnimationFrame(() => { $("#segThr")._place(); $("#segInt")._place(); }); }
   if (page === "settings") requestAnimationFrame(() => { $("#segLang")._place(); $("#segTheme")._place && $("#segTheme")._place(); });
   if (page === "clean") requestAnimationFrame(() => $("#segSort")._place && $("#segSort")._place());
   if (page === "tweaks") { loadTweaks(); requestAnimationFrame(() => $("#twFilter")._place && $("#twFilter")._place()); }
@@ -7157,6 +7222,42 @@ function drawChart() {
   line.style.display = thr ? "" : "none";
   if (thr) { const y = H - 6 - (thr / 100) * (H - 12); line.setAttribute("y1", y); line.setAttribute("y2", y); }
 }
+/* who uses the memory, and which program keeps growing (a leak) */
+const MU = { hist: {}, rows: [], at: 0, timer: 0 };
+function muGrowing(h) {
+  // ≥ 5 minutes of samples, +30% and +300 MB, and it went up in most steps
+  if (!h || h.length < 2 || h[h.length - 1].t - h[0].t < 300e3) return 0;
+  const a = h[0].m, b = h[h.length - 1].m;
+  let up = 0; for (let i = 1; i < h.length; i++) if (h[i].m >= h[i - 1].m) up++;
+  return b > a * 1.3 && b - a > 300 * 1048576 && up / (h.length - 1) >= 0.7 ? b - a : 0;
+}
+async function pollMemUsers() {
+  clearTimeout(MU.timer);
+  let v = null; try { v = await api.procList(); } catch (e) {}
+  if (v && v.rows) {
+    const by = {}, now = Date.now();
+    v.rows.forEach(r => { const k = r.name.toLowerCase(); const g = by[k] || (by[k] = { name: r.name, desc: r.desc, path: r.path, mem: 0, n: 0, kind: r.kind }); g.mem += r.mem; g.n++; if (!g.desc && r.desc) g.desc = r.desc; if (!g.path && r.path) g.path = r.path; });
+    Object.values(by).forEach(g => { const k = g.name.toLowerCase(); const h = MU.hist[k] || (MU.hist[k] = []); h.push({ t: now, m: g.mem }); while (h.length && now - h[0].t > 15 * 60e3) h.shift(); });
+    Object.keys(MU.hist).forEach(k => { if (!by[k]) delete MU.hist[k]; });
+    MU.rows = Object.values(by).sort((a, b) => b.mem - a.mem); MU.total = v.memTotal; MU.at = now;
+    if (S.page === "memory") renderMemUsers();
+  }
+  MU.timer = setTimeout(pollMemUsers, S.page === "memory" && !document.hidden ? 4000 : 20000);
+}
+function renderMemUsers() {
+  const el = $("#muList"); if (!el) return;
+  if (!MU.at) { el.innerHTML = [0, 1, 2, 3, 4].map(() => `<div class="mu-row"><span class="skel" style="width:60%"></span></div>`).join(""); return; }
+  const top = MU.rows.slice(0, 8), max = Math.max(1, ...top.map(g => g.mem));
+  const grow = MU.rows.map(g => ({ g, d: muGrowing(MU.hist[g.name.toLowerCase()]) })).filter(x => x.d > 0).sort((a, b) => b.d - a.d);
+  el.innerHTML = (grow.length ? `<div class="notice warn mu-leak"><p><b>${esc(t("mu.leakT"))}</b> ${esc(grow.slice(0, 3).map(x => t("mu.leakItem", x.g.desc || x.g.name.replace(/\.exe$/i, ""), fmt(x.d))).join(", "))}. ${esc(t("mu.leakD"))}</p></div>` : "")
+    + top.map(g => {
+      const nm = g.desc || g.name.replace(/\.exe$/i, ""), gr = muGrowing(MU.hist[g.name.toLowerCase()]);
+      const share = MU.total ? Math.round(g.mem / MU.total * 100) : 0;
+      return `<div class="mu-row"><span class="mu-n" title="${esc(g.path || g.name)}">${esc(nm)}${g.n > 1 ? ` <span class="badge-s">${g.n}</span>` : ""}${gr ? ` <span class="tw-b caution">${esc(t("mu.grows"))}</span>` : ""}</span><span class="mu-v">${esc(fmt(g.mem))}<small>${share}%</small></span><span class="mu-bar"><i style="width:${(g.mem / max * 100).toFixed(1)}%"></i></span></div>`;
+    }).join("");
+}
+$("#muProcs").addEventListener("click", () => { PM.sort = "mem"; PM.desc = true; go("procs"); });
+setTimeout(pollMemUsers, 4000);
 function pollMem() {
   clearTimeout(memTimer);
   api.getMemory().then(showMem).catch(() => {}).finally(() => { memTimer = setTimeout(pollMem, 1000); });
@@ -10347,10 +10448,10 @@ function sizeOpt(v) { return v.startsWith("fd.") ? t(v) : L === "bg" ? v.replace
 function renderFilters(f) {
   const el = $("#" + f.pre + "Filters"); if (!el) return;
   const dis = f.running || f.queued ? "disabled" : "";
-  const sizes = f.kind === "large" ? SIZES_LARGE : SIZES_DUP;
-  el.innerHTML = `<span class="lab">${esc(t("fd.min"))}</span><select class="sel" data-o="minSize" ${dis}>${sizes.map(s => `<option value="${s[0]}" ${+f.o.minSize === s[0] ? "selected" : ""}>${esc(sizeOpt(s[1]))}</option>`).join("")}</select>
+  const sizes = f.kind === "large" ? SIZES_LARGE : SIZES_DUP, sim = f.kind === "dupes" && !!f.o.similar;
+  el.innerHTML = (f.kind === "dupes" ? `<div class="seg blue" id="dupMode"></div>` : "") + (sim ? "" : `<span class="lab">${esc(t("fd.min"))}</span><select class="sel" data-o="minSize" ${dis}>${sizes.map(s => `<option value="${s[0]}" ${+f.o.minSize === s[0] ? "selected" : ""}>${esc(sizeOpt(s[1]))}</option>`).join("")}</select>
     <select class="sel" data-o="cat" ${dis} aria-label="${esc(t("fd.kind"))}"><option value="">${esc(t("fd.allKinds"))}</option>${DA_CATS.map(c => `<option value="${c}" ${f.o.cat === c ? "selected" : ""}>${esc(t("da.cat." + c))}</option>`).join("")}</select>
-    ${f.kind === "large" ? `<select class="sel" data-o="olderDays" ${dis} aria-label="${esc(t("fd.age"))}">${AGES.map(a => `<option value="${a[0]}" ${+f.o.olderDays === a[0] ? "selected" : ""}>${esc(t(a[1]))}</option>`).join("")}</select>` : ""}
+    `) + `${f.kind === "large" ? `<select class="sel" data-o="olderDays" ${dis} aria-label="${esc(t("fd.age"))}">${AGES.map(a => `<option value="${a[0]}" ${+f.o.olderDays === a[0] ? "selected" : ""}>${esc(t(a[1]))}</option>`).join("")}</select>` : ""}
     <label class="chk"><input type="checkbox" class="cb" data-o="hidden" ${f.o.hidden ? "checked" : ""} ${dis}><span>${esc(t("fd.hidden"))}</span></label>
     <label class="chk"><input type="checkbox" class="cb" data-o="system" ${f.o.system ? "checked" : ""} ${dis}><span>${esc(t("fd.system"))}</span></label>`;
   el.querySelectorAll("[data-o]").forEach(c => c.addEventListener("change", () => {
@@ -10358,6 +10459,15 @@ function renderFilters(f) {
     f.o[k] = c.type === "checkbox" ? c.checked : (k === "cat" ? c.value : +c.value);
     fdSave(f); paintFinderNote(f);
   }));
+  const mode = $("#dupMode");
+  if (mode && f.kind === "dupes") {
+    makeSeg(mode, [{ v: "same", label: t("dup.m.same") }, { v: "sim", label: t("dup.m.sim") }], sim ? "sim" : "same", v => {
+      if (f.running || f.queued) return;
+      f.o.similar = v === "sim"; fdSave(f); renderFilters(f);
+    });
+    mode.querySelectorAll("button").forEach(b => { b.disabled = !!(f.running || f.queued); });
+    requestAnimationFrame(() => mode._place && mode._place());
+  }
   paintFinderNote(f);
 }
 function paintFinderNote(f) {
@@ -10365,6 +10475,7 @@ function paintFinderNote(f) {
   const notes = [];
   if (f.o.system) notes.push(t("fd.systemNote"));
   if (f.kind === "dupes" && f.roots.some(r => /^[a-z]:\\?$/i.test(r))) notes.push(t("dup.driveNote"));
+  if (f.kind === "dupes" && f.o.similar) notes.push(t("dup.simNote"));
   n.hidden = !notes.length; n.textContent = notes.join(" ");
 }
 function paintFinderStart(kind) {
@@ -10391,7 +10502,8 @@ async function startFind(kind) {
   const q = jobOf(kind); if (q && q.state === "queued") { jobDrop(q.id); return; }
   await fdPlaces(); if (!f.inited) await loadFinder(kind);
   if (!f.roots.length) { toast(t("fd.noRoots"), "alert", "warn"); return; }
-  const o = { roots: f.roots.slice(), minSize: +f.o.minSize || 1, cats: f.o.cat ? [f.o.cat] : [], olderDays: kind === "large" ? (+f.o.olderDays || 0) : 0, hidden: !!f.o.hidden, system: !!f.o.system, limit: 500 };
+  const similar = kind === "dupes" && !!f.o.similar;
+  const o = { roots: f.roots.slice(), minSize: similar ? 1 : +f.o.minSize || 1, cats: similar ? ["images"] : f.o.cat ? [f.o.cat] : [], olderDays: kind === "large" ? (+f.o.olderDays || 0) : 0, hidden: !!f.o.hidden, system: !!f.o.system, limit: 500, similar };
   jobAdd({ kind, page: kind, title: t(kind === "large" ? "job.large" : "job.dupes"), stop: () => api.findCancel(),
     onWait: () => { f.queued = true; renderFinder(kind); },
     onDrop: () => { f.queued = false; renderFinder(kind); },
@@ -10432,14 +10544,14 @@ function paintFindProg(kind) {
   }
   const p = f.prog || { phase: "walk", files: 0, dirs: 0, matched: 0, toHash: 0, hashed: 0, current: "" };
   const el2 = (s) => el.querySelector(s);
-  el2("[data-ph]").textContent = kind === "dupes" ? t("dup.ph." + (p.phase || "walk")) : t("lf.ph");
+  el2("[data-ph]").textContent = kind === "dupes" ? t(f.o.similar && p.phase === "hash" ? "dup.ph.look" : "dup.ph." + (p.phase || "walk")) : t("lf.ph");
   const took = (performance.now() - (f.t0 || performance.now())) / 1000;
   el2("[data-nums]").innerHTML = [[nfi(p.files), t("fd.files")], [nfi(p.dirs), t("fd.dirs")], [nfi(p.matched), t(kind === "dupes" ? "dup.cands" : "lf.matched")], [secs(Math.max(1, took)), t("da.time")]]
     .map(x => `<div><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join("");
   const det = p.phase === "hash" && p.toHash > 0, bar = el2("[data-bar]");
   bar.className = "progress" + (det ? "" : " indet");
   bar.querySelector("i").style.width = det ? Math.min(100, p.hashed / p.toHash * 100).toFixed(1) + "%" : "";
-  const h = el2("[data-hash]"); h.hidden = !det; if (det) h.textContent = t("dup.hashing", fmt(p.hashed), fmt(p.toHash));
+  const h = el2("[data-hash]"); h.hidden = !det; if (det) h.textContent = t(f.o.similar ? "dup.looking" : "dup.hashing", fmt(p.hashed), fmt(p.toHash));
   el2("[data-cur]").innerHTML = `<bdi>${esc(p.current || "")}</bdi>`;
 }
 function scannedLine(r) {
@@ -10509,7 +10621,7 @@ function renderDupes() {
   el.innerHTML = `<div class="res-head"><span class="n">${esc(t("dup.found", nfi(groups.length), fmt(r.wasted)))}</span><span class="d">${esc(scannedLine(r))}</span></div>
     <div class="tw-tools" style="padding-top:4px"><label class="search"><span>${ICONS.search}</span><input id="dupQ" type="search" spellcheck="false" placeholder="${esc(t("dup.search"))}" value="${esc(f.q)}"></label>
       <span class="lab" style="color:var(--faint);font-size:12px;font-weight:600;margin-left:auto;white-space:nowrap">${esc(t("dup.auto"))}</span>
-      <button class="btn small" data-auto="old">${esc(t("dup.keepOld"))}</button><button class="btn small" data-auto="new">${esc(t("dup.keepNew"))}</button><button class="btn small ghost" data-auto="none">${esc(t("dup.clear"))}</button></div>
+      ${r.opts && r.opts.similar ? `<button class="btn small" data-auto="big">${esc(t("dup.keepBig"))}</button>` : `<button class="btn small" data-auto="old">${esc(t("dup.keepOld"))}</button><button class="btn small" data-auto="new">${esc(t("dup.keepNew"))}</button>`}<button class="btn small ghost" data-auto="none">${esc(t("dup.clear"))}</button></div>
     <div class="f-note" style="margin:0 0 10px">${esc(t("dup.howTo"))}</div>
     <div id="dupGroups">${shown.map(g => dupGroupHtml(g)).join("") || `<div class="tw-empty">${esc(t("lf.noMatch"))}</div>`}</div>
     ${view.length > shown.length ? `<div class="dg-more"><button class="btn small" id="dupMore">${esc(t("dup.more", nfi(view.length - shown.length)))}</button></div>` : ""}
@@ -10527,6 +10639,7 @@ function renderDupes() {
 }
 function dupGroupHtml(g) {
   const f = FD.dupes, x0 = g.files[0], anySel = g.files.some(x => f.sel.has(x.path));
+  if (g.hash.startsWith("sim:")) return simGroupHtml(g, anySel);
   return `<div class="dg" data-g="${g.gi}"><div class="dg-h">${ico(fileKey(x0.path), "r-ico", ICONS[CAT_ICON[x0.cat] || "file"])}
     <div style="min-width:0"><div class="dg-t" title="${esc(baseName(x0.path))}">${esc(baseName(x0.path))}</div><div class="dg-m">${esc(t("dup.meta", g.files.length, fmt(g.size), t("da.cat." + x0.cat)))}</div></div>
     <div class="dg-w">${fmt(g.wasted)}<small>${esc(t("dup.canFree"))}</small></div></div>
@@ -10535,6 +10648,19 @@ function dupGroupHtml(g) {
         <div class="dg-path" title="${esc(x.path)}"><bdi>${esc(dirName(x.path))}<b>${esc(baseName(x.path))}</b></bdi></div>
         <div class="r">${esc(dateS(x.mtime))}${anySel && !sel ? `<span class="dg-keep">${esc(t("dup.stays"))}</span>` : ""}${x.protected ? `<span class="badge-s prot" style="margin-left:6px">${esc(t("da.prot"))}</span>` : ""}</div>
         <button class="ibtn" data-open="${esc(x.path)}" title="${esc(t("da.explorer"))}" aria-label="${esc(t("da.explorer"))}">${ICONS.open}</button></div>`; }).join("")}</div>`;
+}
+function simGroupHtml(g, anySel) {
+  const f = FD.dupes;
+  return `<div class="dg sim" data-g="${g.gi}"><div class="dg-h"><span class="r-ico">${ICONS.image || ICONS.file}</span>
+    <div style="min-width:0"><div class="dg-t">${esc(t("dup.simT", g.files.length))}</div><div class="dg-m">${esc(t("dup.simM"))}</div></div>
+    <div class="dg-w">${fmt(g.wasted)}<small>${esc(t("dup.canFree"))}</small></div></div>
+    <div class="sim-grid">${g.files.map((x, j) => { const sel = f.sel.has(x.path);
+      return `<label class="sim-c ${sel ? "picked" : ""}" title="${esc(x.path)}"><span class="sim-img">${x.thumb ? `<img src="${x.thumb}" alt="">` : ICONS.file}${j === 0 ? `<span class="sim-best">${esc(t("dup.best"))}</span>` : ""}</span>
+        <span class="sim-n"><input type="checkbox" class="cb" data-f="${g.gi}:${j}" ${sel ? "checked" : ""} ${x.protected ? "disabled" : ""}><b>${esc(baseName(x.path))}</b></span>
+        <span class="sim-m">${x.w ? esc(x.w + "×" + x.h) + " · " : ""}${esc(fmt(x.size))} · ${esc(dateS(x.mtime))}</span>
+        <span class="sim-m"><bdi>${esc(dirName(x.path))}</bdi></span>
+        ${anySel && !sel ? `<span class="dg-keep">${esc(t("dup.stays"))}</span>` : ""}
+        <button class="ibtn" data-open="${esc(x.path)}" title="${esc(t("da.explorer"))}" aria-label="${esc(t("da.explorer"))}">${ICONS.open}</button></label>`; }).join("")}</div></div>`;
 }
 function wireDupGroups() {
   const f = FD.dupes, groups = (f.res && f.res.dupes) || [];
@@ -10555,8 +10681,8 @@ function dupAutoSelect(mode) {
   const f = FD.dupes, groups = (f.res && f.res.dupes) || [];
   f.sel.clear();
   if (mode !== "none") groups.forEach(g => {
-    const files = g.files.slice().sort((a, b) => (a.mtime - b.mtime) || (a.path < b.path ? -1 : 1));
-    const keep = mode === "old" ? files[0] : files[files.length - 1];
+    const files = mode === "big" ? g.files.slice() : g.files.slice().sort((a, b) => (a.mtime - b.mtime) || (a.path < b.path ? -1 : 1));
+    const keep = mode === "old" || mode === "big" ? files[0] : files[files.length - 1];
     files.forEach(x => { if (x !== keep && !x.protected) f.sel.add(x.path); });
   });
   renderDupes();
@@ -12852,7 +12978,7 @@ function renderGame() {
   btn.disabled = GM.busy || (!on && !pick.length && !cfg.ram);
   btn.className = "btn big " + (on ? "" : "primary");
   btn.innerHTML = GM.busy ? `<span class="spin"></span><span>${esc(t(on ? "gm.stopping" : "gm.starting"))}</span>` : on ? `${ICONS.undo}<span>${esc(t("gm.stop", (st.closed || []).length))}</span>` : `${ICONS.gamepad}<span>${esc(t("gm.start"))}</span>`;
-  $("#gmRam").checked = cfg.ram; $("#gmForce").checked = cfg.force; $("#gmAuto").checked = cfg.auto; $("#gmPrio").checked = !!cfg.prio;
+  $("#gmRam").checked = cfg.ram; $("#gmForce").checked = cfg.force; $("#gmAuto").checked = cfg.auto; $("#gmPrio").checked = !!cfg.prio; $("#gmPower").checked = cfg.power !== false;
   $("#gmRam").disabled = $("#gmForce").disabled = on;
   const left = st.left || [];
   $("#gmClosed").innerHTML = on ? `<div class="section-t">${esc(t("gm.closedT"))}</div><div class="list">${(st.closed || []).map(c => `<div class="rc-row"><span>${isPath(c.path) ? ico("exe:" + c.path, "fic", ICONS.apps) : ICONS.apps}</span><div style="min-width:0"><div class="t">${esc(c.name || c.exe)}</div><div class="d path"><bdi>${esc(c.path)}</bdi></div></div><span class="tw-st reboot">${esc(t("gm.willReopen"))}</span></div>`).join("") || `<div class="tw-empty">${esc(t("gm.noneClosed"))}</div>`}</div>${left.length ? `<div class="rc-note">${esc(t("gm.left", left.join(", ")))}</div>` : ""}` : "";
@@ -12873,6 +12999,7 @@ function renderGame() {
 }
 $("#gmAuto").addEventListener("change", e => { gmCfg().auto = e.target.checked; storeSettings(); });
 $("#gmPrio").addEventListener("change", e => { gmCfg().prio = e.target.checked; storeSettings(); });
+$("#gmPower").addEventListener("change", e => { gmCfg().power = e.target.checked; storeSettings(); });
 // 4.4: a game started or closed (game mode on, or turned on by itself)
 on("gm-auto", d => {
   const g = d.game || "", freed = d.freed > 0 ? fmt(d.freed) : "";
@@ -13385,6 +13512,16 @@ const Mock = (() => {
     mkG("cv-2026.pdf", 380 * 1024, ["C:\\Users\\demo\\Documents\\", "C:\\Users\\demo\\Downloads\\"], "documents"),
     mkG("song.flac", 41 * MB, ["C:\\Users\\demo\\Music\\", "D:\\Backup\\Music\\"], "audio"),
     mkG("setup.msi", 96 * MB, ["C:\\Users\\demo\\Downloads\\", "C:\\Program Files\\App\\Installer\\"], "programs")].sort((a, b) => b.wasted - a.wasted);
+  // similar photos: thumbnails drawn here (the app makes them from the photos)
+  const mockThumb = (hue, k) => { const c = document.createElement("canvas"); c.width = 120; c.height = 90; const x = c.getContext("2d"); const g = x.createLinearGradient(0, 0, 120, 90); g.addColorStop(0, `hsl(${hue} 70% ${30 + k * 6}%)`); g.addColorStop(1, `hsl(${hue + 40} 60% 15%)`); x.fillStyle = g; x.fillRect(0, 0, 120, 90); x.fillStyle = "rgba(255,255,255,.8)"; x.beginPath(); x.arc(42, 40, 16, 0, 7); x.fill(); return c.toDataURL("image/jpeg", .7); };
+  const mockSim = () => [
+    { hash: "sim:9f3a11c0b2d4e5f6", size: 6.1 * MB, wasted: (1.2 + 0.4) * MB, files: [
+      { path: "C:\\Users\\demo\\Pictures\\2025\\IMG_4412.jpg", size: 6.1 * MB, cat: "images", w: 4032, h: 3024, mtime: Math.round(Date.now() / 1000 - 86400 * 40), thumb: mockThumb(200, 2) },
+      { path: "C:\\Users\\demo\\Downloads\\IMG_4412 (edited).jpg", size: 1.2 * MB, cat: "images", w: 1920, h: 1440, mtime: Math.round(Date.now() / 1000 - 86400 * 20), thumb: mockThumb(200, 3) },
+      { path: "C:\\Users\\demo\\Desktop\\for whatsapp.png", size: 0.4 * MB, cat: "images", w: 800, h: 600, mtime: Math.round(Date.now() / 1000 - 86400 * 5), thumb: mockThumb(200, 1) }] },
+    { hash: "sim:01aa77c0b2d4e5f6", size: 3.3 * MB, wasted: 2.9 * MB, files: [
+      { path: "C:\\Users\\demo\\Pictures\\Wallpapers\\mountains.png", size: 3.3 * MB, cat: "images", w: 2560, h: 1440, mtime: Math.round(Date.now() / 1000 - 86400 * 300), thumb: mockThumb(120, 2) },
+      { path: "C:\\Users\\demo\\OneDrive\\Pictures\\mountains.jpg", size: 2.9 * MB, cat: "images", w: 2560, h: 1440, mtime: Math.round(Date.now() / 1000 - 86400 * 200), thumb: mockThumb(120, 2) }] }];
   const later = (ms, f) => setTimeout(f, ms);
   return {
     appInfo: async () => ({ version: "4.17.0", author: "xKi4o", admin: scen !== "noadmin", pc: "DESKTOP-XKI4O", user: scen === "nouser" ? "" : "Alex Ivanov", os: "Windows 11 Pro 24H2", build: "26100.4652", drive, year: 2026, profile: "C:\\Users\\demo" }),
@@ -14024,8 +14161,8 @@ const Mock = (() => {
         window.__ev("find-progress", { kind, p: { phase: ph, files: n * 21734, dirs: n * 1830, bytes: n * 3.1 * GB, matched: kind === "dupes" ? n * 412 : n * 6, toHash: 9.4 * GB, hashed: Math.max(0, n - 6) * 2.4 * GB, current: (o.roots[0] || "C:\\") + "Users\\demo\\Pictures\\2025\\IMG_" + (4000 + n * 37) + ".jpg" } });
         if (findStop || n >= 16) {
           clearInterval(iv); const stopped = findStop; findStop = false; findRun = "";
-          if (!stopped) { findRes[kind] = { kind, at: Date.now(), took: Date.now() - t0, opts: o, scanned: { files: 217340, dirs: 18300, denied: 3 } }; if (kind === "large") { findRes.large.large = mockLarge.slice(); findRes.large.total = mockLarge.reduce((s, x) => s + x.size, 0); } else { findRes.dupes.dupes = JSON.parse(JSON.stringify(mockDupes)); findRes.dupes.wasted = mockDupes.reduce((s, g) => s + g.wasted, 0); } }
-          window.__ev("find-done", { kind, ok: true, stopped, count: kind === "large" ? mockLarge.length : mockDupes.length, took: Date.now() - t0, p: {} });
+          if (!stopped) { findRes[kind] = { kind, at: Date.now(), took: Date.now() - t0, opts: o, scanned: { files: 217340, dirs: 18300, denied: 3 } }; if (kind === "large") { findRes.large.large = mockLarge.slice(); findRes.large.total = mockLarge.reduce((s, x) => s + x.size, 0); } else { const src = o.similar ? mockSim() : mockDupes; findRes.dupes.dupes = JSON.parse(JSON.stringify(src)); findRes.dupes.wasted = src.reduce((s, g) => s + g.wasted, 0); } }
+          window.__ev("find-done", { kind, ok: true, stopped, count: kind === "large" ? mockLarge.length : (o.similar ? 2 : mockDupes.length), took: Date.now() - t0, p: {} });
         }
       }, 240);
       return true;

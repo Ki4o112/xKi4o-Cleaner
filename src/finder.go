@@ -42,6 +42,7 @@ type findOpts struct {
 	System    bool     `json:"system"`    // also Windows, program folders and AppData
 	Exclude   []string `json:"exclude"`   // folders to leave out
 	Limit     int      `json:"limit"`     // large files: how many to list
+	Similar   bool     `json:"similar"`   // duplicates: pictures that look alike, not identical files
 }
 
 type foundFile struct {
@@ -52,6 +53,9 @@ type foundFile struct {
 	Ext       string `json:"ext,omitempty"`
 	Cat       string `json:"cat"`
 	Protected bool   `json:"protected,omitempty"`
+	W         int    `json:"w,omitempty"` // similar pictures: the size in pixels
+	H         int    `json:"h,omitempty"`
+	Thumb     string `json:"thumb,omitempty"` // similar pictures: a small JPEG (data URL)
 	mtimeNs   int64  // exact time of the last change, for the check before deleting
 	part      uint64 // checksum of the first and last 64 KB (duplicates)
 }
@@ -539,7 +543,7 @@ func planDupDelete(groups []dupGroup, paths []string, fs finderFS) (ok []foundFi
 			if want[normPath(f.Path)] {
 				found[normPath(f.Path)] = true
 				del = append(del, f)
-			} else if !keeper && sameContent(f, g.Hash) {
+			} else if !keeper && (isSimilarGroup(g) && unchanged(f) || !isSimilarGroup(g) && sameContent(f, g.Hash)) {
 				keeper = true // read again: this copy really stays as it was
 			}
 		}

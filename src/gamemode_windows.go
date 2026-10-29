@@ -387,6 +387,10 @@ func gameStart(o gmOpts) gmResult {
 		st.Freed = res.Freed
 		op.info("", T("log.gmRAM"), map[string]any{"freed": res.Freed})
 	}
+	gamePowerUp(&st)
+	if st.Plan != "" || st.Overlay != "" {
+		op.info("", T("log.gmPower"), map[string]any{"plan": st.Plan, "overlay": st.Overlay})
+	}
 	gmSave(st)
 	for _, c := range st.Closed {
 		op.info(c.Name, T("log.gmClosed"), map[string]any{"exe": c.Exe})
@@ -441,6 +445,7 @@ func gameStop() gmResult {
 		}
 		op.info(c.Name, T("log.gmStarted"), nil)
 	}
+	gamePowerBack(st)
 	gmSave(gmState{})
 	op.end(T("log.gmOff"), nil)
 	res := gmResult{State: gmState{}}

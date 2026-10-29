@@ -32,6 +32,11 @@ type gmState struct {
 	Closed []gmClosed `json:"closed"`
 	Left   []string   `json:"left,omitempty"` // chosen but still running (refused to close)
 	Freed  int64      `json:"freed"`          // memory freed at the start
+	// the power plan or power mode game mode switched to, and the user's own
+	Plan        string `json:"plan,omitempty"`
+	PrevPlan    string `json:"prevPlan,omitempty"`
+	Overlay     string `json:"overlay,omitempty"`
+	PrevOverlay string `json:"prevOverlay,omitempty"`
 }
 
 // gmRoots: the first process of each chosen program (not the helpers it

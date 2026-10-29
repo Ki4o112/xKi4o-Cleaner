@@ -206,6 +206,7 @@ var texts = map[string][2]string{ // [bg, en]
 	"pm.p.normal":      {"нормален", "normal"},
 	"pm.p.above":       {"над нормалния", "above normal"},
 	"pm.p.high":        {"висок", "high"},
+	"log.gmPower":      {"Захранване: най-добра производителност до края на играта", "Power: best performance until the game ends"},
 	"bp.err":           {"Дневникът на Windows за стартирането не можа да се прочете.", "Windows' start log could not be read."},
 	"th.log":           {"Процесорът се забавя (до %d%% от скоростта си) — %s", "The processor slows itself down (to %d%% of its speed) — %s"},
 	"th.nTitle":        {"Процесорът се забавя до %d%%", "The processor slows down to %d%%"},

@@ -248,13 +248,13 @@ func TestProcControls(t *testing.T) {
 	}()
 	st := procCtlState(tg)
 	t.Logf("state %+v", st)
-	if !st.Can || st.Game || st.Prio != "normal" {
+	if !st.Can || st.Game || st.Prio == "" { // (GitHub's runner starts its programs below normal)
 		t.Fatalf("state %+v", st)
 	}
-	if r := procPriority([]procTarget{tg}, "below", false); r.Done != 1 {
+	if r := procPriority([]procTarget{tg}, "above", false); r.Done != 1 {
 		t.Fatalf("priority %+v", r)
 	}
-	if st := procCtlState(tg); st.Prio != "below" {
+	if st := procCtlState(tg); st.Prio != "above" {
 		t.Fatalf("after priority %+v", st)
 	}
 	if r := procEco([]procTarget{tg}, true); r.Done != 1 {
@@ -313,5 +313,30 @@ func TestPrioRemember(t *testing.T) {
 	if k, err := registry.OpenKey(registry.LOCAL_MACHINE, ifeoKey+`\`+exe, registry.QUERY_VALUE); err == nil {
 		k.Close()
 		t.Fatal("the key stayed")
+	}
+}
+
+// Game mode's power: the best plan (or power mode) while playing, the
+// user's own back after.
+func TestGamePower(t *testing.T) {
+	changesThisPC(t)
+	before := activeScheme()
+	ov0, hasOv := overlayGet()
+	t.Logf("plan %s, power mode %s (%v)", before, ov0, hasOv)
+	var st gmState
+	gamePowerUp(&st)
+	t.Logf("game mode: %+v", st)
+	if st.Plan == "" && st.Overlay == "" {
+		t.Skip("this PC is already at its best performance, or has no such setting")
+	}
+	if st.Plan != "" && activeScheme() != st.Plan {
+		t.Fatalf("plan now %s", activeScheme())
+	}
+	gamePowerBack(st)
+	if got := activeScheme(); got != before {
+		t.Fatalf("plan after %s, want %s", got, before)
+	}
+	if ov, _ := overlayGet(); hasOv && ov != ov0 {
+		t.Fatalf("power mode after %s, want %s", ov, ov0)
 	}
 }
