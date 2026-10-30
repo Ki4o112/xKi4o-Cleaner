@@ -12,6 +12,10 @@ on:
         description: "only the tests matching this (go test -run)"
         required: false
         default: ""
+      wv2args:
+        description: "extra WebView2 browser arguments for the app tests"
+        required: false
+        default: ""
 
 jobs:
   test:
@@ -29,6 +33,7 @@ jobs:
           XKI4O_WRITE_TESTS: "1"
           XKI4O_APP_TESTS: "1"
           ONLY: ${{ inputs.run }}
+          XKI4O_WV2_ARGS: ${{ inputs.wv2args }}
         shell: bash
         run: |
           set -o pipefail

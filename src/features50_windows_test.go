@@ -481,7 +481,7 @@ func TestStartsInTray(t *testing.T) {
 		_ = os.MkdirAll(filepath.Join(data, "xKi4oCleaner"), 0o755)
 		_ = os.WriteFile(filepath.Join(data, "xKi4oCleaner", "settings.json"), []byte(settings), 0o644)
 		cmd := exec.Command(exe, args...)
-		cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data)
+		cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data, "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS="+os.Getenv("XKI4O_WV2_ARGS"))
 		if err := cmd.Start(); err != nil {
 			t.Fatal(err)
 		}
@@ -528,7 +528,7 @@ func TestStartsInTray(t *testing.T) {
 		label := fmt.Sprintf("fromTray%v-%s", c.args, c.wait)
 		_ = os.WriteFile(filepath.Join(data, "xKi4oCleaner", "settings.json"), []byte(c.settings), 0o644)
 		cmd := exec.Command(exe, c.args...)
-		cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data)
+		cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data, "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS="+os.Getenv("XKI4O_WV2_ARGS"))
 		if err := cmd.Start(); err != nil {
 			t.Fatal(err)
 		}
