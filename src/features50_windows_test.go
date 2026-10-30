@@ -502,3 +502,146 @@ func TestStartsInTray(t *testing.T) {
 		t.Errorf("a plain start: window found %v, visible %v", found, vis)
 	}
 }
+
+// Debloat: a change goes into the real registry, counts as applied, and its
+// undo takes it back; the user's own value comes back after the test.
+func TestDebloatApplyUndo(t *testing.T) {
+	changesThisPC(t)
+	initPaths()
+	logInit(t.TempDir())
+	const adv = `Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced`
+	k, _, err := registry.CreateKey(registry.CURRENT_USER, adv, registry.QUERY_VALUE|registry.SET_VALUE)
+	if err != nil {
+		t.Fatal(err)
+	}
+	old, _, oldErr := k.GetIntegerValue("HideFileExt")
+	defer func() {
+		if oldErr == nil {
+			_ = k.SetDWordValue("HideFileExt", uint32(old))
+		} else {
+			_ = k.DeleteValue("HideFileExt")
+		}
+		k.Close()
+	}()
+	f := dbFeatureByID("ShowKnownFileExt")
+	if err := applyOps(f.Undo); err != nil {
+		t.Fatal(err)
+	}
+	if regApplied(f.Apply, liveReg{}) {
+		t.Fatal("applied before applying")
+	}
+	if err := dbChange(f, false, nil); err != nil {
+		t.Fatal(err)
+	}
+	if !regApplied(f.Apply, liveReg{}) {
+		t.Fatal("not applied after applying")
+	}
+	if v, _, _ := k.GetIntegerValue("HideFileExt"); v != 0 {
+		t.Fatalf("HideFileExt = %d", v)
+	}
+	if err := dbChange(f, true, nil); err != nil {
+		t.Fatal(err)
+	}
+	if regApplied(f.Apply, liveReg{}) {
+		t.Fatal("still applied after the undo")
+	}
+}
+
+// Every registry change of Win11Debloat can be written and read back here,
+// in a test key (so this PC's settings are not touched): the paths, value
+// types and key deletes all work.
+func TestDebloatAllOpsWork(t *testing.T) {
+	const base = `HKCU\Software\xKi4oDebloatTest`
+	defer func() { _ = deleteTree(registry.CURRENT_USER, `Software\xKi4oDebloatTest`) }()
+	n := 0
+	for _, f := range debloatData().Features {
+		for _, ops := range [][]regOp{f.Apply, f.Undo} {
+			var moved []regOp
+			for _, op := range ops {
+				_, path, _ := strings.Cut(op.Key, `\`)
+				op.Key = base + `\` + strings.ReplaceAll(op.Key[:strings.Index(op.Key, `\`)], `\`, "") + `\` + path
+				moved = append(moved, op)
+			}
+			if len(moved) == 0 {
+				continue
+			}
+			if err := applyOps(moved); err != nil {
+				t.Errorf("%s: %v", f.ID, err)
+				continue
+			}
+			if !regApplied(moved, liveReg{}) {
+				t.Errorf("%s: not read back", f.ID)
+			}
+			n += len(moved)
+		}
+	}
+	t.Logf("%d operations written and read back", n)
+}
+
+// The start menu without pinned apps, and back.
+func TestDebloatClearStart(t *testing.T) {
+	changesThisPC(t)
+	dir := t.TempDir()
+	t.Setenv("LOCALAPPDATA", dir)
+	p := startBinPath()
+	_ = os.MkdirAll(filepath.Dir(p), 0o755)
+	if err := os.WriteFile(p, []byte("the user's own start menu"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := clearStart(false); err != nil {
+		t.Fatal(err)
+	}
+	if b, _ := os.ReadFile(p); string(b) != string(emptyStartBin) {
+		t.Fatal("not cleared")
+	}
+	if err := clearStart(true); err != nil {
+		t.Fatal(err)
+	}
+	if b, _ := os.ReadFile(p); string(b) != "the user's own start menu" {
+		t.Fatalf("not put back: %q", b)
+	}
+}
+
+// What Windows has: the Store apps and the state of every change.
+func TestDebloatStateRead(t *testing.T) {
+	initPaths()
+	st := debloatState()
+	t.Logf("build %d, %d installed apps of the list: %v, error %q", st.Build, len(st.Installed), st.Installed, st.Error)
+	if st.Build < 10000 || st.Error != "" || len(st.Applied) != len(debloatData().Features) {
+		t.Fatalf("%+v", st)
+	}
+	on := 0
+	for _, v := range st.Applied {
+		if v {
+			on++
+		}
+	}
+	t.Logf("%d changes already applied here", on)
+}
+
+// A Store app comes off for real (the runner has Feedback Hub), and an app
+// that is not there counts as done.
+func TestDebloatRemoveApp(t *testing.T) {
+	changesThisPC(t)
+	if f := removeAppx([]string{"xKi4o.NoSuchApp"}); len(f) != 0 {
+		t.Fatalf("an app that is not there: %v", f)
+	}
+	before := debloatState()
+	has := false
+	for _, id := range before.Installed {
+		if id == "Microsoft.WindowsFeedbackHub" {
+			has = true
+		}
+	}
+	if !has {
+		t.Skip("no Feedback Hub here")
+	}
+	if f := removeAppx([]string{"Microsoft.WindowsFeedbackHub"}); len(f) != 0 {
+		t.Fatalf("removal: %v", f)
+	}
+	for _, id := range debloatState().Installed {
+		if id == "Microsoft.WindowsFeedbackHub" {
+			t.Fatal("still installed")
+		}
+	}
+}

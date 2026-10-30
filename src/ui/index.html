@@ -969,6 +969,32 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .pg-opts { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-top: 10px; }
 .pg-len { display: flex; gap: 8px; align-items: center; font-size: 13px; }
 .pg-len input { width: 160px; accent-color: var(--blue); }
+/* ================= Debloat ================= */
+.db-hero { display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; padding: 18px 20px; border-radius: var(--r-l); background: linear-gradient(145deg, color-mix(in srgb, var(--blue) 12%, var(--card)), var(--card)); border: 1px solid var(--edge); }
+.db-ring { position: relative; width: 74px; height: 74px; }
+.db-ring b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 18px; font-weight: 800; }
+.db-hero .t { font-weight: 800; font-size: 17px; }
+.db-hero .d { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.db-acts { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.db-cat { margin-top: 16px; }
+.db-cat h3 { display: flex; gap: 8px; align-items: center; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 8px; }
+.db-cat h3 .n { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.db-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 14px; border-top: 1px solid var(--line-soft); }
+.db-row:first-child { border-top: 0; }
+.db-row .t { font-weight: 600; display: flex; gap: 6px 8px; flex-wrap: wrap; align-items: center; }
+.db-row .d { color: var(--muted); font-size: 12px; margin-top: 2px; line-height: 1.45; }
+.db-row.picked { background: color-mix(in srgb, var(--blue) 7%, transparent); }
+.db-row.undo { background: color-mix(in srgb, var(--amber) 8%, transparent); }
+.db-row .acts { display: flex; gap: 6px; align-items: center; }
+.db-row select.sel { max-width: 300px; }
+.tw-b.ok { color: var(--mint, #3ee8b0); }
+.tw-b.unsafe { color: var(--red, #ff6b6b); }
+.tw-b.optional { color: var(--amber); }
+.db-presets { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 10px; }
+#dbList { padding-bottom: 76px; }
+.db-prog { margin-top: 14px; padding: 14px 16px; border-radius: var(--r-l); background: var(--card); border: 1px solid var(--edge); }
+.db-prog .row1 { display: flex; gap: 10px; align-items: center; font-weight: 700; margin-bottom: 10px; }
+@media (max-width: 760px) { .db-hero { grid-template-columns: 1fr; } .db-acts { justify-content: flex-start; } }
 /* ================= Startup Manager ================= */
 .bp-card { background: var(--card); border: 1px solid var(--edge); border-radius: var(--r-l); padding: 16px 18px; margin-top: 12px; }
 .bp-card:empty { display: none; }
@@ -2581,6 +2607,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
       <button data-page="procs"><span class="ico" data-icon="cpu"></span><span class="label" data-i="nav.procs"></span></button>
       <button data-page="startup"><span class="ico" data-icon="rocket"></span><span class="label" data-i="nav.startup"></span><span class="badge err" id="suBadge" hidden></span></button>
       <button data-page="tweaks"><span class="ico" data-icon="tweaks"></span><span class="label" data-i="nav.tweaks"></span><span class="badge" id="twBadge" hidden></span></button>
+      <button data-page="debloat"><span class="ico" data-icon="broom"></span><span class="label" data-i="nav.debloat"></span></button>
       <div class="nav-g" data-i="nav.g.pc"></div>
       <button data-page="sysinfo"><span class="ico" data-icon="board"></span><span class="label" data-i="nav.sysinfo"></span></button>
       <button data-page="gpu"><span class="ico" data-icon="gpu"></span><span class="label" data-i="nav.gpu"></span><span class="badge" id="gpBadge" hidden></span></button>
@@ -2809,6 +2836,26 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
             <div id="muList"></div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- =============== DEBLOAT =============== -->
+    <section class="page" id="page-debloat">
+      <div class="head">
+        <div class="head-ico" data-icon="broom"></div>
+        <div><h1 data-i="db.title"></h1><div class="sub" data-i="db.sub"></div></div>
+        <div class="head-r"><button class="btn icon-btn" id="dbRefresh" data-i-title="db.refresh"><span data-icon="refresh"></span></button></div>
+      </div>
+      <div class="tw-body" id="dbBody">
+        <div class="db-hero" id="dbHero"></div>
+        <div class="tw-tools">
+          <div class="seg blue" id="dbTabs"></div>
+          <label class="search"><span data-icon="search"></span><input id="dbQ" type="search" spellcheck="false" autocomplete="off" data-i-ph="db.search"></label>
+          <label class="chk" id="dbOnlyWrap" hidden><input type="checkbox" class="cb" id="dbOnly" checked><span data-i="db.onlyInstalled"></span></label>
+        </div>
+        <div id="dbList"></div>
+        <div class="note-line" id="dbCredit"></div>
+        <div class="sel-bar" id="dbBar"><span class="n" id="dbSelN"></span><span class="d" id="dbSelD"></span><label class="chk"><input type="checkbox" class="cb" id="dbRp" checked><span data-i="db.rp"></span></label><button class="btn primary grow" id="dbGo" disabled><span data-icon="broom"></span><span data-i="db.go"></span></button></div>
       </div>
     </section>
 
@@ -3769,6 +3816,24 @@ bg: {
   "set.startTrayD": "Програмата се отваря само като иконка долу до часовника — без целия прозорец, и при старт на Windows, и когато я пуснеш сам. Отваря се с клик на иконката.",
   "set.startTrayOn": "Следващия път програмата ще тръгне в трея",
   "set.startTrayOff": "Програмата ще се отваря на цял прозорец (при старт на Windows пак тръгва в трея)",
+  "nav.debloat": "Debloat", "db.title": "Debloat", "db.sub": "Всичко от Win11Debloat — махни рекламите, следенето, AI и излишните приложения на Windows",
+  "db.refresh": "Провери отново", "db.search": "Търси настройка или приложение…", "db.onlyInstalled": "Само инсталираните",
+  "db.loading": "Проверявам Windows…", "db.heroT": "Приложени {0} от {1} промени", "db.heroD": "Инсталирани приложения, които могат да се махнат: {0}",
+  "db.noAdmin": "Нужни са администраторски права.", "db.rec": "Препоръчани", "db.clear": "Изчисти избора",
+  "db.t.set": "Настройки", "db.t.apps": "Приложения", "db.custom": "Друго (променено ръчно)",
+  "db.on": "приложено", "db.reboot": "иска рестарт", "db.oneway": "без връщане", "db.undo": "Върни", "db.undoPicked": "Ще се върне",
+  "db.catOn": "{0} приложени", "db.none": "Нищо не отговаря на търсенето.", "db.noApps": "Няма инсталирани приложения от списъка — Windows вече е изчистен.",
+  "db.p.def": "Препоръчани за махане", "db.p.0": "Xbox приложенията", "db.p.1": "Програмите на производителя (Acer, ASUS, Dell, HP, Lenovo, LG, MSI, Samsung)",
+  "db.clearApps": "Изчисти", "db.rec.safe": "безопасно", "db.rec.optional": "по желание", "db.rec.unsafe": "внимание", "db.notInst": "не е инсталирано",
+  "db.picked": "Избрани: {0} промени, {1} приложения", "db.nothing": "Избери промени или приложения", "db.undoN": "{0} ще се върнат както са в Windows по подразбиране",
+  "db.rp": "Точка за възстановяване", "db.go": "Приложи",
+  "db.recDone": "Избрани са препоръчаните: {0} промени и {1} приложения. Прегледай ги и натисни „Приложи“.",
+  "db.cTitle": "Да приложа ли избраното?", "db.cText": "Промените са като в Win11Debloat. Повечето се връщат оттук по всяко време.",
+  "db.cApply": "{0} промени", "db.cUndo": "{0} промени се връщат", "db.cApps": "{0} приложения се премахват за всички потребители",
+  "db.cUnsafe": "Внимание — тези приложения е по-добре да останат: {0}", "db.cExplorer": "Лентата на задачите ще мигне за момент (рестарт на Explorer).",
+  "db.cReboot": "Някои промени искат рестарт на компютъра.", "db.cant": "Не може да започне — друга промяна още тече или няма администраторски права.",
+  "db.running": "Прилагам…", "db.done": "Готово — {0} промени.", "db.doneReboot": "Готово — {0} промени. Рестартирай компютъра, за да влязат всички.",
+  "db.partly": "Готови {0} от {1}.", "db.credit": "Базирано на Win11Debloat от Raphire (MIT лиценз) — {0}.",
   "pc.more": "Приоритет и още",
   "pc.title": "{0}",
   "pc.subMany": "{0} процеса",
@@ -4995,6 +5060,24 @@ en: {
   "set.startTrayD": "The app opens only as an icon by the clock — without the whole window, both when Windows starts and when you start it yourself. Click the icon to open it.",
   "set.startTrayOn": "Next time the app starts in the tray",
   "set.startTrayOff": "The app opens in its full window (with Windows it still starts in the tray)",
+  "nav.debloat": "Debloat", "db.title": "Debloat", "db.sub": "Everything from Win11Debloat — remove Windows' ads, tracking, AI and unneeded apps",
+  "db.refresh": "Check again", "db.search": "Search a setting or an app…", "db.onlyInstalled": "Installed only",
+  "db.loading": "Checking Windows…", "db.heroT": "{0} of {1} changes applied", "db.heroD": "Installed apps that can be removed: {0}",
+  "db.noAdmin": "Administrator rights are needed.", "db.rec": "Recommended", "db.clear": "Clear the choice",
+  "db.t.set": "Settings", "db.t.apps": "Apps", "db.custom": "Other (changed by hand)",
+  "db.on": "applied", "db.reboot": "needs a restart", "db.oneway": "no going back", "db.undo": "Take back", "db.undoPicked": "Will be taken back",
+  "db.catOn": "{0} applied", "db.none": "Nothing matches the search.", "db.noApps": "None of the listed apps is installed — Windows is clean already.",
+  "db.p.def": "Recommended to remove", "db.p.0": "Xbox apps", "db.p.1": "The maker's software (Acer, ASUS, Dell, HP, Lenovo, LG, MSI, Samsung)",
+  "db.clearApps": "Clear", "db.rec.safe": "safe", "db.rec.optional": "optional", "db.rec.unsafe": "careful", "db.notInst": "not installed",
+  "db.picked": "Chosen: {0} changes, {1} apps", "db.nothing": "Choose changes or apps", "db.undoN": "{0} go back to Windows' default",
+  "db.rp": "Restore point", "db.go": "Apply",
+  "db.recDone": "The recommended ones are chosen: {0} changes and {1} apps. Look them over and press Apply.",
+  "db.cTitle": "Apply the chosen ones?", "db.cText": "The changes are the same as Win11Debloat's. Most of them can be taken back here any time.",
+  "db.cApply": "{0} changes", "db.cUndo": "{0} changes taken back", "db.cApps": "{0} apps removed for every user",
+  "db.cUnsafe": "Careful — these apps are better kept: {0}", "db.cExplorer": "The taskbar blinks for a moment (Explorer restarts).",
+  "db.cReboot": "Some changes need the PC to restart.", "db.cant": "It cannot start — another change is still running or there are no administrator rights.",
+  "db.running": "Applying…", "db.done": "Done — {0} changes.", "db.doneReboot": "Done — {0} changes. Restart the PC for all of them to take effect.",
+  "db.partly": "{0} of {1} done.", "db.credit": "Based on Win11Debloat by Raphire (MIT licence) — {0}.",
   "pc.more": "Priority and more",
   "pc.title": "{0}",
   "pc.subMany": "{0} processes",
@@ -6319,7 +6402,7 @@ function fitNav() {
     n.classList.toggle("tight", mode === "tight"); n.classList.toggle("lines", mode === "lines");
     const over = n.scrollHeight - n.clientHeight;
     const h = Math.floor(h0 - over / bs.length - .5);
-    if (h >= 24 || mode === "lines") { n.style.setProperty("--navh", Math.max(18, Math.min(h0, h)) + "px"); n.classList.add("fit"); break; }
+    if (h >= 24 || mode === "lines") { n.style.setProperty("--navh", Math.max(17, Math.min(h0, h)) + "px"); n.classList.add("fit"); break; }
   }
   moveNav();
 }
@@ -6447,6 +6530,7 @@ function go(page, opt) {
   if (page === "memory") { paintMem(); renderMemUsers(); pollMemUsers(); requestAnimationFrame(() => { $("#segThr")._place(); $("#segInt")._place(); }); }
   if (page === "settings") requestAnimationFrame(() => { $("#segLang")._place(); $("#segTheme")._place && $("#segTheme")._place(); });
   if (page === "clean") requestAnimationFrame(() => $("#segSort")._place && $("#segSort")._place());
+  if (page === "debloat") { setupDbTabs(); loadDebloat(false); requestAnimationFrame(() => $("#dbTabs")._place && $("#dbTabs")._place()); }
   if (page === "tweaks") { loadTweaks(); requestAnimationFrame(() => $("#twFilter")._place && $("#twFilter")._place()); }
   if (page === "startup") { loadStartup(); loadBoot(); }
   if (page === "sysinfo") { loadSysInfo(false); loadSiLive(); }
@@ -7886,6 +7970,170 @@ $("#twImport").addEventListener("click", async () => {
     refreshTwTools();
   });
 });
+
+/* =====================================================================
+   DEBLOAT — everything Win11Debloat does (by Raphire, MIT), run by the app
+===================================================================== */
+const DB = { info: null, st: null, loading: false, tab: "set", q: "", only: true, sel: new Set(), undo: new Set(), grp: {}, apps: new Set(), run: null };
+const dbF = id => DB.info && DB.info.features.find(f => f.id === id);
+const dbLabel = f => L === "bg" ? f.bg[0] : f.label;
+const dbTip = f => L === "bg" ? f.bg[1] : f.tip;
+const dbAppName = a => L === "bg" && a.bg[0] ? a.bg[0] : a.name;
+const dbAppDesc = a => L === "bg" ? a.bg[1] : a.desc;
+async function loadDebloat(force) {
+  if (DB.loading) return;
+  DB.loading = true; $("#dbRefresh").classList.add("spin"); renderDebloat();
+  try {
+    if (!DB.info) DB.info = await api.debloatInfo();
+    if (force || !DB.st || !DB.run) DB.st = await api.debloatState();
+  } catch (e) { DB.st = DB.st || { error: String(e && e.message || e), applied: {}, fits: {}, installed: [] }; }
+  DB.loading = false; $("#dbRefresh").classList.remove("spin");
+  renderDebloat();
+}
+// a group's current value: the one whose changes are all in
+function dbGroupNow(g) {
+  const ap = (DB.st && DB.st.applied) || {};
+  const i = g.values.findIndex(v => v.ids.every(id => ap[id]));
+  return i;
+}
+function dbCounts() {
+  const st = DB.st || {}, info = DB.info;
+  if (!info || !st.applied) return { on: 0, all: 0 };
+  const inGroup = new Set(info.groups.flatMap(g => g.values.flatMap(v => v.ids)));
+  const list = info.features.filter(f => !inGroup.has(f.id) && st.fits[f.id] !== false);
+  return { on: list.filter(f => st.applied[f.id]).length, all: list.length };
+}
+function dbPicks() {
+  const grpIds = Object.values(DB.grp).flat();
+  return { apply: [...DB.sel, ...grpIds], undo: [...DB.undo], apps: [...DB.apps] };
+}
+function renderDebloat() {
+  const list = $("#dbList"); if (!list) return;
+  const info = DB.info, st = DB.st;
+  $("#dbCredit").innerHTML = info ? esc(t("db.credit", info.source)) : "";
+  if (!info || !st) { list.innerHTML = `<div class="tw-empty"><span class="spin"></span> ${esc(t("db.loading"))}</div>`; $("#dbHero").innerHTML = ""; paintDbBar(); return; }
+  const c = dbCounts(), pct = c.all ? Math.round(c.on / c.all * 100) : 0, ring = 194.8;
+  const admin = st.admin !== false;
+  $("#dbHero").innerHTML = `<div class="db-ring"><svg width="74" height="74" viewBox="0 0 74 74"><circle cx="37" cy="37" r="31" fill="none" stroke="var(--well)" stroke-width="8"/><circle cx="37" cy="37" r="31" fill="none" stroke="var(--blue)" stroke-width="8" stroke-linecap="round" stroke-dasharray="${ring}" stroke-dashoffset="${ring * (1 - pct / 100)}" transform="rotate(-90 37 37)"/></svg><b>${pct}%</b></div>
+    <div><div class="t">${esc(t("db.heroT", c.on, c.all))}</div><div class="d">${esc(t("db.heroD", st.installed.length))}</div>${st.error ? `<div class="d" style="color:var(--amber)">${esc(st.error)}</div>` : ""}${admin ? "" : `<div class="d" style="color:var(--amber)">${esc(t("db.noAdmin"))}</div>`}</div>
+    <div class="db-acts"><button class="btn small primary" id="dbRec" ${DB.run ? "disabled" : ""}>${ICONS.sparkle}<span>${esc(t("db.rec"))}</span></button><button class="btn small ghost" id="dbClear" ${DB.run ? "disabled" : ""}>${esc(t("db.clear"))}</button></div>`;
+  $("#dbRec").addEventListener("click", dbRecommended);
+  $("#dbClear").addEventListener("click", () => { DB.sel.clear(); DB.undo.clear(); DB.grp = {}; DB.apps.clear(); renderDebloat(); });
+  $("#dbOnlyWrap").hidden = DB.tab !== "apps";
+  const q = DB.q.toLowerCase(), dis = DB.run || !admin ? "disabled" : "";
+  if (DB.run) {
+    const r = DB.run, p = r.total ? Math.round(r.step / r.total * 100) : 0;
+    list.innerHTML = `<div class="db-prog"><div class="row1"><span class="spin"></span>${esc(t("db.running"))}</div><div class="progress"><i style="width:${p}%"></i></div><div class="f-note" style="margin-top:8px">${esc(r.text || "")}</div></div>`;
+    paintDbBar(); return;
+  }
+  if (DB.tab === "set") {
+    const inGroup = new Set(info.groups.flatMap(g => g.values.flatMap(v => v.ids)));
+    list.innerHTML = info.categories.map(cat => {
+      const feats = info.features.filter(f => f.cat === cat.id && !inGroup.has(f.id) && st.fits[f.id] !== false)
+        .filter(f => !q || (dbLabel(f) + " " + dbTip(f) + " " + f.label).toLowerCase().includes(q));
+      const groups = info.groups.filter(g => g.cat === cat.id && g.values.some(v => v.ids.every(id => st.fits[id] !== false)))
+        .filter(g => !q || ((L === "bg" ? g.bg[0] : g.label) + " " + g.label).toLowerCase().includes(q));
+      if (!feats.length && !groups.length) return "";
+      const rows = groups.map(g => {
+        const now = dbGroupNow(g), want = DB.grp[g.id];
+        const vals = g.values.filter(v => v.ids.every(id => st.fits[id] !== false));
+        const cur = want ? g.values.findIndex(v => v.ids.join() === want.join()) : now;
+        return `<div class="db-row ${want ? "picked" : ""}"><span style="width:18px"></span><div><div class="t">${esc(L === "bg" ? g.bg[0] : g.label)}</div><div class="d">${esc(L === "bg" ? g.bg[1] : g.tip)}</div></div>
+          <div class="acts"><select class="sel" data-dbg="${esc(g.id)}" ${dis}>${now < 0 && !want ? `<option value="-1" selected>${esc(t("db.custom"))}</option>` : ""}${vals.map(v => { const i = g.values.indexOf(v); return `<option value="${i}" ${i === cur ? "selected" : ""}>${esc(L === "bg" ? v.bg : v.label)}</option>`; }).join("")}</select></div></div>`;
+      }).join("") + feats.sort((a, b) => a.prio - b.prio).map(f => {
+        const on = !!st.applied[f.id], picked = DB.sel.has(f.id), undo = DB.undo.has(f.id);
+        const badges = [on ? `<span class="tw-b ok">${esc(t("db.on"))}</span>` : "", f.reboot ? `<span class="tw-b">${esc(t("db.reboot"))}</span>` : "", f.oneway || !f.undo ? `<span class="tw-b">${esc(t("db.oneway"))}</span>` : ""].join("");
+        const ctl = on ? (f.undo ? `<button class="btn small ${undo ? "danger" : ""}" data-dbu="${esc(f.id)}" ${dis}>${ICONS.undo}<span>${esc(t(undo ? "db.undoPicked" : "db.undo"))}</span></button>` : "")
+          : `<input type="checkbox" class="switch" data-dbf="${esc(f.id)}" ${picked ? "checked" : ""} ${dis} aria-label="${esc(dbLabel(f))}">`;
+        return `<div class="db-row ${picked ? "picked" : ""} ${undo ? "undo" : ""}"><span style="width:18px"></span><div><div class="t">${esc(dbLabel(f))}${badges}</div><div class="d">${esc(dbTip(f))}</div></div><div class="acts">${ctl}</div></div>`;
+      }).join("");
+      const n = info.features.filter(f => f.cat === cat.id && !inGroup.has(f.id) && st.applied[f.id]).length;
+      return `<div class="db-cat"><h3>${esc(L === "bg" ? cat.bg : cat.label)} <span class="n">${n ? esc(t("db.catOn", n)) : ""}</span></h3><div class="list">${rows}</div></div>`;
+    }).join("") || `<div class="tw-empty">${esc(t("db.none"))}</div>`;
+    list.querySelectorAll("[data-dbf]").forEach(x => x.addEventListener("change", () => { if (x.checked) DB.sel.add(x.dataset.dbf); else DB.sel.delete(x.dataset.dbf); renderDebloat(); }));
+    list.querySelectorAll("[data-dbu]").forEach(x => x.addEventListener("click", () => { const id = x.dataset.dbu; if (DB.undo.has(id)) DB.undo.delete(id); else DB.undo.add(id); renderDebloat(); }));
+    list.querySelectorAll("[data-dbg]").forEach(x => x.addEventListener("change", () => {
+      const g = info.groups.find(y => y.id === x.dataset.dbg), i = +x.value;
+      if (i < 0 || i === dbGroupNow(g)) delete DB.grp[g.id]; else DB.grp[g.id] = g.values[i].ids.slice();
+      renderDebloat();
+    }));
+  } else {
+    const inst = new Set(st.installed);
+    const apps = info.apps.filter(a => (!DB.only || inst.has(a.ids[0])) && (!q || (a.name + " " + dbAppName(a) + " " + dbAppDesc(a) + " " + a.ids.join(" ")).toLowerCase().includes(q)));
+    const order = { safe: 0, optional: 1, unsafe: 2 };
+    apps.sort((a, b) => (order[a.rec] - order[b.rec]) || dbAppName(a).localeCompare(dbAppName(b), locale()));
+    const presets = `<div class="db-presets"><button class="btn small" data-dbp="def" ${dis}>${esc(t("db.p.def"))}</button>${info.presets.map((p, i) => `<button class="btn small" data-dbp="${i}" ${dis}>${esc(t("db.p." + i) === "db.p." + i ? p.name : t("db.p." + i))}</button>`).join("")}<button class="btn small ghost" data-dbp="none" ${dis}>${esc(t("db.clearApps"))}</button></div>`;
+    list.innerHTML = presets + (apps.length ? `<div class="list">${apps.map(a => {
+      const id = a.ids[0], on = inst.has(id), picked = DB.apps.has(id);
+      return `<div class="db-row ${picked ? "picked" : ""}"><input type="checkbox" class="cb" data-dba="${esc(id)}" ${picked ? "checked" : ""} ${on && !dis ? "" : "disabled"}>
+        <div><div class="t">${esc(dbAppName(a))}<span class="tw-b ${a.rec}">${esc(t("db.rec." + a.rec))}</span>${on ? "" : `<span class="tw-b">${esc(t("db.notInst"))}</span>`}</div><div class="d">${esc(dbAppDesc(a))}</div></div><span class="f-note" style="font-family:ui-monospace,Consolas,monospace">${esc(id)}</span></div>`;
+    }).join("")}</div>` : `<div class="tw-empty">${esc(t(DB.only && !q ? "db.noApps" : "db.none"))}</div>`);
+    list.querySelectorAll("[data-dba]").forEach(x => x.addEventListener("change", () => { if (x.checked) DB.apps.add(x.dataset.dba); else DB.apps.delete(x.dataset.dba); renderDebloat(); }));
+    list.querySelectorAll("[data-dbp]").forEach(x => x.addEventListener("click", () => {
+      const v = x.dataset.dbp;
+      if (v === "none") DB.apps.clear();
+      else {
+        const ids = v === "def" ? info.apps.filter(a => a.def && a.rec === "safe").map(a => a.ids[0]) : info.presets[+v].ids.map(id => (info.apps.find(a => a.ids.includes(id)) || { ids: [id] }).ids[0]);
+        ids.filter(id => inst.has(id)).forEach(id => DB.apps.add(id));
+      }
+      renderDebloat();
+    }));
+  }
+  paintDbBar();
+}
+function paintDbBar() {
+  const p = dbPicks(), n = p.apply.length + p.undo.length;
+  const nEl = $("#dbSelN"); if (!nEl) return;
+  nEl.textContent = n || p.apps.length ? t("db.picked", n, p.apps.length) : t("db.nothing");
+  $("#dbSelD").textContent = p.undo.length ? t("db.undoN", p.undo.length) : "";
+  $("#dbGo").disabled = !!DB.run || !(n || p.apps.length) || (DB.st && DB.st.admin === false);
+}
+// Win11Debloat's default selection: its default changes and the safe apps it picks
+function dbRecommended() {
+  const info = DB.info, st = DB.st; if (!info || !st) return;
+  info.defaults.forEach(id => { if (st.fits[id] !== false && !st.applied[id]) DB.sel.add(id); });
+  const inst = new Set(st.installed);
+  info.apps.filter(a => a.def && a.rec === "safe" && inst.has(a.ids[0])).forEach(a => DB.apps.add(a.ids[0]));
+  toast(t("db.recDone", DB.sel.size, DB.apps.size), "sparkle");
+  renderDebloat();
+}
+async function dbGo() {
+  const p = dbPicks(); if (!(p.apply.length || p.undo.length || p.apps.length)) return;
+  const info = DB.info, unsafe = p.apps.map(id => info.apps.find(a => a.ids[0] === id)).filter(a => a && a.rec === "unsafe");
+  const reboot = p.apply.concat(p.undo).some(id => (dbF(id) || {}).reboot);
+  const list = [];
+  if (p.apply.length) list.push(t("db.cApply", p.apply.length));
+  if (p.undo.length) list.push(t("db.cUndo", p.undo.length));
+  if (p.apps.length) list.push(t("db.cApps", p.apps.length));
+  if (unsafe.length) list.push(t("db.cUnsafe", unsafe.map(dbAppName).join(", ")));
+  list.push(t("db.cExplorer"));
+  if (reboot) list.push(t("db.cReboot"));
+  confirmBox({ title: t("db.cTitle"), text: t("db.cText"), list, okText: t("db.go"), danger: unsafe.length > 0,
+    ok: async () => {
+      DB.run = { step: 0, total: p.apply.length + p.undo.length + p.apps.length, text: "" }; renderDebloat();
+      let ok = false; try { ok = await api.debloatRun({ apply: p.apply, undo: p.undo, apps: p.apps, restorePoint: !!$("#dbRp").checked }); } catch (e) {}
+      if (!ok) { DB.run = null; toast(t("db.cant"), "alert", "warn"); renderDebloat(); }
+    } });
+}
+on("debloat", d => {
+  if (!d) return;
+  if (d.state === "run") { DB.run = Object.assign(DB.run || {}, d); if (S.page === "debloat") renderDebloat(); return; }
+  DB.run = null;
+  const fails = d.failed || [];
+  DB.sel.clear(); DB.undo.clear(); DB.grp = {}; DB.apps.clear();
+  fails.forEach(f => { const x = dbF(f.id); if (x) DB.sel.add(f.id); });
+  if (!fails.length) toast(t(d.reboot ? "db.doneReboot" : "db.done", d.total), "check");
+  else toast(t("db.partly", d.total - fails.length, d.total) + " " + fails.slice(0, 2).map(f => { const x = dbF(f.id); const a = DB.info.apps.find(y => y.ids[0] === f.id); return (x ? dbLabel(x) : a ? dbAppName(a) : f.id) + ": " + f.error; }).join(" · "), "alert", "warn");
+  loadDebloat(true);
+});
+function setupDbTabs() {
+  makeSeg($("#dbTabs"), [{ v: "set", label: t("db.t.set") }, { v: "apps", label: t("db.t.apps") }], DB.tab, v => { DB.tab = v; renderDebloat(); });
+}
+let dbQT = 0;
+$("#dbQ").addEventListener("input", e => { clearTimeout(dbQT); dbQT = setTimeout(() => { DB.q = e.target.value.trim(); renderDebloat(); }, 150); });
+$("#dbOnly").addEventListener("change", e => { DB.only = e.target.checked; renderDebloat(); });
+$("#dbRefresh").addEventListener("click", () => loadDebloat(true));
+$("#dbGo").addEventListener("click", dbGo);
 
 /* =====================================================================
    STARTUP page
@@ -10468,7 +10716,7 @@ function setupSwatches() {
 }
 
 /* Keyboard shortcuts */
-const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "sysinfo", "gpu", "wupd", "bench", "optimize", "network", "nmerge", "repair", "restore", "ext", "pass", "av", "bsod", "recover", "logs", "settings", "credits"];
+const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "debloat", "sysinfo", "gpu", "wupd", "bench", "optimize", "network", "nmerge", "repair", "restore", "ext", "pass", "av", "bsod", "recover", "logs", "settings", "credits"];
 document.addEventListener("keydown", e => {
   if ($("#veil").classList.contains("on") || $("#sveil").classList.contains("on")) return;
   if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K" || e.key === "p" || e.key === "P")) { e.preventDefault(); if ($("#palVeil").classList.contains("on")) palClose(); else palOpen(); return; }
@@ -11856,8 +12104,8 @@ on("auto-clean", d => {
    Command palette (Ctrl+K): every section, action, tweak and category
 ===================================================================== */
 const PAL = { items: [], idx: 0 };
-const PAGE_ICON = { home: "heart", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", sysinfo: "board", gpu: "gpu", wupd: "wupd", network: "network", nmerge: "merge", bench: "bench", ext: "puzzle", pass: "lock", av: "shieldq", bsod: "alert", recover: "history", tweaks: "tweaks", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
-const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", sysinfo: "si.sub", gpu: "gp.sub", wupd: "wu.sub", network: "net.sub", nmerge: "nm.sub", bench: "bn.sub", ext: "bx.sub", pass: "ps.sub", av: "av.sub", bsod: "bs.sub", recover: "rf.sub", tweaks: "tw.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
+const PAGE_ICON = { home: "heart", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", sysinfo: "board", gpu: "gpu", wupd: "wupd", network: "network", nmerge: "merge", bench: "bench", ext: "puzzle", pass: "lock", av: "shieldq", bsod: "alert", recover: "history", tweaks: "tweaks", debloat: "broom", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
+const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", sysinfo: "si.sub", gpu: "gp.sub", wupd: "wu.sub", network: "net.sub", nmerge: "nm.sub", bench: "bn.sub", ext: "bx.sub", pass: "ps.sub", av: "av.sub", bsod: "bs.sub", recover: "rf.sub", tweaks: "tw.sub", debloat: "db.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
 function palSources() {
   const items = [];
   PAGES.forEach((p, i) => items.push({ g: "pal.g.pages", icon: PAGE_ICON[p], title: t("nav." + p), sub: t(PAGE_SUB[p]), hint: i < 9 ? "Ctrl " + (i + 1) : "", kw: p, run: () => go(p) }));
@@ -12111,6 +12359,7 @@ async function paintBgTame() {
    2.7 — icons
 ===================================================================== */
 Object.assign(ICONS, {
+  broom: P('<path d="M20 3 11 12"/><path d="M8.6 10.4c2.4-.7 4.6.6 5.4 2.9-.3 3.6-3.6 6.9-7.7 7.7C4.9 19.6 3.9 18 3.3 16c1.5-.4 2.9-1.4 3.6-2.8z"/><path d="M6.4 16.9 8 15.3M9.3 18.6l1.3-1.6"/>'),
   power: P('<path d="M12 3v9"/><path d="M6.6 6.6a8 8 0 1 0 10.8 0"/>'),
   wupd: P('<path d="M20.5 12a8.5 8.5 0 1 1-2.5-6"/><path d="M20.5 3.8v4.6h-4.6"/><path d="M12 8v5l3 1.8"/>'),
   heart: P('<path d="M12 20s-7.5-4.6-9.3-9.3A5 5 0 0 1 12 5.8a5 5 0 0 1 9.3 4.9"/><path d="M3.5 13h4l2-3 3 6 2-3h6"/>'),
@@ -13735,6 +13984,8 @@ const Mock = (() => {
   mockOp("files", "", "Deleting large files (to the Recycle Bin)", "cut", [["info", "D:\\Videos\\raw.mov", "Moved to the Recycle Bin"]], "", false, 900e3);
   mockEnts[0] = [{ id: 1, t: Date.now() - 7300e3, kind: "app", level: "info", msg: "The app started (version 2.5.0)", data: { os: "Windows 11 Pro 24H2", admin: true } }];
   const P0 = (name, n, o) => Array.from({ length: n }, (_, i) => Object.assign({ name, pid: 1000 + Math.floor(Math.random() * 30000), ppid: 4, start: 1760000000000000 + i * 1000, threads: 12 + i, handles: 300 + i * 20, session: 1, kind: "background", closable: true, cpu0: .2, mem: 40 * MB, ws: 60 * MB, priv: 50 * MB, io0: 1024 * 30 }, o, { mem: (o.mem || 40 * MB) * (i ? .35 : 1) }));
+  const mockDebloat = {"source": "Win11Debloat a6c0084", "categories": [{"id": "PrivacySuggestedContent", "label": "Privacy & Suggested Content", "bg": "Поверителност и реклами"}, {"id": "System", "label": "System", "bg": "Система"}, {"id": "StartMenuSearch", "label": "Start Menu & Search", "bg": "Старт меню и търсене"}, {"id": "AI", "label": "AI", "bg": "Изкуствен интелект"}, {"id": "WindowsUpdate", "label": "Windows Update", "bg": "Windows Update"}, {"id": "Taskbar", "label": "Taskbar", "bg": "Лента на задачите"}, {"id": "Appearance", "label": "Appearance", "bg": "Външен вид"}, {"id": "FileExplorer", "label": "File Explorer", "bg": "File Explorer"}, {"id": "Gaming", "label": "Gaming", "bg": "Игри"}, {"id": "MultiTasking", "label": "Multi-tasking", "bg": "Работа с прозорци"}, {"id": "OptionalWindowsFeatures", "label": "Optional Windows Features", "bg": "Допълнителни функции на Windows"}, {"id": "Other", "label": "Other", "bg": "Други"}], "features": [{"id": "DisableTelemetry", "cat": "PrivacySuggestedContent", "label": "Disable telemetry, tracking & targeted ads", "tip": "This setting disables telemetry, diagnostic data collection, activity history, app-launch tracking, targeted ads and more. It limits the data that is sent to Microsoft about your device and usage. If you are a Windows Insider, updates may be blocked until optional diagnostic data collection is turned back on.", "bg": ["Изключи телеметрията, следенето и рекламите по интереси", "Спира събирането на диагностични данни, историята на дейността, следенето кои програми пускаш и рекламите по интереси — Microsoft получава много по-малко данни за компютъра и как го ползваш. Ако си Windows Insider, ъпдейтите може да спрат, докато не върнеш допълнителните диагностични данни."], "prio": 1, "reboot": null, "oneway": null, "undo": true}, {"id": "DisableCopilot", "cat": "AI", "label": "Disable Microsoft Copilot", "tip": "This will disable and uninstall Microsoft Copilot, Windows' built-in AI assistant.", "bg": ["Изключи Microsoft Copilot", "Изключва и премахва Microsoft Copilot — вградения AI асистент на Windows."], "prio": 99, "reboot": null, "oneway": null, "undo": true}, {"id": "DisableBing", "cat": "StartMenuSearch", "label": "Disable Bing web search & Copilot integration in search", "tip": "This will turn off Bing web search results and Copilot integration in the Windows search experience. This feature uses policies, which will lock down certain settings.", "bg": ["Изключи търсенето в Bing и Copilot в търсачката на Windows", "Търсачката на Windows спира да показва резултати от интернет (Bing) и Copilot — търси само в компютъра. Използва политики, които заключват някои настройки."], "prio": 99, "reboot": null, "oneway": null, "undo": true}, {"id": "TaskbarAlignLeft", "cat": "Taskbar", "label": "Align taskbar to the left", "tip": "By default, Windows 11 has the taskbar buttons centered. Enabling this setting will move the taskbar buttons to the left, similar to previous versions of Windows.", "bg": ["Лентата на задачите вляво", "Бутоните на лентата на задачите отиват вляво, както в старите Windows (по подразбиране в Windows 11 са в средата)."], "prio": 1, "reboot": null, "oneway": null, "undo": true}, {"id": "HideSearchTb", "cat": "Taskbar", "label": "Hide search icon from the taskbar", "tip": "", "bg": ["Скрий търсенето от лентата на задачите", ""], "prio": 99, "reboot": null, "oneway": null, "undo": true}, {"id": "ShowSearchIconTb", "cat": "Taskbar", "label": "Show search icon on the taskbar", "tip": "", "bg": ["Само иконка за търсене на лентата", ""], "prio": 99, "reboot": null, "oneway": null, "undo": true}, {"id": "ShowSearchLabelTb", "cat": "Taskbar", "label": "Show search icon with label on the taskbar", "tip": "", "bg": ["Иконка и надпис за търсене на лентата", ""], "prio": 99, "reboot": null, "oneway": null, "undo": true}, {"id": "ShowSearchBoxTb", "cat": "Taskbar", "label": "Show search box on the taskbar", "tip": "", "bg": ["Поле за търсене на лентата", ""], "prio": 99, "reboot": null, "oneway": null, "undo": false}, {"id": "DisableWidgets", "cat": "Taskbar", "label": "Disable widgets on the taskbar & lock screen", "tip": "This will disable the widgets features in Windows, including the widgets button on the taskbar and the widgets that can appear on the lock screen.", "bg": ["Изключи уиджетите (лентата и заключения екран)", "Изключва уиджетите на Windows — бутона на лентата на задачите и уиджетите на заключения екран — и премахва пакетите им. Връщане става само с ново инсталиране от Microsoft Store."], "prio": 4, "reboot": null, "oneway": true, "undo": false}, {"id": "DisableFastStartup", "cat": "System", "label": "Disable fast start-up", "tip": "Fast Start-up helps your PC start faster after shutdown by saving a system image to disk. Disabling Fast Start-up can help with certain issues, but may result in slightly longer boot times.", "bg": ["Изключи бързото стартиране (Fast Startup)", "Бързото стартиране записва образ на системата при изключване. Изключването му решава някои проблеми (драйвери, ъпдейти, двойна система), но тръгването може да е малко по-бавно."], "prio": 99, "reboot": null, "oneway": null, "undo": true}, {"id": "ShowKnownFileExt", "cat": "FileExplorer", "label": "Show file extensions for known file types", "tip": "This will show file extensions for known file types. By default, Windows hides file extensions for known file types which can lead to confusion and security risks.", "bg": ["Показвай разширенията на файловете", "Показва разширенията (.exe, .pdf, .jpg…) на всички файлове. Скритите разширения объркват и помагат на вирусите да се маскират."], "prio": 2, "reboot": null, "oneway": null, "undo": true}, {"id": "Hide3dObjects", "cat": "FileExplorer", "label": "Hide '3D objects' folder under 'This PC'", "tip": "Hides the '3D objects' folder from the File Explorer navigation pane.", "bg": ["Скрий папката „3D обекти“ в „Този компютър“", "Маха папката „3D обекти“ от File Explorer (Windows 10)."], "prio": 8, "reboot": null, "oneway": null, "undo": true}, {"id": "EnableWindowsSandbox", "cat": "OptionalWindowsFeatures", "label": "Enable Windows Sandbox", "tip": "Windows Sandbox is a lightweight desktop environment for safely running applications in isolation. Software installed inside the Windows Sandbox environment remains 'sandboxed' and runs separately from the host machine. Only supported on Windows 11 Pro, Workstation, Enterprise, and Education editions.", "bg": ["Включи Windows Sandbox", "Изолиран Windows в прозорец за безопасно пробване на програми — всичко в него изчезва, щом го затвориш. Само за Windows 11 Pro, Enterprise и Education. Иска рестарт."], "prio": 99, "reboot": true, "oneway": null, "undo": true}], "groups": [{"id": "SearchIcon", "cat": "Taskbar", "label": "Taskbar search style", "tip": "This setting allows you to customize the appearance of the search box on the taskbar.", "prio": 2, "values": [{"label": "Show search box (Default)", "ids": ["ShowSearchBoxTb"], "bg": "Поле за търсене (по подразбиране)"}, {"label": "Show search icon and label", "ids": ["ShowSearchLabelTb"], "bg": "Иконка и надпис"}, {"label": "Show search icon only", "ids": ["ShowSearchIconTb"], "bg": "Само иконка"}, {"label": "Hide", "ids": ["HideSearchTb"], "bg": "Скрито"}], "bg": ["Търсене на лентата на задачите", "Как изглежда търсенето на лентата на задачите."]}], "apps": [{"ids": ["Clipchamp.Clipchamp"], "name": "Microsoft Clipchamp", "desc": "Create and edit videos with trimming, captions, and audio", "rec": "safe", "method": "Appx", "def": true, "bg": ["", "Монтаж на видео — рязане, надписи и звук"]}, {"ids": ["Microsoft.BingNews"], "name": "News", "desc": "Personalized news feeds and breaking-news alerts", "rec": "safe", "method": "Appx", "def": true, "bg": ["Новини (News)", "Новини и известия за важни събития"]}, {"ids": ["Microsoft.BingWeather"], "name": "Weather", "desc": "Weather forecast app from Microsoft", "rec": "safe", "method": "Appx", "def": true, "bg": ["Времето (Weather)", "Прогноза за времето от Microsoft"]}, {"ids": ["king.com.CandyCrushSaga"], "name": "Candy Crush Saga", "desc": "Match-three candy puzzle game", "rec": "safe", "method": "Appx", "def": true, "bg": ["", "Игра „подреди три“ с бонбони"]}, {"ids": ["Microsoft.GamingApp"], "name": "XBOX", "desc": "Xbox gaming app for Windows, required to install some PC games", "rec": "optional", "method": "Appx", "def": false, "bg": ["", "Приложението Xbox — нужно за инсталиране на някои игри"]}, {"ids": ["Microsoft.OneDrive"], "name": "OneDrive", "desc": "Sync and back up files with OneDrive cloud storage", "rec": "optional", "method": "WinGet", "def": false, "bg": ["", "Синхронизиране и резервни копия в облака OneDrive"]}, {"ids": ["Microsoft.WindowsStore"], "name": "Microsoft Store", "desc": "Install and update Windows apps and games. Warning: Removing the Store can make app installation and recovery more difficult", "rec": "unsafe", "method": "Appx", "def": false, "bg": ["", "Инсталиране и обновяване на приложения и игри. ВНИМАНИЕ: без Store приложенията се инсталират и възстановяват трудно"]}, {"ids": ["AD2F1837.myHP"], "name": "HP", "desc": "HP device settings, support, and printer features on supported devices", "rec": "optional", "method": "Appx", "def": false, "bg": ["", "Настройки, поддръжка и принтери на HP"]}], "presets": [{"name": "Xbox gaming apps", "ids": ["Microsoft.GamingApp", "Microsoft.XboxGameOverlay", "Microsoft.XboxGamingOverlay"]}, {"name": "OEM software (Acer, ASUS, Dell, HP, Lenovo, LG, MSI, Samsung)", "ids": ["SAMSUNGELECTRONICSCoLtd.MultiControl", "SAMSUNGELECTRONICSCoLtd.SecondScreen", "SAMSUNGELECTRONICSCO.LTD.PENUP", "9426MICRO-STARINTERNATION.BusinessCenter", "AcerIncorporated.AcerRegistration", "E0469640.SmartAppearance", "SAMSUNGELECTRONICSCO.LTD.SamsungStudio", "SAMSUNGELECTRONICSCO.LTD.SamsungScreenRecording", "SAMSUNGELECTRONICSCO.LTD.Bixby", "SAMSUNGELECTRONICSCO.LTD.SamsungWelcome", "SAMSUNGELECTRONICSCO.LTD.SmartThingsWindows", "SAMSUNGELECTRONICSCO.LTD.PCGallery", "SAMSUNGELECTRONICSCoLtd.SamsungFlux", "SAMSUNGELECTRONICSCoLtd.SamsungNotes", "B9ECED6F.ScreenPadMaster", "B9ECED6F.Glidex", "SAMSUNGELECTRONICSCoLtd.SamsungQuickShare", "9426MICRO-STARINTERNATION.MSICenter", "AD2F1837.OMENCommandCenter", "AcerIncorporated.AcerCareCenterS", "B9ECED6F.ASUSPCAssistant", "AD2F1837.HPAIExperienceCenter", "AD2F1837.HPConnectedMusic", "AD2F1837.HPConnectedPhotopoweredbySnapfish", "AD2F1837.HPDesktopSupportUtilities", "AD2F1837.HPEasyClean", "AD2F1837.HPFileViewer", "AD2F1837.HPJumpStarts", "AD2F1837.HPPCHardwareDiagnosticsWindows", "AD2F1837.HPPowerManager", "AD2F1837.HPPrinterControl", "AD2F1837.HPPrivacySettings", "AD2F1837.HPQuickDrop", "AD2F1837.HPQuickTouch", "AD2F1837.HPRegistration", "AD2F1837.HPSupportAssistant", "AD2F1837.HPSureShieldAI", "AD2F1837.HPSystemInformation", "AD2F1837.HPWelcome", "AD2F1837.HPWorkWell", "AD2F1837.myHP", "E046963F.LenovoCompanion", "LenovoCompanyLimited.LenovoVantageService", "LGElectronics.LGMonitorApp", "DellInc.DellSupportAssistforPCs", "DellInc.DellDigitalDelivery", "DellInc.DellMobileConnect"]}], "defaults": ["DisableTelemetry", "DisableBing", "DisableCopilot", "DisableWidgets", "ShowKnownFileExt", "Hide3dObjects"]};
+  const mockDbState = {"build": 26100, "admin": true, "applied": {"DisableTelemetry": false, "DisableCopilot": false, "DisableBing": false, "TaskbarAlignLeft": false, "HideSearchTb": false, "ShowSearchIconTb": false, "ShowSearchLabelTb": false, "ShowSearchBoxTb": true, "DisableWidgets": false, "DisableFastStartup": false, "ShowKnownFileExt": true, "Hide3dObjects": false, "EnableWindowsSandbox": false}, "fits": {"DisableTelemetry": true, "DisableCopilot": true, "DisableBing": true, "TaskbarAlignLeft": true, "HideSearchTb": true, "ShowSearchIconTb": true, "ShowSearchLabelTb": true, "ShowSearchBoxTb": true, "DisableWidgets": true, "DisableFastStartup": true, "ShowKnownFileExt": true, "Hide3dObjects": false, "EnableWindowsSandbox": true}, "installed": ["Clipchamp.Clipchamp", "Microsoft.BingNews", "Microsoft.BingWeather", "king.com.CandyCrushSaga", "Microsoft.GamingApp", "Microsoft.OneDrive", "Microsoft.WindowsStore"], "busy": false};
   let mockPrioRules = [{ exe: "obs64.exe", level: "above" }];
   const mockProcs = [].concat(
     P0("chrome.exe", 8, { desc: "Google Chrome", company: "Google LLC", path: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", kind: "app", cpu0: 1.8, mem: 520 * MB, io0: 1024 * 400 }),
@@ -14444,6 +14695,16 @@ const Mock = (() => {
       const tw = Object.keys(twOn).filter(k => twOn[k] && mockApplied[k]).map((id, i) => ({ id, at: Date.now() / 1000 - 3600 * (i + 2) }));
       const u = mockHist.slice().reverse().find(h => h.ok && !h.undone && (h.action === "apply" || h.action === "revert"));
       return { tweaks: tw, startup: su, files: mockRecycled.map(x => Object.assign({}, x)), undo: u || null, admin: scen !== "noadmin" };
+    },
+    debloatInfo: async () => JSON.parse(JSON.stringify(mockDebloat)),
+    debloatState: async () => { await new Promise(r => setTimeout(r, 300)); return JSON.parse(JSON.stringify(mockDbState)); },
+    debloatRun: async o => {
+      window.__dbRun = o; const total = o.apply.length + o.undo.length + o.apps.length; let step = 0;
+      const tick = () => { if (step < total) { window.__ev("debloat", { state: "run", step, total, text: "Step " + (step + 1) }); step++; setTimeout(tick, 80); return; }
+        o.apply.forEach(id => { mockDbState.applied[id] = true; }); o.undo.forEach(id => { mockDbState.applied[id] = false; });
+        mockDbState.installed = mockDbState.installed.filter(id => !o.apps.includes(id));
+        window.__ev("debloat", { state: "done", total, failed: q.get("dbfail") ? [{ id: o.apply[0] || o.apps[0], error: "Access is denied." }] : [], reboot: o.apply.includes("DisableFastStartup") }); };
+      setTimeout(tick, 80); return true;
     },
     powerProfile: async p => { await new Promise(r => setTimeout(r, 400)); window.__profile = p; return { ok: true, plan: p === "games" ? "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c" : "381b4222-f694-41f0-9685-ff5bb260df2e" }; },
     restoreToPoint: async seq => { await new Promise(r => setTimeout(r, 300)); window.__restoredTo = seq; return mockPoints.some(p => p.seq === seq) ? "" : "That restore point is gone."; },
