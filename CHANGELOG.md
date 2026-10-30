@@ -3,6 +3,16 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.19.2 — 2026-10-30
+
+### English
+- Fixed: since 4.19.0 the window stayed empty and dark (the page had grown past what WebView2 loads that way)
+- Started in the tray, no empty window shows while it starts
+
+### Български
+- Оправено: от 4.19.0 прозорецът оставаше празен и тъмен (страницата беше станала по-голяма, отколкото WebView2 зарежда по този начин)
+- Тръгнала в трея, вече не се показва празен прозорец, докато се зарежда
+
 ## 4.19.1 — 2026-10-30
 
 ### English

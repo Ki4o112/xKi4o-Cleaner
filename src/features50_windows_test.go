@@ -144,7 +144,13 @@ func TestGameNotifyCard(t *testing.T) {
 	if h == 0 {
 		t.Fatal("no window")
 	}
-	if v, _, _ := procIsWindowVisible.Call(h); v == 0 {
+	shown := false // the window is kept a moment before it is shown
+	for i := 0; i < 50 && !shown; i++ {
+		v, _, _ := procIsWindowVisible.Call(h)
+		shown = v != 0
+		time.Sleep(20 * time.Millisecond)
+	}
+	if !shown {
 		t.Error("not shown")
 	}
 	ex, _, _ := procGetWindowLongPtrW.Call(h, ^uintptr(19)) // GWL_EXSTYLE (-20)
