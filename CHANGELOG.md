@@ -3,6 +3,16 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.19.1 — 2026-10-30
+
+### English
+- Fixed: started hidden in the tray (with Windows or after an update), the app opened as an empty dark window
+- New screenshots in the README
+
+### Български
+- Оправено: тръгнала скрита в трея (с Windows или след обновление), програмата се отваряше като празен тъмен прозорец
+- Нови снимки в README
+
 ## 4.19.0 — 2026-10-30
 
 ### English

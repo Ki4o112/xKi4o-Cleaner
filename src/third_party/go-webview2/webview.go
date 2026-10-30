@@ -47,6 +47,8 @@ type browser interface {
 	Eval(script string)
 	NotifyParentWindowPositionChanged() error
 	Focus()
+	Show() error
+	Hide() error
 }
 
 type webview struct {
@@ -445,6 +447,19 @@ func (w *webview) CreateWithOptions(opts WindowOptions) bool {
 // the window's own top edge for resizing). UI thread only.
 func (w *webview) SetTopInset(px int) {
 	w.browser.SetTopInset(int32(px))
+	w.browser.Resize()
+}
+
+// SetVisible tells WebView2 whether its window can be seen (patched in for
+// xKi4o Cleaner). A window shown again after being hidden from the start
+// stays empty until WebView2 is told; hidden, it also stops drawing.
+func (w *webview) SetVisible(on bool) {
+	if !on {
+		_ = w.browser.Hide()
+		return
+	}
+	_ = w.browser.Show()
+	_ = w.browser.NotifyParentWindowPositionChanged()
 	w.browser.Resize()
 }
 

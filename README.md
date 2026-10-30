@@ -36,6 +36,8 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 | **PC health** | A live dashboard — processor, graphics card (temperature and video memory on NVIDIA), memory, system drive and network — with one score, what lowers it, and one button for what is recommended |
 | **Cleanup** | Caches and temporary files of Windows, browsers, games and apps — the size of each before you clean |
 | **Programs** | Uninstall with a scan for leftovers (like Revo), remove Store apps, update programs with winget, and install the programs you pick in one go (like Ninite) |
+| **Debloat** | Everything [Win11Debloat](https://github.com/Raphire/Win11Debloat) by Raphire does, built in: 97 changes (telemetry, ads, Bing and Copilot, Recall, widgets, the taskbar, Start, File Explorer, Windows Update…) and 162 Store and maker apps to remove, with its recommended choice, presets and taking back |
+| **Modes** | Balanced, Games or Saver in one click on PC health — the power plan, Windows' background work and game mode together |
 | **Tweaker** | About 90 Windows tweaks and one-click presets (Essential, Gaming, Privacy, Ultimate); switching one off brings back exactly what you had |
 | **Memory and game mode** | Free RAM; close the programs you choose while you play and start them again after — by hand or by itself when any game starts, with memory freed as the game starts and after it closes; a frame counter (FPS, 1% low, frame time) with a small box above the game, through Intel's [PresentMon](https://github.com/GameTechDev/PresentMon) — downloaded on request, nothing is injected into the game |
 | **Disks** | Disk Analyzer (with "What can I delete?"), disk health (S.M.A.R.T., what the errors mean and what helps), TRIM and defragmentation, duplicates, empty folders, broken shortcuts |
@@ -52,13 +54,16 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 | **Browser extensions** | Every extension in Chrome, Edge, Brave, Vivaldi, Opera and Firefox, with what it may do and the risky ones marked — read only |
 | **PC report** | One HTML page on the Desktop with the system, security, drive health, free space, network, startup programs, extensions and the last benchmark — read only |
 | **Internet speed test** | Download, upload, ping and jitter against Cloudflare's speed test server |
-| **System** | Processes, startup apps, Windows repair (DISM, SFC, disk check) and quick fixes (Explorer, icons, Store, Winsock, the shader cache for games that stutter) |
+| **Processes** | What runs and what it uses, a priority (now or remembered for the program), Efficiency mode and pause — games are never touched, so no anti-cheat flags the app |
+| **Startup** | What starts with Windows, how long the start takes and what slows it, and programs that start a minute or two later so the desktop is ready sooner |
+| **System** | Startup apps, Windows repair (DISM, SFC, disk check) and quick fixes (Explorer, icons, Store, Winsock, the shader cache for games that stutter) |
 | **Automatic cleaning** | Daily, weekly or monthly, with no window; open apps and sensitive categories are left out |
 | **Restore Center** | Puts back what the app changed; every operation has a step-by-step log |
 
 <p align="center">
 <img src="docs/screenshots/cleanup.png" width="430" alt="Cleanup">
 <img src="docs/screenshots/programs.png" width="430" alt="Programs">
+<img src="docs/screenshots/debloat.png" width="430" alt="Debloat">
 <img src="docs/screenshots/tweaker.png" width="430" alt="Tweaker">
 <img src="docs/screenshots/disk.png" width="430" alt="Disk Analyzer">
 <img src="docs/screenshots/sysinfo.png" width="430" alt="System info">
@@ -69,6 +74,9 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 <img src="docs/screenshots/game.png" width="430" alt="Game mode">
 <img src="docs/screenshots/viruses.png" width="430" alt="Virus scanner">
 <img src="docs/screenshots/passwords.png" width="430" alt="Passwords">
+<img src="docs/screenshots/processes.png" width="430" alt="Processes">
+<img src="docs/screenshots/startup.png" width="430" alt="Startup">
+<img src="docs/screenshots/memory.png" width="430" alt="Memory">
 </p>
 
 ## Is it safe?

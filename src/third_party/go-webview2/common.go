@@ -54,6 +54,10 @@ type WebView interface {
 	// for xKi4o Cleaner). Must be called from the UI thread.
 	SetTopInset(px int)
 
+	// SetVisible tells WebView2 whether its window can be seen (patched in
+	// for xKi4o Cleaner). Must be called from the UI thread.
+	SetVisible(on bool)
+
 	// SetSize updates native window size. See Hint constants.
 	SetSize(w int, h int, hint Hint)
 

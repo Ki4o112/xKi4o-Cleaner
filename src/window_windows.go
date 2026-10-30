@@ -377,10 +377,27 @@ func winTray(hint bool) bool {
 		if !trayAdd(hint) {
 			return // no icon, no way back: the window stays
 		}
-		win.inTray.Store(true)
-		_, _, _ = procShowWindow.Call(app.hwnd, swHide)
+		hideToTray()
 	})
 	return true
+}
+
+// hideToTray hides the window and tells WebView2 (it stops drawing).
+func hideToTray() {
+	win.inTray.Store(true)
+	_, _, _ = procShowWindow.Call(app.hwnd, swHide)
+	if app.w != nil {
+		app.w.SetVisible(false)
+	}
+}
+
+// showWindow shows the window and tells WebView2, which else stays an empty
+// dark window after starting hidden (in the tray, or after an update).
+func showWindow(h uintptr) {
+	_, _, _ = procShowWindow.Call(h, swShow)
+	if app.w != nil {
+		app.w.SetVisible(true)
+	}
 }
 
 // trayStart hides the window from the start (started with Windows). Right
@@ -388,8 +405,7 @@ func winTray(hint bool) bool {
 // every 2 seconds (and Explorer's "TaskbarCreated" adds it too); after a
 // minute without it the window shows, so the app is never out of reach.
 func trayStart(hint bool) {
-	win.inTray.Store(true)
-	_, _, _ = procShowWindow.Call(app.hwnd, swHide)
+	hideToTray()
 	if trayAdd(hint) {
 		return
 	}
@@ -404,7 +420,7 @@ func trayStart(hint bool) {
 		}
 		app.w.Dispatch(func() {
 			win.inTray.Store(false)
-			_, _, _ = procShowWindow.Call(app.hwnd, swShow)
+			showWindow(app.hwnd)
 			bringToFront(app.hwnd)
 		})
 	}()
@@ -418,7 +434,7 @@ func winShow() {
 	}
 	if win.inTray.Swap(false) {
 		trayRemove()
-		_, _, _ = procShowWindow.Call(h, swShow)
+		showWindow(h)
 	}
 	bringToFront(h)
 	emitWin()

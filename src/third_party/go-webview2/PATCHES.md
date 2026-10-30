@@ -22,6 +22,8 @@ xKi4o Cleaner:
   `CreateSolidBrush` and `LoadCursorW`.
 - **`WebViewOptions.OnMessage`** — sees every window message first; when it
   returns true its answer is used (the app's own title bar and tray icon).
+- **`WebView.SetVisible`** — tells WebView2 when the window is hidden in the
+  tray and shown again (else a window hidden from the start stays empty).
 - **`WebView.SetTopInset`** — leaves a few pixels above the page (the
   window's top edge for resizing with the app's own title bar).
 - The big and the small window icon are loaded each at its own size.
