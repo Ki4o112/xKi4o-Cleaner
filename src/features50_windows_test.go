@@ -124,8 +124,6 @@ func TestBgTame(t *testing.T) {
 	}
 }
 
-var procGetWindowLongPtrW = user32.NewProc("GetWindowLongPtrW")
-
 // The card over the game: a click-through window that shows and goes away
 // by itself.
 func TestGameNotifyCard(t *testing.T) {
@@ -469,6 +467,7 @@ func TestStartsInTray(t *testing.T) {
 		t.Fatalf("build: %v\n%s", err, out)
 	}
 	data := t.TempDir()
+	lastColours := 0
 	cls, _ := windows.UTF16PtrFromString("webview")
 	title, _ := windows.UTF16PtrFromString(appName)
 	run := func(settings string, args ...string) (found, visible bool) {
@@ -490,6 +489,7 @@ func TestStartsInTray(t *testing.T) {
 		}
 		time.Sleep(12 * time.Second) // the page loads and says it is ready
 		v, _, _ := procIsWindowVisible.Call(h)
+		lastColours, _ = windowColors(h)
 		return true, v != 0
 	}
 	if found, vis := run(`{"lang":"en"}`, "--tray"); !found || vis {
@@ -501,6 +501,8 @@ func TestStartsInTray(t *testing.T) {
 	if found, vis := run(`{"lang":"en"}`); !found || !vis {
 		t.Errorf("a plain start: window found %v, visible %v", found, vis)
 	}
+	plainColours := lastColours
+	t.Logf("a plain start: %d colours (the screenshot works when this is many)", plainColours)
 
 	// started in the tray, then opened (as a click on the icon does): the page
 	// is drawn, not an empty dark window
@@ -529,6 +531,9 @@ func TestStartsInTray(t *testing.T) {
 	}
 	n, spread := windowColors(h)
 	t.Logf("opened from the tray: %d colours, spread %d", n, spread)
+	if plainColours < 8 {
+		t.Skipf("this desktop gives no screenshots of the page (a plain start: %d colours)", plainColours)
+	}
 	if n < 8 || spread < 40 {
 		t.Errorf("opened from the tray the window is empty (%d colours, spread %d)", n, spread)
 	}
