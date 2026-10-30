@@ -122,10 +122,13 @@ func (e *Chromium) Navigate(url string) {
 }
 
 func (e *Chromium) NavigateToString(htmlContent string) {
-	_, _, _ = e.webview.vtbl.NavigateToString.Call(
+	r, _, _ := e.webview.vtbl.NavigateToString.Call(
 		uintptr(unsafe.Pointer(e.webview)),
 		uintptr(unsafe.Pointer(windows.StringToUTF16Ptr(htmlContent))),
 	)
+	if r != 0 {
+		log.Printf("NavigateToString failed: %08x", r)
+	}
 }
 
 func (e *Chromium) Init(script string) {

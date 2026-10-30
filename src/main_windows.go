@@ -413,6 +413,7 @@ func main() {
 		must(w.Bind(name, f))
 	}
 
+	fmt.Fprintf(os.Stderr, "DIAG go: page of %d bytes\n", len(indexHTML))
 	w.SetHtml(indexHTML)
 	w.Run()
 	if fpsState().Running {
