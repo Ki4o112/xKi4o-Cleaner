@@ -120,6 +120,7 @@ func main() {
 	dataDir := filepath.Join(os.Getenv("LOCALAPPDATA"), "xKi4oCleaner")
 	_ = os.MkdirAll(dataDir, 0o755)
 
+	toTray := slices.Contains(os.Args[1:], "--tray") || startTray.Load()
 	w := webview2.NewWithOptions(webview2.WebViewOptions{
 		AutoFocus:  true,
 		DataPath:   dataDir,
@@ -132,6 +133,7 @@ func main() {
 			Height: uint(height),
 			IconId: 1,
 			Center: true,
+			Hidden: toTray, // WebView2 may take a while after sign-in: no empty window meanwhile
 			OnCreated: func(h uintptr) {
 				app.hwnd = h
 				styleWindow(h)

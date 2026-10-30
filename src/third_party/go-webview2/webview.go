@@ -76,6 +76,10 @@ type WindowOptions struct {
 	// OnCreated runs after the window exists and before it is shown, so
 	// frame styling (dark title bar) is applied before the first paint.
 	OnCreated func(hwnd uintptr)
+
+	// Hidden: the window is not shown when made (patched in for xKi4o
+	// Cleaner: started in the tray, no empty window while WebView2 starts).
+	Hidden bool
 }
 
 type WebViewOptions struct {
@@ -432,9 +436,11 @@ func (w *webview) CreateWithOptions(opts WindowOptions) bool {
 		opts.OnCreated(w.hwnd)
 	}
 
-	_, _, _ = w32.User32ShowWindow.Call(w.hwnd, w32.SWShow)
-	_, _, _ = w32.User32UpdateWindow.Call(w.hwnd)
-	_, _, _ = w32.User32SetFocus.Call(w.hwnd)
+	if !opts.Hidden {
+		_, _, _ = w32.User32ShowWindow.Call(w.hwnd, w32.SWShow)
+		_, _, _ = w32.User32UpdateWindow.Call(w.hwnd)
+		_, _, _ = w32.User32SetFocus.Call(w.hwnd)
+	}
 
 	if !w.browser.Embed(w.hwnd) {
 		return false

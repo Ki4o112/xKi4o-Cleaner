@@ -13,6 +13,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 	"unsafe"
@@ -482,8 +483,8 @@ func TestStartsInTray(t *testing.T) {
 		_ = os.WriteFile(filepath.Join(data, "xKi4oCleaner", "settings.json"), []byte(settings), 0o644)
 		cmd := exec.Command(exe, args...)
 		cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data, "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS="+os.Getenv("XKI4O_WV2_ARGS"))
-		var diag bytes.Buffer
-		cmd.Stderr = &diag
+		diag := &syncBuf{}
+		cmd.Stderr = diag
 		if err := cmd.Start(); err != nil {
 			t.Fatal(err)
 		}
@@ -504,7 +505,11 @@ func TestStartsInTray(t *testing.T) {
 		if h == 0 {
 			return false, false
 		}
-		time.Sleep(12 * time.Second) // the page loads and says it is ready
+		// the page loads (WebView2 may start slowly the first time), then settles
+		for i := 0; i < 90 && !strings.Contains(diag.String(), `"why":"boot"`); i++ {
+			time.Sleep(500 * time.Millisecond)
+		}
+		time.Sleep(6 * time.Second)
 		v, _, _ := procIsWindowVisible.Call(h)
 		if v != 0 {
 			lastColours, _ = windowColors(t, h, strings.Join(append([]string{"start"}, args...), "-"))
@@ -539,8 +544,8 @@ func TestStartsInTray(t *testing.T) {
 		_ = os.WriteFile(filepath.Join(data, "xKi4oCleaner", "settings.json"), []byte(c.settings), 0o644)
 		cmd := exec.Command(exe, c.args...)
 		cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data, "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS="+os.Getenv("XKI4O_WV2_ARGS"))
-		var diag bytes.Buffer
-		cmd.Stderr = &diag
+		diag := &syncBuf{}
+		cmd.Stderr = diag
 		if err := cmd.Start(); err != nil {
 			t.Fatal(err)
 		}
@@ -613,6 +618,24 @@ func TestScreenCopy(t *testing.T) {
 }
 
 var procGetDC2 = user32.NewProc("GetDC")
+
+// syncBuf is a buffer the app's stderr is copied into while the test reads it.
+type syncBuf struct {
+	mu sync.Mutex
+	b  bytes.Buffer
+}
+
+func (s *syncBuf) Write(p []byte) (int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.b.Write(p)
+}
+
+func (s *syncBuf) String() string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.b.String()
+}
 
 // windowColors copies the window as it is on the screen (what DWM shows,
 // the WebView2 page of its other process included) and counts its colours:

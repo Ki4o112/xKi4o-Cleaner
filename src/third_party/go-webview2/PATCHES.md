@@ -29,3 +29,5 @@ xKi4o Cleaner:
 - The big and the small window icon are loaded each at its own size.
 - After moving or resizing the window, the page gets the keyboard back.
 - The `cmd/` demo folder was removed.
+- `WindowOptions.Hidden`: the window is made without being shown (the app
+  started in the tray shows no empty window while WebView2 starts).
