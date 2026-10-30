@@ -124,6 +124,8 @@ func TestBgTame(t *testing.T) {
 	}
 }
 
+var procGetWindowLongPtrW = user32.NewProc("GetWindowLongPtrW")
+
 // The card over the game: a click-through window that shows and goes away
 // by itself.
 func TestGameNotifyCard(t *testing.T) {
@@ -522,6 +524,9 @@ func TestStartsInTray(t *testing.T) {
 		t.Fatal("no window")
 	}
 	time.Sleep(12 * time.Second)
+	if v, _, _ := procIsWindowVisible.Call(h); v != 0 {
+		t.Fatal("started in the tray: the window shows")
+	}
 	name, _ := windows.UTF16PtrFromString("xKi4oCleaner.Show")
 	msg, _, _ := procRegisterWindowMessageW.Call(uintptr(unsafe.Pointer(name)))
 	_, _, _ = procPostMessageW.Call(h, msg, 0, 0)
@@ -529,12 +534,16 @@ func TestStartsInTray(t *testing.T) {
 	if v, _, _ := procIsWindowVisible.Call(h); v == 0 {
 		t.Fatal("opened from the tray: not shown")
 	}
-	n, spread := windowColors(h)
-	t.Logf("opened from the tray: %d colours, spread %d", n, spread)
-	if plainColours < 8 {
-		t.Skipf("this desktop gives no screenshots of the page (a plain start: %d colours)", plainColours)
+	var r rect
+	_, _, _ = procGetWindowRect.Call(h, uintptr(unsafe.Pointer(&r)))
+	if r.Right-r.Left < 600 || r.Bottom-r.Top < 400 {
+		t.Fatalf("opened from the tray: size %dx%d", r.Right-r.Left, r.Bottom-r.Top)
 	}
-	if n < 8 || spread < 40 {
+	// (GitHub's runner gives no screenshots of a WebView2 page, so whether it
+	// is drawn cannot be told here; colours are logged for a desktop that can)
+	n, spread := windowColors(h)
+	t.Logf("opened from the tray: %dx%d, %d colours, spread %d (a plain start: %d)", r.Right-r.Left, r.Bottom-r.Top, n, spread, plainColours)
+	if plainColours >= 8 && (n < 8 || spread < 40) {
 		t.Errorf("opened from the tray the window is empty (%d colours, spread %d)", n, spread)
 	}
 }

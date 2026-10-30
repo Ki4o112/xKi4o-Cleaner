@@ -92,9 +92,6 @@ var win struct {
 	msgAuto  uint32 // "clean now", sent by the copy the automatic cleaning task started
 	trayIcon uintptr
 	noteUpd  atomic.Bool // the last Windows notification is about a new version
-	// started in the tray: invisible until the page has drawn once (trayStart)
-	trayPending atomic.Bool
-	trayEx      atomic.Uint64
 }
 
 func registerWindowMessages() {
@@ -385,25 +382,6 @@ func winTray(hint bool) bool {
 	return true
 }
 
-// trayStartDone: the page has drawn (or did not say so in time): the window
-// hides for real and gets its own look back for when it is opened.
-func trayStartDone() {
-	if !win.trayPending.Swap(false) {
-		return
-	}
-	h := app.hwnd
-	_, _, _ = procShowWindow.Call(h, swHide)
-	_, _, _ = procSetWindowLongPtrW.Call(h, gwlExStyle, uintptr(win.trayEx.Load()))
-	if win.inTray.Load() {
-		if app.w != nil {
-			app.w.SetVisible(false)
-		}
-	} else {
-		showWindow(h) // opened meanwhile
-		bringToFront(h)
-	}
-}
-
 // hideToTray hides the window and tells WebView2 (it stops drawing).
 func hideToTray() {
 	win.inTray.Store(true)
@@ -420,6 +398,15 @@ func showWindow(h uintptr) {
 	if app.w != nil {
 		app.w.SetVisible(true)
 	}
+	// a size change of one pixel and back makes WebView2 draw the page anew
+	// (the usual cure for an empty WebView2 after its window was hidden)
+	var r rect
+	if ok, _, _ := procGetWindowRect.Call(h, uintptr(unsafe.Pointer(&r))); ok != 0 && !iconic(h) && !zoomed(h) {
+		const noMoveZ = 0x0002 | 0x0004 | 0x0010 // SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE
+		w, ht := r.Right-r.Left, r.Bottom-r.Top
+		_, _, _ = procSetWindowPos.Call(h, 0, 0, 0, uintptr(w+1), uintptr(ht), noMoveZ)
+		_, _, _ = procSetWindowPos.Call(h, 0, 0, 0, uintptr(w), uintptr(ht), noMoveZ)
+	}
 }
 
 // trayStart hides the window from the start (started with Windows). Right
@@ -427,23 +414,7 @@ func showWindow(h uintptr) {
 // every 2 seconds (and Explorer's "TaskbarCreated" adds it too); after a
 // minute without it the window shows, so the app is never out of reach.
 func trayStart(hint bool) {
-	// The window stays "shown" but invisible (fully transparent, no taskbar
-	// button) until the page has been drawn once, and only then hides: a
-	// WebView2 that never drew while its window was hidden stays an empty
-	// dark window when it is opened later.
-	win.inTray.Store(true)
-	h := app.hwnd
-	_, _, _ = procShowWindow.Call(h, swHide)
-	ex, _, _ := procGetWindowLongPtrW.Call(h, gwlExStyle)
-	win.trayEx.Store(uint64(ex))
-	_, _, _ = procSetWindowLongPtrW.Call(h, gwlExStyle, ex|wsExLayered|wsExToolWindow|wsExNoActivate)
-	_, _, _ = procSetLayeredWindowAttribs.Call(h, 0, 0, lwaAlpha)
-	_, _, _ = procShowWindow.Call(h, swShowNoActive)
-	win.trayPending.Store(true)
-	go func() { // a page that never says it is ready: hide anyway
-		time.Sleep(20 * time.Second)
-		app.w.Dispatch(trayStartDone)
-	}()
+	hideToTray()
 	if trayAdd(hint) {
 		return
 	}
@@ -472,11 +443,7 @@ func winShow() {
 	}
 	if win.inTray.Swap(false) {
 		trayRemove()
-		if win.trayPending.Load() {
-			trayStartDone() // still invisible from the start: give it back its look first
-		} else {
-			showWindow(h)
-		}
+		showWindow(h)
 	}
 	bringToFront(h)
 	emitWin()
@@ -647,13 +614,6 @@ func signalRunningCopy() bool {
 	}
 	return true
 }
-
-var (
-	procGetWindowLongPtrW = user32.NewProc("GetWindowLongPtrW")
-	procSetWindowLongPtrW = user32.NewProc("SetWindowLongPtrW")
-)
-
-const gwlExStyle = ^uintptr(19) // GWL_EXSTYLE (-20)
 
 var (
 	startTray atomic.Bool // Settings: the app starts hidden in the notification area

@@ -393,13 +393,6 @@ func main() {
 		"winFrame":    winFrame,
 		"winReady": func() map[string]any {
 			w.Dispatch(func() {
-				if win.trayPending.Load() {
-					go func() { // the page has drawn its first frame
-						time.Sleep(1500 * time.Millisecond)
-						w.Dispatch(trayStartDone)
-					}()
-					return
-				}
 				if !win.inTray.Load() { // started in the tray: it stays there
 					bringToFront(app.hwnd) // the page is there: in front, even if loading took a while
 				}
