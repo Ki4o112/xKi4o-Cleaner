@@ -491,6 +491,9 @@ func TestStartsInTray(t *testing.T) {
 			_ = cmd.Process.Kill()
 			_ = cmd.Wait()
 			t.Logf("start %v, the page said:\n%s", args, diag.String())
+			if !strings.Contains(diag.String(), `"why":"boot"`) {
+				t.Errorf("start %v: the page never loaded", args)
+			}
 			time.Sleep(time.Second)
 		}()
 		var h uintptr
@@ -575,6 +578,9 @@ func TestStartsInTray(t *testing.T) {
 		_ = cmd.Process.Kill()
 		_ = cmd.Wait()
 		t.Logf("%s, the page said:\n%s", label, diag.String())
+		if !strings.Contains(diag.String(), `"vis":"visible"`) {
+			t.Errorf("%s: the page never said it can be seen", label)
+		}
 		time.Sleep(time.Second)
 	}
 }
@@ -607,8 +613,6 @@ func TestScreenCopy(t *testing.T) {
 }
 
 var procGetDC2 = user32.NewProc("GetDC")
-
-
 
 // windowColors copies the window as it is on the screen (what DWM shows,
 // the WebView2 page of its other process included) and counts its colours:

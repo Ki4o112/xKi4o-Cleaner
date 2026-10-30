@@ -6,6 +6,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -21,6 +22,22 @@ import (
 
 //go:embed ui/index.html
 var indexHTML string
+
+// pageURL writes the page into the app's data folder and gives its file://
+// address. NavigateToString puts the page into a data: URL, which Chromium
+// cuts at 2 MB: past that (as the page is since 4.19) the window stays empty.
+func pageURL(dataDir string) string {
+	p := filepath.Join(dataDir, "ui", "index.html")
+	if err := os.MkdirAll(filepath.Dir(p), 0o755); err != nil {
+		return ""
+	}
+	if old, err := os.ReadFile(p); err != nil || string(old) != indexHTML {
+		if err := os.WriteFile(p, []byte(indexHTML), 0o644); err != nil {
+			return ""
+		}
+	}
+	return (&url.URL{Scheme: "file", Path: "/" + filepath.ToSlash(p)}).String()
+}
 
 const (
 	appName   = "xKi4o Cleaner"
@@ -413,8 +430,11 @@ func main() {
 		must(w.Bind(name, f))
 	}
 
-	fmt.Fprintf(os.Stderr, "DIAG go: page of %d bytes\n", len(indexHTML))
-	w.SetHtml(indexHTML)
+	if u := pageURL(dataDir); u != "" {
+		w.Navigate(u)
+	} else {
+		w.SetHtml(indexHTML)
+	}
 	w.Run()
 	if fpsState().Running {
 		fpsStop()
