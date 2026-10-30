@@ -173,10 +173,11 @@ var dbRun struct {
 
 var widgetApps = []string{"Microsoft.StartExperiencesApp", "MicrosoftWindows.Client.WebExperience", "Microsoft.WidgetsPlatformRuntime"}
 
+// The installed Store apps and the optional features, quickly: the features
+// through WMI (InstallState 1 = on), not DISM, which takes a minute.
 const dbScanScript = `$ErrorActionPreference = 'SilentlyContinue'
 Get-AppxPackage -AllUsers | ForEach-Object { 'P' + [char]9 + $_.Name }
-Get-AppxProvisionedPackage -Online | ForEach-Object { 'P' + [char]9 + $_.DisplayName }
-Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -in 'Containers-DisposableClientVM','Microsoft-Windows-Subsystem-Linux','VirtualMachinePlatform' } | ForEach-Object { 'F' + [char]9 + $_.FeatureName + [char]9 + $_.State }`
+Get-CimInstance Win32_OptionalFeature -Filter "Name='Containers-DisposableClientVM' OR Name='Microsoft-Windows-Subsystem-Linux' OR Name='VirtualMachinePlatform'" | ForEach-Object { 'F' + [char]9 + $_.Name + [char]9 + $(if ($_.InstallState -eq 1) { 'Enabled' } else { 'Disabled' }) }`
 
 func startBinPath() string {
 	return filepath.Join(os.Getenv("LOCALAPPDATA"), `Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\start2.bin`)
@@ -304,12 +305,14 @@ func removeAppx(ids []string) map[string]string {
 	for i, id := range ids {
 		q[i] = psQuote(id)
 	}
+	// the image's packages are read once (it takes DISM a while)
 	script := `$ErrorActionPreference = 'Continue'
+$prov = @(Get-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue)
 foreach ($n in @(` + strings.Join(q, ",") + `)) {
   $p = '*' + $n + '*'
   try {
     Get-AppxPackage -AllUsers -Name $p | ForEach-Object { Remove-AppxPackage -Package $_.PackageFullName -AllUsers -ErrorAction Stop }
-    Get-AppxProvisionedPackage -Online | Where-Object { $_.PackageName -like $p } | ForEach-Object { Remove-AppxProvisionedPackage -Online -AllUsers -PackageName $_.PackageName -ErrorAction Stop | Out-Null }
+    $prov | Where-Object { $_.PackageName -like $p } | ForEach-Object { Remove-AppxProvisionedPackage -Online -AllUsers -PackageName $_.PackageName -ErrorAction Stop | Out-Null }
     if (@(Get-AppxPackage -AllUsers -Name $p).Count) { 'FAIL' + [char]9 + $n + [char]9 + 'still installed' } else { 'OK' + [char]9 + $n }
   } catch { 'FAIL' + [char]9 + $n + [char]9 + $_.Exception.Message }
 }`

@@ -605,8 +605,12 @@ func TestDebloatClearStart(t *testing.T) {
 // What Windows has: the Store apps and the state of every change.
 func TestDebloatStateRead(t *testing.T) {
 	initPaths()
+	start := time.Now()
 	st := debloatState()
-	t.Logf("build %d, %d installed apps of the list: %v, error %q", st.Build, len(st.Installed), st.Installed, st.Error)
+	if took := time.Since(start); took > 30*time.Second {
+		t.Errorf("reading took %v: the page waits that long", took)
+	}
+	t.Logf("in %v: build %d, %d installed apps of the list: %v, error %q", time.Since(start).Round(time.Second), st.Build, len(st.Installed), st.Installed, st.Error)
 	if st.Build < 10000 || st.Error != "" || len(st.Applied) != len(debloatData().Features) {
 		t.Fatalf("%+v", st)
 	}
