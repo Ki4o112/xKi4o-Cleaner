@@ -391,6 +391,12 @@ func main() {
 		"winClose":    winClose,
 		"winTray":     winTray,
 		"winFrame":    winFrame,
+		// what the page sees (visible, painted, splash): to stderr, for the tests
+		"winDiag": func(d map[string]any) bool {
+			b, _ := json.Marshal(d)
+			fmt.Fprintf(os.Stderr, "DIAG %s\n", b)
+			return true
+		},
 		"winReady": func() map[string]any {
 			w.Dispatch(func() {
 				if !win.inTray.Load() { // started in the tray: it stays there

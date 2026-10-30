@@ -13716,6 +13716,7 @@ async function init() {
   setTimeout(async () => { await maybeShowNews(); if (S.settings.updates !== false) updCheck(false); }, SPL_MIN + (SPL_FAST ? 1200 : 3200)); // after the opening has landed
   requestAnimationFrame(moveNav);
   api.winReady().then(paintWin).catch(() => {});
+  pageDiag("boot");
   setTimeout(() => maybeHideSplash(true), SPL_MAX); // never longer: the scan goes on in the window
   setTimeout(diskHealthWarn, 9000); // warn early about a disk in trouble
   setTimeout(async () => {
@@ -13725,6 +13726,14 @@ async function init() {
   }, SPL_FAST ? 4500 : SPL_MIN + 3600);
 }
 const BOOT = performance.now();
+// what the page sees, for the Windows tests (the app writes it to stderr)
+let diagRaf = 0;
+function pageDiag(why) {
+  try { api.winDiag({ why, vis: document.visibilityState, frames: diagRaf, splash: !!$("#splash"), body: document.body.className, nav: $$(".nav > button").length, w: innerWidth, h: innerHeight, t: Math.round(performance.now() - BOOT) }).catch(() => {}); } catch (e) {}
+  requestAnimationFrame(() => diagRaf++); // counts only while frames are made
+}
+document.addEventListener("visibilitychange", () => pageDiag("vis"));
+setInterval(() => { if (performance.now() - BOOT < 90000) pageDiag("tick"); }, 5000);
 // the finale: full → the logo and the name fly into the title bar → the app opens out of the logo
 const wait = ms => new Promise(r => setTimeout(r, ms));
 function bootDone(sp) {
@@ -14901,6 +14910,7 @@ Object.assign(Mock, (() => {
     winTray: async hint => { (window.__winCalls = window.__winCalls || []).push(hint ? "tray+hint" : "tray"); return true; },
     winFrame: async own => { MOCKWIN.own = own; (window.__winCalls = window.__winCalls || []).push(own ? "frame:own" : "frame:classic"); return { own, max: MOCKWIN.max, active: true }; },
     winReady: async () => ({ own: MOCKWIN.own, max: MOCKWIN.max, active: true }),
+    winDiag: async () => true,
     tidyPlaces: async () => [
       { id: "desktop", path: "C:\\Users\\demo\\Desktop", def: true }, { id: "documents", path: "C:\\Users\\demo\\Documents", def: true },
       { id: "downloads", path: "C:\\Users\\demo\\Downloads", def: true }, { id: "pictures", path: "C:\\Users\\demo\\Pictures", def: true },

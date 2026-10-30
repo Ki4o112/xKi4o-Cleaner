@@ -482,10 +482,17 @@ func TestStartsInTray(t *testing.T) {
 		_ = os.WriteFile(filepath.Join(data, "xKi4oCleaner", "settings.json"), []byte(settings), 0o644)
 		cmd := exec.Command(exe, args...)
 		cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data, "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS="+os.Getenv("XKI4O_WV2_ARGS"))
+		var diag bytes.Buffer
+		cmd.Stderr = &diag
 		if err := cmd.Start(); err != nil {
 			t.Fatal(err)
 		}
-		defer func() { _ = cmd.Process.Kill(); _ = cmd.Wait(); time.Sleep(time.Second) }()
+		defer func() {
+			_ = cmd.Process.Kill()
+			_ = cmd.Wait()
+			t.Logf("start %v, the page said:\n%s", args, diag.String())
+			time.Sleep(time.Second)
+		}()
 		var h uintptr
 		for i := 0; i < 60 && h == 0; i++ {
 			time.Sleep(500 * time.Millisecond)
@@ -529,6 +536,8 @@ func TestStartsInTray(t *testing.T) {
 		_ = os.WriteFile(filepath.Join(data, "xKi4oCleaner", "settings.json"), []byte(c.settings), 0o644)
 		cmd := exec.Command(exe, c.args...)
 		cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data, "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS="+os.Getenv("XKI4O_WV2_ARGS"))
+		var diag bytes.Buffer
+		cmd.Stderr = &diag
 		if err := cmd.Start(); err != nil {
 			t.Fatal(err)
 		}
@@ -565,8 +574,36 @@ func TestStartsInTray(t *testing.T) {
 		}
 		_ = cmd.Process.Kill()
 		_ = cmd.Wait()
+		t.Logf("%s, the page said:\n%s", label, diag.String())
 		time.Sleep(time.Second)
 	}
+}
+
+// Can this desktop be copied at all? Edge (the same Chromium) with a
+// colourful page: its copy must have many colours.
+func TestScreenCopy(t *testing.T) {
+	if os.Getenv("XKI4O_APP_TESTS") != "1" {
+		t.Skip("only with XKI4O_APP_TESTS=1")
+	}
+	edge := filepath.Join(os.Getenv("ProgramFiles(x86)"), "Microsoft", "Edge", "Application", "msedge.exe")
+	cmd := exec.Command(edge, "--user-data-dir="+t.TempDir(), "--no-first-run", "--window-size=900,600",
+		"--app=data:text/html,<title>XEDGE</title><body style='margin:0;height:100vh;background:linear-gradient(90deg,red,lime,blue)'><h1>Hello</h1>")
+	if err := cmd.Start(); err != nil {
+		t.Skip(err)
+	}
+	defer func() { _ = exec.Command("taskkill", "/F", "/T", "/PID", fmt.Sprint(cmd.Process.Pid)).Run() }()
+	title, _ := windows.UTF16PtrFromString("XEDGE")
+	var h uintptr
+	for i := 0; i < 60 && h == 0; i++ {
+		time.Sleep(500 * time.Millisecond)
+		h, _, _ = procFindWindowW.Call(0, uintptr(unsafe.Pointer(title)))
+	}
+	if h == 0 {
+		t.Skip("no Edge window")
+	}
+	time.Sleep(3 * time.Second)
+	n, spread := windowColors(t, h, "edge")
+	t.Logf("Edge: %d colours, spread %d", n, spread)
 }
 
 var procGetDC2 = user32.NewProc("GetDC")
