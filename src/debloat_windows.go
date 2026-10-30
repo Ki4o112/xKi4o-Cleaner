@@ -312,9 +312,15 @@ foreach ($n in @(` + strings.Join(q, ",") + `)) {
   $p = '*' + $n + '*'
   try {
     Get-AppxPackage -AllUsers -Name $p | ForEach-Object { Remove-AppxPackage -Package $_.PackageFullName -AllUsers -ErrorAction Stop }
-    $prov | Where-Object { $_.PackageName -like $p } | ForEach-Object { Remove-AppxProvisionedPackage -Online -AllUsers -PackageName $_.PackageName -ErrorAction Stop | Out-Null }
-    if (@(Get-AppxPackage -AllUsers -Name $p).Count) { 'FAIL' + [char]9 + $n + [char]9 + 'still installed' } else { 'OK' + [char]9 + $n }
-  } catch { 'FAIL' + [char]9 + $n + [char]9 + $_.Exception.Message }
+  } catch { }
+  # removing it for all users often takes the image's copy too: a "not found" here is not a failure
+  $prov | Where-Object { $_.PackageName -like $p } | ForEach-Object { try { Remove-AppxProvisionedPackage -Online -AllUsers -PackageName $_.PackageName -ErrorAction Stop | Out-Null } catch { } }
+  $left = @(Get-AppxPackage -AllUsers -Name $p)
+  if ($left.Count) {
+    $why = 'still installed'
+    try { $left | ForEach-Object { Remove-AppxPackage -Package $_.PackageFullName -AllUsers -ErrorAction Stop } } catch { $why = $_.Exception.Message }
+    if (@(Get-AppxPackage -AllUsers -Name $p).Count) { 'FAIL' + [char]9 + $n + [char]9 + $why } else { 'OK' + [char]9 + $n }
+  } else { 'OK' + [char]9 + $n }
 }`
 	out, _, err := runPS(15*time.Minute, script)
 	failed := map[string]string{}
