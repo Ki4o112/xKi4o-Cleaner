@@ -3,6 +3,18 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.19.0 — 2026-10-30
+
+### English
+- New Debloat page: everything Win11Debloat (by Raphire) does, built into the app — 93 changes to Windows (telemetry, ads, Bing and Copilot, Recall, widgets, the taskbar, Start, File Explorer, Windows Update and more) and 162 apps to remove, with its recommended choice, presets and taking back
+- 4 more of the app's own: no sponsored apps, no Store apps in the background, Edge not kept in memory, no Office telemetry
+- Everything in Bulgarian, with what each change does
+
+### Български
+- Нова страница Debloat: всичко от Win11Debloat (на Raphire), вградено в програмата — 93 промени в Windows (телеметрия, реклами, Bing и Copilot, Recall, уиджети, лентата на задачите, Старт, File Explorer, Windows Update и още) и 162 приложения за премахване, с препоръчания избор, готови пакети и връщане
+- Още 4 от програмата: без спонсорирани приложения, без Store приложения във фона, Edge да не стои в паметта, без телеметрия в Office
+- Всичко е на български, с обяснение какво прави всяка промяна
+
 ## 4.18.0 — 2026-10-29
 
 ### English

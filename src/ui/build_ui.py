@@ -43,6 +43,7 @@ def main():
         "ms": (ROOT / "third_party/go-webview2/webviewloader/sdk/LICENSE.txt").read_text(encoding="utf-8"),
         "nvapi": (ROOT / "third_party/licenses/nvapi-LICENSE").read_text(encoding="utf-8"),
         "winutil": (ROOT / "third_party/licenses/winutil-LICENSE").read_text(encoding="utf-8"),
+        "w11d": (ROOT / "debloat/LICENSE-Win11Debloat").read_text(encoding="utf-8"),
     }
     src = src.replace("/*@@LICENSES@@*/{}", json.dumps(licenses, ensure_ascii=False), 1)
 

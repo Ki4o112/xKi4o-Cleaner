@@ -126,6 +126,30 @@ for f in feat["Features"]:
     if not x.get("apply") and not x.get("custom"):
         raise SystemExit(f"{fid}: nothing to do")
     out["features"].append(x)
+# the app's own additions, in the same form (category XExtras)
+def S(key, name, num): return {"op": "set", "key": key, "name": name, "type": "dword", "num": num}
+def D(key, name): return {"op": "delval", "key": key, "name": name}
+CC = "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CloudContent"
+AP = "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppPrivacy"
+EDGE = "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge"
+OFF = "HKCU\\Software\\Policies\\Microsoft\\office\\16.0\\common\\clienttelemetry"
+OFF2 = "HKCU\\Software\\Policies\\Microsoft\\office\\common\\clienttelemetry"
+EXTRAS = [
+    {"id": "XDisableConsumerFeatures", "cat": "XExtras", "prio": 1,
+     "label": "Stop Windows from installing sponsored apps", "tip": "Windows installs promoted apps and games (like Candy Crush) by itself, also for new users. This policy stops it.",
+     "apply": [S(CC, "DisableWindowsConsumerFeatures", 1)], "undo": [D(CC, "DisableWindowsConsumerFeatures")]},
+    {"id": "XDisableBackgroundApps", "cat": "XExtras", "prio": 2,
+     "label": "Don't let Store apps run in the background", "tip": "Store apps (Weather, Mail, Photos...) stop running in the background, which saves memory and battery. Their live tiles and some notifications stop until you open them.",
+     "apply": [S(AP, "LetAppsRunInBackground", 2)], "undo": [D(AP, "LetAppsRunInBackground")]},
+    {"id": "XEdgeNoBackground", "cat": "XExtras", "prio": 3,
+     "label": "Don't keep Microsoft Edge in memory", "tip": "Edge starts with Windows (Startup boost) and keeps running after you close it. This turns both off, so it uses no memory when closed. It opens a little slower.",
+     "apply": [S(EDGE, "StartupBoostEnabled", 0), S(EDGE, "BackgroundModeEnabled", 0)], "undo": [D(EDGE, "StartupBoostEnabled"), D(EDGE, "BackgroundModeEnabled")]},
+    {"id": "XOfficeTelemetry", "cat": "XExtras", "prio": 4,
+     "label": "Turn off Microsoft Office telemetry", "tip": "Microsoft Office stops sending usage and diagnostic data (Office 2016 and newer, Microsoft 365).",
+     "apply": [S(OFF, "DisableTelemetry", 1), S(OFF, "SendTelemetry", 3), S(OFF2, "DisableTelemetry", 1)], "undo": [D(OFF, "DisableTelemetry"), D(OFF, "SendTelemetry"), D(OFF2, "DisableTelemetry")]},
+]
+out["categories"].append({"id": "XExtras", "label": "More from xKi4o Cleaner"})
+out["features"].extend(EXTRAS)
 ids = {x["id"] for x in out["features"]}
 for g in feat["UiGroups"]:
     tg = en["UiGroups"].get(g["GroupId"], {})

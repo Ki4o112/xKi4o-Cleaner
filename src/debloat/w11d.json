@@ -59,6 +59,11 @@
    "id": "Other",
    "label": "Other",
    "bg": "Други"
+  },
+  {
+   "id": "XExtras",
+   "label": "More from xKi4o Cleaner",
+   "bg": "Допълнително от xKi4o Cleaner"
   }
  ],
  "features": [
@@ -5727,6 +5732,150 @@
    "bg": [
     "„Всички приложения“ като списък",
     ""
+   ]
+  },
+  {
+   "id": "XDisableConsumerFeatures",
+   "cat": "XExtras",
+   "prio": 1,
+   "label": "Stop Windows from installing sponsored apps",
+   "tip": "Windows installs promoted apps and games (like Candy Crush) by itself, also for new users. This policy stops it.",
+   "apply": [
+    {
+     "op": "set",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CloudContent",
+     "name": "DisableWindowsConsumerFeatures",
+     "type": "dword",
+     "num": 1
+    }
+   ],
+   "undo": [
+    {
+     "op": "delval",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CloudContent",
+     "name": "DisableWindowsConsumerFeatures"
+    }
+   ],
+   "bg": [
+    "Windows да не инсталира сам спонсорирани приложения",
+    "Windows сам инсталира рекламирани приложения и игри (като Candy Crush), и за нови потребители. Тази политика го спира."
+   ]
+  },
+  {
+   "id": "XDisableBackgroundApps",
+   "cat": "XExtras",
+   "prio": 2,
+   "label": "Don't let Store apps run in the background",
+   "tip": "Store apps (Weather, Mail, Photos...) stop running in the background, which saves memory and battery. Their live tiles and some notifications stop until you open them.",
+   "apply": [
+    {
+     "op": "set",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppPrivacy",
+     "name": "LetAppsRunInBackground",
+     "type": "dword",
+     "num": 2
+    }
+   ],
+   "undo": [
+    {
+     "op": "delval",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppPrivacy",
+     "name": "LetAppsRunInBackground"
+    }
+   ],
+   "bg": [
+    "Store приложенията да не работят във фона",
+    "Приложенията от Store (Времето, Поща, Снимки…) спират да работят във фона — пести памет и батерия. Живите им плочки и някои известия спират, докато не ги отвориш."
+   ]
+  },
+  {
+   "id": "XEdgeNoBackground",
+   "cat": "XExtras",
+   "prio": 3,
+   "label": "Don't keep Microsoft Edge in memory",
+   "tip": "Edge starts with Windows (Startup boost) and keeps running after you close it. This turns both off, so it uses no memory when closed. It opens a little slower.",
+   "apply": [
+    {
+     "op": "set",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+     "name": "StartupBoostEnabled",
+     "type": "dword",
+     "num": 0
+    },
+    {
+     "op": "set",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+     "name": "BackgroundModeEnabled",
+     "type": "dword",
+     "num": 0
+    }
+   ],
+   "undo": [
+    {
+     "op": "delval",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+     "name": "StartupBoostEnabled"
+    },
+    {
+     "op": "delval",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+     "name": "BackgroundModeEnabled"
+    }
+   ],
+   "bg": [
+    "Edge да не стои в паметта",
+    "Edge тръгва с Windows (Startup boost) и продължава да работи, след като го затвориш. Това спира и двете — затворен не заема памет. Отваря се малко по-бавно."
+   ]
+  },
+  {
+   "id": "XOfficeTelemetry",
+   "cat": "XExtras",
+   "prio": 4,
+   "label": "Turn off Microsoft Office telemetry",
+   "tip": "Microsoft Office stops sending usage and diagnostic data (Office 2016 and newer, Microsoft 365).",
+   "apply": [
+    {
+     "op": "set",
+     "key": "HKCU\\Software\\Policies\\Microsoft\\office\\16.0\\common\\clienttelemetry",
+     "name": "DisableTelemetry",
+     "type": "dword",
+     "num": 1
+    },
+    {
+     "op": "set",
+     "key": "HKCU\\Software\\Policies\\Microsoft\\office\\16.0\\common\\clienttelemetry",
+     "name": "SendTelemetry",
+     "type": "dword",
+     "num": 3
+    },
+    {
+     "op": "set",
+     "key": "HKCU\\Software\\Policies\\Microsoft\\office\\common\\clienttelemetry",
+     "name": "DisableTelemetry",
+     "type": "dword",
+     "num": 1
+    }
+   ],
+   "undo": [
+    {
+     "op": "delval",
+     "key": "HKCU\\Software\\Policies\\Microsoft\\office\\16.0\\common\\clienttelemetry",
+     "name": "DisableTelemetry"
+    },
+    {
+     "op": "delval",
+     "key": "HKCU\\Software\\Policies\\Microsoft\\office\\16.0\\common\\clienttelemetry",
+     "name": "SendTelemetry"
+    },
+    {
+     "op": "delval",
+     "key": "HKCU\\Software\\Policies\\Microsoft\\office\\common\\clienttelemetry",
+     "name": "DisableTelemetry"
+    }
+   ],
+   "bg": [
+    "Изключи телеметрията на Microsoft Office",
+    "Office спира да праща данни за използването и диагностика (Office 2016 и по-нови, Microsoft 365)."
    ]
   }
  ],
