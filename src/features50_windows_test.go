@@ -501,6 +501,83 @@ func TestStartsInTray(t *testing.T) {
 	if found, vis := run(`{"lang":"en"}`); !found || !vis {
 		t.Errorf("a plain start: window found %v, visible %v", found, vis)
 	}
+
+	// started in the tray, then opened (as a click on the icon does): the page
+	// is drawn, not an empty dark window
+	_ = os.WriteFile(filepath.Join(data, "xKi4oCleaner", "settings.json"), []byte(`{"lang":"en","startTray":true}`), 0o644)
+	cmd := exec.Command(exe)
+	cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data)
+	if err := cmd.Start(); err != nil {
+		t.Fatal(err)
+	}
+	defer func() { _ = cmd.Process.Kill(); _ = cmd.Wait() }()
+	var h uintptr
+	for i := 0; i < 60 && h == 0; i++ {
+		time.Sleep(500 * time.Millisecond)
+		h, _, _ = procFindWindowW.Call(uintptr(unsafe.Pointer(cls)), uintptr(unsafe.Pointer(title)))
+	}
+	if h == 0 {
+		t.Fatal("no window")
+	}
+	time.Sleep(12 * time.Second)
+	name, _ := windows.UTF16PtrFromString("xKi4oCleaner.Show")
+	msg, _, _ := procRegisterWindowMessageW.Call(uintptr(unsafe.Pointer(name)))
+	_, _, _ = procPostMessageW.Call(h, msg, 0, 0)
+	time.Sleep(4 * time.Second)
+	if v, _, _ := procIsWindowVisible.Call(h); v == 0 {
+		t.Fatal("opened from the tray: not shown")
+	}
+	n, spread := windowColors(h)
+	t.Logf("opened from the tray: %d colours, spread %d", n, spread)
+	if n < 8 || spread < 40 {
+		t.Errorf("opened from the tray the window is empty (%d colours, spread %d)", n, spread)
+	}
+}
+
+var (
+	procPrintWindow = user32.NewProc("PrintWindow")
+	procGetDC2      = user32.NewProc("GetDC")
+)
+
+// windowColors draws the window into memory (as Windows' own screenshots
+// do) and counts its colours: an empty window has one or two.
+func windowColors(h uintptr) (distinct int, spread int) {
+	var r rect
+	_, _, _ = procGetClientRect.Call(h, uintptr(unsafe.Pointer(&r)))
+	w, ht := r.Right-r.Left, r.Bottom-r.Top
+	if w <= 0 || ht <= 0 {
+		return 0, 0
+	}
+	sdc, _, _ := procGetDC2.Call(0)
+	defer procReleaseDC.Call(0, sdc)
+	mdc, _, _ := procCreateCompatibleDC.Call(sdc)
+	defer procDeleteDC.Call(mdc)
+	bmp, _, _ := procCreateCompatibleBitmap.Call(sdc, uintptr(w), uintptr(ht))
+	defer procDeleteObject.Call(bmp)
+	old, _, _ := procSelectObject.Call(mdc, bmp)
+	_, _, _ = procPrintWindow.Call(h, mdc, 3) // PW_CLIENTONLY | PW_RENDERFULLCONTENT
+	_, _, _ = procSelectObject.Call(mdc, old)
+	type bmiHeader struct {
+		Size                   uint32
+		Width, Height          int32
+		Planes, BitCount       uint16
+		Compression, SizeImage uint32
+		XPels, YPels           int32
+		ClrUsed, ClrImportant  uint32
+	}
+	hdr := bmiHeader{Width: w, Height: -ht, Planes: 1, BitCount: 32}
+	hdr.Size = uint32(unsafe.Sizeof(hdr))
+	px := make([]byte, int(w)*int(ht)*4)
+	_, _, _ = procGetDIBits.Call(mdc, bmp, 0, uintptr(ht), uintptr(unsafe.Pointer(&px[0])), uintptr(unsafe.Pointer(&hdr)), 0)
+	seen := map[uint32]bool{}
+	lo, hi := 255*3, 0
+	for i := 0; i+3 < len(px); i += 4 * 7 { // every 7th pixel is plenty
+		c := uint32(px[i]) | uint32(px[i+1])<<8 | uint32(px[i+2])<<16
+		seen[c] = true
+		l := int(px[i]) + int(px[i+1]) + int(px[i+2])
+		lo, hi = min(lo, l), max(hi, l)
+	}
+	return len(seen), hi - lo
 }
 
 // Debloat: a change goes into the real registry, counts as applied, and its

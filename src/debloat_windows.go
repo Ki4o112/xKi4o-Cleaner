@@ -294,7 +294,6 @@ func telemetryTasksSet(enable bool) {
 	}
 }
 
-
 // removeAppx removes Store apps (by Win11Debloat's ids) for every user and
 // from the image new users get; it returns the ones that stayed.
 func removeAppx(ids []string) map[string]string {
