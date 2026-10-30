@@ -3,7 +3,12 @@
 package main
 
 import (
+	"bytes"
+	"encoding/base64"
 	"encoding/json"
+	"fmt"
+	"image"
+	"image/png"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -491,7 +496,9 @@ func TestStartsInTray(t *testing.T) {
 		}
 		time.Sleep(12 * time.Second) // the page loads and says it is ready
 		v, _, _ := procIsWindowVisible.Call(h)
-		lastColours, _ = windowColors(h)
+		if v != 0 {
+			lastColours, _ = windowColors(t, h, strings.Join(append([]string{"start"}, args...), "-"))
+		}
 		return true, v != 0
 	}
 	if found, vis := run(`{"lang":"en"}`, "--tray"); !found || vis {
@@ -507,57 +514,73 @@ func TestStartsInTray(t *testing.T) {
 	t.Logf("a plain start: %d colours (the screenshot works when this is many)", plainColours)
 
 	// started in the tray, then opened (as a click on the icon does): the page
-	// is drawn, not an empty dark window
-	_ = os.WriteFile(filepath.Join(data, "xKi4oCleaner", "settings.json"), []byte(`{"lang":"en","startTray":true}`), 0o644)
-	cmd := exec.Command(exe)
-	cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data)
-	if err := cmd.Start(); err != nil {
-		t.Fatal(err)
-	}
-	defer func() { _ = cmd.Process.Kill(); _ = cmd.Wait() }()
-	var h uintptr
-	for i := 0; i < 60 && h == 0; i++ {
-		time.Sleep(500 * time.Millisecond)
-		h, _, _ = procFindWindowW.Call(uintptr(unsafe.Pointer(cls)), uintptr(unsafe.Pointer(title)))
-	}
-	if h == 0 {
-		t.Fatal("no window")
-	}
-	time.Sleep(12 * time.Second)
-	if v, _, _ := procIsWindowVisible.Call(h); v != 0 {
-		t.Fatal("started in the tray: the window shows")
-	}
-	name, _ := windows.UTF16PtrFromString("xKi4oCleaner.Show")
-	msg, _, _ := procRegisterWindowMessageW.Call(uintptr(unsafe.Pointer(name)))
-	_, _, _ = procPostMessageW.Call(h, msg, 0, 0)
-	time.Sleep(4 * time.Second)
-	if v, _, _ := procIsWindowVisible.Call(h); v == 0 {
-		t.Fatal("opened from the tray: not shown")
-	}
-	var r rect
-	_, _, _ = procGetWindowRect.Call(h, uintptr(unsafe.Pointer(&r)))
-	if r.Right-r.Left < 600 || r.Bottom-r.Top < 400 {
-		t.Fatalf("opened from the tray: size %dx%d", r.Right-r.Left, r.Bottom-r.Top)
-	}
-	// (GitHub's runner gives no screenshots of a WebView2 page, so whether it
-	// is drawn cannot be told here; colours are logged for a desktop that can)
-	n, spread := windowColors(h)
-	t.Logf("opened from the tray: %dx%d, %d colours, spread %d (a plain start: %d)", r.Right-r.Left, r.Bottom-r.Top, n, spread, plainColours)
-	if plainColours >= 8 && (n < 8 || spread < 40) {
-		t.Errorf("opened from the tray the window is empty (%d colours, spread %d)", n, spread)
+	// is drawn, not an empty dark window. Opened soon (the page still loads)
+	// and late; started with Windows (--tray) and with the setting.
+	for _, c := range []struct {
+		settings string
+		args     []string
+		wait     time.Duration
+	}{
+		{`{"lang":"en","startTray":true}`, nil, 12 * time.Second},
+		{`{"lang":"en"}`, []string{"--tray"}, 3 * time.Second},
+		{`{"lang":"en"}`, []string{"--tray"}, 40 * time.Second},
+	} {
+		label := fmt.Sprintf("fromTray%v-%s", c.args, c.wait)
+		_ = os.WriteFile(filepath.Join(data, "xKi4oCleaner", "settings.json"), []byte(c.settings), 0o644)
+		cmd := exec.Command(exe, c.args...)
+		cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data)
+		if err := cmd.Start(); err != nil {
+			t.Fatal(err)
+		}
+		var h uintptr
+		for i := 0; i < 60 && h == 0; i++ {
+			time.Sleep(500 * time.Millisecond)
+			h, _, _ = procFindWindowW.Call(uintptr(unsafe.Pointer(cls)), uintptr(unsafe.Pointer(title)))
+		}
+		if h == 0 {
+			_ = cmd.Process.Kill()
+			_ = cmd.Wait()
+			t.Fatal("no window")
+		}
+		time.Sleep(c.wait)
+		if v, _, _ := procIsWindowVisible.Call(h); v != 0 {
+			t.Errorf("%s: started in the tray, the window shows", label)
+		}
+		name, _ := windows.UTF16PtrFromString("xKi4oCleaner.Show")
+		msg, _, _ := procRegisterWindowMessageW.Call(uintptr(unsafe.Pointer(name)))
+		_, _, _ = procPostMessageW.Call(h, msg, 0, 0)
+		time.Sleep(4 * time.Second)
+		if v, _, _ := procIsWindowVisible.Call(h); v == 0 {
+			t.Errorf("%s: not shown", label)
+		}
+		var r rect
+		_, _, _ = procGetWindowRect.Call(h, uintptr(unsafe.Pointer(&r)))
+		if r.Right-r.Left < 600 || r.Bottom-r.Top < 400 {
+			t.Errorf("%s: size %dx%d", label, r.Right-r.Left, r.Bottom-r.Top)
+		}
+		n, spread := windowColors(t, h, label)
+		t.Logf("%s: %dx%d, %d colours, spread %d (a plain start: %d)", label, r.Right-r.Left, r.Bottom-r.Top, n, spread, plainColours)
+		if plainColours >= 8 && (n < 8 || spread < 40) {
+			t.Errorf("%s: the window is empty (%d colours, spread %d)", label, n, spread)
+		}
+		_ = cmd.Process.Kill()
+		_ = cmd.Wait()
+		time.Sleep(time.Second)
 	}
 }
 
-var (
-	procPrintWindow = user32.NewProc("PrintWindow")
-	procGetDC2      = user32.NewProc("GetDC")
-)
+var procGetDC2 = user32.NewProc("GetDC")
 
-// windowColors draws the window into memory (as Windows' own screenshots
-// do) and counts its colours: an empty window has one or two.
-func windowColors(h uintptr) (distinct int, spread int) {
+
+
+// windowColors copies the window as it is on the screen (what DWM shows,
+// the WebView2 page of its other process included) and counts its colours:
+// an empty window has one or two. A small copy goes to the log (base64 PNG).
+func windowColors(t *testing.T, h uintptr, label string) (distinct int, spread int) {
+	bringToFront(h)
+	time.Sleep(1500 * time.Millisecond)
 	var r rect
-	_, _, _ = procGetClientRect.Call(h, uintptr(unsafe.Pointer(&r)))
+	_, _, _ = procGetWindowRect.Call(h, uintptr(unsafe.Pointer(&r)))
 	w, ht := r.Right-r.Left, r.Bottom-r.Top
 	if w <= 0 || ht <= 0 {
 		return 0, 0
@@ -569,7 +592,7 @@ func windowColors(h uintptr) (distinct int, spread int) {
 	bmp, _, _ := procCreateCompatibleBitmap.Call(sdc, uintptr(w), uintptr(ht))
 	defer procDeleteObject.Call(bmp)
 	old, _, _ := procSelectObject.Call(mdc, bmp)
-	_, _, _ = procPrintWindow.Call(h, mdc, 3) // PW_CLIENTONLY | PW_RENDERFULLCONTENT
+	_, _, _ = procBitBlt.Call(mdc, 0, 0, uintptr(w), uintptr(ht), sdc, uintptr(r.Left), uintptr(r.Top), 0x00CC0020|0x40000000) // SRCCOPY | CAPTUREBLT
 	_, _, _ = procSelectObject.Call(mdc, old)
 	type bmiHeader struct {
 		Size                   uint32
@@ -591,6 +614,18 @@ func windowColors(h uintptr) (distinct int, spread int) {
 		l := int(px[i]) + int(px[i+1]) + int(px[i+2])
 		lo, hi = min(lo, l), max(hi, l)
 	}
+	// a copy a quarter of the size for the log
+	tw, th := int(w)/4, int(ht)/4
+	img := image.NewRGBA(image.Rect(0, 0, tw, th))
+	for y := 0; y < th; y++ {
+		for x := 0; x < tw; x++ {
+			i := ((y*4)*int(w) + x*4) * 4
+			img.Pix[(y*tw+x)*4], img.Pix[(y*tw+x)*4+1], img.Pix[(y*tw+x)*4+2], img.Pix[(y*tw+x)*4+3] = px[i+2], px[i+1], px[i], 255
+		}
+	}
+	var buf bytes.Buffer
+	_ = png.Encode(&buf, img)
+	t.Logf("SHOT %s %s", label, base64.StdEncoding.EncodeToString(buf.Bytes()))
 	return len(seen), hi - lo
 }
 

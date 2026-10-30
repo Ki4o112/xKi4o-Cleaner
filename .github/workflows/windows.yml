@@ -7,6 +7,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      run:
+        description: "only the tests matching this (go test -run)"
+        required: false
+        default: ""
 
 jobs:
   test:
@@ -23,10 +28,11 @@ jobs:
         env:
           XKI4O_WRITE_TESTS: "1"
           XKI4O_APP_TESTS: "1"
+          ONLY: ${{ inputs.run }}
         shell: bash
         run: |
           set -o pipefail
-          go test -count=1 -timeout 30m -v ./src 2>&1 | tee test.log
+          go test -count=1 -timeout 30m -v ${ONLY:+-run "$ONLY"} ./src 2>&1 | tee test.log
       - name: What failed
         if: failure()
         shell: bash
