@@ -2509,8 +2509,13 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
   border-color: rgba(var(--blue-rgb), .38); box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(var(--blue-rgb), .10), 0 26px 60px -30px rgba(var(--blue-rgb), .55); transform: translateY(-2px); }
 :root[data-theme="carbon"] .gcard:not(.on):hover { box-shadow: 0 0 0 1px rgba(var(--blue-rgb), .25), 0 20px 44px -26px rgba(var(--blue-rgb), .5); }
 /* the menu: the page you are on glows and breathes */
-:root[data-theme="carbon"] .nav button[aria-current="page"] .ico { animation: navGlow 3.2s ease-in-out infinite; }
-@keyframes navGlow { 0%, 100% { box-shadow: 0 0 0 4px rgba(var(--blue-rgb), .14), 0 0 18px -2px rgba(var(--blue-rgb), .55); } 50% { box-shadow: 0 0 0 6px rgba(var(--blue-rgb), .08), 0 0 26px 0 rgba(var(--blue-rgb), .75); } }
+:root[data-theme="carbon"] .nav .ico { position: relative; }
+/* the glow is a layer whose opacity breathes: drawn once, not repainted every frame */
+:root[data-theme="carbon"] .nav button[aria-current="page"] .ico::after { content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  box-shadow: 0 0 0 6px rgba(var(--blue-rgb), .10), 0 0 26px 0 rgba(var(--blue-rgb), .75); opacity: .3; animation: navGlow 3.2s ease-in-out infinite; will-change: opacity; }
+@keyframes navGlow { 50% { opacity: 1; } }
+/* the window is not in front: the decoration stands still (no work for nothing) */
+.away .main::before, .away .nav .ico::after, .away .progress i::after { animation-play-state: paused !important; }
 :root[data-theme="carbon"] .nav button:not([aria-current="page"]):hover .ico { background: rgba(var(--blue-rgb), .12); color: var(--blue-light); transform: scale(1.08); }
 :root[data-theme="carbon"] .nav .ico { transition: background .25s, color .25s, transform .3s var(--spring); }
 /* buttons: the accent glows more on hover */
@@ -2526,7 +2531,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
 :root[data-theme="carbon"] .switch:checked { box-shadow: 0 0 14px -2px rgba(var(--blue-rgb), .7); }
 :root[data-theme="carbon"] ::-webkit-scrollbar-thumb:hover { background-color: rgba(var(--blue-rgb), .55); }
 :root[data-theme="carbon"] ::selection { background: rgba(var(--blue-rgb), .35); color: #fff; }
-@media (prefers-reduced-motion: reduce) { :root[data-theme="carbon"] .main::before, :root[data-theme="carbon"] .nav button[aria-current="page"] .ico, :root[data-theme="carbon"] .progress i::after { animation: none; } }
+@media (prefers-reduced-motion: reduce) { :root[data-theme="carbon"] .main::before, :root[data-theme="carbon"] .nav button[aria-current="page"] .ico::after, :root[data-theme="carbon"] .progress i::after { animation: none; } }
 .nomotion .main::before { animation: none !important; }
 /* 4.13: buttons beside a setting keep their size (Save / Load were squeezed) */
 .mv-btns { display: flex; gap: 8px; flex: none; } .item .btn { flex-shrink: 0; }
@@ -6854,7 +6859,7 @@ function analyzeDone(d) {
   maybeHideSplash();
   jobFinish("scan", "ok", S.total ? t("job.scanRes", fmt(S.total)) : t("hero.none"));
   if (S.page === "home") renderHome();
-  if (!S.autoDiskTried) { S.autoDiskTried = true; setTimeout(daAutoStart, 900); }
+  if (!S.autoDiskTried) { S.autoDiskTried = true; whenShown(15 * 60e3, () => setTimeout(daAutoStart, 900)); } // in the tray: not right at sign-in
   junkReminder();
 }
 on("analyze-done", analyzeDone);
@@ -13707,8 +13712,10 @@ async function init() {
   applyLang();
   splashStep(t("sp.scan0"), 22);
   if (!S.page) S.page = "home";
-  analyze();
-  homeLoad(false);
+  // started hidden (in the tray, at sign-in): the heavy reads wait until the
+  // window is opened or the PC has had a few minutes, so sign-in stays fast
+  whenShown(90e3, analyze);
+  whenShown(180e3, () => homeLoad(false));
   if (S.page === "home") { liveTick(); loadAuto(); }
   pollMem();
   pulseTick();
@@ -13721,7 +13728,7 @@ async function init() {
   api.winReady().then(paintWin).catch(() => {});
   pageDiag("boot");
   setTimeout(() => maybeHideSplash(true), SPL_MAX); // never longer: the scan goes on in the window
-  setTimeout(diskHealthWarn, 9000); // warn early about a disk in trouble
+  whenShown(240e3, () => setTimeout(diskHealthWarn, 9000)); // warn early about a disk in trouble
   setTimeout(async () => {
     try { GM.st = await api.gameState(); } catch (e) {}
     paintGameNav();
@@ -13729,6 +13736,18 @@ async function init() {
   }, SPL_FAST ? 4500 : SPL_MIN + 3600);
 }
 const BOOT = performance.now();
+addEventListener("blur", () => document.documentElement.classList.add("away"));
+addEventListener("focus", () => document.documentElement.classList.remove("away"));
+// whenShown runs f now when the window can be seen, else when it is first
+// shown or after ms, whichever comes first (once)
+function whenShown(ms, f) {
+  if (!document.hidden) { f(); return; }
+  let done = false;
+  const go1 = () => { if (done) return; done = true; clearTimeout(tm); document.removeEventListener("visibilitychange", vis); f(); };
+  const vis = () => { if (!document.hidden) go1(); };
+  const tm = setTimeout(go1, ms);
+  document.addEventListener("visibilitychange", vis);
+}
 // what the page sees, for the Windows tests (the app writes it to stderr)
 let diagRaf = 0;
 function pageDiag(why) {
