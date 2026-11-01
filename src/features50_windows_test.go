@@ -845,3 +845,91 @@ func TestDebloatRemoveApp(t *testing.T) {
 		}
 	}
 }
+
+// What the app costs: processor and memory of the app and its WebView2
+// processes, hidden in the tray and shown on the start page, and how long
+// the page takes to load.
+func TestIdleCost(t *testing.T) {
+	if os.Getenv("XKI4O_APP_TESTS") != "1" {
+		t.Skip("starts the whole app: only with XKI4O_APP_TESTS=1")
+	}
+	exe := filepath.Join(t.TempDir(), "xKi4oCleaner.exe")
+	build := exec.Command("go", "build", "-o", exe, ".")
+	build.Env = append(os.Environ(), "CGO_ENABLED=0")
+	if out, err := build.CombinedOutput(); err != nil {
+		t.Fatalf("build: %v\n%s", err, out)
+	}
+	data := t.TempDir()
+	_ = os.MkdirAll(filepath.Join(data, "xKi4oCleaner"), 0o755)
+	_ = os.WriteFile(filepath.Join(data, "xKi4oCleaner", "settings.json"), []byte(`{"lang":"en"}`), 0o644)
+	// the tree of processes under pid: CPU time (100 ns) and memory
+	tree := func(root uint32) (cpu int64, ws uint64, n int, top string) {
+		raw, err := queryProcesses()
+		if err != nil {
+			return
+		}
+		kids := map[uint32][]rawProc{}
+		var me *rawProc
+		for i, p := range raw {
+			kids[p.ppid] = append(kids[p.ppid], p)
+			if p.pid == root {
+				me = &raw[i]
+			}
+		}
+		if me == nil {
+			return
+		}
+		var parts []string
+		var walk func(p rawProc, depth int)
+		walk = func(p rawProc, depth int) {
+			if depth > 6 {
+				return
+			}
+			cpu += p.cpu
+			ws += p.privateBytes
+			n++
+			parts = append(parts, fmt.Sprintf("%s:%d=%.1fs/%dMB", p.name, p.pid, float64(p.cpu)/1e7, p.privateBytes>>20))
+			for _, k := range kids[p.pid] {
+				if k.created >= p.created {
+					walk(k, depth+1)
+				}
+			}
+		}
+		walk(*me, 0)
+		return cpu, ws, n, strings.Join(parts, " ")
+	}
+	measure := func(pid uint32, label string, d time.Duration) float64 {
+		c0, _, _, _ := tree(pid)
+		time.Sleep(d)
+		c1, ws, n, top := tree(pid)
+		pct := float64(c1-c0) / float64(d/100) * 100
+		t.Logf("%s: %.2f%% of one core over %s, %d processes, %d MB private\n    %s", label, pct, d, n, ws>>20, top)
+		return pct
+	}
+	for _, c := range []struct {
+		label string
+		args  []string
+	}{{"in the tray", []string{"--tray"}}, {"shown, start page", nil}} {
+		cmd := exec.Command(exe, c.args...)
+		cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data)
+		diag := &syncBuf{}
+		cmd.Stderr = diag
+		start := time.Now()
+		if err := cmd.Start(); err != nil {
+			t.Fatal(err)
+		}
+		for i := 0; i < 120 && !strings.Contains(diag.String(), `"why":"boot"`); i++ {
+			time.Sleep(250 * time.Millisecond)
+		}
+		t.Logf("%s: the page loaded after %s", c.label, time.Since(start).Round(time.Millisecond))
+		time.Sleep(25 * time.Second) // the opening and the first scan are over
+		pid := uint32(cmd.Process.Pid)
+		pct := measure(pid, c.label, 60*time.Second)
+		if c.args != nil && pct > 5 {
+			t.Errorf("%s: %.2f%% of a core while doing nothing", c.label, pct)
+		}
+		_ = cmd.Process.Kill()
+		_ = cmd.Wait()
+		time.Sleep(2 * time.Second)
+	}
+}
