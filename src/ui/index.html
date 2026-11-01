@@ -7495,10 +7495,13 @@ function renderMemUsers() {
 }
 $("#muProcs").addEventListener("click", () => { PM.sort = "mem"; PM.desc = true; go("procs"); });
 setTimeout(pollMemUsers, 4000);
+let memSeq = 0;
 function pollMem() {
   clearTimeout(memTimer);
-  api.getMemory().then(showMem).catch(() => {}).finally(() => { memTimer = setTimeout(pollMem, 1000); });
+  const my = ++memSeq; // a newer call takes over the loop
+  api.getMemory().then(showMem).catch(() => {}).finally(() => { if (my === memSeq) memTimer = setTimeout(pollMem, document.hidden ? 5000 : 1000); }); // hidden (in the tray): less often
 }
+document.addEventListener("visibilitychange", () => { if (!document.hidden) pollMem(); });
 function freeMemory() {
   const q = jobOf("memory");
   if (q && q.state === "queued") { jobDrop(q.id); return; }
