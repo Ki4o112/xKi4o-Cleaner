@@ -910,8 +910,9 @@ func TestIdleCost(t *testing.T) {
 		label string
 		args  []string
 	}{{"in the tray", []string{"--tray"}}, {"shown, start page", nil}} {
+		prof := filepath.Join(t.TempDir(), "cpu.pprof")
 		cmd := exec.Command(exe, c.args...)
-		cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data)
+		cmd.Env = append(os.Environ(), "LOCALAPPDATA="+data, "XKI4O_CPUPROFILE="+prof, "XKI4O_CPUPROFILE_SECS=80")
 		diag := &syncBuf{}
 		cmd.Stderr = diag
 		start := time.Now()
@@ -927,6 +928,13 @@ func TestIdleCost(t *testing.T) {
 		pct := measure(pid, c.label, 60*time.Second)
 		if c.args != nil && pct > 5 {
 			t.Errorf("%s: %.2f%% of a core while doing nothing", c.label, pct)
+		}
+		time.Sleep(3 * time.Second) // the profile is written
+		if out, err := exec.Command("go", "tool", "pprof", "-top", "-nodecount=35", exe, prof).CombinedOutput(); err == nil {
+			t.Logf("%s, where the app's processor time goes:\n%s", c.label, out)
+		}
+		if out, err := exec.Command("go", "tool", "pprof", "-top", "-cum", "-nodecount=35", exe, prof).CombinedOutput(); err == nil {
+			t.Logf("%s, cumulative:\n%s", c.label, out)
 		}
 		_ = cmd.Process.Kill()
 		_ = cmd.Wait()

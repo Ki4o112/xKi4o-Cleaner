@@ -156,6 +156,9 @@ func main() {
 		bringToFront(app.hwnd)
 	}
 	go bootGet()     // closing goes to the tray when the app starts with Windows
+	if f := os.Getenv("XKI4O_CPUPROFILE"); f != "" {
+		profileCPU(f) // the tests: where the processor time goes
+	}
 	go memAutoLoop() // started after app.w is set, so its events can reach the page
 	go gameAutoLoop()
 	go updateLoop()
