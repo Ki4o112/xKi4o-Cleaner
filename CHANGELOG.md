@@ -3,6 +3,18 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.19.3 — 2026-11-01
+
+### English
+- Much lighter in the tray (processor about 13% → 1% of a core): at sign-in the drive scan, the junk count and the start page's checks wait until the window is opened or a few minutes pass
+- Hidden, memory is read every 5 seconds instead of every second
+- Smoother animations that stand still while the window is not in front
+
+### Български
+- Много по-лека в трея (процесор от около 13% на 1% от ядро): при влизане в Windows сканирането на диска, боклуците и проверките на началната страница чакат да отвориш прозореца или няколко минути
+- Скрита, паметта се чете на 5 секунди вместо всяка секунда
+- По-леки анимации, които спират, когато прозорецът не е отпред
+
 ## 4.19.2 — 2026-10-30
 
 ### English
