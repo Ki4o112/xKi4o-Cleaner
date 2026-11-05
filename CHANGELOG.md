@@ -3,6 +3,18 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.20.0 — 2026-11-05
+
+### English
+- A tidier menu: the groups (Clean, Files, System, PC, Safety) have titles that open and close them; when the window is small, the group you are in and as many others as fit stay open, so the buttons stay big enough to read. A closed group shows a dot when something inside needs a look
+- Search in Settings
+- Clearer cleanup buttons: Clean everything and Only the selected
+
+### Български
+- По-подредено меню: групите (Почистване, Файлове, Система, Компютър, Сигурност) имат заглавия, с които се отварят и затварят; в малък прозорец остават отворени групата, в която си, и колкото още се побират, така че бутоните са достатъчно големи за четене. Затворена група показва точка, когато нещо вътре иска внимание
+- Търсене в настройките
+- По-ясни бутони за почистване: Почисти всичко и Само избраното
+
 ## 4.19.3 — 2026-11-01
 
 ### English
