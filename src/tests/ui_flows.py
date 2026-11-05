@@ -66,6 +66,13 @@ async def wait_for(pg, js, timeout=8000):
     except Exception:
         return False
 
+async def nav_click(pg, page):
+    # a section in a closed group of the menu: its title opens it first, as a person would
+    g = await pg.evaluate(f"(() => {{ const b = document.querySelector('#nav [data-page={page}]'); return b && b.classList.contains('g-off') ? b.dataset.g : ''; }})()")
+    if g:
+        await pg.click(f'#nav .nav-g[data-g="{g}"]')
+    await pg.click(f"[data-page={page}]")
+
 async def main():
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path=CHROME)
@@ -162,7 +169,7 @@ async def main():
         sens = await pg.evaluate("['recycle','nvdrivers','msiorphans','recent','clipboard'].filter(id=>S.checked[id])")
         check("sensitive categories are not selected by default", sens == [], sens)
         # 4. tweaker
-        await pg.click("[data-page=tweaks]")
+        await nav_click(pg, "tweaks")
         await wait_for(pg, "TW.loaded && !TW.meta.some(m => (TW.state[m.id]||{}).state === 'pending')", 6000)
         pills = await pg.evaluate("Array.from(new Set(Array.from(document.querySelectorAll('#twList [data-st]:not([hidden])')).map(x=>x.className)))")
         check("tweak states show On/Off/Changed elsewhere/Needs restart/Error", all(any(c.endswith(k) for c in pills) for k in ["on", "off", "drift", "reboot", "err"]), pills)
@@ -186,7 +193,7 @@ async def main():
         check("history lists changes", await wait_for(pg, "document.querySelectorAll('#shBody .hi-row').length >= 3"))
         await pg.keyboard.press("Escape")
         # 5. startup
-        await pg.click("[data-page=startup]")
+        await nav_click(pg, "startup")
         await wait_for(pg, "SU.loaded")
         n = await pg.evaluate("document.querySelectorAll('#suList .su-row').length")
         check("startup list shows the entries", n >= 6, n)
@@ -206,7 +213,7 @@ async def main():
         n = await pg.evaluate("document.querySelectorAll('#suList .su-row').length")
         check("'worth a look' filter (suspicious / missing)", n == 2, n)
         # 6. disk analyzer: a tree like TreeSize
-        await pg.click("[data-page=disk]")
+        await nav_click(pg, "disk")
         vols = await pg.evaluate("Array.from(document.querySelectorAll('#daVols .pfree')).map(x => x.textContent)")
         check("drives show how much is free in %", len(vols) >= 2 and all("% free" in v for v in vols), vols)
         await pg.click("#daScan")
@@ -260,8 +267,29 @@ async def main():
         check("all 29 sections fit at the minimum window size", vis)
         await pg.set_viewport_size({"width": 1180, "height": 820})
         await pg.wait_for_timeout(300)
-        vis = await pg.evaluate("Array.from(document.querySelectorAll('[data-page]')).every(b => { const r = b.getBoundingClientRect(); return r.width > 0 && r.bottom <= innerHeight - 8; })")
-        check("all 28 sections fit at the default window size (with labels)", vis)
+        # each section is in reach: shown, or in a closed group whose title is shown;
+        # the shown buttons keep a readable height
+        vis = await pg.evaluate("""(() => { const ok = el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.bottom <= innerHeight - 8; };
+          return Array.from(document.querySelectorAll('[data-page]')).every(b => ok(b) || (b.classList.contains('g-off') && ok(document.querySelector(`#nav .nav-g[data-g="${b.dataset.g}"]`)))); })()""")
+        check("all sections are in reach at the default window size (with labels)", vis)
+        hs = await pg.evaluate("Array.from(document.querySelectorAll('#nav button[data-page]:not(.g-off)')).map(b => b.offsetHeight)")
+        check("the menu's buttons keep a readable height (28 px or more)", hs and min(hs) >= 28, hs)
+        # a closed group opens with a click and shows its sections
+        shut = await pg.evaluate("(document.querySelector('#nav .nav-g.shut') || {}).dataset?.g || ''")
+        if shut:
+            await pg.click(f'#nav .nav-g[data-g="{shut}"]')
+            await pg.wait_for_timeout(200)
+            opened = await pg.evaluate(f"""Array.from(document.querySelectorAll('#nav button[data-g="{shut}"]')).every(b => b.offsetHeight > 0)""")
+            check("a closed group opens with a click", opened)
+            await pg.click(f'#nav .nav-g[data-g="{shut}"]')
+            await pg.wait_for_timeout(200)
+            closed = await pg.evaluate(f"""Array.from(document.querySelectorAll('#nav button[data-g="{shut}"]')).every(b => b.offsetHeight === 0)""")
+            check("and closes again", closed)
+        # going to a section in a closed group opens it
+        await pg.evaluate("go('bsod')")
+        await pg.wait_for_timeout(200)
+        check("going to a section opens its group", await pg.evaluate("document.querySelector('#nav [data-page=\"bsod\"]').offsetHeight > 0"))
+        await pg.evaluate("go('home')")
         check("the side menu never scrolls — every section stays in view (it shrinks the items instead)", await pg.evaluate("(() => { const n = document.querySelector('.nav'); return n.scrollHeight <= n.clientHeight + 1; })()"))
         # 9. a clean asked for while a scan runs waits for the scan, then starts (never ignored)
         await pg.close()
@@ -286,7 +314,7 @@ async def main():
         pg = await page(b, "?lang=en")
         await wait_for(pg, "S.analyzed && !S.busy")
         check("large files: the section is gone (the Disk Analyzer has the largest files)", await pg.evaluate("!document.querySelector('[data-page=large]') && !document.getElementById('page-large') && !PAGES.includes('large')"))
-        await pg.click("[data-page=restore]")
+        await nav_click(pg, "restore")
         await wait_for(pg, "!!document.querySelector('#rcCards [data-rct=files]')")
         await pg.click("#rcCards [data-rct=files]")
         ok = await wait_for(pg, "document.querySelectorAll('#rcSec [data-rf]:not(:disabled)').length >= 1")
@@ -296,7 +324,7 @@ async def main():
         ok = await wait_for(pg, "RC.ov && RC.ov.files.some(f => f.restored)", 4000)
         check("restore center: a file is restored", ok)
         # 12. duplicates: quick pick keeps one copy per group, never all
-        await pg.click("[data-page=dupes]")
+        await nav_click(pg, "dupes")
         await wait_for(pg, "!!document.querySelector('#dupPlaces [data-root]')")
         roots = await pg.evaluate("FD.dupes.roots.length")
         check("duplicates: the user folders are the default places", roots == 6, roots)
@@ -318,7 +346,7 @@ async def main():
         ok = await wait_for(pg, "!document.getElementById('sveil').classList.contains('on') && FD.dupes.res.dupes.length === 5", 4000)
         check("duplicates: a group with one copy left goes away", ok)
         # 13. processes: list, filters, locked Windows parts, polite close then forced close
-        await pg.click("[data-page=procs]")
+        await nav_click(pg, "procs")
         ok = await wait_for(pg, "document.querySelectorAll('#pmTable .pm-row').length >= 5", 5000)
         check("processes: the apps are listed with CPU and memory", ok)
         await pg.evaluate("PM.filter = 'win'; renderProcs()")
@@ -333,7 +361,7 @@ async def main():
         ok = await wait_for(pg, "!PM.v.rows.some(r => r.name === 'Discord.exe')", 6000)
         check("processes: after confirming, it is ended", ok)
         # 14. logs: operations, error state, report copy
-        await pg.click("[data-page=logs]")
+        await nav_click(pg, "logs")
         await wait_for(pg, "document.querySelectorAll('#lgOps [data-op]').length > 3")
         await pg.evaluate("(() => { const o = LG.v.ops.find(x => x.state === 'error'); document.querySelector(`#lgOps [data-op=\"${o.id}\"]`).click(); })()")
         await wait_for(pg, "document.querySelector('#lgDet .st-pill.error')")
@@ -361,7 +389,7 @@ async def main():
         await pg.keyboard.press("Escape")
         check("palette: Esc closes it", await wait_for(pg, "!document.getElementById('palVeil').classList.contains('on')"))
         # 16. settings: the live readout can be turned off (and stays off)
-        await pg.click("[data-page=settings]")
+        await nav_click(pg, "settings")
         await pg.click("#pulseToggle")
         ok = await wait_for(pg, "document.getElementById('pulse').hidden && S.settings.pulse === false", 3000)
         check("settings: turning off the live CPU/RAM hides it and is saved", ok)
@@ -373,19 +401,19 @@ async def main():
         await pg.close()
         pg = await page(b, "?lang=en")
         await wait_for(pg, "S.analyzed && !S.busy && !JOBS.cur", 9000)
-        await pg.click("[data-page=dupes]")
+        await nav_click(pg, "dupes")
         await wait_for(pg, "!!document.querySelector('#dupPlaces [data-root]')")
         await pg.click("#dupStart")
         await wait_for(pg, "FD.dupes.running")
         check("the job's own page shows no dock while nothing waits", await pg.evaluate("document.getElementById('jobDock').hidden"))
-        await pg.click("[data-page=memory]")
+        await nav_click(pg, "memory")
         check("on another page, the dock shows the running job", await wait_for(pg, "!document.getElementById('jobDock').hidden && document.getElementById('jdBar').textContent.includes('Duplicate search')"))
         await pg.click("#btnMem")
         check("a second job waits in the queue, and says so", await wait_for(pg, "Array.from(document.querySelectorAll('.toast')).some(t => t.textContent.includes('in the queue'))", 2000))
         check("the dock counts the waiting job", "1 waiting" in (await pg.text_content("#jdBar") or ""))
         await pg.click("#jdBar")
         check("the dock opens a list: now, in the queue", await wait_for(pg, "!document.getElementById('jdPanel').hidden && document.getElementById('jdPanel').textContent.includes('Freeing RAM')"))
-        await pg.click("[data-page=optimize]")
+        await nav_click(pg, "optimize")
         await pg.click("#btnTrim")
         await wait_for(pg, "!!document.getElementById('optGo')", 3000)
         await pg.click("#optGo")
@@ -400,7 +428,7 @@ async def main():
         check("the removed job never ran", not await pg.evaluate("JOBS.recent.some(j => j.kind === 'trim')"))
         check("no page errors (jobs)", not pg.errs, pg.errs)
         # 18. restore points: the red button deletes them (after a confirmation)
-        await pg.click("[data-page=restore]")
+        await nav_click(pg, "restore")
         await wait_for(pg, "RC.rp && RC.rp.points && RC.rp.points.length === 3", 5000)
         await pg.click("#rcRpDel")
         check("deleting restore points asks first", await pg.is_visible("#veil.on"))
@@ -409,9 +437,9 @@ async def main():
         check("all restore points are deleted", ok)
         check("...and the result is shown", await wait_for(pg, "Array.from(document.querySelectorAll('.toast')).some(t => t.textContent.includes('deleted: 3 of 3'))", 2000))
         # 19. real icons replace the drawn ones (here: the preview's stand-ins)
-        await pg.click("[data-page=clean]")
+        await nav_click(pg, "clean")
         check("app categories show real app icons", await wait_for(pg, "document.querySelectorAll('#rows .r-ico.real img').length >= 3", 4000))
-        await pg.click("[data-page=procs]")
+        await nav_click(pg, "procs")
         check("processes show real app icons", await wait_for(pg, "document.querySelectorAll('#pmTable .pm-av.real img').length >= 3", 5000))
         check("no page errors (restore points, icons)", not pg.errs, pg.errs)
         # 20. as in the real app: bindings in window.__go, called as go-webview2 calls them
@@ -431,7 +459,7 @@ async def main():
         check("native: the cleaning reached the backend exactly once", n == 1, n)
         bad = await pg.evaluate("Array.from(document.querySelectorAll('.toast')).filter(t => t.textContent.includes('stopped with an error')).length")
         check("native: no 'cleaning stopped with an error' toast", bad == 0, bad)
-        await pg.click("[data-page=settings]")
+        await nav_click(pg, "settings")
         await pg.click("#pulseToggle")
         ok = await wait_for(pg, "window.__calls.includes('saveSettings')", 3000)
         check("native: settings are saved to the backend", ok)
@@ -651,7 +679,7 @@ async def main():
         check("home: the cleaning from 'Do all recommended' finishes", ok, await pg.evaluate("JOBS.recent.map(j => j.kind + ':' + j.state)"))
         check("no page errors (home)", not pg.errs, pg.errs)
         # 23. programs: the list, sorting, and an uninstall with a leftover scan
-        await pg.click("[data-page=programs]")
+        await nav_click(pg, "programs")
         ok = await wait_for(pg, "document.querySelectorAll('#prList .pr-row').length === 12", 5000)
         check("programs: the installed programs are listed", ok)
         await pg.select_option("#prSort", "size")
@@ -735,7 +763,7 @@ async def main():
         ok = await wait_for(pg, "GM.st && !GM.st.active && document.getElementById('gmBadge').hidden", 5000)
         check("game mode: turns off again", ok)
         # 27. empty folders and broken shortcuts
-        await pg.click("[data-page=tidy]")
+        await nav_click(pg, "tidy")
         await wait_for(pg, "!!TD.places", 3000)
         check("tidy: AppData is not searched unless chosen", await pg.evaluate("!TD.roots.has('C:\\\\Users\\\\demo\\\\AppData\\\\Roaming') && TD.roots.size === 6"))
         await pg.click("#tdGo")
@@ -750,7 +778,7 @@ async def main():
         ok = await wait_for(pg, "TD.broken && TD.broken.length === 3 && TD.sel.size === 3", 5000)
         check("tidy: broken shortcuts are found and listed with their targets", ok and "Points to" in await pg.text_content("#tdRes"))
         # 28. disk health
-        await pg.click("[data-page=optimize]")
+        await nav_click(pg, "optimize")
         ok = await wait_for(pg, "document.querySelectorAll('#dhGrid .dh-card').length === 3", 5000)
         check("disk health: one card per disk", ok)
         check("disk health: a warm HDD is a warning with its reason", "runs warm" in await pg.text_content("#dhGrid .dh-card.warn"))
@@ -772,9 +800,9 @@ async def main():
         check("auto disk scan: a job you start goes first (the scan steps aside)", ok)
         ok = await wait_for(pg, "!JOBS.cur && !!DA.view && JOBS.recent.some(j => j.kind === 'memory') && JOBS.recent.some(j => j.kind === 'disk' && j.state === 'ok')", 12000)
         check("auto disk scan: runs again after it and finishes", ok, await pg.evaluate("JOBS.recent.map(j => j.kind + ':' + j.state)"))
-        await pg.click("[data-page=disk]")
+        await nav_click(pg, "disk")
         check("auto disk scan: the Disk Analyzer is ready when opened", await wait_for(pg, "!document.getElementById('daResult').hidden && DA.nodes.size > 0", 3000))
-        await pg.click("[data-page=settings]")
+        await nav_click(pg, "settings")
         await pg.click("#autoDiskToggle")
         check("auto disk scan: can be turned off in Settings", await wait_for(pg, "S.settings.autoDisk === false"))
         check("no page errors (auto disk scan)", not pg.errs, pg.errs)
@@ -811,7 +839,7 @@ async def main():
         await pg.wait_for_timeout(300)
         await pg.click("#wbTray")
         check("tray: hides the app, the notification only the first time", (await calls()).endswith("tray+hint,tray") and await pg.evaluate("S.settings.trayTold === true"), await calls())
-        await pg.click("[data-page=settings]")
+        await nav_click(pg, "settings")
         await pg.click("#frameToggle")
         ok = await wait_for(pg, "document.body.classList.contains('classic-frame') && getComputedStyle(document.getElementById('winbar')).display === 'none' && document.getElementById('brand').parentElement.classList.contains('side')", 2000)
         check("Windows' title bar: the app's bar goes, the brand goes back to the sidebar", ok)
@@ -1203,7 +1231,7 @@ async def main():
         check("view: Easy shows the six main sections and the one-button cleanup", ok and await pg.evaluate("S.settings.cleanMode === 'simple'"))
         await pg.evaluate("go('tweaks')")
         await pg.click("#modeSw [data-mode=full]")
-        check("view: Full brings every section back", await wait_for(pg, "S.settings.uiMode === 'full' && [...document.querySelectorAll('.nav button[data-page]')].filter(b => b.offsetParent).length === document.querySelectorAll('.nav button[data-page]').length", 3000))
+        check("view: Full brings every section back", await wait_for(pg, "S.settings.uiMode === 'full' && [...document.querySelectorAll('.nav button[data-page]')].filter(b => b.offsetParent || (b.classList.contains('g-off') && document.querySelector('#nav .nav-g[data-g=' + b.dataset.g + ']').offsetParent)).length === document.querySelectorAll('.nav button[data-page]').length", 3000))
         await pg.click("#modeSw [data-mode=easy]")
         check("view: a page Easy does not show goes back to PC health", await wait_for(pg, "S.page === 'home'", 3000))
         check("no page errors (view)", not pg.errs, pg.errs)

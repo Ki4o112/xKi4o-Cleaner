@@ -2537,6 +2537,24 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
 /* 4.13: buttons beside a setting keep their size (Save / Load were squeezed) */
 .mv-btns { display: flex; gap: 8px; flex: none; } .item .btn { flex-shrink: 0; }
 :root[data-theme="carbon"] .fbtn { border-radius: 50%; }
+
+/* ================= 4.20: the menu's groups open and close ================= */
+.nav-g[data-g] { display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; border-radius: 8px; transition: color .2s; }
+.nav-g[data-g]:hover, .nav-g[data-g]:focus-visible { color: var(--muted); outline: none; }
+.nav-g[data-g] > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nav-g .chev { width: 12px; height: 12px; margin-left: auto; flex: none; opacity: 0; transition: transform .25s var(--expo), opacity .2s; }
+.nav-g:hover .chev, .nav-g:focus-visible .chev, .nav-g.shut .chev, .nav.acc .nav-g .chev { opacity: .8; }
+.nav-g.shut .chev { transform: rotate(-90deg); }
+.nav-g .g-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-2); flex: none; }
+.nav-g .g-dot.err { background: var(--red); }
+.nav button.g-off { display: none !important; }
+/* with groups closed there is room: titles and buttons keep a readable size */
+.nav.acc .nav-g { font-size: 10px !important; height: auto !important; background: none !important; margin: 0 !important; padding: 9px 12px 3px !important; text-transform: uppercase; letter-spacing: .09em; }
+.nav.acc .nav-g.first { display: flex !important; }
+.nav.acc .nav-g.shut { padding-bottom: 6px !important; }
+.nav.acc button[data-page], .nav.acc .nav-ind { height: 32px !important; }
+.nav.acc .ico { width: 26px !important; height: 26px !important; }
+body.ui-easy .nav .nav-g { display: none !important; }
 </style>
 </head>
 <body class="booting">
@@ -2598,22 +2616,22 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
     <nav class="nav" id="nav" aria-label="Sections">
       <div class="nav-ind" id="navInd"></div>
       <button data-page="home" data-easy aria-current="page"><span class="ico" data-icon="heart"></span><span class="label" data-i="nav.home"></span><span class="badge" id="homeBadge" hidden></span></button>
-      <div class="nav-g" data-i="nav.g.clean"></div>
+      <div class="nav-g" data-g="clean" role="button" tabindex="0"><span data-i="nav.g.clean"></span></div>
       <button data-page="clean" data-easy><span class="ico" data-icon="clean"></span><span class="label" data-i="nav.clean"></span><span class="badge" id="navBadge" hidden></span></button>
       <button data-page="memory"><span class="ico" data-icon="memory"></span><span class="label" data-i="nav.memory"></span><span class="live" id="navLive" hidden></span></button>
       <button data-page="game" data-easy><span class="ico" data-icon="gamepad"></span><span class="label" data-i="nav.game"></span><span class="badge on" id="gmBadge" hidden></span></button>
-      <div class="nav-g" data-i="nav.g.files"></div>
+      <div class="nav-g" data-g="files" role="button" tabindex="0"><span data-i="nav.g.files"></span></div>
       <button data-page="disk"><span class="ico" data-icon="pie"></span><span class="label" data-i="nav.disk"></span></button>
       <button data-page="dupes"><span class="ico" data-icon="copy"></span><span class="label" data-i="nav.dupes"></span><span class="badge" id="dupBadge" hidden></span></button>
       <button data-page="tidy"><span class="ico" data-icon="broken"></span><span class="label" data-i="nav.tidy"></span></button>
       <button data-page="recover"><span class="ico" data-icon="history"></span><span class="label" data-i="nav.recover"></span></button>
-      <div class="nav-g" data-i="nav.g.system"></div>
+      <div class="nav-g" data-g="system" role="button" tabindex="0"><span data-i="nav.g.system"></span></div>
       <button data-page="programs" data-easy><span class="ico" data-icon="package"></span><span class="label" data-i="nav.programs"></span><span class="badge" id="prBadge" hidden></span></button>
       <button data-page="procs"><span class="ico" data-icon="cpu"></span><span class="label" data-i="nav.procs"></span></button>
       <button data-page="startup"><span class="ico" data-icon="rocket"></span><span class="label" data-i="nav.startup"></span><span class="badge err" id="suBadge" hidden></span></button>
       <button data-page="tweaks"><span class="ico" data-icon="tweaks"></span><span class="label" data-i="nav.tweaks"></span><span class="badge" id="twBadge" hidden></span></button>
       <button data-page="debloat"><span class="ico" data-icon="broom"></span><span class="label" data-i="nav.debloat"></span></button>
-      <div class="nav-g" data-i="nav.g.pc"></div>
+      <div class="nav-g" data-g="pc" role="button" tabindex="0"><span data-i="nav.g.pc"></span></div>
       <button data-page="sysinfo"><span class="ico" data-icon="board"></span><span class="label" data-i="nav.sysinfo"></span></button>
       <button data-page="gpu"><span class="ico" data-icon="gpu"></span><span class="label" data-i="nav.gpu"></span><span class="badge" id="gpBadge" hidden></span></button>
       <button data-page="wupd" data-easy><span class="ico" data-icon="wupd"></span><span class="label" data-i="nav.wupd"></span><span class="badge" id="wuBadge" hidden></span></button>
@@ -2623,7 +2641,7 @@ body.boot-land #brand .logo { animation: brandLand .6s var(--expo); }
       <button data-page="nmerge"><span class="ico" data-icon="merge"></span><span class="label" data-i="nav.nmerge"></span></button>
       <button data-page="repair"><span class="ico" data-icon="repair"></span><span class="label" data-i="nav.repair"></span></button>
       <button data-page="bsod"><span class="ico" data-icon="alert"></span><span class="label" data-i="nav.bsod"></span><span class="badge err" id="bsBadge" hidden></span></button>
-      <div class="nav-g" data-i="nav.g.safety"></div>
+      <div class="nav-g" data-g="safety" role="button" tabindex="0"><span data-i="nav.g.safety"></span></div>
       <button data-page="restore"><span class="ico" data-icon="lifebuoy"></span><span class="label" data-i="nav.restore"></span></button>
       <button data-page="pass"><span class="ico" data-icon="lock"></span><span class="label" data-i="nav.pass"></span></button>
       <button data-page="av" data-easy><span class="ico" data-icon="shieldq"></span><span class="label" data-i="nav.av"></span><span class="badge err" id="avBadge" hidden></span></button>
@@ -3471,7 +3489,7 @@ bg: {
   "hero.scanning": "Сканиране на диска…", "hero.ready": "може да се освободи от диск {0}:", "hero.none": "Избери какво да се почисти",
   "hero.progress": "освободени до момента от {0}", "hero.freed": "освободени за {0}", "hero.freedStopped": "освободени, преди да спре", "hero.freeOf": "<b>{0}</b> свободни от {1} на диск {2}:",
   "hero.sel": "{0} избрани", "legend.used": "Заето", "legend.reclaim": "Ще се освободи", "legend.gained": "Освободено сега", "legend.free": "Свободно",
-  "btn.cleanAll": "Почисти всичко", "btn.cleanSel": "Почисти избраното", "btn.cleanSelN": "Почисти {0}", "btn.stop": "Спри", "btn.scan": "Сканирай отново",
+  "btn.cleanAll": "Почисти всичко", "btn.cleanSel": "Почисти избраното", "btn.cleanSelN": "Само избраното ({0})", "btn.stop": "Спри", "btn.scan": "Сканирай отново",
   "status.scanDone": "Сканирането завърши за {0}", "status.scanning": "Сканиране…", "status.starting": "Започва…", "status.cleaning": "Почиства се: {0}",
   "status.stopping": "Спира след текущата стъпка…", "status.done": "Готово.", "status.doneRestart": "Готово. Рестартирай компютъра, за да приключат системните промени.",
   "status.rp": "Създава се точка за възстановяване…", "status.rpFail": "Точката за възстановяване не се създаде, затова системните стъпки се пропускат. Можеш да изключиш изискването в „Настройки“.",
@@ -4719,7 +4737,7 @@ en: {
   "hero.scanning": "Scanning the drive…", "hero.ready": "can be freed on drive {0}:", "hero.none": "Choose what to clean",
   "hero.progress": "freed so far of {0}", "hero.freed": "freed in {0}", "hero.freedStopped": "freed before stopping", "hero.freeOf": "<b>{0}</b> free of {1} on drive {2}:",
   "hero.sel": "{0} selected", "legend.used": "Used", "legend.reclaim": "To be freed", "legend.gained": "Freed now", "legend.free": "Free",
-  "btn.cleanAll": "Clean everything", "btn.cleanSel": "Clean selected", "btn.cleanSelN": "Clean {0}", "btn.stop": "Stop", "btn.scan": "Scan again",
+  "btn.cleanAll": "Clean everything", "btn.cleanSel": "Clean selected", "btn.cleanSelN": "Only the selected ({0})", "btn.stop": "Stop", "btn.scan": "Scan again",
   "status.scanDone": "Scan finished in {0}", "status.scanning": "Scanning…", "status.starting": "Starting…", "status.cleaning": "Cleaning: {0}",
   "status.stopping": "Stopping after the current step…", "status.done": "Done.", "status.doneRestart": "Done. Restart the computer to finish the system changes.",
   "status.rp": "Creating a restore point…", "status.rpFail": "The restore point could not be created, so the system steps are skipped. You can turn this requirement off in Settings.",
@@ -5179,7 +5197,7 @@ en: {
   "da.cat.code": "Code & development", "da.cat.system": "System & temporary", "da.cat.other": "Other",
   "status.waitScan": "Waiting for the scan to finish…",
   "nav.large": "Large files", "nav.dupes": "Duplicates", "nav.procs": "Processes", "nav.restore": "Restore Center", "nav.logs": "Logs", "nav.g.clean": "Clean", "nav.g.files": "Files",
-  "nav.g.system": "System", "nav.g.safety": "Safety", "pal.btn": "Search or run…", "pal.btnT": "Find sections, actions and settings fast (Ctrl+K)",
+  "nav.g.system": "System", "nav.g.safety": "Safety", "pal.btn": "Search…", "pal.btnT": "Find sections, actions and settings fast (Ctrl+K)",
   "pal.ph": "A section, action, tweak or category…", "pal.move": "move", "pal.run": "run", "pal.close": "close", "pal.none": "Nothing matches. Try another word.",
   "pal.g.pages": "Sections", "pal.g.actions": "Actions", "pal.g.tweaks": "Tweaks", "pal.g.clean": "Cleanup categories", "pal.g.procs": "Open apps",
   "pal.a.cleanAll": "Clean everything", "pal.a.preview": "Preview what would be deleted", "pal.a.rescan": "Scan again", "pal.a.ram": "Free RAM now", "pal.a.large": "Find large files",
@@ -6396,10 +6414,61 @@ fadeEdgesY($(".nav"));
 // every section stays in view: when the window is too short for the menu,
 // its buttons get just as much smaller as needed (and the group titles
 // become thin lines) instead of scrolling
+/* the menu's groups: a title opens or closes its sections. When the whole
+   menu does not fit, only the group of the page you are on (and the ones you
+   opened) stay open, so the buttons keep a readable size. */
+const NAVG = { open: new Set(), shut: new Set(), fill: new Set(), auto: false };
+function navGroupsInit() {
+  let g = "";
+  $$("#nav > *").forEach(el => {
+    if (el.classList.contains("nav-g")) {
+      g = el.dataset.g;
+      const g0 = g;
+      if (!el.querySelector(".chev")) el.insertAdjacentHTML("beforeend", '<i class="g-dot" hidden></i><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+      const flip = () => {
+        if (el.classList.contains("shut")) { NAVG.shut.delete(g0); NAVG.open.add(g0); } else { NAVG.open.delete(g0); NAVG.shut.add(g0); }
+        S.settings.navShut = [...NAVG.shut]; storeSettings(); fitNav();
+      };
+      el.addEventListener("click", flip);
+      el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); } });
+    } else if (el.matches("button[data-page]") && g) el.dataset.g = g;
+  });
+}
+function navApplyGroups() {
+  const n = $("#nav"), rail = matchMedia("(max-width: 1080px)").matches || uiEasy();
+  const cur = $(".nav button[aria-current='page']"), here = cur && cur.dataset.g;
+  const shut = g => !rail && g !== here && (NAVG.shut.has(g) || (NAVG.auto && !NAVG.open.has(g) && !NAVG.fill.has(g)));
+  n.classList.toggle("acc", !rail && (NAVG.auto || NAVG.shut.size > 0));
+  $$("#nav .nav-g").forEach(h => {
+    const off = shut(h.dataset.g);
+    h.classList.toggle("shut", off); h.setAttribute("aria-expanded", String(!off));
+    // a closed group still shows that something inside wants a look
+    const bs = $$(`#nav button[data-g="${h.dataset.g}"]`);
+    const bad = bs.some(b => { const x = b.querySelector(".badge.err"); return x && !x.hidden; });
+    const any = bad || bs.some(b => { const x = b.querySelector(".badge, .live"); return x && !x.hidden; });
+    const dot = h.querySelector(".g-dot"); if (dot) { dot.hidden = !off || !any; dot.classList.toggle("err", bad); }
+  });
+  $$("#nav button[data-g]").forEach(b => b.classList.toggle("g-off", shut(b.dataset.g)));
+}
 function fitNav() {
+  // the marker (still sliding to the last page) would make the menu look longer than it is
+  const ind = $("#navInd"); if (ind) ind.style.display = "none";
+  try { fitNavSizes(); } finally { if (ind) ind.style.display = ""; moveNav(); }
+}
+function fitNavSizes() {
   const n = $(".nav"); if (!n) return;
   n.classList.remove("fit", "lines", "tight"); n.style.removeProperty("--navh");
-  const bs = n.querySelectorAll("button");
+  NAVG.auto = false; NAVG.fill.clear(); navApplyGroups();
+  if (n.scrollHeight > n.clientHeight + 1) {
+    NAVG.auto = true; navApplyGroups();
+    // then as many of the other groups as there is room for, top to bottom
+    $$("#nav .nav-g.shut").forEach(h => {
+      if (NAVG.shut.has(h.dataset.g)) return;
+      NAVG.fill.add(h.dataset.g); navApplyGroups();
+      if (n.scrollHeight > n.clientHeight + 1) { NAVG.fill.delete(h.dataset.g); navApplyGroups(); }
+    });
+  }
+  const bs = n.querySelectorAll("button:not(.g-off)");
   if (!bs.length || n.scrollHeight <= n.clientHeight + 1) { moveNav(); return; }
   const h0 = bs[0].offsetHeight;
   // first smaller buttons, then smaller group titles, then lines instead of titles
@@ -6413,6 +6482,7 @@ function fitNav() {
 }
 window.addEventListener("resize", fitNav);
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitNav);
+navGroupsInit();
 setTimeout(fitNav, 0);
 // Go bindings live in window.__go (see third_party/go-webview2/PATCHES.md): a page
 // function with the same name as a binding would otherwise replace window[name].
@@ -6519,7 +6589,7 @@ function go(page, opt) {
   const pgEl = document.getElementById("page-" + page);
   if (pgEl && was !== page && motionOK()) { pgEl.classList.remove("enter"); void pgEl.offsetWidth; pgEl.classList.add("enter"); clearTimeout(pgEl._enterT); pgEl._enterT = setTimeout(() => pgEl.classList.remove("enter"), 1400); }
   S.page = page;
-  moveNav();
+  if (NAVG.auto || NAVG.shut.size) fitNav(); else moveNav();
   const cur = $(".nav button[aria-current='page']"); if (cur && cur.scrollIntoViewIfNeeded) cur.scrollIntoViewIfNeeded(false);
   if (page === "procs") { if (was !== "procs") PM.first = true; startProcs(); requestAnimationFrame(() => $("#pmFilter")._place && $("#pmFilter")._place()); }
   if (page === "dupes") loadFinder(page);
@@ -13664,6 +13734,7 @@ async function init() {
     if (typeof st.hideEmpty === "boolean") s.hideEmpty = st.hideEmpty;
     if (st.cleanMode === "simple" || st.cleanMode === "detailed") s.cleanMode = st.cleanMode;
     if (st.uiMode === "easy" || st.uiMode === "full") s.uiMode = st.uiMode;
+    if (Array.isArray(st.navShut)) { s.navShut = st.navShut.filter(x => typeof x === "string"); NAVG.shut = new Set(s.navShut); }
     if (st.remind && typeof st.remind === "object") s.remind = st.remind;
     if (typeof st.accent === "string" && ACCENTS[st.accent]) s.accent = st.accent;
     // 3.1: the new look once for everyone; an accent picked earlier (not the old default) stays
