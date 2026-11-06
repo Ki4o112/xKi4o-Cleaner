@@ -909,7 +909,7 @@ async def main():
         await pg.evaluate("go('tweaks')")
         await wait_for(pg, "TW.loaded", 5000)
         first = await pg.evaluate("(() => { const s = document.querySelector('#twList .tw-sec'); return s ? s.className + '|' + s.textContent : ''; })()")
-        check("tweaks: the first section is what is new in this version", "new" in first.split("|")[0] and "New in version 3.4" in first, first)
+        check("tweaks: the first section is what is new in this version", "new" in first.split("|")[0] and "New in version 4.21" in first, first)
         n_new = await pg.evaluate("TW.meta.filter(m => m.new).length")
         rows = await pg.evaluate("[...document.querySelectorAll('#twList .tw-row')].map(r => r.dataset.tw)")
         check("tweaks: each new tweak is listed once (not again in its group)", n_new >= 7 and len(rows) == len(set(rows)), (n_new, len(rows), len(set(rows))))

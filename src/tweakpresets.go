@@ -51,6 +51,8 @@ var presetNever = map[string]bool{
 	"dark-mode": true, "classic-menu": true, "taskbar-left": true, "taskbar-search-off": true, "taskview-widgets-off": true,
 	"clock-seconds": true, "clock-24h": true, "compact-view": true, "hidden-files": true, "numlock-on": true,
 	"ps7-default": true, "clipboard-history": true, "taskbar-labels": true, "printer-manual": true,
+	"mpo-off": true, "sysmain-off": true, "wu-drivers-off": true, "wu-no-auto-restart": true, "snap-assist-off": true,
+	"alttab-no-tabs": true, "this-pc-desktop": true, "explorer-thispc": true, "ntfs-8dot3-off": true,
 }
 
 // union keeps the order of first appearance and drops repeats.

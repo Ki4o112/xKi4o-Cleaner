@@ -4,6 +4,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 	"time"
 
@@ -184,5 +185,57 @@ func TestCheckDebloatFromLog(t *testing.T) {
 	op.end("", nil)
 	if x := debloatTimes()[f.ID]; x.Made {
 		t.Fatal("still made after the undo")
+	}
+}
+
+// The tweaks of 4.21: each turns on, reads as on, turns off and leaves the
+// PC as it was (the registry values and the service start types).
+func TestTweaks421OnOff(t *testing.T) {
+	changesThisPC(t)
+	buildTweaks()
+	was := app.admin
+	app.admin = isElevated()
+	defer func() { app.admin = was }()
+	if !app.admin {
+		t.Skip("needs administrator rights")
+	}
+	ids := []string{"mpo-off", "power-throttling-off", "sysmain-off", "ntfs-8dot3-off", "wu-drivers-off", "wu-no-auto-restart",
+		"storage-sense", "snap-assist-off", "alttab-no-tabs", "this-pc-desktop", "explorer-thispc"}
+	for _, id := range ids {
+		tw := findTweak(id)
+		if tw == nil {
+			t.Errorf("%s: no such tweak", id)
+			continue
+		}
+		before := map[string]string{}
+		for _, v := range tw.reg {
+			before[v.path+`\`+v.name] = fmt.Sprint(v.read())
+		}
+		p := newProbe()
+		if st := fullState(tw, p); st.State == "na" {
+			t.Logf("%s: not on this PC (%s)", id, st.Note)
+			continue
+		} else if st.State == "on" {
+			t.Logf("%s: already on here, skipped", id)
+			continue
+		}
+		res := setTweak(id, true, tweakOpts{})
+		if !res.OK || res.State.State != "on" {
+			t.Errorf("%s on: %+v", id, res)
+			continue
+		}
+		res = setTweak(id, false, tweakOpts{})
+		if !res.OK || res.State.State != "off" {
+			t.Errorf("%s off: %+v", id, res)
+			continue
+		}
+		for _, v := range tw.reg {
+			if got := fmt.Sprint(v.read()); got != before[v.path+`\`+v.name] {
+				t.Errorf("%s: %s is %s after off, was %s", id, v.name, got, before[v.path+`\`+v.name])
+			}
+		}
+		if getBackup(id) != nil {
+			t.Errorf("%s: the backup is still there", id)
+		}
 	}
 }

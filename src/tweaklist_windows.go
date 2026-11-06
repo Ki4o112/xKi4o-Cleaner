@@ -1078,6 +1078,30 @@ func buildTweaks() {
 		{id: "printer-manual", group: "system", since: "3.0.0",
 			reg: []rv{dw(hkcu, `Software\Microsoft\Windows NT\CurrentVersion\Windows`, "LegacyDefaultPrinterMode", 1, uint32(0))}},
 
+		// ---------------- 4.21
+		{id: "mpo-off", group: "gaming", risk: "caution", reboot: true, sys: true, since: "4.21.0",
+			reg: []rv{dw(hklm, `SOFTWARE\Microsoft\Windows\Dwm`, "OverlayTestMode", 5, nil)}},
+		{id: "power-throttling-off", group: "perf", reboot: true, sys: true, since: "4.21.0",
+			reg: []rv{dw(hklm, `SYSTEM\CurrentControlSet\Control\Power\PowerThrottling`, "PowerThrottlingOff", 1, nil)}},
+		{id: "sysmain-off", group: "perf", risk: "caution", reboot: true, sys: true, since: "4.21.0",
+			svc: []svcSet{{name: "SysMain", on: svcDisabled, off: svcAuto}}},
+		{id: "ntfs-8dot3-off", group: "perf", reboot: true, sys: true, since: "4.21.0",
+			reg: []rv{dw(hklm, `SYSTEM\CurrentControlSet\Control\FileSystem`, "NtfsDisable8dot3NameCreation", 1, uint32(2))}},
+		{id: "wu-drivers-off", group: "system", sys: true, since: "4.21.0",
+			reg: []rv{dw(hklm, `SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate`, "ExcludeWUDriversInQualityUpdate", 1, nil)}},
+		{id: "wu-no-auto-restart", group: "system", rec: true, sys: true, since: "4.21.0",
+			reg: []rv{dw(hklm, `SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU`, "NoAutoRebootWithLoggedOnUsers", 1, nil)}},
+		{id: "storage-sense", group: "system", since: "4.21.0",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy`, "01", 1, nil)}},
+		{id: "snap-assist-off", group: "look", since: "4.21.0",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced`, "SnapAssist", 0, nil)}},
+		{id: "alttab-no-tabs", group: "look", explorer: true, since: "4.21.0",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced`, "MultiTaskingAltTabFilter", 3, nil)}},
+		{id: "this-pc-desktop", group: "look", explorer: true, since: "4.21.0",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel`, "{20D04FE0-3AEA-1069-A2D8-08002B30309D}", 0, nil)}},
+		{id: "explorer-thispc", group: "explorer", explorer: true, since: "4.21.0",
+			reg: []rv{dw(hkcu, `Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced`, "LaunchTo", 1, nil)}},
+
 		// ---------------- Apps
 		{id: "edge-bg-off", group: "apps", sys: true,
 			reg: []rv{
