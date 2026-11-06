@@ -3,6 +3,32 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.21.0 — 2026-11-06
+
+### English
+- **New Check page** — are the tweaks and Debloat changes working, and has anything gone wrong since?
+  - Finds what Windows changed back (often after a big update), with Apply again
+  - Checks the 40 services Windows needs (core, network, sound, protection, updates, Store, Start, search) and turns a disabled one back on with one click
+  - Reads the event logs: crashes, freezes ("not responding"), blue screens, sudden shut-downs, graphics driver resets and failed services — and tells when they began after your changes, compared with as many days before them
+  - Names the likely changes (the ones known to touch that part of Windows, newest first), each with Undo
+  - Checks the desktop, the antivirus and its definitions, policies or a hosts file that block Windows Update, the internet and DNS, the page file, free space, a pending restart and a recent restore point
+  - Catches risky mixes: telemetry off on an Insider build, Xbox apps removed with Game Pass games installed, printing off with printers installed
+  - Checks by itself once a day; the menu shows a red count when something needs a look; the report can be copied
+- **9 new tweaks**: Multi-Plane Overlay off (fixes flicker and stutter), no slowing of background programs, SysMain off, no 8.3 short names, Windows Update leaves drivers alone, Storage Sense, no suggestions when snapping, Alt+Tab without Edge tabs, This PC on the desktop
+- **8 new Debloat options**: Chrome not kept running after closing, no Rewards and promotions in Edge (and Do Not Track), Firefox telemetry and studies off, PowerShell and .NET telemetry off, no feedback requests, no suggested actions when copying, no offline map downloads, pen workspace off
+
+### Български
+- **Нова страница „Проверка“** — работят ли туийковете и Debloat промените и счупило ли се е нещо след тях?
+  - Намира какво е върнал Windows (често след голямо обновление), с бутон „Приложи отново“
+  - Проверява 40-те услуги, които Windows използва (ядро, мрежа, звук, защита, обновления, Store, „Старт“, търсене), и включва изключена с един клик
+  - Чете журналите: сривове, забивания („не отговаря“), сини екрани, внезапно изгасване, рестарт на драйвера на видеокартата и спрели услуги — и казва дали са започнали след промените ти, спрямо толкова дни преди тях
+  - Показва вероятните виновници (промените, които засягат тази част от Windows, най-новите първо), всяка с „Върни“
+  - Проверява работния плот, антивируса и дефинициите му, правила или hosts файл, които спират Windows Update, интернета и DNS, файла за виртуална памет, свободното място, чакащ рестарт и скорошна точка за възстановяване
+  - Хваща рискови комбинации: изключена телеметрия на Insider версия, махнато Xbox приложение при инсталирани Game Pass игри, изключен печат при инсталирани принтери
+  - Проверява сама веднъж на ден; менюто показва червено число, когато нещо иска внимание; отчетът може да се копира
+- **9 нови туийка**: изключен Multi-Plane Overlay (маха трептенето и насичането), без забавяне на фоновите програми, изключен SysMain, без къси имена 8.3, Windows Update да не сменя драйверите, Storage Sense, без предложения при подреждане на прозорци, Alt+Tab без разделите на Edge, „Този компютър“ на работния плот
+- **8 нови опции в Debloat**: Chrome да не остава пуснат след затваряне, без Rewards и реклами в Edge (и „Не ме следи“), без телеметрия и проучвания във Firefox, без телеметрия на PowerShell и .NET, без молби за обратна връзка, без предложения при копиране, без сваляне на офлайн карти, изключено работно място за писалка
+
 ## 4.20.0 — 2026-11-05
 
 ### English

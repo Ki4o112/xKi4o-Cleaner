@@ -199,8 +199,8 @@ func TestTweaks421OnOff(t *testing.T) {
 	if !app.admin {
 		t.Skip("needs administrator rights")
 	}
-	ids := []string{"mpo-off", "power-throttling-off", "sysmain-off", "ntfs-8dot3-off", "wu-drivers-off", "wu-no-auto-restart",
-		"storage-sense", "snap-assist-off", "alttab-no-tabs", "this-pc-desktop", "explorer-thispc"}
+	ids := []string{"mpo-off", "power-throttling-off", "sysmain-off", "ntfs-8dot3-off", "wu-drivers-off",
+		"storage-sense", "snap-assist-off", "alttab-no-tabs", "this-pc-desktop"}
 	for _, id := range ids {
 		tw := findTweak(id)
 		if tw == nil {
