@@ -108,6 +108,12 @@ func TestCheckFindsDisabledService(t *testing.T) {
 func TestCheckFindsDrift(t *testing.T) {
 	changesThisPC(t)
 	buildTweaks()
+	was := app.admin
+	app.admin = isElevated()
+	defer func() { app.admin = was }()
+	if !app.admin {
+		t.Skip("needs administrator rights")
+	}
 	const id = "menu-delay"
 	res := setTweak(id, true, tweakOpts{})
 	if !res.OK {

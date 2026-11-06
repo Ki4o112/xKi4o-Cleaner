@@ -8338,6 +8338,17 @@ on("debloat", d => {
 ===================================================================== */
 const CK = { rep: null, run: null, loaded: false, busyFix: "" };
 const ckName = r => r.kind === "debloat" ? ((dbF(r.id) && dbLabel(dbF(r.id))) || r.id) : t("tw." + r.id + ".n");
+// the parts of Windows a crash or a freeze can be in, by their program
+const CK_EXE = {
+  "explorer.exe": ["Explorer (the desktop)", "Explorer (работният плот)"], "startmenuexperiencehost.exe": ["The Start menu", "Менюто „Старт“"],
+  "searchhost.exe": ["Windows search", "Търсенето на Windows"], "searchapp.exe": ["Windows search", "Търсенето на Windows"], "searchui.exe": ["Windows search", "Търсенето на Windows"],
+  "shellexperiencehost.exe": ["The taskbar and notifications", "Лентата на задачите и известията"], "textinputhost.exe": ["Typing and emoji", "Писането и емоджитата"],
+  "dwm.exe": ["Window drawing (dwm)", "Рисуването на прозорците (dwm)"], "ctfmon.exe": ["Keyboard input", "Въвеждането от клавиатурата"],
+  "runtimebroker.exe": ["App permissions (RuntimeBroker)", "Разрешенията на приложенията (RuntimeBroker)"], "widgets.exe": ["Widgets", "Уиджетите"],
+  "systemsettings.exe": ["Settings", "Настройки"], "searchindexer.exe": ["Search indexing", "Индексирането за търсене"], "lockapp.exe": ["The lock screen", "Заключеният екран"],
+  "taskmgr.exe": ["Task Manager", "Диспечерът на задачите"], "sihost.exe": ["The shell (sihost)", "Обвивката (sihost)"], "applicationframehost.exe": ["Store app windows", "Прозорците на Store приложенията"],
+};
+const ckExe = x => CK_EXE[x] ? CK_EXE[x][L === "bg" ? 1 : 0] : x;
 function ckWhen(at) { return at ? fmtDateTime(at * 1000) : t("ck.earlier"); }
 async function loadCheck() {
   if (!CK.loaded) {
@@ -8377,7 +8388,7 @@ function ckTexts(f) {
   const id = f.id;
   let title, desc = "";
   if (id.startsWith("ev-")) {
-    title = t("ck." + id + ".t", a[0] || "", f.count);
+    title = t("ck." + id + ".t", id.startsWith("ev-svc") ? a[0] || "" : ckExe(a[0] || ""), f.count);
     if (id.endsWith("-old")) desc = t("ck.old.d");
     else desc = t("ck.ev.d", f.before || 0, ckWhen(f.first));
     if (id.startsWith("ev-power")) desc = t("ck.ev-power.d2") + " " + desc;
