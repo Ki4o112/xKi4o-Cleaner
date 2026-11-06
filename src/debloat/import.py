@@ -148,6 +148,45 @@ EXTRAS = [
      "label": "Turn off Microsoft Office telemetry", "tip": "Microsoft Office stops sending usage and diagnostic data (Office 2016 and newer, Microsoft 365).",
      "apply": [S(OFF, "DisableTelemetry", 1), S(OFF, "SendTelemetry", 3), S(OFF2, "DisableTelemetry", 1)], "undo": [D(OFF, "DisableTelemetry"), D(OFF, "SendTelemetry"), D(OFF2, "DisableTelemetry")]},
 ]
+# 4.21
+def SZ(key, name, val): return {"op": "set", "key": key, "name": name, "type": "string", "str": val}
+CHROME = "HKLM\\SOFTWARE\\Policies\\Google\\Chrome"
+FF = "HKLM\\SOFTWARE\\Policies\\Mozilla\\Firefox"
+ENV = "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"
+DC = "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection"
+CLIP = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SmartActionPlatform\\SmartClipboard"
+MAPS = "HKLM\\SYSTEM\\Maps"
+INK = "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsInkWorkspace"
+EXTRAS += [
+    {"id": "XChromeNoBackground", "cat": "XExtras", "prio": 5,
+     "label": "Don't keep Google Chrome running after you close it", "tip": "Chrome keeps running in the background (for apps and notifications) after its last window is closed. This policy turns that off, so it uses no memory when closed.",
+     "apply": [S(CHROME, "BackgroundModeEnabled", 0)], "undo": [D(CHROME, "BackgroundModeEnabled")]},
+    {"id": "XEdgeRewards", "cat": "XExtras", "prio": 6,
+     "label": "No Microsoft Rewards and promotions in Edge", "tip": "Edge stops showing Microsoft Rewards and its own recommendations and promotional notifications, and sends Do Not Track to sites.",
+     "apply": [S(EDGE, "ShowMicrosoftRewards", 0), S(EDGE, "ShowRecommendationsEnabled", 0), S(EDGE, "ConfigureDoNotTrack", 1)],
+     "undo": [D(EDGE, "ShowMicrosoftRewards"), D(EDGE, "ShowRecommendationsEnabled"), D(EDGE, "ConfigureDoNotTrack")]},
+    {"id": "XFirefoxTelemetry", "cat": "XExtras", "prio": 7,
+     "label": "Turn off Firefox telemetry and studies", "tip": "Firefox stops sending usage data, running Mozilla's studies and running its default-browser agent in the background.",
+     "apply": [S(FF, "DisableTelemetry", 1), S(FF, "DisableFirefoxStudies", 1), S(FF, "DisableDefaultBrowserAgent", 1)],
+     "undo": [D(FF, "DisableTelemetry"), D(FF, "DisableFirefoxStudies"), D(FF, "DisableDefaultBrowserAgent")]},
+    {"id": "XDevTelemetry", "cat": "XExtras", "prio": 8,
+     "label": "Turn off PowerShell and .NET telemetry", "tip": "PowerShell 7 and the .NET tools stop sending usage data to Microsoft (for programs started after the next sign-in).",
+     "apply": [SZ(ENV, "POWERSHELL_TELEMETRY_OPTOUT", "1"), SZ(ENV, "DOTNET_CLI_TELEMETRY_OPTOUT", "1")],
+     "undo": [D(ENV, "POWERSHELL_TELEMETRY_OPTOUT"), D(ENV, "DOTNET_CLI_TELEMETRY_OPTOUT")]},
+    {"id": "XFeedbackOff", "cat": "XExtras", "prio": 9,
+     "label": "No feedback requests from Windows", "tip": "Windows stops asking you to rate it or give feedback in notifications.",
+     "apply": [S(DC, "DoNotShowFeedbackNotifications", 1)], "undo": [D(DC, "DoNotShowFeedbackNotifications")]},
+    {"id": "XSmartClipboard", "cat": "XExtras", "prio": 10,
+     "label": "No suggested actions when you copy", "tip": "When you copy a phone number or a date, Windows no longer pops up suggested actions (call, add to calendar).",
+     "apply": [S(CLIP, "Disabled", 1)], "undo": [D(CLIP, "Disabled")]},
+    {"id": "XMapsAutoUpdate", "cat": "XExtras", "prio": 11,
+     "label": "Don't download offline map updates by themselves", "tip": "Windows stops downloading updates for offline maps in the background. Maps you use are updated when you open them.",
+     "apply": [S(MAPS, "AutoUpdateEnabled", 0)], "undo": [D(MAPS, "AutoUpdateEnabled")]},
+    {"id": "XInkWorkspace", "cat": "XExtras", "prio": 12,
+     "label": "Turn off the pen workspace and its app suggestions", "tip": "The Windows Ink Workspace (pen menu) and the apps it suggests from the Store are turned off. For PCs without a pen.",
+     "apply": [S(INK, "AllowWindowsInkWorkspace", 0), S(INK, "AllowSuggestedAppsInWindowsInkWorkspace", 0)],
+     "undo": [D(INK, "AllowWindowsInkWorkspace"), D(INK, "AllowSuggestedAppsInWindowsInkWorkspace")]},
+]
 out["categories"].append({"id": "XExtras", "label": "More from xKi4o Cleaner"})
 out["features"].extend(EXTRAS)
 ids = {x["id"] for x in out["features"]}

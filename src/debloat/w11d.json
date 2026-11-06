@@ -5877,6 +5877,294 @@
     "Изключи телеметрията на Microsoft Office",
     "Office спира да праща данни за използването и диагностика (Office 2016 и по-нови, Microsoft 365)."
    ]
+  },
+  {
+   "id": "XChromeNoBackground",
+   "cat": "XExtras",
+   "prio": 5,
+   "label": "Don't keep Google Chrome running after you close it",
+   "tip": "Chrome keeps running in the background (for apps and notifications) after its last window is closed. This policy turns that off, so it uses no memory when closed.",
+   "apply": [
+    {
+     "op": "set",
+     "key": "HKLM\\SOFTWARE\\Policies\\Google\\Chrome",
+     "name": "BackgroundModeEnabled",
+     "type": "dword",
+     "num": 0
+    }
+   ],
+   "undo": [
+    {
+     "op": "delval",
+     "key": "HKLM\\SOFTWARE\\Policies\\Google\\Chrome",
+     "name": "BackgroundModeEnabled"
+    }
+   ],
+   "bg": [
+    "Google Chrome да не остава пуснат след затваряне",
+    "Chrome продължава да работи във фона (за приложения и известия), след като затвориш последния прозорец. Това го спира — затворен, не заема памет."
+   ]
+  },
+  {
+   "id": "XEdgeRewards",
+   "cat": "XExtras",
+   "prio": 6,
+   "label": "No Microsoft Rewards and promotions in Edge",
+   "tip": "Edge stops showing Microsoft Rewards and its own recommendations and promotional notifications, and sends Do Not Track to sites.",
+   "apply": [
+    {
+     "op": "set",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+     "name": "ShowMicrosoftRewards",
+     "type": "dword",
+     "num": 0
+    },
+    {
+     "op": "set",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+     "name": "ShowRecommendationsEnabled",
+     "type": "dword",
+     "num": 0
+    },
+    {
+     "op": "set",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+     "name": "ConfigureDoNotTrack",
+     "type": "dword",
+     "num": 1
+    }
+   ],
+   "undo": [
+    {
+     "op": "delval",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+     "name": "ShowMicrosoftRewards"
+    },
+    {
+     "op": "delval",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+     "name": "ShowRecommendationsEnabled"
+    },
+    {
+     "op": "delval",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge",
+     "name": "ConfigureDoNotTrack"
+    }
+   ],
+   "bg": [
+    "Без Microsoft Rewards и реклами в Edge",
+    "Edge спира да показва Microsoft Rewards, своите препоръки и рекламни известия и казва на сайтовете „Не ме следи“."
+   ]
+  },
+  {
+   "id": "XFirefoxTelemetry",
+   "cat": "XExtras",
+   "prio": 7,
+   "label": "Turn off Firefox telemetry and studies",
+   "tip": "Firefox stops sending usage data, running Mozilla's studies and running its default-browser agent in the background.",
+   "apply": [
+    {
+     "op": "set",
+     "key": "HKLM\\SOFTWARE\\Policies\\Mozilla\\Firefox",
+     "name": "DisableTelemetry",
+     "type": "dword",
+     "num": 1
+    },
+    {
+     "op": "set",
+     "key": "HKLM\\SOFTWARE\\Policies\\Mozilla\\Firefox",
+     "name": "DisableFirefoxStudies",
+     "type": "dword",
+     "num": 1
+    },
+    {
+     "op": "set",
+     "key": "HKLM\\SOFTWARE\\Policies\\Mozilla\\Firefox",
+     "name": "DisableDefaultBrowserAgent",
+     "type": "dword",
+     "num": 1
+    }
+   ],
+   "undo": [
+    {
+     "op": "delval",
+     "key": "HKLM\\SOFTWARE\\Policies\\Mozilla\\Firefox",
+     "name": "DisableTelemetry"
+    },
+    {
+     "op": "delval",
+     "key": "HKLM\\SOFTWARE\\Policies\\Mozilla\\Firefox",
+     "name": "DisableFirefoxStudies"
+    },
+    {
+     "op": "delval",
+     "key": "HKLM\\SOFTWARE\\Policies\\Mozilla\\Firefox",
+     "name": "DisableDefaultBrowserAgent"
+    }
+   ],
+   "bg": [
+    "Изключи телеметрията и проучванията на Firefox",
+    "Firefox спира да праща данни за използването, да пуска проучванията на Mozilla и агента си за браузър по подразбиране във фона."
+   ]
+  },
+  {
+   "id": "XDevTelemetry",
+   "cat": "XExtras",
+   "prio": 8,
+   "label": "Turn off PowerShell and .NET telemetry",
+   "tip": "PowerShell 7 and the .NET tools stop sending usage data to Microsoft (for programs started after the next sign-in).",
+   "apply": [
+    {
+     "op": "set",
+     "key": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment",
+     "name": "POWERSHELL_TELEMETRY_OPTOUT",
+     "type": "string",
+     "str": "1"
+    },
+    {
+     "op": "set",
+     "key": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment",
+     "name": "DOTNET_CLI_TELEMETRY_OPTOUT",
+     "type": "string",
+     "str": "1"
+    }
+   ],
+   "undo": [
+    {
+     "op": "delval",
+     "key": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment",
+     "name": "POWERSHELL_TELEMETRY_OPTOUT"
+    },
+    {
+     "op": "delval",
+     "key": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment",
+     "name": "DOTNET_CLI_TELEMETRY_OPTOUT"
+    }
+   ],
+   "bg": [
+    "Изключи телеметрията на PowerShell и .NET",
+    "PowerShell 7 и инструментите на .NET спират да пращат данни за използването на Microsoft (за програмите, пуснати след следващото влизане)."
+   ]
+  },
+  {
+   "id": "XFeedbackOff",
+   "cat": "XExtras",
+   "prio": 9,
+   "label": "No feedback requests from Windows",
+   "tip": "Windows stops asking you to rate it or give feedback in notifications.",
+   "apply": [
+    {
+     "op": "set",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection",
+     "name": "DoNotShowFeedbackNotifications",
+     "type": "dword",
+     "num": 1
+    }
+   ],
+   "undo": [
+    {
+     "op": "delval",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection",
+     "name": "DoNotShowFeedbackNotifications"
+    }
+   ],
+   "bg": [
+    "Без молби за обратна връзка от Windows",
+    "Windows спира да те моли с известия да го оцениш или да дадеш обратна връзка."
+   ]
+  },
+  {
+   "id": "XSmartClipboard",
+   "cat": "XExtras",
+   "prio": 10,
+   "label": "No suggested actions when you copy",
+   "tip": "When you copy a phone number or a date, Windows no longer pops up suggested actions (call, add to calendar).",
+   "apply": [
+    {
+     "op": "set",
+     "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SmartActionPlatform\\SmartClipboard",
+     "name": "Disabled",
+     "type": "dword",
+     "num": 1
+    }
+   ],
+   "undo": [
+    {
+     "op": "delval",
+     "key": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SmartActionPlatform\\SmartClipboard",
+     "name": "Disabled"
+    }
+   ],
+   "bg": [
+    "Без предложения при копиране",
+    "Когато копираш телефонен номер или дата, Windows вече не показва предложения (обади се, добави в календара)."
+   ]
+  },
+  {
+   "id": "XMapsAutoUpdate",
+   "cat": "XExtras",
+   "prio": 11,
+   "label": "Don't download offline map updates by themselves",
+   "tip": "Windows stops downloading updates for offline maps in the background. Maps you use are updated when you open them.",
+   "apply": [
+    {
+     "op": "set",
+     "key": "HKLM\\SYSTEM\\Maps",
+     "name": "AutoUpdateEnabled",
+     "type": "dword",
+     "num": 0
+    }
+   ],
+   "undo": [
+    {
+     "op": "delval",
+     "key": "HKLM\\SYSTEM\\Maps",
+     "name": "AutoUpdateEnabled"
+    }
+   ],
+   "bg": [
+    "Без самостоятелно сваляне на офлайн карти",
+    "Windows спира да сваля обновления на офлайн картите във фона. Картите, които ползваш, се обновяват, когато ги отвориш."
+   ]
+  },
+  {
+   "id": "XInkWorkspace",
+   "cat": "XExtras",
+   "prio": 12,
+   "label": "Turn off the pen workspace and its app suggestions",
+   "tip": "The Windows Ink Workspace (pen menu) and the apps it suggests from the Store are turned off. For PCs without a pen.",
+   "apply": [
+    {
+     "op": "set",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsInkWorkspace",
+     "name": "AllowWindowsInkWorkspace",
+     "type": "dword",
+     "num": 0
+    },
+    {
+     "op": "set",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsInkWorkspace",
+     "name": "AllowSuggestedAppsInWindowsInkWorkspace",
+     "type": "dword",
+     "num": 0
+    }
+   ],
+   "undo": [
+    {
+     "op": "delval",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsInkWorkspace",
+     "name": "AllowWindowsInkWorkspace"
+    },
+    {
+     "op": "delval",
+     "key": "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsInkWorkspace",
+     "name": "AllowSuggestedAppsInWindowsInkWorkspace"
+    }
+   ],
+   "bg": [
+    "Изключи работното място за писалка и предложенията му",
+    "Windows Ink Workspace (менюто за писалка) и приложенията, които предлага от Store, се изключват. За компютри без писалка."
+   ]
   }
  ],
  "groups": [
