@@ -155,7 +155,7 @@ func main() {
 	} else {
 		bringToFront(app.hwnd)
 	}
-	go bootGet()     // closing goes to the tray when the app starts with Windows
+	go bootGet() // closing goes to the tray when the app starts with Windows
 	if f := os.Getenv("XKI4O_CPUPROFILE"); f != "" {
 		profileCPU(f) // the tests: where the processor time goes
 	}
@@ -219,6 +219,9 @@ func main() {
 		"bgTameState":          bgTameState,
 		"startupDelay":         startupDelay,
 		"debloatInfo":          debloatInfo,
+		"checkRun":             checkRun,
+		"checkLast":            checkLast,
+		"checkFixService":      checkFixService,
 		"debloatState":         debloatState,
 		"debloatRun":           debloatRun,
 		"powerProfile":         powerProfile,

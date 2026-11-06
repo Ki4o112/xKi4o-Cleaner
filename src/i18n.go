@@ -145,6 +145,7 @@ var texts = map[string][2]string{ // [bg, en]
 	"log.twDone":       {"Готово, проверено след промяната", "Done, checked after the change"},
 	"log.twState":      {"Състояние сега: %s", "State now: %s"},
 	"log.explorer":     {"Рестартиране на Explorer", "Restarting Explorer"},
+	"log.ckSvc":        {"Проверка: услугата %s е върната", "Check: the %s service put back"},
 	"log.explorerFail": {"Explorer не се стартира отново сам", "Explorer did not start again by itself"},
 	"log.su.enable":    {"Включване при стартиране", "Turning on at startup"},
 	"log.su.disable":   {"Изключване при стартиране", "Turning off at startup"},
