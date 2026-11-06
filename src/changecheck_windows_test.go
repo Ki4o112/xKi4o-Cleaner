@@ -17,18 +17,19 @@ func TestChangeCheckRuns(t *testing.T) {
 	if underWine() {
 		t.Skip("Wine has no event logs")
 	}
+	buildTweaks()
 	start := time.Now()
 	var steps []string
 	r := changeCheck(func(i int, s string) { steps = append(steps, s) })
 	took := time.Since(start)
-	t.Logf("took %s, %d changes, %d findings", took, len(r.Changes), len(r.Findings))
+	t.Logf("took %s, %d changes, %d findings, steps (ms) %v", took, len(r.Changes), len(r.Findings), r.Steps)
 	for _, f := range r.Findings {
 		t.Logf("  %s %s %v x%d suspects=%v fix=%s %s", f.Sev, f.ID, f.Args, f.Count, f.Suspects, f.Fix, f.FixArg)
 	}
 	if len(steps) != ckSteps {
 		t.Errorf("steps %v", steps)
 	}
-	if took > 3*time.Minute {
+	if took > 45*time.Second {
 		t.Errorf("too slow: %s", took)
 	}
 	if _, err := json.Marshal(r); err != nil {
@@ -106,6 +107,7 @@ func TestCheckFindsDisabledService(t *testing.T) {
 // again: told as changed back, with the button that applies it again.
 func TestCheckFindsDrift(t *testing.T) {
 	changesThisPC(t)
+	buildTweaks()
 	const id = "menu-delay"
 	res := setTweak(id, true, tweakOpts{})
 	if !res.OK {

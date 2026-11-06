@@ -2560,6 +2560,40 @@ body.ui-easy .nav .nav-g { display: none !important; }
 .set-find .search { flex: 0 1 420px; margin: 0; }
 .set-none { color: var(--faint); font-size: 13px; }
 .set-hit { box-shadow: inset 3px 0 0 var(--blue); }
+
+/* ================= 4.21: Check — are the changes working? ================= */
+.ck-hero { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 22px; align-items: center; padding: 22px 24px; margin-bottom: 18px; }
+.ck-ring { position: relative; width: 84px; height: 84px; display: grid; place-items: center; }
+.ck-ring svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.ck-ring b { font-size: 26px; font-weight: 800; position: relative; }
+.ck-ring.ok b { color: var(--mint); } .ck-ring.warn b { color: var(--amber); } .ck-ring.bad b { color: var(--red); }
+.ck-hero .t { font-size: 19px; font-weight: 750; letter-spacing: -.01em; }
+.ck-hero .d { color: var(--muted); font-size: 13px; margin-top: 4px; line-height: 1.45; }
+.ck-hero .progress { margin-top: 12px; max-width: 460px; }
+.ck-sec { display: flex; align-items: center; gap: 10px; margin: 22px 2px 10px; font-weight: 700; font-size: 13.5px; color: var(--muted); }
+.ck-sec .n { color: var(--faint); font-weight: 600; }
+.ck-card { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 14px; align-items: start; padding: 16px 18px; border-radius: 18px; background: var(--card); border: 1px solid var(--line-soft); margin-bottom: 10px; }
+.ck-card .ic { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; }
+.ck-card .ic svg { width: 17px; height: 17px; }
+.ck-card.bad .ic { background: var(--red-soft); color: #ffb3bc; } .ck-card.bad { border-color: rgba(255, 99, 120, .28); }
+.ck-card.warn .ic { background: rgba(255, 191, 71, .14); color: var(--amber); }
+.ck-card.info .ic { background: rgba(var(--blue-rgb), .12); color: var(--blue-2); }
+.ck-card .t { font-weight: 700; font-size: 14px; }
+.ck-card .d { color: var(--muted); font-size: 12.5px; margin-top: 3px; line-height: 1.45; }
+.ck-card .acts { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.ck-sus { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.ck-sus .h { font-size: 11.5px; color: var(--faint); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.ck-chip { display: flex; align-items: center; gap: 10px; padding: 7px 8px 7px 12px; border-radius: 12px; background: var(--card-2); font-size: 12.5px; }
+.ck-chip .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.ck-chip .when { color: var(--faint); font-size: 11.5px; white-space: nowrap; }
+.ck-ok { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
+.ck-ok > div { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 14px; background: var(--card); font-size: 13px; }
+.ck-ok > div svg { width: 15px; height: 15px; color: var(--mint); flex: none; }
+.ck-ch { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; align-items: center; padding: 10px 14px; border-radius: 14px; background: var(--card); margin-bottom: 6px; font-size: 13px; }
+.ck-ch .k { font-size: 11px; color: var(--faint); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-right: 8px; }
+.ck-ch .when { color: var(--faint); font-size: 12px; white-space: nowrap; }
+.ck-empty { color: var(--muted); padding: 18px 4px; font-size: 13px; }
+@media (max-width: 1080px) { .ck-hero { grid-template-columns: auto minmax(0, 1fr); } .ck-hero .ck-go { grid-column: 1 / -1; } }
 </style>
 </head>
 <body class="booting">
@@ -2636,6 +2670,7 @@ body.ui-easy .nav .nav-g { display: none !important; }
       <button data-page="startup"><span class="ico" data-icon="rocket"></span><span class="label" data-i="nav.startup"></span><span class="badge err" id="suBadge" hidden></span></button>
       <button data-page="tweaks"><span class="ico" data-icon="tweaks"></span><span class="label" data-i="nav.tweaks"></span><span class="badge" id="twBadge" hidden></span></button>
       <button data-page="debloat"><span class="ico" data-icon="broom"></span><span class="label" data-i="nav.debloat"></span></button>
+      <button data-page="check"><span class="ico" data-icon="shieldok"></span><span class="label" data-i="nav.check"></span><span class="badge" id="ckBadge" hidden></span></button>
       <div class="nav-g" data-g="pc" role="button" tabindex="0"><span data-i="nav.g.pc"></span></div>
       <button data-page="sysinfo"><span class="ico" data-icon="board"></span><span class="label" data-i="nav.sysinfo"></span></button>
       <button data-page="gpu"><span class="ico" data-icon="gpu"></span><span class="label" data-i="nav.gpu"></span><span class="badge" id="gpBadge" hidden></span></button>
@@ -3323,6 +3358,17 @@ body.ui-easy .nav .nav-g { display: none !important; }
     </section>
 
     <!-- =============== RESTORE CENTER =============== -->
+    <section class="page" id="page-check">
+      <div class="head">
+        <div class="head-ico" data-icon="shieldok"></div>
+        <div><h1 data-i="ck.title"></h1><div class="sub" data-i="ck.sub"></div></div>
+      </div>
+      <div class="tw-body" id="ckBody">
+        <div class="ck-hero panel" id="ckHero"></div>
+        <div id="ckList"></div>
+      </div>
+    </section>
+
     <section class="page" id="page-restore">
       <div class="head">
         <div class="head-ico" data-icon="lifebuoy"></div>
@@ -3845,6 +3891,42 @@ bg: {
   "set.startTrayD": "Програмата се отваря само като иконка долу до часовника — без целия прозорец, и при старт на Windows, и когато я пуснеш сам. Отваря се с клик на иконката.",
   "set.startTrayOn": "Следващия път програмата ще тръгне в трея",
   "set.startTrayOff": "Програмата ще се отваря на цял прозорец (при старт на Windows пак тръгва в трея)",
+  "nav.check": "Проверка", "ck.title": "Проверка на промените", "ck.sub": "Работят ли туийковете и Debloat както трябва — сривове, забивания и услуги след промените",
+  "ck.go": "Провери сега", "ck.again": "Провери отново", "ck.running": "Проверявам…", "ck.never": "Още не е проверявано",
+  "ck.s.changes": "Промените от програмата", "ck.s.services": "Услугите, които Windows използва", "ck.s.events": "Сривове, забивания и сини екрани", "ck.s.windows": "Работния плот, защитата и обновленията", "ck.s.network": "Интернета", "ck.s.pc": "Паметта, мястото и точката за възстановяване",
+  "ck.allOk": "Всичко работи нормално", "ck.allOkD": "Няма проблеми от промените. Провери пак след голямо обновление на Windows или ако нещо започне да засича.",
+  "ck.some": "{0} неща искат внимание", "ck.one": "1 нещо иска внимание", "ck.bad": "{0} проблема", "ck.when": "Проверено {0} · за {1}",
+  "ck.noChanges": "От тази програма още няма включени туийкове или Debloat промени — проверено е само здравето на Windows.",
+  "ck.problems": "Какво да погледнеш", "ck.passed": "Наред", "ck.changes": "Твоите промени", "ck.earlier": "по-рано",
+  "ck.k.tweak": "Туийк", "ck.k.debloat": "Debloat", "ck.suspects": "Може би от", "ck.undo": "Върни", "ck.undone": "Върнато: {0}", "ck.undoFail": "Не стана: {0}",
+  "ck.f.reapply": "Приложи отново", "ck.f.svc": "Включи я отново", "ck.f.explorer": "Пусни Explorer", "ck.f.page": "Отвори", "ck.fixed": "Поправено — проверявам пак…",
+  "ck.tw-drift.t": "„{0}“ е върнато обратно", "ck.tw-drift.d": "Нещо (често обновление на Windows) го е изключило. В момента не действа.",
+  "ck.tw-failed.t": "„{0}“ не се приложи", "ck.tw-failed.d": "Последната промяна не стана: {1}",
+  "ck.tw-reboot.t": "„{0}“ чака рестарт", "ck.tw-reboot.d": "Рестартирай компютъра, за да влезе в сила.",
+  "ck.db-drift.t": "„{0}“ е върнато обратно", "ck.db-drift.d": "Windows е върнал настройката (често след голямо обновление).",
+  "ck.svc-off.t": "Услугата {0} е изключена", "ck.svc-stopped.t": "Услугата {0} не работи", "ck.svc-stopped.d": "Трябва да работи постоянно — може да е спряла със срив.",
+  "ck.area.core": "Windows има нужда от нея — без нея програми и работният плот може да не работят.", "ck.area.net": "Без нея интернетът може да спре.", "ck.area.security": "Без нея защитната стена или защитата не работят.", "ck.area.audio": "Без нея няма звук.", "ck.area.update": "Без нея обновленията на Windows и драйверите не стават.", "ck.area.store": "Без нея Microsoft Store и инсталирането на приложения не работят.", "ck.area.start": "Без нея менюто „Старт“, търсенето или писането може да се чупят.", "ck.area.install": "Без нея програмите (.msi) не могат да се инсталират и махат.", "ck.area.time": "Часовникът не се сверява.", "ck.area.search": "Търсенето в „Старт“ и Explorer е бавно или празно.", "ck.area.look": "Видът на Windows става стар и обикновен.", "ck.area.print": "Печатането не работи.",
+  "ck.ev-crash.t": "{0} се срина {1} пъти след промените", "ck.ev-hang.t": "{0} заби {1} пъти след промените", "ck.ev-svc.t": "Услугата „{0}“ спря {1} пъти след промените",
+  "ck.ev-bsod.t": "{1} сини екрана след промените", "ck.ev-power.t": "Компютърът изгасна внезапно {1} пъти след промените", "ck.ev-gpu.t": "Драйверът на видеокартата спря {1} пъти след промените",
+  "ck.ev.d": "Преди промените: {0} пъти за толкова дни. Започнало е на {1}.", "ck.ev-power.d2": "Забиване, което иска бутона за захранване, или спиране на тока.", "ck.ev-gpu.d2": "Екранът за миг става черен — Windows рестартира драйвера.",
+  "ck.ev-crash-old.t": "{0} се срина {1} пъти за 7 дни", "ck.ev-hang-old.t": "{0} заби {1} пъти за 7 дни", "ck.ev-svc-old.t": "Услугата „{0}“ спря {1} пъти за 7 дни", "ck.ev-bsod-old.t": "{1} сини екрана за 7 дни", "ck.ev-power-old.t": "Компютърът изгасна внезапно {1} пъти за 7 дни", "ck.ev-gpu-old.t": "Драйверът на видеокартата спря {1} пъти за 7 дни",
+  "ck.old.d": "Случвало се е и преди промените — не идва от тях.",
+  "ck.shell-down.t": "Работният плот (Explorer) не работи", "ck.shell-down.d": "Лентата на задачите и „Старт“ липсват.",
+  "ck.av-off.t": "Нищо не пази компютъра от вируси", "ck.av-off.d": "Нито Windows Defender, нито друг антивирус работи.",
+  "ck.av-rt-off.t": "Защитата в реално време е изключена", "ck.av-rt-off.d": "Defender не проверява файловете, докато ги отваряш.",
+  "ck.av-old.t": "Дефинициите за вируси са на {0} дни", "ck.av-old.d": "Обикновено се обновяват всеки ден. Провери обновленията на Windows.",
+  "ck.wu-blocked.t": "Правило спира Windows Update", "ck.wu-blocked.d": "Зададено е {0}: обновленията и поправките за сигурност не идват.",
+  "ck.hosts-block.t": "Файлът hosts блокира сървърите за обновления", "ck.hosts-block.d": "Блокирани: {0}. Обновленията и Store може да не работят.",
+  "ck.insider-telemetry.t": "Insider версиите искат диагностични данни", "ck.insider-telemetry.d": "С изключена телеметрия Windows Insider не получава нови версии.",
+  "ck.xbox-games.t": "Игрите от Game Pass искат приложението Xbox", "ck.xbox-games.d": "На компютъра има Xbox игри — без приложението Xbox и Gaming Services може да не тръгват.",
+  "ck.print-off.t": "Печатането е изключено", "ck.print-off.d": "Има инсталирани принтери, но услугата за печат е изключена.",
+  "ck.reboot-pending.t": "Windows чака рестарт", "ck.reboot-pending.d": "Обновление или промяна се довършва чак след рестарт.",
+  "ck.net-dns.t": "Адресите в интернет не се откриват (DNS)", "ck.net-dns.d": "Има връзка, но имената на сайтовете не се превеждат.",
+  "ck.net-offline.t": "Няма интернет", "ck.net-offline.d": "Проверките на мрежата са пропуснати.",
+  "ck.pagefile-off.t": "Няма файл за виртуална памет", "ck.pagefile-off.d": "С {0} GB памет игри и големи програми може да се сриват, когато тя свърши.",
+  "ck.low-space.t": "Малко място на системния диск ({0} свободни)", "ck.low-space.d": "Обновленията на Windows и програмите може да не работят.",
+  "ck.no-rp.t": "Няма скорошна точка за възстановяване", "ck.no-rp.d": "Направи една, за да можеш да се върнеш, ако нещо се обърка.",
+  "ck.ok-changes.t": "Твоите {0} промени са на място", "ck.ok-services.t": "Услугите, които Windows използва, работят", "ck.ok-events.t": "Няма сривове, забивания и сини екрани заради промените", "ck.ok-shell.t": "Работният плот работи", "ck.ok-av.t": "Компютърът е защитен", "ck.ok-updates.t": "Нищо не спира Windows Update", "ck.ok-net.t": "Интернетът работи", "ck.ok-pagefile.t": "Файлът за виртуална памет е включен", "ck.ok-space.t": "Достатъчно място на системния диск ({0})", "ck.ok-rp.t": "Има скорошна точка за възстановяване",
   "nav.debloat": "Debloat", "db.title": "Debloat", "db.sub": "Всичко от Win11Debloat — махни рекламите, следенето, AI и излишните приложения на Windows",
   "db.refresh": "Провери отново", "db.search": "Търси настройка или приложение…", "db.onlyInstalled": "Само инсталираните",
   "db.loading": "Проверявам Windows…", "db.heroT": "Приложени {0} от {1} промени", "db.heroD": "Инсталирани приложения, които могат да се махнат: {0}",
@@ -5089,6 +5171,42 @@ en: {
   "set.startTrayD": "The app opens only as an icon by the clock — without the whole window, both when Windows starts and when you start it yourself. Click the icon to open it.",
   "set.startTrayOn": "Next time the app starts in the tray",
   "set.startTrayOff": "The app opens in its full window (with Windows it still starts in the tray)",
+  "nav.check": "Check", "ck.title": "Check the changes", "ck.sub": "Are the tweaks and Debloat working as they should — crashes, freezes and services after the changes",
+  "ck.go": "Check now", "ck.again": "Check again", "ck.running": "Checking…", "ck.never": "Not checked yet",
+  "ck.s.changes": "The changes made from the app", "ck.s.services": "The services Windows uses", "ck.s.events": "Crashes, freezes and blue screens", "ck.s.windows": "The desktop, protection and updates", "ck.s.network": "The internet", "ck.s.pc": "Memory, space and the restore point",
+  "ck.allOk": "Everything works normally", "ck.allOkD": "No problems from the changes. Check again after a big Windows update, or when something starts to stutter.",
+  "ck.some": "{0} things need a look", "ck.one": "1 thing needs a look", "ck.bad": "{0} problems", "ck.when": "Checked {0} · took {1}",
+  "ck.noChanges": "No tweaks or Debloat changes from this app yet — only Windows' health was checked.",
+  "ck.problems": "What to look at", "ck.passed": "Fine", "ck.changes": "Your changes", "ck.earlier": "earlier",
+  "ck.k.tweak": "Tweak", "ck.k.debloat": "Debloat", "ck.suspects": "Maybe from", "ck.undo": "Undo", "ck.undone": "Undone: {0}", "ck.undoFail": "Did not work: {0}",
+  "ck.f.reapply": "Apply again", "ck.f.svc": "Turn it back on", "ck.f.explorer": "Start Explorer", "ck.f.page": "Open", "ck.fixed": "Fixed — checking again…",
+  "ck.tw-drift.t": "“{0}” was changed back", "ck.tw-drift.d": "Something (often a Windows update) turned it off again. It is not working right now.",
+  "ck.tw-failed.t": "“{0}” did not apply", "ck.tw-failed.d": "The last change failed: {1}",
+  "ck.tw-reboot.t": "“{0}” waits for a restart", "ck.tw-reboot.d": "Restart the PC to finish it.",
+  "ck.db-drift.t": "“{0}” was changed back", "ck.db-drift.d": "Windows put the setting back (often after a big update).",
+  "ck.svc-off.t": "The {0} service is turned off", "ck.svc-stopped.t": "The {0} service is not running", "ck.svc-stopped.d": "It should run all the time — it may have crashed.",
+  "ck.area.core": "Windows needs it — without it programs and the desktop can fail.", "ck.area.net": "Without it the internet can stop.", "ck.area.security": "Without it the firewall or protection does not work.", "ck.area.audio": "Without it there is no sound.", "ck.area.update": "Windows and driver updates fail without it.", "ck.area.store": "The Microsoft Store and app installs fail without it.", "ck.area.start": "Start, search or typing can break without it.", "ck.area.install": "Programs (.msi) cannot be installed or removed.", "ck.area.time": "The clock is not synced.", "ck.area.search": "Search in Start and Explorer is slow or empty.", "ck.area.look": "Windows falls back to a plain look.", "ck.area.print": "Printing does not work.",
+  "ck.ev-crash.t": "{0} crashed {1} times since the changes", "ck.ev-hang.t": "{0} froze {1} times since the changes", "ck.ev-svc.t": "The “{0}” service stopped {1} times since the changes",
+  "ck.ev-bsod.t": "{1} blue screens since the changes", "ck.ev-power.t": "The PC shut down suddenly {1} times since the changes", "ck.ev-gpu.t": "The graphics driver stopped {1} times since the changes",
+  "ck.ev.d": "Before the changes: {0} times in as many days. It began on {1}.", "ck.ev-power.d2": "A freeze that needs the power button, or a power cut.", "ck.ev-gpu.d2": "The screen goes black for a moment — Windows restarts the driver.",
+  "ck.ev-crash-old.t": "{0} crashed {1} times in 7 days", "ck.ev-hang-old.t": "{0} froze {1} times in 7 days", "ck.ev-svc-old.t": "The “{0}” service stopped {1} times in 7 days", "ck.ev-bsod-old.t": "{1} blue screens in 7 days", "ck.ev-power-old.t": "The PC shut down suddenly {1} times in 7 days", "ck.ev-gpu-old.t": "The graphics driver stopped {1} times in 7 days",
+  "ck.old.d": "It happened before the changes too — they are not the cause.",
+  "ck.shell-down.t": "The desktop (Explorer) is not running", "ck.shell-down.d": "The taskbar and Start are gone.",
+  "ck.av-off.t": "Nothing protects the PC from viruses", "ck.av-off.d": "Neither Windows Defender nor another antivirus is running.",
+  "ck.av-rt-off.t": "Real-time protection is off", "ck.av-rt-off.d": "Defender does not check files as you open them.",
+  "ck.av-old.t": "The virus definitions are {0} days old", "ck.av-old.d": "They are usually updated every day. Check Windows updates.",
+  "ck.wu-blocked.t": "A policy stops Windows Update", "ck.wu-blocked.d": "{0} is set: updates and security fixes do not come.",
+  "ck.hosts-block.t": "The hosts file blocks the update servers", "ck.hosts-block.d": "Blocked: {0}. Updates and the Store may not work.",
+  "ck.insider-telemetry.t": "Insider builds need diagnostic data", "ck.insider-telemetry.d": "With telemetry off, Windows Insider gets no new builds.",
+  "ck.xbox-games.t": "Game Pass games need the Xbox app", "ck.xbox-games.d": "There are Xbox games on this PC — without the Xbox app and Gaming Services they may not start.",
+  "ck.print-off.t": "Printing is turned off", "ck.print-off.d": "There are printers on this PC, but the print service is off.",
+  "ck.reboot-pending.t": "Windows waits for a restart", "ck.reboot-pending.d": "An update or a change is finished only after a restart.",
+  "ck.net-dns.t": "Internet addresses are not found (DNS)", "ck.net-dns.d": "There is a connection, but site names do not resolve.",
+  "ck.net-offline.t": "No internet", "ck.net-offline.d": "The network checks were skipped.",
+  "ck.pagefile-off.t": "There is no page file", "ck.pagefile-off.d": "With {0} GB of memory, games and big programs can crash when it runs out.",
+  "ck.low-space.t": "Little space on the system drive ({0} free)", "ck.low-space.d": "Windows updates and programs can fail.",
+  "ck.no-rp.t": "No recent restore point", "ck.no-rp.d": "Make one, so you can go back if something goes wrong.",
+  "ck.ok-changes.t": "Your {0} changes are in place", "ck.ok-services.t": "The services Windows uses are running", "ck.ok-events.t": "No crashes, freezes or blue screens from the changes", "ck.ok-shell.t": "The desktop runs", "ck.ok-av.t": "The PC is protected", "ck.ok-updates.t": "Nothing blocks Windows Update", "ck.ok-net.t": "The internet works", "ck.ok-pagefile.t": "The page file is on", "ck.ok-space.t": "Enough space on the system drive ({0})", "ck.ok-rp.t": "There is a recent restore point",
   "nav.debloat": "Debloat", "db.title": "Debloat", "db.sub": "Everything from Win11Debloat — remove Windows' ads, tracking, AI and unneeded apps",
   "db.refresh": "Check again", "db.search": "Search a setting or an app…", "db.onlyInstalled": "Installed only",
   "db.loading": "Checking Windows…", "db.heroT": "{0} of {1} changes applied", "db.heroD": "Installed apps that can be removed: {0}",
@@ -5993,6 +6111,7 @@ const ICONS = {
   report: P('<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 17.5v-3M13 17.5v-5.5M16 17.5v-2"/>'),
   gauge: P('<path d="M4.5 17a8.5 8.5 0 1 1 15 0"/><path d="M12 13l4-4.5"/><circle cx="12" cy="13" r="1.4"/>'),
   merge: P('<path d="M6 3v5a4 4 0 0 0 4 4h8"/><path d="M6 21v-5a4 4 0 0 1 4-4"/><path d="M15 9l3 3-3 3"/>'),
+  shieldok: P('<path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M8.8 12.2l2.2 2.2 4.3-4.6"/>'),
   shieldq: P('<path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M12 10v.01M12 13v3"/>'),
   all: P('<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>'),
   system: P('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>'),
@@ -6346,8 +6465,11 @@ function makeSeg(el, options, value, onChange) {
    Backend bridge (Go functions in the app, a mock in a normal browser)
 ===================================================================== */
 const handlers = {};
-window.__ev = (type, data) => { const h = handlers[type]; if (h) h(data); };
+// on: the one handler of an event; listen: more, for a while (returns its end)
+const listeners = {};
+window.__ev = (type, data) => { const h = handlers[type]; if (h) h(data); (listeners[type] || []).slice().forEach(f => f(data)); };
 const on = (tp, f) => { handlers[tp] = f; };
+const listen = (tp, f) => { (listeners[tp] = listeners[tp] || []).push(f); return () => { listeners[tp] = (listeners[tp] || []).filter(x => x !== f); }; };
 
 /* The window's own title bar: drag to move, double-click to maximize, and
    the buttons (to the tray, minimize, maximize, close). */
@@ -6611,6 +6733,7 @@ function go(page, opt) {
   if (page === "memory") { paintMem(); renderMemUsers(); pollMemUsers(); requestAnimationFrame(() => { $("#segThr")._place(); $("#segInt")._place(); }); }
   if (page === "settings") requestAnimationFrame(() => { $("#segLang")._place(); $("#segTheme")._place && $("#segTheme")._place(); });
   if (page === "clean") requestAnimationFrame(() => $("#segSort")._place && $("#segSort")._place());
+  if (page === "check") loadCheck();
   if (page === "debloat") { setupDbTabs(); loadDebloat(false); requestAnimationFrame(() => $("#dbTabs")._place && $("#dbTabs")._place()); }
   if (page === "tweaks") { loadTweaks(); requestAnimationFrame(() => $("#twFilter")._place && $("#twFilter")._place()); }
   if (page === "startup") { loadStartup(); loadBoot(); }
@@ -8210,6 +8333,167 @@ on("debloat", d => {
   else toast(t("db.partly", d.total - fails.length, d.total) + " " + fails.slice(0, 2).map(f => { const x = dbF(f.id); const a = DB.info.apps.find(y => y.ids[0] === f.id); return (x ? dbLabel(x) : a ? dbAppName(a) : f.id) + ": " + f.error; }).join(" · "), "alert", "warn");
   loadDebloat(true);
 });
+/* =====================================================================
+   CHECK: are the tweaks and Debloat changes working, has anything broken?
+===================================================================== */
+const CK = { rep: null, run: null, loaded: false, busyFix: "" };
+const ckName = r => r.kind === "debloat" ? ((dbF(r.id) && dbLabel(dbF(r.id))) || r.id) : t("tw." + r.id + ".n");
+function ckWhen(at) { return at ? fmtDateTime(at * 1000) : t("ck.earlier"); }
+async function loadCheck() {
+  if (!CK.loaded) {
+    CK.loaded = true;
+    try { if (!DB.info) DB.info = await api.debloatInfo(); } catch (e) {}
+    try { CK.rep = await api.checkLast(); } catch (e) {}
+  }
+  renderCheck();
+  // a first look, or the last one is old: check now
+  if (!CK.run && (!CK.rep || Date.now() / 1000 - CK.rep.at > 3600)) checkStart();
+}
+function checkStart() {
+  if (CK.run) return;
+  CK.run = { step: 0, total: 6, text: "changes" };
+  renderCheck();
+  api.checkRun().then(ok => { if (!ok && CK.run && !CK.run.text) { CK.run = null; renderCheck(); } }).catch(() => { CK.run = null; renderCheck(); });
+}
+on("check", d => {
+  if (!d) return;
+  if (d.state === "step") { CK.run = { step: d.step, total: d.total, text: d.text }; if (S.page === "check") renderCheck(); return; }
+  CK.run = null; CK.rep = d.report || null;
+  paintCkBadge();
+  if (S.page === "check") renderCheck();
+});
+function ckProblems() { return ((CK.rep && CK.rep.findings) || []).filter(f => f.sev !== "ok"); }
+function paintCkBadge() {
+  const b = $("#ckBadge"); if (!b) return;
+  const ps = ckProblems().filter(f => f.sev === "bad" || f.sev === "warn");
+  b.hidden = !ps.length; b.textContent = ps.length; b.classList.toggle("err", ps.some(f => f.sev === "bad"));
+  if (typeof navApplyGroups === "function") navApplyGroups();
+}
+function ckTexts(f) {
+  const a = (f.args || []).slice();
+  if (f.id === "tw-drift" || f.id === "tw-failed" || f.id === "tw-reboot") a[0] = t("tw." + a[0] + ".n");
+  if (f.id === "db-drift") a[0] = ckName({ kind: "debloat", id: a[0] });
+  if (f.id === "hosts-block") a[0] = (f.args || []).slice(0, 4).join(", ") + ((f.args || []).length > 4 ? "…" : "");
+  const id = f.id;
+  let title, desc = "";
+  if (id.startsWith("ev-")) {
+    title = t("ck." + id + ".t", a[0] || "", f.count);
+    if (id.endsWith("-old")) desc = t("ck.old.d");
+    else desc = t("ck.ev.d", f.before || 0, ckWhen(f.first));
+    if (id.startsWith("ev-power")) desc = t("ck.ev-power.d2") + " " + desc;
+    if (id.startsWith("ev-gpu")) desc = t("ck.ev-gpu.d2") + " " + desc;
+  } else if (id === "svc-off") {
+    title = t("ck.svc-off.t", a[0]); desc = t("ck.area." + (a[1] || "core"));
+  } else if (id === "svc-stopped") {
+    title = t("ck.svc-stopped.t", a[0]); desc = t("ck.svc-stopped.d") + " " + t("ck.area." + (a[1] || "core"));
+  } else if (id.startsWith("ok-")) {
+    title = t("ck." + id + ".t", id === "ok-changes" ? f.count : a[0] || "");
+  } else {
+    title = t("ck." + id + ".t", ...a); desc = t("ck." + id + ".d", ...a);
+  }
+  return { title, desc };
+}
+function ckFixBtn(f, i) {
+  const busy = CK.busyFix ? "disabled" : "";
+  const lbl = { "reapply": "ck.f.reapply", "reapply-db": "ck.f.reapply", "svc": "ck.f.svc", "explorer": "ck.f.explorer", "page": "ck.f.page" }[f.fix];
+  if (!lbl) return "";
+  return `<button class="btn small ${f.fix === "page" ? "" : "primary"}" data-ckfix="${i}" ${busy}>${esc(t(lbl))}</button>`;
+}
+function renderCheck() {
+  const hero = $("#ckHero"), list = $("#ckList"); if (!hero) return;
+  const r = CK.rep, run = CK.run;
+  const ps = ckProblems(), bad = ps.filter(f => f.sev === "bad").length, warn = ps.filter(f => f.sev === "warn").length;
+  const lvl = !r ? "" : bad ? "bad" : warn ? "warn" : "ok";
+  const ringC = 2 * Math.PI * 36, frac = !r ? 0 : lvl === "ok" ? 1 : lvl === "warn" ? .62 : .3;
+  const col = { ok: "var(--mint)", warn: "var(--amber)", bad: "var(--red)" }[lvl] || "var(--line-hi)";
+  const n = bad + warn;
+  let tl, dl;
+  if (run) { tl = t("ck.running"); dl = t("ck.s." + run.text); }
+  else if (!r) { tl = t("ck.never"); dl = ""; }
+  else {
+    tl = n === 0 ? t("ck.allOk") : n === 1 ? t("ck.one") : t("ck.some", n);
+    dl = (n === 0 ? t("ck.allOkD") + " " : "") + t("ck.when", ago(r.at * 1000), secs(Math.max(1, (r.took || 0) / 1000)));
+    if (!(r.changes || []).length) dl += " " + t("ck.noChanges");
+  }
+  const pct = run ? Math.round((run.step + .5) / (run.total || 6) * 100) : 0;
+  hero.innerHTML = `<div class="ck-ring ${lvl}"><svg width="84" height="84" viewBox="0 0 84 84"><circle cx="42" cy="42" r="36" fill="none" stroke="var(--well)" stroke-width="8"/><circle cx="42" cy="42" r="36" fill="none" stroke="${col}" stroke-width="8" stroke-linecap="round" stroke-dasharray="${ringC}" stroke-dashoffset="${ringC * (1 - frac)}" style="transition:stroke-dashoffset .8s var(--expo)"/></svg><b>${run ? '<span class="spin"></span>' : r ? (n || ICONS.check) : "—"}</b></div>
+    <div><div class="t">${esc(tl)}</div><div class="d">${esc(dl)}</div>${run ? `<div class="progress"><i style="width:${pct}%"></i></div>` : ""}</div>
+    <div class="ck-go"><button class="btn primary" id="ckGo" ${run ? "disabled" : ""}>${ICONS.shieldok}<span>${esc(t(r ? "ck.again" : "ck.go"))}</span></button></div>`;
+  $("#ckGo").addEventListener("click", checkStart);
+  if (!r) { list.innerHTML = run ? "" : `<div class="ck-empty">${esc(t("ck.noChanges"))}</div>`; return; }
+  let html = "";
+  const fs = r.findings || [];
+  if (ps.length) {
+    html += `<div class="ck-sec">${esc(t("ck.problems"))} <span class="n">${ps.length}</span></div>`;
+    html += ps.map(f => {
+      const i = fs.indexOf(f), x = ckTexts(f);
+      const ic = f.sev === "bad" ? ICONS.alert : f.sev === "warn" ? ICONS.alert : ICONS.info || ICONS.alert;
+      const sus = (f.suspects || []).length ? `<div class="ck-sus"><div class="h">${esc(t("ck.suspects"))}</div>${f.suspects.map(s => `<div class="ck-chip"><span class="nm">${esc(ckName(s))}</span><span class="when">${esc(ckWhen(s.at))}</span><button class="btn small" data-ckundo="${esc(s.kind + ":" + s.id)}" ${CK.busyFix ? "disabled" : ""}>${ICONS.undo || ""}<span>${esc(t("ck.undo"))}</span></button></div>`).join("")}</div>` : "";
+      return `<div class="ck-card ${f.sev}"><div class="ic">${ic}</div><div><div class="t">${esc(x.title)}</div>${x.desc ? `<div class="d">${esc(x.desc)}</div>` : ""}${sus}</div><div class="acts">${ckFixBtn(f, i)}</div></div>`;
+    }).join("");
+  }
+  const oks = fs.filter(f => f.sev === "ok");
+  if (oks.length) {
+    html += `<div class="ck-sec">${esc(t("ck.passed"))} <span class="n">${oks.length}</span></div><div class="ck-ok">${oks.map(f => `<div>${ICONS.check}<span>${esc(ckTexts(f).title)}</span></div>`).join("")}</div>`;
+  }
+  const ch = (r.changes || []).slice().sort((a, b) => (b.at || 0) - (a.at || 0));
+  if (ch.length) {
+    html += `<div class="ck-sec">${esc(t("ck.changes"))} <span class="n">${ch.length}</span></div>`;
+    html += ch.map(c => `<div class="ck-ch"><div><span class="k">${esc(t("ck.k." + c.kind))}</span>${esc(ckName(c))}</div><span class="when">${esc(ckWhen(c.at))}</span><button class="btn small ghost" data-ckundo="${esc(c.kind + ":" + c.id)}" ${CK.busyFix ? "disabled" : ""}>${esc(t("ck.undo"))}</button></div>`).join("");
+  }
+  list.innerHTML = html;
+  list.querySelectorAll("[data-ckfix]").forEach(b => b.addEventListener("click", () => ckFix(fs[+b.dataset.ckfix])));
+  list.querySelectorAll("[data-ckundo]").forEach(b => b.addEventListener("click", () => { const [k, ...rest] = b.dataset.ckundo.split(":"); ckUndo(k, rest.join(":")); }));
+}
+// a Debloat change made or taken back from here: wait for its end
+function ckDebloat(o) {
+  return new Promise(res => {
+    const off = listen("debloat", d => { if (d && d.state !== "run") { off(); res(!(d.failed || []).length); } });
+    api.debloatRun(Object.assign({ apply: [], undo: [], apps: [], restorePoint: false }, o)).then(ok => { if (!ok) { off(); res(false); } }).catch(() => { off(); res(false); });
+  });
+}
+async function ckUndo(kind, id) {
+  if (CK.busyFix) return;
+  CK.busyFix = kind + ":" + id; renderCheck();
+  const name = ckName({ kind, id });
+  let ok = false, err = "";
+  try {
+    if (kind === "tweak") {
+      let res = await api.setTweak(id, false, { restorePoint: false, apps: [], useDefaults: false, source: "check" });
+      if (res && res.noBackup) res = await api.setTweak(id, false, { restorePoint: false, apps: [], useDefaults: true, source: "check" });
+      ok = !!(res && res.ok); err = (res && res.error) || "";
+      if (ok && res.explorer) { try { await api.restartExplorer(); } catch (e) {} }
+    } else {
+      ok = await ckDebloat({ undo: [id] });
+    }
+  } catch (e) { err = String(e && e.message || e); }
+  CK.busyFix = "";
+  toast(ok ? t("ck.undone", name) : t("ck.undoFail", err || name), ok ? "undo" : "alert", ok ? "" : "warn");
+  TW.loaded = false; // the Tweaker reads the states again when opened
+  checkStart();
+}
+async function ckFix(f) {
+  if (!f || CK.busyFix) return;
+  if (f.fix === "page") { go(f.fixArg); return; }
+  CK.busyFix = f.id; renderCheck();
+  let ok = false;
+  try {
+    if (f.fix === "reapply") { const res = await api.setTweak(f.fixArg, true, { restorePoint: false, apps: [], useDefaults: false, source: "check" }); ok = !!(res && res.ok); if (ok && res.explorer) { try { await api.restartExplorer(); } catch (e) {} } }
+    else if (f.fix === "reapply-db") ok = await ckDebloat({ apply: [f.fixArg] });
+    else if (f.fix === "svc") { const res = await api.checkFixService(f.fixArg); ok = !!(res && res.ok); }
+    else if (f.fix === "explorer") ok = await api.restartExplorer();
+  } catch (e) {}
+  CK.busyFix = "";
+  toast(ok ? t("ck.fixed") : t("ck.undoFail", ckTexts(f).title), ok ? "check" : "alert", ok ? "" : "warn");
+  checkStart();
+}
+// once a day, a quiet check in the background (when the window has been
+// opened): the menu shows when something needs a look
+whenShown(20 * 60e3, () => setTimeout(async () => {
+  try { if (!CK.rep) CK.rep = await api.checkLast(); } catch (e) {}
+  paintCkBadge();
+  if (!CK.run && (!CK.rep || Date.now() / 1000 - CK.rep.at > 86400)) { try { if (!DB.info) DB.info = await api.debloatInfo(); } catch (e) {} checkStart(); }
+}, 120e3));
 function setupDbTabs() {
   makeSeg($("#dbTabs"), [{ v: "set", label: t("db.t.set") }, { v: "apps", label: t("db.t.apps") }], DB.tab, v => { DB.tab = v; renderDebloat(); });
 }
@@ -10800,7 +11084,7 @@ function setupSwatches() {
 }
 
 /* Keyboard shortcuts */
-const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "debloat", "sysinfo", "gpu", "wupd", "bench", "optimize", "network", "nmerge", "repair", "restore", "ext", "pass", "av", "bsod", "recover", "logs", "settings", "credits"];
+const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "debloat", "check", "sysinfo", "gpu", "wupd", "bench", "optimize", "network", "nmerge", "repair", "restore", "ext", "pass", "av", "bsod", "recover", "logs", "settings", "credits"];
 document.addEventListener("keydown", e => {
   if ($("#veil").classList.contains("on") || $("#sveil").classList.contains("on")) return;
   if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K" || e.key === "p" || e.key === "P")) { e.preventDefault(); if ($("#palVeil").classList.contains("on")) palClose(); else palOpen(); return; }
@@ -12189,8 +12473,8 @@ on("auto-clean", d => {
    Command palette (Ctrl+K): every section, action, tweak and category
 ===================================================================== */
 const PAL = { items: [], idx: 0 };
-const PAGE_ICON = { home: "heart", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", sysinfo: "board", gpu: "gpu", wupd: "wupd", network: "network", nmerge: "merge", bench: "bench", ext: "puzzle", pass: "lock", av: "shieldq", bsod: "alert", recover: "history", tweaks: "tweaks", debloat: "broom", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
-const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", sysinfo: "si.sub", gpu: "gp.sub", wupd: "wu.sub", network: "net.sub", nmerge: "nm.sub", bench: "bn.sub", ext: "bx.sub", pass: "ps.sub", av: "av.sub", bsod: "bs.sub", recover: "rf.sub", tweaks: "tw.sub", debloat: "db.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
+const PAGE_ICON = { home: "heart", check: "shieldok", game: "gamepad", tidy: "broken", programs: "package", clean: "clean", memory: "memory", disk: "pie", large: "weight", dupes: "copy", procs: "cpu", startup: "rocket", sysinfo: "board", gpu: "gpu", wupd: "wupd", network: "network", nmerge: "merge", bench: "bench", ext: "puzzle", pass: "lock", av: "shieldq", bsod: "alert", recover: "history", tweaks: "tweaks", debloat: "broom", optimize: "optimize", repair: "repair", restore: "lifebuoy", logs: "logs", settings: "settings", credits: "credits" };
+const PAGE_SUB = { home: "hm.sub", game: "gm.sub", tidy: "td.sub", programs: "pr.sub", clean: "clean.sub", memory: "mem.sub", disk: "da.sub", large: "lf.sub", dupes: "dup.sub", procs: "pm.sub", startup: "su.sub", sysinfo: "si.sub", gpu: "gp.sub", wupd: "wu.sub", network: "net.sub", nmerge: "nm.sub", bench: "bn.sub", ext: "bx.sub", pass: "ps.sub", av: "av.sub", bsod: "bs.sub", recover: "rf.sub", tweaks: "tw.sub", debloat: "db.sub", check: "ck.sub", optimize: "opt.sub", repair: "rep.sub", restore: "rc.sub", logs: "lg.sub", settings: "set.sub", credits: "cr.role" };
 function palSources() {
   const items = [];
   PAGES.forEach((p, i) => items.push({ g: "pal.g.pages", icon: PAGE_ICON[p], title: t("nav." + p), sub: t(PAGE_SUB[p]), hint: i < 9 ? "Ctrl " + (i + 1) : "", kw: p, run: () => go(p) }));
@@ -13931,6 +14215,24 @@ setTimeout(hideSplash, SPL_MAX + 2500); // never stay stuck on the splash
    Mock backend for previewing in a normal browser
 ===================================================================== */
 const MOCKWIN = { max: false, own: new URLSearchParams(location.search).get("frame") !== "classic" };
+// the Check page's report in the browser preview: ?ck=clean for all fine;
+// a fixed service or an undone change no longer shows after the next check
+function mockCheck() {
+  const q = new URLSearchParams(location.search), now = Math.floor(Date.now() / 1000), d = 86400;
+  const fixed = window.__ckFixed || [], undone = window.__ckUndone || [];
+  const changes = [{ kind: "tweak", id: "hags", at: now - 9 * d }, { kind: "tweak", id: "classic-menu", at: now - 6 * d }, { kind: "debloat", id: "DisableBing", at: now - 5 * d },
+    { kind: "tweak", id: "file-ext", at: now - 3 * d }, { kind: "tweak", id: "svc-manual", at: 0 }].filter(c => !undone.includes(c.kind + ":" + c.id));
+  const ok = [{ id: "ok-shell", sev: "ok" }, { id: "ok-av", sev: "ok" }, { id: "ok-updates", sev: "ok" }, { id: "ok-net", sev: "ok" }, { id: "ok-pagefile", sev: "ok" }, { id: "ok-space", sev: "ok", args: ["214.6 GB"] }, { id: "ok-rp", sev: "ok" }];
+  if (q.get("ck") === "clean") return { at: now, took: 2400, changes, findings: [{ id: "ok-changes", sev: "ok", count: changes.length }, { id: "ok-services", sev: "ok" }, { id: "ok-events", sev: "ok" }, ...ok] };
+  const fs = [];
+  if (!undone.includes("tweak:classic-menu") && !undone.includes("debloat:DisableBing"))
+    fs.push({ id: "ev-hang", sev: "bad", args: ["startmenuexperiencehost.exe"], count: 4, before: 0, first: now - 5 * d + 3600, suspects: changes.filter(c => c.id === "DisableBing" || c.id === "classic-menu").sort((a, b) => b.at - a.at) });
+  fs.push({ id: "tw-drift", sev: "warn", args: ["hags", "off"], fix: "reapply", fixArg: "hags" });
+  if (!fixed.includes("WSearch")) fs.push({ id: "svc-off", sev: "info", args: ["WSearch", "search"], suspects: changes.filter(c => c.id === "svc-manual"), fix: "svc", fixArg: "WSearch" });
+  fs.push({ id: "ev-crash-old", sev: "info", args: ["game.exe"], count: 6, first: now - 6 * d });
+  if (!fixed.includes("WSearch")) fs.push({ id: "ok-services", sev: "ok" });
+  return { at: now, took: 3100, changes, findings: fs.concat(ok) };
+}
 const Mock = (() => {
   const DNSP = [
     { id: "cloudflare", name: "Cloudflare", v4: ["1.1.1.1", "1.0.0.1"], v6: ["2606:4700:4700::1111", "2606:4700:4700::1001"], note: "dns.n.cloudflare" },
@@ -14311,6 +14613,7 @@ const Mock = (() => {
       return TWM.map(([id]) => slow.has(id) ? { id, state: "pending" } : twState(id));
     },
     setTweak: async (id, on, o) => {
+      if (!on) window.__ckUndone = (window.__ckUndone || []).concat("tweak:" + id);
       await new Promise(r => setTimeout(r, id === "debloat" ? 1600 : q.get("fast") ? 40 : 650));
       const m = TWM.find(x => x[0] === id), f = m ? m[2] : "";
       if (id === "ultimate-power" && on && scen === "fail") return { ok: false, error: "This PC does not support the Ultimate Performance plan.", state: twState(id) };
@@ -14823,10 +15126,19 @@ const Mock = (() => {
       const u = mockHist.slice().reverse().find(h => h.ok && !h.undone && (h.action === "apply" || h.action === "revert"));
       return { tweaks: tw, startup: su, files: mockRecycled.map(x => Object.assign({}, x)), undo: u || null, admin: scen !== "noadmin" };
     },
+    checkLast: async () => q.get("ck") === "old" ? JSON.parse(JSON.stringify(Object.assign({}, mockCheck(), { at: Math.floor(Date.now() / 1000) - 86400 * 2 }))) : null,
+    checkRun: async () => {
+      if (window.__ckRunning) return false;
+      window.__ckRunning = true; window.__ckRuns = (window.__ckRuns || 0) + 1;
+      ["changes", "services", "events", "windows", "network", "pc"].forEach((x, i) => setTimeout(() => window.__ev("check", { state: "step", step: i, total: 6, text: x }), 60 + i * 70));
+      setTimeout(() => { window.__ckRunning = false; window.__ev("check", { state: "done", report: mockCheck() }); }, 520);
+      return true;
+    },
+    checkFixService: async n => { window.__ckFixed = (window.__ckFixed || []).concat(n); return { ok: true }; },
     debloatInfo: async () => JSON.parse(JSON.stringify(mockDebloat)),
     debloatState: async () => { await new Promise(r => setTimeout(r, 300)); return JSON.parse(JSON.stringify(mockDbState)); },
     debloatRun: async o => {
-      window.__dbRun = o; const total = o.apply.length + o.undo.length + o.apps.length; let step = 0;
+      window.__dbRun = o; const total = o.apply.length + o.undo.length + o.apps.length; let step = 0; o.undo.forEach(id => { window.__ckUndone = (window.__ckUndone || []).concat("debloat:" + id); });
       const tick = () => { if (step < total) { window.__ev("debloat", { state: "run", step, total, text: "Step " + (step + 1) }); step++; setTimeout(tick, 80); return; }
         o.apply.forEach(id => { mockDbState.applied[id] = true; }); o.undo.forEach(id => { mockDbState.applied[id] = false; });
         mockDbState.installed = mockDbState.installed.filter(id => !o.apps.includes(id));

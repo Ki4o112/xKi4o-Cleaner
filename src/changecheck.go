@@ -46,7 +46,8 @@ type ckReport struct {
 	At       int64       `json:"at"`
 	Changes  []ckRef     `json:"changes"`
 	Findings []ckFinding `json:"findings"`
-	Took     int64       `json:"took"` // milliseconds
+	Took     int64       `json:"took"`  // milliseconds
+	Steps    []int64     `json:"steps"` // milliseconds each step took
 	Error    string      `json:"error,omitempty"`
 }
 

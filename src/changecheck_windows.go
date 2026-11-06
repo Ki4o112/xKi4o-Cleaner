@@ -74,6 +74,28 @@ func changeCheck(step func(int, string)) *ckReport {
 	r := &ckReport{At: t0.Unix()}
 	var fs []ckFinding
 	add := func(f ckFinding) { fs = append(fs, f) }
+	last := t0
+	inner := step
+	step = func(i int, text string) {
+		if i > 0 {
+			r.Steps = append(r.Steps, time.Since(last).Milliseconds())
+		}
+		last = time.Now()
+		inner(i, text)
+	}
+
+	// the slow reads (PowerShell) start at once and are waited for later
+	avc := make(chan avState, 1)
+	go func() { defer recoverLog("check av"); avc <- avStateRead() }()
+	rpc := make(chan rpList, 1)
+	go func() {
+		defer recoverLog("check rp")
+		if app.admin {
+			rpc <- restorePointList()
+		} else {
+			rpc <- rpList{Error: "no admin"}
+		}
+	}()
 
 	// 1. the changes made from the app, and whether they still hold
 	step(0, "changes")
@@ -98,7 +120,7 @@ func changeCheck(step func(int, string)) *ckReport {
 
 	// 4. Windows itself: the desktop, protection, updates
 	step(3, "windows")
-	fs = append(fs, ckWindows(changes)...)
+	fs = append(fs, ckWindows(changes, ckWait(avc, avState{Error: "timeout"}))...)
 
 	// 5. the network
 	step(4, "network")
@@ -106,8 +128,9 @@ func changeCheck(step func(int, string)) *ckReport {
 
 	// 6. memory, space, restore point
 	step(5, "pc")
-	fs = append(fs, ckPC(changes)...)
+	fs = append(fs, ckPC(changes, ckWait(rpc, rpList{Error: "timeout"}))...)
 
+	r.Steps = append(r.Steps, time.Since(last).Milliseconds())
 	sortCkFindings(fs)
 	r.Findings = fs
 	if r.Findings == nil {
@@ -429,7 +452,17 @@ func ckSetters(changes []ckRef, key, name string) []ckRef {
 	return out
 }
 
-func ckWindows(changes []ckRef) []ckFinding {
+// ckWait: what a slow read gave, or the fallback after 40 seconds.
+func ckWait[T any](c chan T, fallback T) T {
+	select {
+	case v := <-c:
+		return v
+	case <-time.After(40 * time.Second):
+		return fallback
+	}
+}
+
+func ckWindows(changes []ckRef, av avState) []ckFinding {
 	var fs []ckFinding
 	// the desktop: Explorer runs
 	shellOK := false
@@ -447,7 +480,6 @@ func ckWindows(changes []ckRef) []ckFinding {
 		}
 	}
 	// protection
-	av := avStateRead()
 	switch {
 	case av.Error != "" && !av.On && len(av.Other) == 0:
 		// Defender could not be asked (removed, or a policy): nothing to say
@@ -563,7 +595,7 @@ func ckNetwork(changes []ckRef) []ckFinding {
 
 var procGlobalMemStatus = kernel32.NewProc("GlobalMemoryStatusEx")
 
-func ckPC(changes []ckRef) []ckFinding {
+func ckPC(changes []ckRef, rp rpList) []ckFinding {
 	var fs []ckFinding
 	// the page file
 	if k, err := registry.OpenKey(registry.LOCAL_MACHINE, `SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management`, registry.QUERY_VALUE); err == nil {
@@ -594,7 +626,6 @@ func ckPC(changes []ckRef) []ckFinding {
 	}
 	// a way back: a restore point from the last 30 days (only with changes)
 	if len(changes) > 0 && app.admin {
-		rp := restorePointList()
 		if rp.Error == "" {
 			recent := false
 			for _, p := range rp.Points {
