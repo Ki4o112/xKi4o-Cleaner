@@ -6,7 +6,7 @@
 
 **The all-in-one Windows 10 / 11 cleaner, optimizer and tweaker — one portable exe, no telemetry, in English and Bulgarian.**
 
-Clean junk safely, apply 90 reversible tweaks, boost games, update Windows and drivers, check your disks, GPU and network — and undo anything in one click.
+Clean junk safely, apply 100 reversible tweaks, check that nothing broke, boost games, update Windows and drivers, check your disks, GPU and network — and undo anything in one click.
 
 [![Release](https://img.shields.io/github/v/release/Ki4o112/xKi4o-Cleaner?label=version&color=2a9dff)](../../releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/Ki4o112/xKi4o-Cleaner/total?color=3ee8b0)](../../releases)
@@ -36,9 +36,10 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 | **PC health** | A live dashboard — processor, graphics card (temperature and video memory on NVIDIA), memory, system drive and network — with one score, what lowers it, and one button for what is recommended |
 | **Cleanup** | Caches and temporary files of Windows, browsers, games and apps — the size of each before you clean |
 | **Programs** | Uninstall with a scan for leftovers (like Revo), remove Store apps, update programs with winget, and install the programs you pick in one go (like Ninite) |
-| **Debloat** | Everything [Win11Debloat](https://github.com/Raphire/Win11Debloat) by Raphire does, built in: 97 changes (telemetry, ads, Bing and Copilot, Recall, widgets, the taskbar, Start, File Explorer, Windows Update…) and 162 Store and maker apps to remove, with its recommended choice, presets and taking back |
+| **Debloat** | Everything [Win11Debloat](https://github.com/Raphire/Win11Debloat) by Raphire does, built in: 97 changes plus 12 of the app's own (telemetry, ads, Bing and Copilot, Recall, widgets, the taskbar, Start, File Explorer, Windows Update…) and 162 Store and maker apps to remove, with its recommended choice, presets and taking back |
+| **Check** | Are the tweaks and Debloat working? What Windows changed back, the services Windows needs, crashes, freezes and blue screens that began after the changes (with the likely change and Undo), protection, updates, the internet — checked by itself once a day |
 | **Modes** | Balanced, Games or Saver in one click on PC health — the power plan, Windows' background work and game mode together |
-| **Tweaker** | About 90 Windows tweaks and one-click presets (Essential, Gaming, Privacy, Ultimate); switching one off brings back exactly what you had |
+| **Tweaker** | About 100 Windows tweaks and one-click presets (Essential, Gaming, Privacy, Ultimate); switching one off brings back exactly what you had |
 | **Memory and game mode** | Free RAM; close the programs you choose while you play and start them again after — by hand or by itself when any game starts, with memory freed as the game starts and after it closes; a frame counter (FPS, 1% low, frame time) with a small box above the game, through Intel's [PresentMon](https://github.com/GameTechDev/PresentMon) — downloaded on request, nothing is injected into the game |
 | **Disks** | Disk Analyzer (with "What can I delete?"), disk health (S.M.A.R.T., what the errors mean and what helps), TRIM and defragmentation, duplicates, empty folders, broken shortcuts |
 | **Graphics card** | Live sensors (temperature, power, fans, clocks on NVIDIA), checks (refresh rate, PCIe lanes, Resizable BAR, HAGS), go back to an older driver or download one from NVIDIA, and remove the driver like DDU — with a copy to put it back |
@@ -65,6 +66,7 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 <img src="docs/screenshots/programs.png" width="430" alt="Programs">
 <img src="docs/screenshots/debloat.png" width="430" alt="Debloat">
 <img src="docs/screenshots/tweaker.png" width="430" alt="Tweaker">
+<img src="docs/screenshots/check.png" width="430" alt="Check the changes">
 <img src="docs/screenshots/disk.png" width="430" alt="Disk Analyzer">
 <img src="docs/screenshots/sysinfo.png" width="430" alt="System info">
 <img src="docs/screenshots/gpu.png" width="430" alt="Graphics card">
