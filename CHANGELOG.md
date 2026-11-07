@@ -3,6 +3,22 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.22.0 — 2026-11-07
+
+### English
+- Check fixes more by itself: removes a policy that stops Windows Update, cleans update blocks out of the hosts file (keeping a copy), makes a restore point, restarts the PC, and undoes all the likely changes of a problem at once
+- Check tells whether Windows starts slower (or faster) since the changes
+- A check in the background that finds something new says so with a notification by the clock; the menu shows the last count right from the start
+- A Check button in the Tweaker, and after Debloat
+- Fixed: a check cut off by an error stayed on "Checking…"; unreadable event logs were not mentioned; old crashes hid "no crashes from the changes"
+
+### Български
+- Проверката поправя повече сама: маха правило, което спира Windows Update, чисти блокировките на обновленията от hosts файла (със запазено копие), прави точка за възстановяване, рестартира компютъра и връща наведнъж всички вероятни виновници за даден проблем
+- Проверката казва дали Windows тръгва по-бавно (или по-бързо) след промените
+- Проверка във фона, която намери нещо ново, казва това с известие до часовника; менюто показва последния брой още от старта
+- Бутон „Проверка“ в Tweaker и след Debloat
+- Оправено: проверка, прекъсната от грешка, оставаше на „Проверявам…“; нечетими журнали не се споменаваха; стари сривове скриваха „няма сривове заради промените“
+
 ## 4.21.0 — 2026-11-06
 
 ### English
