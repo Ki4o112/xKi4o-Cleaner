@@ -190,3 +190,23 @@ func TestParseEvents(t *testing.T) {
 		t.Fatalf("time %d", evs[0].At)
 	}
 }
+
+// The hosts file loses only the blocks of the update and Store servers: other
+// lines, comments and other hosts on a mixed line stay.
+func TestHostsWithoutBlocks(t *testing.T) {
+	in := "# my hosts\r\n127.0.0.1 localhost\r\n0.0.0.0 fe2.update.microsoft.com\r\n0.0.0.0 ads.example.com login.live.com # mixed\r\n10.0.0.5 update.microsoft.com\r\n"
+	got, changed := hostsWithoutBlocks(in)
+	want := "# my hosts\r\n127.0.0.1 localhost\r\n0.0.0.0 ads.example.com # mixed\r\n10.0.0.5 update.microsoft.com\r\n"
+	if !changed || got != want {
+		t.Fatalf("changed %v\n%q\nwant\n%q", changed, got, want)
+	}
+	if got, _ := hostsWithoutBlocks("0.0.0.0 a.example login.live.com\r\nx\r\n"); got != "0.0.0.0 a.example\r\nx\r\n" {
+		t.Fatalf("line ends: %q", got)
+	}
+	if again, ch := hostsWithoutBlocks(got); ch || again != got {
+		t.Fatal("a second pass changes it")
+	}
+	if len(hostsBlockedUpdateDomains(got)) != 0 {
+		t.Fatal("still blocked")
+	}
+}

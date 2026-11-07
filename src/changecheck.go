@@ -419,3 +419,47 @@ func svcNameOfKey(key string) string {
 	}
 	return rest
 }
+
+// hostsWithoutBlocks: the hosts file without the lines that send update and
+// Store addresses nowhere; a line that also names other hosts keeps them.
+// The second result says whether anything changed.
+func hostsWithoutBlocks(hosts string) (string, bool) {
+	lines := strings.Split(hosts, "\n")
+	changed := false
+	out := make([]string, 0, len(lines))
+	for _, l := range lines {
+		body, comment := l, ""
+		if i := strings.IndexByte(l, '#'); i >= 0 {
+			body, comment = l[:i], l[i:]
+		}
+		f := strings.Fields(body)
+		if len(f) < 2 || len(hostsBlockedUpdateDomains(l)) == 0 {
+			out = append(out, l)
+			continue
+		}
+		keep := []string{f[0]}
+		for _, h := range f[1:] {
+			if len(hostsBlockedUpdateDomains(f[0]+" "+h)) == 0 {
+				keep = append(keep, h)
+			}
+		}
+		changed = true
+		if len(keep) > 1 {
+			nl := strings.Join(keep, " ")
+			if comment != "" {
+				nl += " " + comment
+			} else if strings.HasSuffix(l, "\r") {
+				nl += "\r" // the file's line ends stay as they were
+			}
+			out = append(out, nl)
+		}
+	}
+	return strings.Join(out, "\n"), changed
+}
+
+// the update policies the Check page may take away (only these)
+var ckUpdatePolicies = map[string]string{
+	"NoAutoUpdate":                                 `SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU`,
+	"DisableWindowsUpdateAccess":                   `SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate`,
+	"DoNotConnectToWindowsUpdateInternetLocations": `SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate`,
+}

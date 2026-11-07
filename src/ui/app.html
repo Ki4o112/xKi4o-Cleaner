@@ -2582,7 +2582,8 @@ body.ui-easy .nav .nav-g { display: none !important; }
 .ck-card .d { color: var(--muted); font-size: 12.5px; margin-top: 3px; line-height: 1.45; }
 .ck-card .acts { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .ck-sus { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
-.ck-sus .h { font-size: 11.5px; color: var(--faint); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.ck-sus .h { font-size: 11.5px; color: var(--faint); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; display: flex; align-items: center; gap: 12px; }
+.ck-sus .h .linkbtn { margin-left: auto; text-transform: none; letter-spacing: 0; font-size: 12px; }
 .ck-chip { display: flex; align-items: center; gap: 10px; padding: 7px 8px 7px 12px; border-radius: 12px; background: var(--card-2); font-size: 12.5px; }
 .ck-chip .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
 .ck-chip .when { color: var(--faint); font-size: 11.5px; white-space: nowrap; }
@@ -3893,7 +3894,7 @@ bg: {
   "set.startTrayOn": "Следващия път програмата ще тръгне в трея",
   "set.startTrayOff": "Програмата ще се отваря на цял прозорец (при старт на Windows пак тръгва в трея)",
   "nav.check": "Проверка", "ck.title": "Проверка на промените", "ck.sub": "Работят ли туийковете и Debloat както трябва — сривове, забивания и услуги след промените",
-  "ck.go": "Провери сега", "ck.copy": "Копирай отчета", "ck.copied": "Отчетът е копиран", "ck.copyFail": "Не се копира", "ck.again": "Провери отново", "ck.running": "Проверявам…", "ck.never": "Още не е проверявано",
+  "ck.go": "Провери сега", "ck.f.policy": "Махни правилото", "ck.f.hosts": "Почисти hosts", "ck.f.rp": "Направи сега", "ck.f.reboot": "Рестартирай", "ck.undoAll": "Върни всички ({0})", "ck.undoneN": "Върнати {0} от {1}", "ck.rebootD": "Затвори и запиши отворените неща. Компютърът ще се рестартира веднага.", "ck.ntD": "Проверката на промените намери нещо — отвори програмата → Проверка.", "ck.ck-failed.t": "Проверката спря по средата", "ck.ck-failed.d": "Неочаквана грешка: {0}. Опитай пак; ако се повтаря, прати ни логовете.", "ck.ev-unread.t": "Журналите на Windows не се прочетоха", "ck.ev-unread.d": "Сривовете и забиванията не са проверени: {0}", "ck.copy": "Копирай отчета", "ck.copied": "Отчетът е копиран", "ck.copyFail": "Не се копира", "ck.again": "Провери отново", "ck.running": "Проверявам…", "ck.never": "Още не е проверявано",
   "ck.s.changes": "Промените от програмата", "ck.s.services": "Услугите, които Windows използва", "ck.s.events": "Сривове, забивания и сини екрани", "ck.s.windows": "Работния плот, защитата и обновленията", "ck.s.network": "Интернета", "ck.s.pc": "Паметта, мястото и точката за възстановяване",
   "ck.allOk": "Всичко работи нормално", "ck.allOkD": "Няма проблеми от промените. Провери пак след голямо обновление на Windows или ако нещо започне да засича.",
   "ck.some": "{0} неща искат внимание", "ck.one": "1 нещо иска внимание", "ck.bad": "{0} проблема", "ck.when": "Проверено {0} · за {1}",
@@ -5182,7 +5183,7 @@ en: {
   "set.startTrayOn": "Next time the app starts in the tray",
   "set.startTrayOff": "The app opens in its full window (with Windows it still starts in the tray)",
   "nav.check": "Check", "ck.title": "Check the changes", "ck.sub": "Are the tweaks and Debloat working as they should — crashes, freezes and services after the changes",
-  "ck.go": "Check now", "ck.copy": "Copy the report", "ck.copied": "The report is copied", "ck.copyFail": "Could not copy", "ck.again": "Check again", "ck.running": "Checking…", "ck.never": "Not checked yet",
+  "ck.go": "Check now", "ck.f.policy": "Remove the policy", "ck.f.hosts": "Clean hosts", "ck.f.rp": "Make one now", "ck.f.reboot": "Restart", "ck.undoAll": "Undo all ({0})", "ck.undoneN": "Undone {0} of {1}", "ck.rebootD": "Save and close what is open. The PC restarts right away.", "ck.ntD": "The check of the changes found something — open the app → Check.", "ck.ck-failed.t": "The check stopped halfway", "ck.ck-failed.d": "An unexpected error: {0}. Try again; if it keeps happening, send us the logs.", "ck.ev-unread.t": "Windows' event logs could not be read", "ck.ev-unread.d": "Crashes and freezes were not checked: {0}", "ck.copy": "Copy the report", "ck.copied": "The report is copied", "ck.copyFail": "Could not copy", "ck.again": "Check again", "ck.running": "Checking…", "ck.never": "Not checked yet",
   "ck.s.changes": "The changes made from the app", "ck.s.services": "The services Windows uses", "ck.s.events": "Crashes, freezes and blue screens", "ck.s.windows": "The desktop, protection and updates", "ck.s.network": "The internet", "ck.s.pc": "Memory, space and the restore point",
   "ck.allOk": "Everything works normally", "ck.allOkD": "No problems from the changes. Check again after a big Windows update, or when something starts to stutter.",
   "ck.some": "{0} things need a look", "ck.one": "1 thing needs a look", "ck.bad": "{0} problems", "ck.when": "Checked {0} · took {1}",
@@ -8355,7 +8356,7 @@ on("debloat", d => {
 /* =====================================================================
    CHECK: are the tweaks and Debloat changes working, has anything broken?
 ===================================================================== */
-const CK = { rep: null, run: null, loaded: false, busyFix: "" };
+const CK = { rep: null, run: null, loaded: false, busyFix: "", quiet: false };
 const ckName = r => r.kind === "debloat" ? ((dbF(r.id) && dbLabel(dbF(r.id))) || r.id) : t("tw." + r.id + ".n");
 // the parts of Windows a crash or a freeze can be in, by their program
 const CK_EXE = {
@@ -8388,10 +8389,18 @@ function checkStart() {
 on("check", d => {
   if (!d) return;
   if (d.state === "step") { CK.run = { step: d.step, total: d.total, text: d.text }; if (S.page === "check") renderCheck(); return; }
+  const before = new Set(ckProblems().filter(f => f.sev !== "info").map(ckKey));
   CK.run = null; CK.rep = d.report || null;
   paintCkBadge();
+  // a check in the background found something new: say so by the clock
+  if (CK.quiet && document.hidden) {
+    const fresh = ckProblems().filter(f => f.sev !== "info" && !before.has(ckKey(f)));
+    if (fresh.length) api.notify(fresh.length === 1 ? ckTexts(fresh[0]).title : t("ck.some", fresh.length), t("ck.ntD"));
+  }
+  CK.quiet = false;
   if (S.page === "check") renderCheck();
 });
+const ckKey = f => f.id + ":" + (f.args || [])[0];
 function ckProblems() { return ((CK.rep && CK.rep.findings) || []).filter(f => f.sev !== "ok"); }
 function paintCkBadge() {
   const b = $("#ckBadge"); if (!b) return;
@@ -8425,7 +8434,8 @@ function ckTexts(f) {
 }
 function ckFixBtn(f, i) {
   const busy = CK.busyFix ? "disabled" : "";
-  const lbl = { "reapply": "ck.f.reapply", "reapply-db": "ck.f.reapply", "svc": "ck.f.svc", "explorer": "ck.f.explorer", "page": "ck.f.page" }[f.fix];
+  const lbl = { "reapply": "ck.f.reapply", "reapply-db": "ck.f.reapply", "svc": "ck.f.svc", "explorer": "ck.f.explorer", "page": "ck.f.page",
+    "wu-policy": "ck.f.policy", "hosts": "ck.f.hosts", "rp": "ck.f.rp", "reboot": "ck.f.reboot" }[f.fix];
   if (!lbl) return "";
   return `<button class="btn small ${f.fix === "page" ? "" : "primary"}" data-ckfix="${i}" ${busy}>${esc(t(lbl))}</button>`;
 }
@@ -8459,7 +8469,7 @@ function renderCheck() {
     html += ps.map(f => {
       const i = fs.indexOf(f), x = ckTexts(f);
       const ic = f.sev === "bad" ? ICONS.alert : f.sev === "warn" ? ICONS.alert : ICONS.info || ICONS.alert;
-      const sus = (f.suspects || []).length ? `<div class="ck-sus"><div class="h">${esc(t("ck.suspects"))}</div>${f.suspects.map(s => `<div class="ck-chip"><span class="nm">${esc(ckName(s))}</span><span class="when">${esc(ckWhen(s.at))}</span><button class="btn small" data-ckundo="${esc(s.kind + ":" + s.id)}" ${CK.busyFix ? "disabled" : ""}>${ICONS.undo || ""}<span>${esc(t("ck.undo"))}</span></button></div>`).join("")}</div>` : "";
+      const sus = (f.suspects || []).length ? `<div class="ck-sus"><div class="h">${esc(t("ck.suspects"))}${f.suspects.length > 1 ? `<button class="linkbtn" data-ckall="${i}" ${CK.busyFix ? "disabled" : ""}>${esc(t("ck.undoAll", f.suspects.length))}</button>` : ""}</div>${f.suspects.map(s => `<div class="ck-chip"><span class="nm">${esc(ckName(s))}</span><span class="when">${esc(ckWhen(s.at))}</span><button class="btn small" data-ckundo="${esc(s.kind + ":" + s.id)}" ${CK.busyFix ? "disabled" : ""}>${ICONS.undo || ""}<span>${esc(t("ck.undo"))}</span></button></div>`).join("")}</div>` : "";
       return `<div class="ck-card ${f.sev}"><div class="ic">${ic}</div><div><div class="t">${esc(x.title)}</div>${x.desc ? `<div class="d">${esc(x.desc)}</div>` : ""}${sus}</div><div class="acts">${ckFixBtn(f, i)}</div></div>`;
     }).join("");
   }
@@ -8474,6 +8484,7 @@ function renderCheck() {
   }
   list.innerHTML = html;
   list.querySelectorAll("[data-ckfix]").forEach(b => b.addEventListener("click", () => ckFix(fs[+b.dataset.ckfix])));
+  list.querySelectorAll("[data-ckall]").forEach(b => b.addEventListener("click", () => ckUndoAll(fs[+b.dataset.ckall])));
   list.querySelectorAll("[data-ckundo]").forEach(b => b.addEventListener("click", () => { const [k, ...rest] = b.dataset.ckundo.split(":"); ckUndo(k, rest.join(":")); }));
 }
 // the report as text, to send to someone who helps
@@ -8497,6 +8508,26 @@ function ckDebloat(o) {
     const off = listen("debloat", d => { if (d && d.state !== "run") { off(); res(!(d.failed || []).length); } });
     api.debloatRun(Object.assign({ apply: [], undo: [], apps: [], restorePoint: false }, o)).then(ok => { if (!ok) { off(); res(false); } }).catch(() => { off(); res(false); });
   });
+}
+// all the likely changes of one problem, one after the other, then a check
+async function ckUndoAll(f) {
+  if (!f || CK.busyFix) return;
+  const tw = (f.suspects || []).filter(x => x.kind === "tweak"), db = (f.suspects || []).filter(x => x.kind === "debloat");
+  CK.busyFix = "all"; renderCheck();
+  let done = 0;
+  for (const x of tw) {
+    try {
+      let res = await api.setTweak(x.id, false, { restorePoint: false, apps: [], useDefaults: false, source: "check" });
+      if (res && res.noBackup) res = await api.setTweak(x.id, false, { restorePoint: false, apps: [], useDefaults: true, source: "check" });
+      if (res && res.ok) done++;
+      if (res && res.ok && res.explorer) CK.explorer = true;
+    } catch (e) {}
+  }
+  if (db.length && await ckDebloat({ undo: db.map(x => x.id) })) done += db.length;
+  if (CK.explorer) { CK.explorer = false; try { await api.restartExplorer(); } catch (e) {} }
+  CK.busyFix = ""; TW.loaded = false;
+  toast(t("ck.undoneN", done, tw.length + db.length), done ? "undo" : "alert", done === tw.length + db.length ? "" : "warn");
+  checkStart();
 }
 async function ckUndo(kind, id) {
   if (CK.busyFix) return;
@@ -8528,6 +8559,10 @@ async function ckFix(f) {
     else if (f.fix === "reapply-db") ok = await ckDebloat({ apply: [f.fixArg] });
     else if (f.fix === "svc") { const res = await api.checkFixService(f.fixArg); ok = !!(res && res.ok); }
     else if (f.fix === "explorer") ok = await api.restartExplorer();
+    else if (f.fix === "wu-policy") { const res = await api.checkFixPolicy(f.fixArg); ok = !!(res && res.ok); }
+    else if (f.fix === "hosts") { const res = await api.checkFixHosts(); ok = !!(res && res.ok); }
+    else if (f.fix === "rp") { CK.busyFix = ""; makeRestorePoint(); setTimeout(checkStart, 1500); return; }
+    else if (f.fix === "reboot") { CK.busyFix = ""; renderCheck(); confirmBox({ title: t("gp.rebootT"), text: t("ck.rebootD"), okText: t("gp.rebootNow"), ok: async () => { let r = false; try { r = await api.restartPC(); } catch (e) {} if (!r) toast(t("tw.failed"), "alert", "warn"); } }); return; }
   } catch (e) {}
   CK.busyFix = "";
   toast(ok ? t("ck.fixed") : t("ck.undoFail", ckTexts(f).title), ok ? "check" : "alert", ok ? "" : "warn");
@@ -8538,8 +8573,10 @@ async function ckFix(f) {
 whenShown(20 * 60e3, () => setTimeout(async () => {
   try { if (!CK.rep) CK.rep = await api.checkLast(); } catch (e) {}
   paintCkBadge();
-  if (!CK.run && (!CK.rep || Date.now() / 1000 - CK.rep.at > 86400)) { try { if (!DB.info) DB.info = await api.debloatInfo(); } catch (e) {} checkStart(); }
+  if (!CK.run && (!CK.rep || Date.now() / 1000 - CK.rep.at > 86400)) { try { if (!DB.info) DB.info = await api.debloatInfo(); } catch (e) {} CK.quiet = true; checkStart(); }
 }, 120e3));
+// the menu shows the last check's problems from the start (a cheap read)
+setTimeout(async () => { try { if (!CK.rep) { CK.rep = await api.checkLast(); paintCkBadge(); } } catch (e) {} }, 4000);
 function setupDbTabs() {
   makeSeg($("#dbTabs"), [{ v: "set", label: t("db.t.set") }, { v: "apps", label: t("db.t.apps") }], DB.tab, v => { DB.tab = v; renderDebloat(); });
 }
@@ -14276,6 +14313,7 @@ function mockCheck() {
   fs.push({ id: "tw-drift", sev: "warn", args: ["hags", "off"], fix: "reapply", fixArg: "hags" });
   if (!fixed.includes("WSearch")) fs.push({ id: "svc-off", sev: "info", args: ["WSearch", "search"], suspects: changes.filter(c => c.id === "svc-manual"), fix: "svc", fixArg: "WSearch" });
   fs.push({ id: "ev-crash-old", sev: "info", args: ["game.exe"], count: 6, first: now - 6 * d });
+  if (!window.__ckPolicy) fs.push({ id: "wu-blocked", sev: "warn", args: ["NoAutoUpdate"], suspects: [], fix: "wu-policy", fixArg: "NoAutoUpdate" });
   if (!fixed.includes("WSearch")) fs.push({ id: "ok-services", sev: "ok" });
   return { at: now, took: 3100, changes, findings: fs.concat(ok) };
 }
@@ -15184,6 +15222,8 @@ const Mock = (() => {
       setTimeout(() => { window.__ckRunning = false; window.__ev("check", { state: "done", report: mockCheck() }); }, 520);
       return true;
     },
+    checkFixPolicy: async n => { window.__ckPolicy = n; return { ok: true }; },
+    checkFixHosts: async () => { window.__ckHosts = true; return { ok: true, backup: "C:\\Windows\\System32\\drivers\\etc\\hosts.xki4o-20261107" }; },
     checkFixService: async n => { window.__ckFixed = (window.__ckFixed || []).concat(n); return { ok: true }; },
     debloatInfo: async () => JSON.parse(JSON.stringify(mockDebloat)),
     debloatState: async () => { await new Promise(r => setTimeout(r, 300)); return JSON.parse(JSON.stringify(mockDbState)); },

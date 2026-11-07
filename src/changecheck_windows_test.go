@@ -5,10 +5,14 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
 	"golang.org/x/sys/windows"
+	"golang.org/x/sys/windows/registry"
 	"golang.org/x/sys/windows/svc/mgr"
 )
 
@@ -237,5 +241,73 @@ func TestTweaks421OnOff(t *testing.T) {
 		if getBackup(id) != nil {
 			t.Errorf("%s: the backup is still there", id)
 		}
+	}
+}
+
+// A policy that stops Windows Update: told, and its button takes it away.
+func TestCheckFixPolicy(t *testing.T) {
+	changesThisPC(t)
+	const name = "NoAutoUpdate"
+	path := ckUpdatePolicies[name]
+	k, _, err := registry.CreateKey(registry.LOCAL_MACHINE, path, registry.ALL_ACCESS|registry.WOW64_64KEY)
+	if err != nil {
+		t.Skip(err)
+	}
+	old, _, oldErr := k.GetIntegerValue(name)
+	defer func() {
+		if oldErr == nil {
+			_ = k.SetDWordValue(name, uint32(old))
+		} else {
+			_ = k.DeleteValue(name)
+		}
+		k.Close()
+	}()
+	if err := k.SetDWordValue(name, 1); err != nil {
+		t.Fatal(err)
+	}
+	fs := ckWindows(nil, avState{Error: "skip"})
+	if f := findCk(fs, "wu-blocked", name); f == nil || f.Fix != "wu-policy" {
+		t.Fatalf("not told: %+v", fs)
+	}
+	if r := checkFixPolicy(name); r["ok"] != true {
+		t.Fatalf("fix: %v", r)
+	}
+	if _, _, err := k.GetIntegerValue(name); err != registry.ErrNotExist {
+		t.Fatalf("still there: %v", err)
+	}
+	if r := checkFixPolicy("SomethingElse"); r["ok"] == true {
+		t.Fatal("an unknown policy was accepted")
+	}
+}
+
+// The hosts file blocks an update server: told, and cleaned with a backup;
+// the other lines stay.
+func TestCheckFixHosts(t *testing.T) {
+	changesThisPC(t)
+	p := filepath.Join(os.Getenv("SystemRoot"), `System32\drivers\etc\hosts`)
+	orig, err := os.ReadFile(p)
+	if err != nil {
+		t.Skip(err)
+	}
+	defer func() { _ = os.WriteFile(p, orig, 0o644) }()
+	test := string(orig) + "\r\n0.0.0.0 fe2.update.microsoft.com\r\n0.0.0.0 tracker.example.com\r\n"
+	if err := os.WriteFile(p, []byte(test), 0o644); err != nil {
+		t.Skip(err)
+	}
+	if b := hostsBlocks(); len(b) != 1 || b[0] != "fe2.update.microsoft.com" {
+		t.Fatalf("blocks %v", b)
+	}
+	r := checkFixHosts()
+	if r["ok"] != true {
+		t.Fatalf("fix: %v", r)
+	}
+	backup, _ := r["backup"].(string)
+	defer os.Remove(backup)
+	if b, err := os.ReadFile(backup); err != nil || string(b) != test {
+		t.Fatalf("backup: %v", err)
+	}
+	now, _ := os.ReadFile(p)
+	if len(hostsBlockedUpdateDomains(string(now))) != 0 || !strings.Contains(string(now), "tracker.example.com") {
+		t.Fatalf("after: %q", now)
 	}
 }

@@ -1236,8 +1236,8 @@ async def main():
         await pg.evaluate("go('check')")
         ok = await wait_for(pg, "CK.rep && !CK.run && document.querySelectorAll('#ckList .ck-card').length >= 3", 6000)
         check("check: opening the page checks by itself and lists what to look at", ok)
-        check("check: the score says how many things need a look", "2 things need a look" in (await pg.text_content("#ckHero")))
-        check("check: the menu shows them (red when one is bad)", await pg.evaluate("!document.getElementById('ckBadge').hidden && document.getElementById('ckBadge').textContent === '2' && document.getElementById('ckBadge').classList.contains('err')"))
+        check("check: the score says how many things need a look", "3 things need a look" in (await pg.text_content("#ckHero")))
+        check("check: the menu shows them (red when one is bad)", await pg.evaluate("!document.getElementById('ckBadge').hidden && document.getElementById('ckBadge').textContent === '3' && document.getElementById('ckBadge').classList.contains('err')"))
         txt = await pg.text_content("#ckList")
         check("check: a freeze that began after the changes, with its part of Windows by name", "The Start menu froze 4 times since the changes" in txt, txt[:300])
         check("check: the likely changes are named, the latest first", txt.index("Disable Bing web search") < txt.index("Classic right-click menu"))
@@ -1250,6 +1250,11 @@ async def main():
         # a changed-back tweak: applied again
         await pg.click("#ckList >> text=Apply again")
         check("check: Apply again turns the tweak on again", await wait_for(pg, "!CK.run && !CK.busyFix", 6000) and await pg.evaluate("window.__lastTweak ? window.__lastTweak.id === 'hags' : true"))
+        # a policy that stops Windows Update: taken away, gone
+        await pg.click("#ckList >> text=Remove the policy")
+        ok = await wait_for(pg, "window.__ckPolicy === 'NoAutoUpdate' && !CK.run && !document.getElementById('ckList').textContent.includes('A policy stops Windows Update')", 6000)
+        check("check: Remove the policy takes away the update policy and checks again", ok)
+        check("check: several likely changes can be undone at once", await pg.evaluate("!!document.querySelector('#ckList [data-ckall]')"))
         # undo a likely change (Debloat): run through Debloat, then checked again
         runs = await pg.evaluate("window.__ckRuns")
         await pg.click("#ckList .ck-sus [data-ckundo='debloat:DisableBing']")

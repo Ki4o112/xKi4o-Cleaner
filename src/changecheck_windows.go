@@ -7,6 +7,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net"
 	"os"
 	"path/filepath"
@@ -52,7 +53,14 @@ func checkRun() bool {
 	}
 	go func() {
 		defer ckRun.busy.Store(false)
-		defer recoverLog("check")
+		// a check cut off by a panic still ends on the page (with what it says)
+		defer func() {
+			if v := recover(); v != nil {
+				logEvent("app", "error", "check", T("err.unexpected", v), nil)
+				emit("check", map[string]any{"state": "done", "report": &ckReport{At: time.Now().Unix(), Changes: []ckRef{}, Error: fmt.Sprint(v),
+					Findings: []ckFinding{{ID: "ck-failed", Sev: "warn", Args: []string{fmt.Sprint(v)}}}}})
+			}
+		}()
 		r := changeCheck(func(step int, text string) {
 			emit("check", map[string]any{"state": "step", "step": step, "total": ckSteps, "text": text})
 		})
@@ -113,9 +121,15 @@ func changeCheck(step func(int, string)) *ckReport {
 	if evErr == "" {
 		evf := eventFindings(changes, evs, time.Now().Unix())
 		fs = append(fs, evf...)
-		if len(evf) == 0 {
+		fromChanges := false // the ones that keep happening anyway do not count here
+		for _, f := range evf {
+			fromChanges = fromChanges || !strings.HasSuffix(f.ID, "-old")
+		}
+		if !fromChanges {
 			add(ckFinding{ID: "ok-events", Sev: "ok"})
 		}
+	} else {
+		add(ckFinding{ID: "ev-unread", Sev: "info", Args: []string{evErr}})
 	}
 
 	// 4. Windows itself: the desktop, protection, updates
@@ -495,18 +509,15 @@ func ckWindows(changes []ckRef, av avState) []ckFinding {
 	}
 	// updates: no policy that stops them
 	wuOK := true
-	for _, x := range []struct{ path, name string }{
-		{`SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU`, "NoAutoUpdate"},
-		{`SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate`, "DisableWindowsUpdateAccess"},
-		{`SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate`, "DoNotConnectToWindowsUpdateInternetLocations"},
-	} {
-		if v, ok := regDword(registry.LOCAL_MACHINE, x.path, x.name); ok && v == 1 {
-			fs = append(fs, ckFinding{ID: "wu-blocked", Sev: "warn", Args: []string{x.name}, Suspects: ckSetters(changes, x.path, x.name), Fix: "page", FixArg: "wupd"})
+	for _, name := range []string{"NoAutoUpdate", "DisableWindowsUpdateAccess", "DoNotConnectToWindowsUpdateInternetLocations"} {
+		path := ckUpdatePolicies[name]
+		if v, ok := regDword(registry.LOCAL_MACHINE, path, name); ok && v == 1 {
+			fs = append(fs, ckFinding{ID: "wu-blocked", Sev: "warn", Args: []string{name}, Suspects: ckSetters(changes, path, name), Fix: "wu-policy", FixArg: name})
 			wuOK = false
 		}
 	}
 	if blocked := hostsBlocks(); len(blocked) > 0 {
-		fs = append(fs, ckFinding{ID: "hosts-block", Sev: "warn", Args: blocked})
+		fs = append(fs, ckFinding{ID: "hosts-block", Sev: "warn", Args: blocked, Fix: "hosts"})
 		wuOK = false
 	}
 	if wuOK {
@@ -540,7 +551,7 @@ func ckWindows(changes []ckRef, av avState) []ckFinding {
 	// a restart Windows waits for
 	if regKeyExists(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending`) ||
 		regKeyExists(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired`) {
-		fs = append(fs, ckFinding{ID: "reboot-pending", Sev: "info"})
+		fs = append(fs, ckFinding{ID: "reboot-pending", Sev: "info", Fix: "reboot"})
 	}
 	return fs
 }
@@ -637,9 +648,59 @@ func ckPC(changes []ckRef, rp rpList) []ckFinding {
 			if recent {
 				fs = append(fs, ckFinding{ID: "ok-rp", Sev: "ok"})
 			} else {
-				fs = append(fs, ckFinding{ID: "no-rp", Sev: "info", Fix: "page", FixArg: "restore"})
+				fs = append(fs, ckFinding{ID: "no-rp", Sev: "info", Fix: "rp"})
 			}
 		}
 	}
 	return fs
+}
+
+// checkFixPolicy takes away one of the policies that stop Windows Update.
+func checkFixPolicy(name string) map[string]any {
+	path, ok := ckUpdatePolicies[name]
+	if !ok {
+		return map[string]any{"ok": false, "error": "unknown policy"}
+	}
+	op := beginOp("tweak", name, T("log.ckPolicy", name), nil)
+	defer op.end("", nil)
+	k, err := registry.OpenKey(registry.LOCAL_MACHINE, path, registry.SET_VALUE|registry.WOW64_64KEY)
+	if err != nil {
+		op.fail(name, err.Error(), nil)
+		return map[string]any{"ok": false, "error": err.Error()}
+	}
+	defer k.Close()
+	if err := k.DeleteValue(name); err != nil && err != registry.ErrNotExist {
+		op.fail(name, err.Error(), nil)
+		return map[string]any{"ok": false, "error": err.Error()}
+	}
+	return map[string]any{"ok": true}
+}
+
+// checkFixHosts takes the lines that block the update and Store servers out
+// of the hosts file; the file as it was is kept next to it first.
+func checkFixHosts() map[string]any {
+	p := filepath.Join(os.Getenv("SystemRoot"), `System32\drivers\etc\hosts`)
+	op := beginOp("tweak", "hosts", T("log.ckHosts"), nil)
+	defer op.end("", nil)
+	b, err := os.ReadFile(p)
+	if err != nil {
+		op.fail("hosts", err.Error(), nil)
+		return map[string]any{"ok": false, "error": err.Error()}
+	}
+	nb, changed := hostsWithoutBlocks(string(b))
+	if !changed {
+		return map[string]any{"ok": true}
+	}
+	backup := p + ".xki4o-" + time.Now().Format("20060102-150405")
+	if err := os.WriteFile(backup, b, 0o644); err != nil {
+		op.fail("hosts", err.Error(), nil)
+		return map[string]any{"ok": false, "error": err.Error()}
+	}
+	if err := os.WriteFile(p, []byte(nb), 0o644); err != nil {
+		op.fail("hosts", err.Error(), nil)
+		return map[string]any{"ok": false, "error": err.Error()}
+	}
+	op.info("hosts", T("log.ckHostsBackup", backup), nil)
+	_, _, _ = runQuiet(15*time.Second, sys32("ipconfig.exe"), "/flushdns")
+	return map[string]any{"ok": true, "backup": backup}
 }

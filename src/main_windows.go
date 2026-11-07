@@ -222,6 +222,8 @@ func main() {
 		"checkRun":             checkRun,
 		"checkLast":            checkLast,
 		"checkFixService":      checkFixService,
+		"checkFixPolicy":       checkFixPolicy,
+		"checkFixHosts":        checkFixHosts,
 		"debloatState":         debloatState,
 		"debloatRun":           debloatRun,
 		"powerProfile":         powerProfile,
