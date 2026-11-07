@@ -210,3 +210,27 @@ func TestHostsWithoutBlocks(t *testing.T) {
 		t.Fatal("still blocked")
 	}
 }
+
+// Windows starts slower since the changes: told with the times and the
+// changes known to touch the start; faster or as before is fine.
+func TestBootFinding(t *testing.T) {
+	now := int64(200 * day)
+	ms := func(d int64) int64 { return (now - d*day) * 1000 }
+	changes := []ckRef{{Kind: "tweak", ID: "svc-manual", At: now - 10*day}, {Kind: "tweak", ID: "dark-mode", At: now - 10*day}}
+	boots := [][2]int64{{ms(30), 20000}, {ms(20), 22000}, {ms(15), 21000}, {ms(8), 34000}, {ms(5), 36000}, {ms(1), 35000}}
+	f := bootFinding(changes, boots, now)
+	if f == nil || f.ID != "boot-slower" || f.Args[0] != "21.0" || f.Args[1] != "35.0" || len(f.Suspects) != 1 || f.Suspects[0].ID != "svc-manual" {
+		t.Fatalf("got %+v", f)
+	}
+	faster := [][2]int64{{ms(30), 40000}, {ms(20), 42000}, {ms(8), 20000}, {ms(5), 21000}}
+	if f := bootFinding(changes, faster, now); f == nil || f.ID != "ok-boot-faster" {
+		t.Fatalf("faster: %+v", f)
+	}
+	same := [][2]int64{{ms(30), 20000}, {ms(20), 21000}, {ms(8), 22000}, {ms(5), 21000}}
+	if f := bootFinding(changes, same, now); f == nil || f.ID != "ok-boot" {
+		t.Fatalf("same: %+v", f)
+	}
+	if bootFinding(changes, boots[:4], now) != nil || bootFinding(nil, boots, now) != nil {
+		t.Fatal("too few starts after the changes, or no changes: nothing to say")
+	}
+}

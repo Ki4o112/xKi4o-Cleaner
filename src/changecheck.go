@@ -11,6 +11,7 @@ package main
 import (
 	"encoding/xml"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -83,6 +84,8 @@ var ckSuspectTweaks = map[string][]string{
 		"gpu-tdr-longer", "fast-startup-off", "hibernation-off", "wpbt-off", "games-priority", "power-throttling-off", "mpo-off"},
 	"svc": {"svc-manual", "printer-manual", "do-off", "telemetry-off", "gamebar-off", "edge-bg-off", "edge-remove", "search-low-priority",
 		"defender-rtp-off", "wu-drivers-off"},
+	"boot": {"svc-manual", "startup-delay-off", "fast-startup-off", "hibernation-off", "sysmain-off", "ntfs-8dot3-off", "paging-exec-off",
+		"core-isolation-off", "search-low-priority", "bg-apps-off", "power-throttling-off", "debloat", "onedrive-remove", "edge-remove"},
 	"app": {"games-priority", "hags", "windowed-opt", "game-mode", "gamebar-off", "nvidia-opt", "timer-res-global", "win32-priority",
 		"ultimate-power", "paging-exec-off", "core-isolation-off", "dynamic-tick", "mpo-off", "power-throttling-off"},
 }
@@ -462,4 +465,51 @@ var ckUpdatePolicies = map[string]string{
 	"NoAutoUpdate":                                 `SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU`,
 	"DisableWindowsUpdateAccess":                   `SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate`,
 	"DoNotConnectToWindowsUpdateInternetLocations": `SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate`,
+}
+
+// bootFinding: does Windows start slower since the changes? The median
+// start (until the desktop is ready) after the first change of the last 60
+// days against the one before it; at least 2 starts on each side. Starts
+// are boot times in ms with their time in unix ms.
+func bootFinding(changes []ckRef, boots [][2]int64, now int64) *ckFinding {
+	var t0 int64
+	for _, c := range changes {
+		if c.At > 0 && now-c.At <= 60*86400 && (t0 == 0 || c.At < t0) {
+			t0 = c.At
+		}
+	}
+	if t0 == 0 {
+		return nil
+	}
+	var before, after []int64
+	var first int64
+	for _, b := range boots {
+		at := b[0] / 1000
+		switch {
+		case at >= t0:
+			after = append(after, b[1])
+			if first == 0 || at < first {
+				first = at
+			}
+		case at >= t0-60*86400:
+			before = append(before, b[1])
+		}
+	}
+	if len(before) < 2 || len(after) < 2 {
+		return nil
+	}
+	med := func(xs []int64) int64 {
+		s := append([]int64(nil), xs...)
+		sort.Slice(s, func(i, j int) bool { return s[i] < s[j] })
+		return s[len(s)/2]
+	}
+	b, a := med(before), med(after)
+	secs := func(ms int64) string { return strconv.FormatFloat(float64(ms)/1000, 'f', 1, 64) }
+	switch {
+	case a > b*13/10 && a-b >= 5000:
+		return &ckFinding{ID: "boot-slower", Sev: "warn", Args: []string{secs(b), secs(a)}, Count: len(after), First: first, Suspects: ckSuspects("boot", first, changes), Fix: "page", FixArg: "startup"}
+	case b > a*13/10 && b-a >= 3000:
+		return &ckFinding{ID: "ok-boot-faster", Sev: "ok", Args: []string{secs(b), secs(a)}}
+	}
+	return &ckFinding{ID: "ok-boot", Sev: "ok", Args: []string{secs(a)}}
 }

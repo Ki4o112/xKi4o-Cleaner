@@ -2940,6 +2940,7 @@ body.ui-easy .nav .nav-g { display: none !important; }
             <button class="btn small" id="twUndo" disabled><span data-icon="undo"></span><span data-i="tw.undo"></span></button>
             <button class="btn small" id="twUndoAll" disabled><span data-icon="refresh"></span><span data-i="tw.undoAll"></span></button>
             <button class="btn small" id="twHist"><span data-icon="history"></span><span data-i="tw.hist"></span></button>
+            <button class="btn small" id="twCheck"><span data-icon="shieldok"></span><span data-i="nav.check"></span></button>
             <button class="btn small" id="twExport"><span data-icon="download"></span><span data-i="tw.export"></span></button>
             <button class="btn small" id="twImport"><span data-icon="upload"></span><span data-i="tw.import"></span></button>
           </div>
@@ -3895,7 +3896,7 @@ bg: {
   "set.startTrayOn": "Следващия път програмата ще тръгне в трея",
   "set.startTrayOff": "Програмата ще се отваря на цял прозорец (при старт на Windows пак тръгва в трея)",
   "nav.check": "Проверка", "ck.title": "Проверка на промените", "ck.sub": "Работят ли туийковете и Debloat както трябва — сривове, забивания и услуги след промените",
-  "ck.go": "Провери сега", "ck.f.policy": "Махни правилото", "ck.f.hosts": "Почисти hosts", "ck.f.rp": "Направи сега", "ck.f.reboot": "Рестартирай", "ck.undoAll": "Върни всички ({0})", "ck.undoneN": "Върнати {0} от {1}", "ck.rebootD": "Затвори и запиши отворените неща. Компютърът ще се рестартира веднага.", "ck.ntD": "Проверката на промените намери нещо — отвори програмата → Проверка.", "ck.ck-failed.t": "Проверката спря по средата", "ck.ck-failed.d": "Неочаквана грешка: {0}. Опитай пак; ако се повтаря, прати ни логовете.", "ck.ev-unread.t": "Журналите на Windows не се прочетоха", "ck.ev-unread.d": "Сривовете и забиванията не са проверени: {0}", "ck.copy": "Копирай отчета", "ck.copied": "Отчетът е копиран", "ck.copyFail": "Не се копира", "ck.again": "Провери отново", "ck.running": "Проверявам…", "ck.never": "Още не е проверявано",
+  "ck.go": "Провери сега", "ck.boot-slower.t": "Windows тръгва по-бавно след промените ({0} → {1} сек.)", "ck.boot-slower.d": "Средното време до готов работен плот при последните {2} стартирания. Виж кое бави в „Стартиране“.", "ck.ok-boot.t": "Windows тръгва толкова бързо, колкото преди ({0} сек.)", "ck.ok-boot-faster.t": "Windows тръгва по-бързо след промените ({0} → {1} сек.)", "ck.after": "Провери дали всичко работи", "ck.f.policy": "Махни правилото", "ck.f.hosts": "Почисти hosts", "ck.f.rp": "Направи сега", "ck.f.reboot": "Рестартирай", "ck.undoAll": "Върни всички ({0})", "ck.undoneN": "Върнати {0} от {1}", "ck.rebootD": "Затвори и запиши отворените неща. Компютърът ще се рестартира веднага.", "ck.ntD": "Проверката на промените намери нещо — отвори програмата → Проверка.", "ck.ck-failed.t": "Проверката спря по средата", "ck.ck-failed.d": "Неочаквана грешка: {0}. Опитай пак; ако се повтаря, прати ни логовете.", "ck.ev-unread.t": "Журналите на Windows не се прочетоха", "ck.ev-unread.d": "Сривовете и забиванията не са проверени: {0}", "ck.copy": "Копирай отчета", "ck.copied": "Отчетът е копиран", "ck.copyFail": "Не се копира", "ck.again": "Провери отново", "ck.running": "Проверявам…", "ck.never": "Още не е проверявано",
   "ck.s.changes": "Промените от програмата", "ck.s.services": "Услугите, които Windows използва", "ck.s.events": "Сривове, забивания и сини екрани", "ck.s.windows": "Работния плот, защитата и обновленията", "ck.s.network": "Интернета", "ck.s.pc": "Паметта, мястото и точката за възстановяване",
   "ck.allOk": "Всичко работи нормално", "ck.allOkD": "Няма проблеми от промените. Провери пак след голямо обновление на Windows или ако нещо започне да засича.",
   "ck.some": "{0} неща искат внимание", "ck.one": "1 нещо иска внимание", "ck.bad": "{0} проблема", "ck.when": "Проверено {0} · за {1}",
@@ -5184,7 +5185,7 @@ en: {
   "set.startTrayOn": "Next time the app starts in the tray",
   "set.startTrayOff": "The app opens in its full window (with Windows it still starts in the tray)",
   "nav.check": "Check", "ck.title": "Check the changes", "ck.sub": "Are the tweaks and Debloat working as they should — crashes, freezes and services after the changes",
-  "ck.go": "Check now", "ck.f.policy": "Remove the policy", "ck.f.hosts": "Clean hosts", "ck.f.rp": "Make one now", "ck.f.reboot": "Restart", "ck.undoAll": "Undo all ({0})", "ck.undoneN": "Undone {0} of {1}", "ck.rebootD": "Save and close what is open. The PC restarts right away.", "ck.ntD": "The check of the changes found something — open the app → Check.", "ck.ck-failed.t": "The check stopped halfway", "ck.ck-failed.d": "An unexpected error: {0}. Try again; if it keeps happening, send us the logs.", "ck.ev-unread.t": "Windows' event logs could not be read", "ck.ev-unread.d": "Crashes and freezes were not checked: {0}", "ck.copy": "Copy the report", "ck.copied": "The report is copied", "ck.copyFail": "Could not copy", "ck.again": "Check again", "ck.running": "Checking…", "ck.never": "Not checked yet",
+  "ck.go": "Check now", "ck.boot-slower.t": "Windows starts slower since the changes ({0} → {1} s)", "ck.boot-slower.d": "The median time to a ready desktop over the last {2} starts. See what slows it on Startup.", "ck.ok-boot.t": "Windows starts as fast as before ({0} s)", "ck.ok-boot-faster.t": "Windows starts faster since the changes ({0} → {1} s)", "ck.after": "Check that all works", "ck.f.policy": "Remove the policy", "ck.f.hosts": "Clean hosts", "ck.f.rp": "Make one now", "ck.f.reboot": "Restart", "ck.undoAll": "Undo all ({0})", "ck.undoneN": "Undone {0} of {1}", "ck.rebootD": "Save and close what is open. The PC restarts right away.", "ck.ntD": "The check of the changes found something — open the app → Check.", "ck.ck-failed.t": "The check stopped halfway", "ck.ck-failed.d": "An unexpected error: {0}. Try again; if it keeps happening, send us the logs.", "ck.ev-unread.t": "Windows' event logs could not be read", "ck.ev-unread.d": "Crashes and freezes were not checked: {0}", "ck.copy": "Copy the report", "ck.copied": "The report is copied", "ck.copyFail": "Could not copy", "ck.again": "Check again", "ck.running": "Checking…", "ck.never": "Not checked yet",
   "ck.s.changes": "The changes made from the app", "ck.s.services": "The services Windows uses", "ck.s.events": "Crashes, freezes and blue screens", "ck.s.windows": "The desktop, protection and updates", "ck.s.network": "The internet", "ck.s.pc": "Memory, space and the restore point",
   "ck.allOk": "Everything works normally", "ck.allOkD": "No problems from the changes. Check again after a big Windows update, or when something starts to stutter.",
   "ck.some": "{0} things need a look", "ck.one": "1 thing needs a look", "ck.bad": "{0} problems", "ck.when": "Checked {0} · took {1}",
@@ -8350,7 +8351,7 @@ on("debloat", d => {
   const fails = d.failed || [];
   DB.sel.clear(); DB.undo.clear(); DB.grp = {}; DB.apps.clear();
   fails.forEach(f => { const x = dbF(f.id); if (x) DB.sel.add(f.id); });
-  if (!fails.length) toast(t(d.reboot ? "db.doneReboot" : "db.done", d.total), "check");
+  if (!fails.length) toast(t(d.reboot ? "db.doneReboot" : "db.done", d.total), "check", "", S.page === "check" ? undefined : { label: t("ck.after"), run: () => go("check") });
   else toast(t("db.partly", d.total - fails.length, d.total) + " " + fails.slice(0, 2).map(f => { const x = dbF(f.id); const a = DB.info.apps.find(y => y.ids[0] === f.id); return (x ? dbLabel(x) : a ? dbAppName(a) : f.id) + ": " + f.error; }).join(" · "), "alert", "warn");
   loadDebloat(true);
 });
@@ -8426,8 +8427,10 @@ function ckTexts(f) {
     title = t("ck.svc-off.t", a[0]); desc = t("ck.area." + (a[1] || "core"));
   } else if (id === "svc-stopped") {
     title = t("ck.svc-stopped.t", a[0]); desc = t("ck.svc-stopped.d") + " " + t("ck.area." + (a[1] || "core"));
+  } else if (id === "boot-slower") {
+    title = t("ck.boot-slower.t", a[0], a[1]); desc = t("ck.boot-slower.d", a[0], a[1], f.count);
   } else if (id.startsWith("ok-")) {
-    title = t("ck." + id + ".t", id === "ok-changes" ? f.count : a[0] || "");
+    title = t("ck." + id + ".t", id === "ok-changes" ? f.count : a[0] || "", a[1] || "");
   } else {
     title = t("ck." + id + ".t", ...a); desc = t("ck." + id + ".d", ...a);
   }
@@ -13598,6 +13601,7 @@ function setUiMode(v, quiet) {
   storeSettings(); applyUiMode(true);
   if (!quiet) toast(t(v === "easy" ? "um.toEasy" : "um.toFull"), "sparkle");
 }
+$("#twCheck").addEventListener("click", () => go("check"));
 $$("#modeSw [data-mode]").forEach(b => b.addEventListener("click", () => setUiMode(b.dataset.mode)));
 // settings: the search shows the rows (and their sections) whose words match
 $("#setSearch").addEventListener("input", e => {
@@ -14306,7 +14310,7 @@ function mockCheck() {
   const fixed = window.__ckFixed || [], undone = window.__ckUndone || [];
   const changes = [{ kind: "tweak", id: "hags", at: now - 9 * d }, { kind: "tweak", id: "classic-menu", at: now - 6 * d }, { kind: "debloat", id: "DisableBing", at: now - 5 * d },
     { kind: "tweak", id: "file-ext", at: now - 3 * d }, { kind: "tweak", id: "svc-manual", at: 0 }].filter(c => !undone.includes(c.kind + ":" + c.id));
-  const ok = [{ id: "ok-shell", sev: "ok" }, { id: "ok-av", sev: "ok" }, { id: "ok-updates", sev: "ok" }, { id: "ok-net", sev: "ok" }, { id: "ok-pagefile", sev: "ok" }, { id: "ok-space", sev: "ok", args: ["214.6 GB"] }, { id: "ok-rp", sev: "ok" }];
+  const ok = [{ id: "ok-shell", sev: "ok" }, { id: "ok-av", sev: "ok" }, { id: "ok-updates", sev: "ok" }, { id: "ok-net", sev: "ok" }, { id: "ok-pagefile", sev: "ok" }, { id: "ok-space", sev: "ok", args: ["214.6 GB"] }, { id: "ok-rp", sev: "ok" }, { id: "ok-boot-faster", sev: "ok", args: ["31.4", "22.8"] }];
   if (q.get("ck") === "clean") return { at: now, took: 2400, changes, findings: [{ id: "ok-changes", sev: "ok", count: changes.length }, { id: "ok-services", sev: "ok" }, { id: "ok-events", sev: "ok" }, ...ok] };
   const fs = [];
   if (!undone.includes("tweak:classic-menu") && !undone.includes("debloat:DisableBing"))

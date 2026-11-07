@@ -95,6 +95,8 @@ func changeCheck(step func(int, string)) *ckReport {
 	// the slow reads (PowerShell) start at once and are waited for later
 	avc := make(chan avState, 1)
 	go func() { defer recoverLog("check av"); avc <- avStateRead() }()
+	bpc := make(chan bootPerf, 1)
+	go func() { defer recoverLog("check boot"); bpc <- bootPerfRead(false) }()
 	rpc := make(chan rpList, 1)
 	go func() {
 		defer recoverLog("check rp")
@@ -143,6 +145,15 @@ func changeCheck(step func(int, string)) *ckReport {
 	// 6. memory, space, restore point
 	step(5, "pc")
 	fs = append(fs, ckPC(changes, ckWait(rpc, rpList{Error: "timeout"}))...)
+	if bp := ckWait(bpc, bootPerf{Error: "timeout"}); bp.Error == "" {
+		var boots [][2]int64
+		for _, b := range bp.Boots {
+			boots = append(boots, [2]int64{b.At, b.Total})
+		}
+		if f := bootFinding(changes, boots, time.Now().Unix()); f != nil {
+			add(*f)
+		}
+	}
 
 	r.Steps = append(r.Steps, time.Since(last).Milliseconds())
 	sortCkFindings(fs)
