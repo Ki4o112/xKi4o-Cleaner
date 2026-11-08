@@ -258,3 +258,18 @@ func TestEventsLongAfterTheChange(t *testing.T) {
 		t.Fatalf("bsod: %+v", fs)
 	}
 }
+
+// A service that failed to start: Windows' reason comes along (the latest).
+func TestEventsServiceReason(t *testing.T) {
+	now := int64(100 * day)
+	evs := []ckEvent{
+		{At: now - 3*day, Kind: "svc", Subject: "Text Input Management Service", Detail: "old reason"},
+		{At: now - 2*day, Kind: "svc", Subject: "Text Input Management Service"},
+		{At: now - day, Kind: "svc", Subject: "Text Input Management Service", Detail: "The service did not respond"},
+	}
+	fs := eventFindings(nil, evs, now)
+	f := findCk(fs, "ev-svc-old", "Text Input Management Service")
+	if f == nil || len(f.Args) != 2 || f.Args[1] != "The service did not respond" {
+		t.Fatalf("got %+v", fs)
+	}
+}

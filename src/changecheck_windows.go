@@ -827,22 +827,33 @@ func checkFixLang() map[string]any {
 		}
 	}
 	// Windows 11's text input service: back to starting with Windows, and
-	// started again (a stuck one too, which shows nothing)
-	if m, err := mgr.Connect(); err == nil {
-		if start, _, ok := svcStart(m, "TextInputManagementService"); ok {
-			if start == windows.SERVICE_DISABLED {
+	// started again (a stuck one too, which shows nothing); it must run
+	// afterwards, or the answer says what Windows said
+	if here, _ := textInputSvc(); here {
+		if m, err := mgr.Connect(); err == nil {
+			if start, _, ok := svcStart(m, "TextInputManagementService"); ok && start == windows.SERVICE_DISABLED {
 				_ = setSvcStart(m, "TextInputManagementService", windows.SERVICE_AUTO_START, false)
 			}
-			_, _, _ = runQuiet(30*time.Second, sys32("net.exe"), "stop", "TextInputManagementService", "/y")
-			if out, code, err := runQuiet(30*time.Second, sys32("net.exe"), "start", "TextInputManagementService"); err != nil || (code != 0 && code != 2) {
-				op.warnf("TextInputManagementService", strings.TrimSpace(out), nil)
+			m.Disconnect()
+		}
+		_, _, _ = runQuiet(30*time.Second, sys32("net.exe"), "stop", "TextInputManagementService", "/y")
+		out, _, _ := runQuiet(30*time.Second, sys32("net.exe"), "start", "TextInputManagementService")
+		running := false
+		for i := 0; i < 20 && !running; i++ {
+			if _, running = textInputSvc(); !running {
+				time.Sleep(300 * time.Millisecond)
 			}
 		}
-		m.Disconnect()
+		if !running {
+			msg := strings.TrimSpace(out)
+			op.fail("TextInputManagementService", msg, nil)
+			return map[string]any{"ok": false, "error": msg, "svc": true}
+		}
 	}
 	if out, code, err := runQuiet(20*time.Second, sys32("schtasks.exe"), "/Run", "/TN", ctfTask); err != nil || code != 0 {
-		op.fail("ctfmon", strings.TrimSpace(out), nil)
-		return map[string]any{"ok": false, "error": strings.TrimSpace(out)}
+		op.warnf("ctfmon", strings.TrimSpace(out), nil)
 	}
+	// the taskbar shows the switcher again only when Explorer starts anew
+	restartExplorer()
 	return map[string]any{"ok": true}
 }

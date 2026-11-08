@@ -366,7 +366,7 @@ async def main():
         await pg.evaluate("(() => { const o = LG.v.ops.find(x => x.state === 'error'); document.querySelector(`#lgOps [data-op=\"${o.id}\"]`).click(); })()")
         await wait_for(pg, "document.querySelector('#lgDet .st-pill.error')")
         await pg.click("#lgCopy")
-        ok = await wait_for(pg, "(window.__copied || '').includes('Ultimate Performance') && window.__copied.includes('Version 4.22.2')", 3000)
+        ok = await wait_for(pg, "(window.__copied || '').includes('Ultimate Performance') && window.__copied.includes('Version 4.22.3')", 3000)
         check("logs: 'Copy report' puts a full report on the clipboard", ok, await pg.evaluate("(window.__copied || '').slice(0, 200)"))
         await pg.select_option("#lgKind", "dupes")
         n = await wait_for(pg, "LG.v.ops.length > 0 && LG.v.ops.every(o => o.kind === 'dupes')")
@@ -659,7 +659,7 @@ async def main():
         await pg.click("#updToggle")
         check("updates: the check can be turned off (and it is saved)", await wait_for(pg, "S.settings.updates === false"))
         await pg.click("#updNews")
-        check("updates: 'What's new' shows this version's changes", await wait_for(pg, "(document.querySelector('#shBody .upd-notes') || {}).textContent && document.querySelector('#shBody .upd-notes').textContent.includes('Превключвателят за езика се връща')"))
+        check("updates: 'What's new' shows this version's changes", await wait_for(pg, "(document.querySelector('#shBody .upd-notes') || {}).textContent && document.querySelector('#shBody .upd-notes').textContent.includes('Върни го наистина връща превключвателя за езика')"))
         check("no page errors (updates)", not pg.errs, pg.errs)
         # 22. PC health: a score, the cards, and "Do all recommended" through the queue
         await pg.close()
@@ -1204,7 +1204,7 @@ async def main():
         pg = await page(b, "?lang=en&fast=1&last=4.3.0", start=None)
         ok = await wait_for(pg, "!!document.querySelector('#shBody .upd-notes')", 9000)
         heads = await pg.evaluate("[...document.querySelectorAll('#shBody .upd-v')].map(h => h.textContent)") if ok else []
-        check("what's new: from 4.3.0 every newer version, newest first", heads[:2] == ["4.22.2", "4.22.1"] and heads[-1] == "4.4.0" and "4.3.0" not in heads, heads)
+        check("what's new: from 4.3.0 every newer version, newest first", heads[:2] == ["4.22.3", "4.22.2"] and heads[-1] == "4.4.0" and "4.3.0" not in heads, heads)
         check("what's new: the title says from which version", "from 4.3.0" in (await pg.text_content("#shTitle") or ""))
         await pg.close()
         # 4.7: junk reminder, new startup program, Optimize for games, last games, hardware rank
@@ -1262,6 +1262,11 @@ async def main():
         check("check: Undo of a likely change takes it back and checks again", ok)
         await pg.click("#ckCopy")
         check("check: the report can be copied as text", await wait_for(pg, "(window.__copied || '').includes('Check the changes') && window.__copied.includes('[ok]')", 3000))
+        # the language fix: when Windows does not start the service, its answer is shown
+        await pg.evaluate("window.__ckLangFail = true; ckFix({ id: 'lang-gone', sev: 'warn', args: ['svc'], fix: 'lang' })")
+        ok = await wait_for(pg, "document.getElementById('veil').classList.contains('on') && document.getElementById('mText').textContent.includes('1067')", 3000)
+        check("check: a language fix Windows refuses shows Windows' answer and what to try", ok)
+        await pg.evaluate("document.getElementById('mCancel').click(); window.__ckLangFail = false")
         check("check: no page errors", not pg.errs, pg.errs)
         pg.errs.clear()
         # settings: the search keeps only the rows that match

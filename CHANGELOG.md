@@ -3,6 +3,16 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.22.3 — 2026-11-08
+
+### English
+- Fixed: Bring it back (the language switcher) said it worked even when Windows did not start the text input service, and the taskbar did not show the switcher again. Now it checks that the service runs, restarts Explorer so the switcher appears, and when Windows refuses, shows Windows' answer and what to try next (restart, then SFC/DISM on Repair)
+- Check shows why a service failed, in Windows' own words
+
+### Български
+- Оправено: „Върни го“ (превключвателят за езика) казваше, че е станало, дори когато Windows не пуска услугата за въвеждане на текст, а лентата на задачите не показваше превключвателя отново. Сега проверява дали услугата работи, рестартира Explorer, за да се появи превключвателят, а когато Windows откаже — показва отговора на Windows и какво да пробваш (рестарт, после SFC/DISM в „Поправка“)
+- Проверката показва защо е спряла услуга — с думите на самия Windows
+
 ## 4.22.2 — 2026-11-08
 
 ### English

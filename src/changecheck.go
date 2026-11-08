@@ -28,6 +28,7 @@ type ckEvent struct {
 	At      int64  // unix seconds
 	Kind    string // crash, hang, svc, bsod, power, gpu
 	Subject string // the program (lower case) or the service, or "" for the PC
+	Detail  string // a service that failed: Windows' own words for why
 }
 
 // ckFinding is one thing the page shows: a problem, or a check that passed.
@@ -151,9 +152,20 @@ func eventFindings(changes []ckRef, evs []ckEvent, now int64) []ckFinding {
 	}
 	type key struct{ kind, subj string }
 	groups := map[key][]int64{}
+	detail := map[key]string{} // the latest reason Windows gave
+	last := map[key]int64{}
 	for _, e := range evs {
 		k := key{e.Kind, e.Subject}
 		groups[k] = append(groups[k], e.At)
+		if e.Detail != "" && e.At >= last[k] {
+			detail[k], last[k] = e.Detail, e.At
+		}
+	}
+	args := func(k key) []string {
+		if d := detail[k]; d != "" {
+			return []string{k.subj, d}
+		}
+		return []string{k.subj}
 	}
 	var out []ckFinding
 	keys := make([]key, 0, len(groups))
@@ -207,7 +219,7 @@ func eventFindings(changes []ckRef, evs []ckEvent, now int64) []ckFinding {
 						sev = "warn"
 					}
 				}
-				out = append(out, ckFinding{ID: id, Sev: sev, Args: []string{k.subj}, Count: after, Before: before, First: first, Suspects: sus})
+				out = append(out, ckFinding{ID: id, Sev: sev, Args: args(k), Count: after, Before: before, First: first, Suspects: sus})
 				continue
 			}
 		}
@@ -230,7 +242,7 @@ func eventFindings(changes []ckRef, evs []ckEvent, now int64) []ckFinding {
 			limit = 5
 		}
 		if recent >= limit {
-			out = append(out, ckFinding{ID: "ev-" + k.kind + "-old", Sev: "info", Args: []string{k.subj}, Count: recent, First: first})
+			out = append(out, ckFinding{ID: "ev-" + k.kind + "-old", Sev: "info", Args: args(k), Count: recent, First: first})
 		}
 	}
 	return out
@@ -401,6 +413,9 @@ func ckParseEvents(out string) []ckEvent {
 		case (x.System.EventID == 7031 || x.System.EventID == 7034 || x.System.EventID == 7000 || x.System.EventID == 7023 ||
 			x.System.EventID == 7024) && strings.Contains(prov, "service control manager"):
 			e.Kind, e.Subject = "svc", first
+			if x.System.EventID != 7031 && x.System.EventID != 7034 && len(x.Data) > 1 {
+				e.Detail = strings.TrimSpace(x.Data[1]) // 7000, 7023, 7024: the error
+			}
 		case x.System.EventID == 1000 && prov == "application error":
 			e.Kind, e.Subject = "crash", strings.ToLower(first)
 		case x.System.EventID == 1002 && prov == "application hang":
