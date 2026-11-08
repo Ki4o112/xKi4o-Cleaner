@@ -311,3 +311,33 @@ func TestCheckFixHosts(t *testing.T) {
 		t.Fatalf("after: %q", now)
 	}
 }
+
+// The task that starts ctfmon.exe (the language indicator) turned off: seen,
+// and the fix turns it on again and starts it.
+func TestCheckFixLang(t *testing.T) {
+	changesThisPC(t)
+	if out, code, err := runQuiet(15*time.Second, sys32("schtasks.exe"), "/Query", "/TN", ctfTask); err != nil || code != 0 {
+		t.Skip("no MsCtfMonitor task here: " + out)
+	}
+	was := ctfTaskDisabled()
+	defer func() {
+		flag := "/Enable"
+		if was {
+			flag = "/Disable"
+		}
+		_, _, _ = runQuiet(15*time.Second, sys32("schtasks.exe"), "/Change", "/TN", ctfTask, flag)
+	}()
+	if out, code, err := runQuiet(15*time.Second, sys32("schtasks.exe"), "/Change", "/TN", ctfTask, "/Disable"); err != nil || code != 0 {
+		t.Fatalf("disable: %s", out)
+	}
+	if !ctfTaskDisabled() {
+		t.Fatal("the turned-off task is not seen")
+	}
+	if r := checkFixLang(); r["ok"] != true {
+		t.Fatalf("fix: %v", r)
+	}
+	if ctfTaskDisabled() {
+		t.Fatal("still off after the fix")
+	}
+	t.Logf("keyboard languages here: %d, the indicator check says %+v", keyboardLayouts(), ckInput())
+}

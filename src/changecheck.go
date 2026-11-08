@@ -513,3 +513,16 @@ func bootFinding(changes []ckRef, boots [][2]int64, now int64) *ckFinding {
 	}
 	return &ckFinding{ID: "ok-boot", Sev: "ok", Args: []string{secs(a)}}
 }
+
+// ctfTaskOff: schtasks' CSV line says the task is turned off ("Disabled";
+// other languages of Windows write their own word, so the English one and
+// the usual ones count).
+func ctfTaskOff(csv string) bool {
+	l := strings.ToLower(csv)
+	for _, w := range []string{"disabled", "деактивирано", "забранено", "deaktiviert", "désactivé", "deshabilitado", "disabilitato", "wyłączone", "отключено"} {
+		if strings.Contains(l, `"`+w+`"`) {
+			return true
+		}
+	}
+	return false
+}

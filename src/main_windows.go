@@ -224,6 +224,7 @@ func main() {
 		"checkFixService":      checkFixService,
 		"checkFixPolicy":       checkFixPolicy,
 		"checkFixHosts":        checkFixHosts,
+		"checkFixLang":         checkFixLang,
 		"debloatState":         debloatState,
 		"debloatRun":           debloatRun,
 		"powerProfile":         powerProfile,

@@ -559,6 +559,10 @@ func ckWindows(changes []ckRef, av avState) []ckFinding {
 		}
 		m.Disconnect()
 	}
+	// the language indicator by the clock (with two keyboard languages or more)
+	if f := ckInput(); f != nil {
+		fs = append(fs, *f)
+	}
 	// a restart Windows waits for
 	if regKeyExists(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending`) ||
 		regKeyExists(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired`) {
@@ -714,4 +718,91 @@ func checkFixHosts() map[string]any {
 	op.info("hosts", T("log.ckHostsBackup", backup), nil)
 	_, _, _ = runQuiet(15*time.Second, sys32("ipconfig.exe"), "/flushdns")
 	return map[string]any{"ok": true, "backup": backup}
+}
+
+const ctfTask = `\Microsoft\Windows\TextServicesFramework\MsCtfMonitor`
+
+// keyboardLayouts: how many keyboard languages this user has.
+func keyboardLayouts() int {
+	k, err := registry.OpenKey(registry.CURRENT_USER, `Keyboard Layout\Preload`, registry.QUERY_VALUE)
+	if err != nil {
+		return 0
+	}
+	defer k.Close()
+	names, _ := k.ReadValueNames(-1)
+	return len(names)
+}
+
+// ctfTaskDisabled: the task that starts ctfmon.exe at sign-in is turned off.
+func ctfTaskDisabled() bool {
+	out, code, err := runQuiet(15*time.Second, sys32("schtasks.exe"), "/Query", "/TN", ctfTask, "/FO", "CSV", "/NH")
+	return err == nil && code == 0 && ctfTaskOff(out)
+}
+
+// ckInput: the language indicator is gone (ctfmon.exe not running, its task
+// turned off, or the language bar hidden) while there are 2 languages or more.
+func ckInput() *ckFinding {
+	if keyboardLayouts() < 2 {
+		return nil
+	}
+	running := false
+	if raw, err := queryProcesses(); err == nil {
+		for _, p := range raw {
+			if strings.EqualFold(p.name, "ctfmon.exe") {
+				running = true
+				break
+			}
+		}
+	}
+	hidden := false
+	if v, ok := regDwordCU(`Software\Microsoft\CTF\LangBar`, "ShowStatus"); ok && v == 3 {
+		hidden = true
+	}
+	task := ctfTaskDisabled()
+	if running && !hidden && !task {
+		return &ckFinding{ID: "ok-lang", Sev: "ok"}
+	}
+	why := "notrunning"
+	switch {
+	case task:
+		why = "task"
+	case hidden:
+		why = "hidden"
+	}
+	return &ckFinding{ID: "lang-gone", Sev: "warn", Args: []string{why}, Fix: "lang"}
+}
+
+func regDwordCU(path, name string) (uint64, bool) {
+	k, err := registry.OpenKey(registry.CURRENT_USER, path, registry.QUERY_VALUE)
+	if err != nil {
+		return 0, false
+	}
+	defer k.Close()
+	v, _, err := k.GetIntegerValue(name)
+	return v, err == nil
+}
+
+// checkFixLang brings the language indicator back: the language bar back in
+// the taskbar, the task that starts ctfmon.exe turned on, and started now (as
+// the signed-in user, not with the app's administrator rights).
+func checkFixLang() map[string]any {
+	op := beginOp("tweak", "ctfmon", T("log.ckLang"), nil)
+	defer op.end("", nil)
+	if k, err := registry.OpenKey(registry.CURRENT_USER, `Software\Microsoft\CTF\LangBar`, registry.QUERY_VALUE|registry.SET_VALUE); err == nil {
+		if v, _, err := k.GetIntegerValue("ShowStatus"); err == nil && v == 3 {
+			_ = k.SetDWordValue("ShowStatus", 4) // docked in the taskbar
+		}
+		k.Close()
+	}
+	if ctfTaskDisabled() {
+		if out, code, err := runQuiet(20*time.Second, sys32("schtasks.exe"), "/Change", "/TN", ctfTask, "/Enable"); err != nil || code != 0 {
+			op.fail("ctfmon", strings.TrimSpace(out), nil)
+			return map[string]any{"ok": false, "error": strings.TrimSpace(out)}
+		}
+	}
+	if out, code, err := runQuiet(20*time.Second, sys32("schtasks.exe"), "/Run", "/TN", ctfTask); err != nil || code != 0 {
+		op.fail("ctfmon", strings.TrimSpace(out), nil)
+		return map[string]any{"ok": false, "error": strings.TrimSpace(out)}
+	}
+	return map[string]any{"ok": true}
 }

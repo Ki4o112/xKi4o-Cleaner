@@ -234,3 +234,9 @@ func TestBootFinding(t *testing.T) {
 		t.Fatal("too few starts after the changes, or no changes: nothing to say")
 	}
 }
+
+func TestCtfTaskOff(t *testing.T) {
+	if !ctfTaskOff(`"\\Microsoft\\Windows\\TextServicesFramework\\MsCtfMonitor","N/A","Disabled"`) || ctfTaskOff(`"\\MsCtfMonitor","N/A","Ready"`) || ctfTaskOff("") {
+		t.Fatal("ctfTaskOff")
+	}
+}
