@@ -3,6 +3,14 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.22.1 — 2026-11-08
+
+### English
+- Check finds a missing language indicator by the clock (ENG/БЪЛ) — the input program not running, its sign-in task turned off or the language bar hidden — and brings it back with one click
+
+### Български
+- Проверката намира липсващ индикатор за езика до часовника (ENG/БЪЛ) — спряна програма за въвеждане, изключена задача при влизане или скрита лента за езика — и го връща с един клик
+
 ## 4.22.0 — 2026-11-07
 
 ### English
