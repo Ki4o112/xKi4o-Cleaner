@@ -342,7 +342,7 @@ func ckServicesCheck(changes []ckRef, svcOf map[string][]string) []ckFinding {
 			bad++
 			continue
 		}
-		if w.Auto && start == windows.SERVICE_AUTO_START {
+		if w.Auto && start == windows.SERVICE_AUTO_START && w.Area != "lang" { // the language one: told with the language indicator
 			if run, ok := svcRunning(m, w.Name); ok && !run {
 				// a moment later: it may be starting right now
 				time.Sleep(300 * time.Millisecond)
@@ -722,15 +722,37 @@ func checkFixHosts() map[string]any {
 
 const ctfTask = `\Microsoft\Windows\TextServicesFramework\MsCtfMonitor`
 
-// keyboardLayouts: how many keyboard languages this user has.
+// keyboardLayouts: how many keyboard languages this user has (the Windows 11
+// language list, or the older keyboard list, whichever has more).
 func keyboardLayouts() int {
-	k, err := registry.OpenKey(registry.CURRENT_USER, `Keyboard Layout\Preload`, registry.QUERY_VALUE)
-	if err != nil {
-		return 0
+	n := 0
+	if k, err := registry.OpenKey(registry.CURRENT_USER, `Keyboard Layout\Preload`, registry.QUERY_VALUE); err == nil {
+		names, _ := k.ReadValueNames(-1)
+		n = len(names)
+		k.Close()
 	}
-	defer k.Close()
-	names, _ := k.ReadValueNames(-1)
-	return len(names)
+	if k, err := registry.OpenKey(registry.CURRENT_USER, `Control Panel\International\User Profile`, registry.QUERY_VALUE); err == nil {
+		if langs, _, err := k.GetStringsValue("Languages"); err == nil && len(langs) > n {
+			n = len(langs)
+		}
+		k.Close()
+	}
+	return n
+}
+
+// textInputSvc: whether Windows 11's text input service (it shows the
+// language switcher by the clock) is here, and whether it runs.
+func textInputSvc() (here, running bool) {
+	m, err := mgrRead()
+	if err != nil {
+		return false, false
+	}
+	defer m.Disconnect()
+	if _, _, ok := svcStart(m, "TextInputManagementService"); !ok {
+		return false, false
+	}
+	run, ok := svcRunning(m, "TextInputManagementService")
+	return true, ok && run
 }
 
 // ctfTaskDisabled: the task that starts ctfmon.exe at sign-in is turned off.
@@ -759,11 +781,15 @@ func ckInput() *ckFinding {
 		hidden = true
 	}
 	task := ctfTaskDisabled()
-	if running && !hidden && !task {
+	svcHere, svcRun := textInputSvc()
+	svcDown := svcHere && !svcRun
+	if running && !hidden && !task && !svcDown {
 		return &ckFinding{ID: "ok-lang", Sev: "ok"}
 	}
 	why := "notrunning"
 	switch {
+	case svcDown:
+		why = "svc"
 	case task:
 		why = "task"
 	case hidden:
@@ -799,6 +825,20 @@ func checkFixLang() map[string]any {
 			op.fail("ctfmon", strings.TrimSpace(out), nil)
 			return map[string]any{"ok": false, "error": strings.TrimSpace(out)}
 		}
+	}
+	// Windows 11's text input service: back to starting with Windows, and
+	// started again (a stuck one too, which shows nothing)
+	if m, err := mgr.Connect(); err == nil {
+		if start, _, ok := svcStart(m, "TextInputManagementService"); ok {
+			if start == windows.SERVICE_DISABLED {
+				_ = setSvcStart(m, "TextInputManagementService", windows.SERVICE_AUTO_START, false)
+			}
+			_, _, _ = runQuiet(30*time.Second, sys32("net.exe"), "stop", "TextInputManagementService", "/y")
+			if out, code, err := runQuiet(30*time.Second, sys32("net.exe"), "start", "TextInputManagementService"); err != nil || (code != 0 && code != 2) {
+				op.warnf("TextInputManagementService", strings.TrimSpace(out), nil)
+			}
+		}
+		m.Disconnect()
 	}
 	if out, code, err := runQuiet(20*time.Second, sys32("schtasks.exe"), "/Run", "/TN", ctfTask); err != nil || code != 0 {
 		op.fail("ctfmon", strings.TrimSpace(out), nil)

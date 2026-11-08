@@ -240,3 +240,21 @@ func TestCtfTaskOff(t *testing.T) {
 		t.Fatal("ctfTaskOff")
 	}
 }
+
+// The user's case: a service stopped twice on one day, two weeks after the
+// only change (which does not touch services): new, but not blamed on it.
+func TestEventsLongAfterTheChange(t *testing.T) {
+	now := int64(100 * day)
+	changes := []ckRef{{Kind: "tweak", ID: "edge-bg-off", At: now - 14*day}, {Kind: "tweak", ID: "svc-manual", At: now - 14*day}}
+	evs := []ckEvent{{At: now - day/2, Kind: "svc", Subject: "TextInputManagementService"}, {At: now - day/3, Kind: "svc", Subject: "TextInputManagementService"}}
+	fs := eventFindings(changes, evs, now)
+	f := findCk(fs, "ev-svc-new", "TextInputManagementService")
+	if f == nil || f.Sev != "info" || len(f.Suspects) != 0 {
+		t.Fatalf("got %+v", fs)
+	}
+	// a blue screen in the same place stays a warning
+	fs = eventFindings(changes, []ckEvent{{At: now - day, Kind: "bsod"}}, now)
+	if f := findCk(fs, "ev-bsod-new", ""); f == nil || f.Sev != "warn" {
+		t.Fatalf("bsod: %+v", fs)
+	}
+}

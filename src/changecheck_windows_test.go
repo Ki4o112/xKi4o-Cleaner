@@ -341,3 +341,27 @@ func TestCheckFixLang(t *testing.T) {
 	}
 	t.Logf("keyboard languages here: %d, the indicator check says %+v", keyboardLayouts(), ckInput())
 }
+
+// Windows 11's text input service stopped (the language switcher is gone):
+// the fix starts it again.
+func TestCheckFixLangService(t *testing.T) {
+	changesThisPC(t)
+	if here, _ := textInputSvc(); !here {
+		t.Skip("no TextInputManagementService here")
+	}
+	_, _, _ = runQuiet(30*time.Second, sys32("net.exe"), "stop", "TextInputManagementService", "/y")
+	if _, run := textInputSvc(); run {
+		t.Skip("the service did not stop")
+	}
+	if r := checkFixLang(); r["ok"] != true {
+		t.Fatalf("fix: %v", r)
+	}
+	running := false
+	for i := 0; i < 20 && !running; i++ {
+		_, running = textInputSvc()
+		time.Sleep(250 * time.Millisecond)
+	}
+	if !running {
+		t.Fatal("not running after the fix")
+	}
+}

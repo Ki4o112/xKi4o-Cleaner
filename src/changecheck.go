@@ -82,8 +82,7 @@ var ckSuspectTweaks = map[string][]string{
 		"ultimate-power", "dynamic-tick", "core-isolation-off", "mpo-off"},
 	"system": {"core-isolation-off", "dynamic-tick", "timer-res-global", "hags", "win32-priority", "ultimate-power", "paging-exec-off",
 		"gpu-tdr-longer", "fast-startup-off", "hibernation-off", "wpbt-off", "games-priority", "power-throttling-off", "mpo-off"},
-	"svc": {"svc-manual", "printer-manual", "do-off", "telemetry-off", "gamebar-off", "edge-bg-off", "edge-remove", "search-low-priority",
-		"defender-rtp-off", "wu-drivers-off"},
+	"svc": {"svc-manual", "printer-manual", "do-off", "sysmain-off"}, // the tweaks that change services
 	"boot": {"svc-manual", "startup-delay-off", "fast-startup-off", "hibernation-off", "sysmain-off", "ntfs-8dot3-off", "paging-exec-off",
 		"core-isolation-off", "search-low-priority", "bg-apps-off", "power-throttling-off", "debloat", "onedrive-remove", "edge-remove"},
 	"app": {"games-priority", "hags", "windowed-opt", "game-mode", "gamebar-off", "nvidia-opt", "timer-res-global", "win32-priority",
@@ -110,8 +109,9 @@ func ckArea(e ckEvent) string {
 }
 
 // ckSuspects: the changes that may be the cause of trouble that began at
-// first. The changes known to touch that part of Windows, made before it;
-// when none is known, the changes made in the week before it.
+// first: made in the week before it, the ones known to touch that part of
+// Windows first (when none is, all of that week). A change made long before
+// the trouble began is not blamed.
 func ckSuspects(area string, first int64, changes []ckRef) []ckRef {
 	known := map[string]bool{}
 	for _, id := range ckSuspectTweaks[area] {
@@ -119,15 +119,13 @@ func ckSuspects(area string, first int64, changes []ckRef) []ckRef {
 	}
 	var byArea, byTime []ckRef
 	for _, c := range changes {
-		if c.At == 0 || c.At > first {
+		if c.At == 0 || c.At > first || first-c.At > 7*86400 {
 			continue
 		}
 		if (c.Kind == "tweak" && known[c.ID]) || (c.Kind == "debloat" && area == "shell") {
 			byArea = append(byArea, c)
 		}
-		if first-c.At <= 7*86400 {
-			byTime = append(byTime, c)
-		}
+		byTime = append(byTime, c)
 	}
 	out := byArea
 	if len(out) == 0 {
@@ -198,8 +196,18 @@ func eventFindings(changes []ckRef, evs []ckEvent, now int64) []ckFinding {
 				if heavy || (area == "shell" && after >= 3) || (area == "gpu" && after >= 3) {
 					sev = "bad"
 				}
-				out = append(out, ckFinding{ID: "ev-" + k.kind, Sev: sev, Args: []string{k.subj}, Count: after, Before: before,
-					First: first, Suspects: ckSuspects(area, first, changes)})
+				sus := ckSuspects(area, first, changes)
+				id := "ev-" + k.kind
+				if len(sus) == 0 {
+					// it began well after the last change: new, but not theirs
+					id += "-new"
+					if !heavy {
+						sev = "info"
+					} else {
+						sev = "warn"
+					}
+				}
+				out = append(out, ckFinding{ID: id, Sev: sev, Args: []string{k.subj}, Count: after, Before: before, First: first, Suspects: sus})
 				continue
 			}
 		}
@@ -253,7 +261,7 @@ var ckServices = []ckWant{
 	{"wuauserv", false, "update", 3, false}, {"BITS", false, "update", 3, false}, {"TrustedInstaller", false, "update", 3, false},
 	{"UsoSvc", false, "update", 2, true}, {"msiserver", false, "install", 3, false},
 	{"AppXSvc", false, "store", 3, false}, {"ClipSVC", false, "store", 3, false}, {"InstallService", false, "store", 3, false},
-	{"TokenBroker", false, "start", 3, false}, {"camsvc", false, "start", 3, false}, {"TextInputManagementService", false, "start", 2, false},
+	{"TokenBroker", false, "start", 3, false}, {"camsvc", false, "start", 3, false}, {"TextInputManagementService", true, "lang", 2, false},
 	{"W32Time", false, "time", 3, false}, {"WSearch", false, "search", 2, true},
 }
 
