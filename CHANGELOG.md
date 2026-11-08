@@ -3,6 +3,16 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.22.2 — 2026-11-08
+
+### English
+- Fixed: the language switcher by the clock (ENG/БЪЛ) gone because Windows 11's text input service stopped was not found — Check now finds it and its button starts the service again; languages are also counted from Windows 11's list
+- Check blames a change only when it was made in the week before the trouble began; later trouble is told as new, not caused by the changes (no more "No Edge in the background" for a service that stopped two weeks later)
+
+### Български
+- Оправено: превключвателят за езика до часовника (ENG/БЪЛ), изчезнал заради спряла услуга за въвеждане на текст в Windows 11, не се намираше — сега Проверката я намира и бутонът ѝ я пуска отново; езиците се броят и от списъка на Windows 11
+- Проверката обвинява промяна само ако е направена в седмицата преди проблема; по-късен проблем се показва като нов, не от промените (вече няма „Без Edge във фона“ за услуга, спряла две седмици по-късно)
+
 ## 4.22.1 — 2026-11-08
 
 ### English
