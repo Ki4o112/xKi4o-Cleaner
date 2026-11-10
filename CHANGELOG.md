@@ -3,6 +3,26 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.23.0 — 2026-11-10
+
+### English
+- Quick actions on PC health: Clean, Free RAM, Game mode, Check and Updates, each with its current state, one click away
+- Back and forward through the pages: buttons next to the PC's name, Alt + ← / →, and the mouse's side buttons
+- Tooltips drawn by the app instead of Windows' grey ones
+- One rhythm on every page: the same distance under the title, the same section titles, rows that light up under the pointer
+- Debloat: tidier rows, and the bar at the bottom no longer shows the text under it
+- Fixed: the Close button on Processes was cut off
+- A clear ring on what has the keyboard focus
+
+### Български
+- Бързи действия в „Здраве на компютъра“: Почисти, Освободи RAM, Режим „Игри“, Проверка и Обновления, всяко с текущото си състояние, на един клик
+- Назад и напред през страниците: бутони до името на компютъра, Alt + ← / → и страничните бутони на мишката
+- Подсказки, рисувани от програмата, вместо сивите на Windows
+- Един ритъм на всяка страница: еднакво разстояние под заглавието, еднакви заглавия на разделите, редове, които светват под мишката
+- Debloat: по-подредени редове, а лентата отдолу вече не показва текста под нея
+- Оправено: бутонът „Затвори“ в „Процеси“ беше отрязан
+- Ясна рамка около това, което е на фокус от клавиатурата
+
 ## 4.22.3 — 2026-11-08
 
 ### English
