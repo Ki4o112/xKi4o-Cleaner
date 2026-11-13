@@ -158,8 +158,19 @@ func wuInstall(o wuOpts) (res wuResult) {
 	var err error
 	// a failed download is repaired (cache cleared, services restarted, DISM
 	// for a damaged store) and tried once more by itself
-	type failure struct{ title, hr string }
+	type failure struct {
+		title, hr string
+		i         int
+	}
+	fail := func(id string, f failure) { // a final failure: counted, logged and shown on its row
+		got++
+		res.Failed = append(res.Failed, f.title)
+		op.fail(f.title, T("log.wuOneFail", wuHResult(f.hr)), map[string]any{"hresult": f.hr})
+		emit("wu-progress", map[string]any{"phase": "done", "i": f.i, "n": count, "id": id, "title": f.title, "ok": false, "error": wuHResult(f.hr)})
+	}
 	ids := o.IDs
+	place := map[string]int{} // each update's place in the first pass: the retry keeps the bar where it was
+	var retried map[string]failure
 	for attempt := 0; attempt < 2 && len(ids) > 0; attempt++ {
 		retry := attempt == 0
 		failed := map[string]failure{}
@@ -168,22 +179,30 @@ func wuInstall(o wuOpts) (res wuResult) {
 			if !ok {
 				return
 			}
+			key := strings.ToLower(li.ID)
+			i := li.I
+			if attempt == 0 {
+				place[key] = li.I
+			} else if p, ok := place[key]; ok {
+				i = p
+			}
 			switch li.Kind {
 			case "count":
 				if attempt == 0 {
 					count = li.Count
 				}
 			case "step":
-				emit("wu-progress", map[string]any{"phase": li.Phase, "i": li.I, "n": count, "id": li.ID, "title": titles[strings.ToLower(li.ID)], "retry": attempt > 0})
+				emit("wu-progress", map[string]any{"phase": li.Phase, "i": i, "n": count, "id": li.ID, "title": titles[key], "retry": attempt > 0})
 			case "done":
-				title := titles[strings.ToLower(li.ID)]
+				delete(retried, li.ID)
+				title := titles[key]
 				if title == "" {
 					title = li.ID
 				}
 				okRes := li.Result == 2 || li.Result == 3
 				if !okRes {
 					if can, _ := wuRepairable(li.HR); can && retry && ctx.Err() == nil {
-						failed[li.ID] = failure{title, li.HR}
+						failed[li.ID] = failure{title, li.HR, i}
 						op.warnf(title, T("log.wuRetry", wuHResult(li.HR)), map[string]any{"hresult": li.HR})
 						return
 					}
@@ -197,12 +216,26 @@ func wuInstall(o wuOpts) (res wuResult) {
 					op.fail(title, T("log.wuOneFail", wuHResult(li.HR)), map[string]any{"result": li.Result, "hresult": li.HR})
 				}
 				res.Reboot = res.Reboot || li.Reboot
-				emit("wu-progress", map[string]any{"phase": "done", "i": li.I, "n": count, "id": li.ID, "title": title, "ok": okRes, "error": map[bool]string{true: "", false: wuHResult(li.HR)}[okRes]})
+				emit("wu-progress", map[string]any{"phase": "done", "i": i, "n": count, "id": li.ID, "title": title, "ok": okRes, "error": map[bool]string{true: "", false: wuHResult(li.HR)}[okRes]})
 			case "err":
-				res.Error = strings.TrimSpace(wuHResult(li.HR) + " " + strings.TrimPrefix(line, "ERR|"+li.HR+"|"))
+				// the second try failing as a whole does not undo what the first one installed
+				if attempt == 0 {
+					res.Error = strings.TrimSpace(wuHResult(li.HR) + " " + strings.TrimPrefix(line, "ERR|"+li.HR+"|"))
+				}
 			}
 		})
-		if len(failed) == 0 || ctx.Err() != nil {
+		// what the second try did not report on stays failed, with its first error
+		for id, f := range retried {
+			fail(id, f)
+		}
+		retried = nil
+		if len(failed) == 0 {
+			break
+		}
+		if ctx.Err() != nil { // stopped: no repair, they count as failed
+			for id, f := range failed {
+				fail(id, f)
+			}
 			break
 		}
 		// repair Windows Update, then the failed ones once more
@@ -214,11 +247,11 @@ func wuInstall(o wuOpts) (res wuResult) {
 				dism = true
 			}
 		}
-		emit("wu-progress", map[string]any{"phase": "repair", "n": count})
 		wuRepair(ctx, op, dism, func(phase string) { emit("wu-progress", map[string]any{"phase": phase, "n": count}) })
+		retried = failed
 		if ctx.Err() != nil {
-			for _, f := range failed {
-				res.Failed = append(res.Failed, f.title)
+			for id, f := range failed {
+				fail(id, f)
 			}
 			break
 		}

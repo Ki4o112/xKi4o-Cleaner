@@ -3,6 +3,24 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.24.1 — 2026-11-13
+
+### English
+- Fixed: an update whose second try (after the Windows Update repair) never got to report back was counted neither as installed nor as failed — it now shows as failed, with its first error
+- Fixed: stopping the install while an update waited for the repair lost it from the result
+- Fixed: the progress bar jumped back to the start during the second try; it now stays where the update was
+- Fixed: when the second try could not search Windows Update at all, the result said everything failed even though the first pass had installed updates
+- Fixed: the confetti came out after a cleanup that freed nothing
+- Fixed: after clicking the current theme, a later theme change from the keyboard opened the circle from the old click
+
+### Български
+- Оправено: обновление, чийто втори опит (след поправката на Windows Update) не успее да отговори, не се броеше нито за инсталирано, нито за неуспешно — сега се показва като неуспешно с първата си грешка
+- Оправено: спирането на инсталирането, докато обновление чака поправката, го губеше от резултата
+- Оправено: лентата на прогреса скачаше обратно в началото при втория опит; сега остава на мястото на обновлението
+- Оправено: когато вторият опит изобщо не можеше да търси в Windows Update, резултатът казваше, че всичко е неуспешно, въпреки че първото минаване беше инсталирало обновления
+- Оправено: конфетите излизаха и след почистване, което не е освободило нищо
+- Оправено: след клик върху текущата тема по-късна смяна от клавиатурата отваряше кръга от стария клик
+
 ## 4.24.0 — 2026-11-13
 
 ### English
