@@ -166,6 +166,33 @@ func electronTargets(bases ...string) []target {
 	return ts
 }
 
+// packageDirs: an app's folders inside the Store packages, by its family name.
+func packageDirs(family, rest string) []string {
+	var out []string
+	for _, p := range subDirs(j(P.local, "Packages"), family+"_*") {
+		if d := j(p, rest); dirExists(d) {
+			out = append(out, d)
+		}
+	}
+	return out
+}
+
+func spotifyBrowsers() []string {
+	out := packageDirs("SpotifyAB.SpotifyMusic", `LocalCache\Spotify\Browser`)
+	if d := j(P.local, `Spotify\Browser`); dirExists(d) {
+		out = append(out, d)
+	}
+	return out
+}
+
+func whatsappBases() []string {
+	return append(packageDirs("5319275A.WhatsAppDesktop", `LocalCache\EBWebView`), packageDirs("5319275A.51895FA4EA97F", `LocalCache\EBWebView`)...)
+}
+
+func arcBases() []string {
+	return packageDirs("TheBrowserCompany.Arc", `LocalCache\Local\Arc\User Data`)
+}
+
 func anyDir(ps ...string) bool {
 	for _, p := range ps {
 		if dirExists(p) {
@@ -328,6 +355,9 @@ func buildCatalog() {
 		{id: "opera", procs: []string{"opera.exe"},
 			detect:  func() bool { return anyDir(operaBases()...) },
 			targets: func() []target { return chromiumTargets(operaBases()...) }},
+		{id: "arc", procs: []string{"arc.exe"},
+			detect: func() bool { return len(arcBases()) > 0 },
+			targets: func() []target { return chromiumTargets(arcBases()...) }},
 		{id: "firefox", procs: []string{"firefox.exe"},
 			detect: func() bool {
 				return anyDir(j(P.local, `Mozilla\Firefox\Profiles`), j(P.roaming, `Mozilla\Firefox\Profiles`))
@@ -452,6 +482,28 @@ func buildCatalog() {
 			targets: func() []target {
 				o := j(P.roaming, "obs-studio")
 				return contentsIfExists(j(o, "logs"), j(o, "crashes"), j(o, "profiler_data"))
+			}},
+		// 4.24: more apps — only caches they build again, never logins, chats or downloads
+		{id: "spotify", procs: []string{"spotify.exe"},
+			detect: func() bool { return len(spotifyBrowsers()) > 0 },
+			targets: func() []target {
+				// the built-in browser's caches only: Storage (offline songs) and
+				// Data stay
+				return electronTargets(spotifyBrowsers()...)
+			}},
+		{id: "whatsapp", procs: []string{"whatsapp.exe", "whatsapp.root.exe"},
+			detect: func() bool { return len(whatsappBases()) > 0 },
+			targets: func() []target { return chromiumTargets(whatsappBases()...) }},
+		{id: "zoom", procs: []string{"zoom.exe"},
+			detect: func() bool { return dirExists(j(P.roaming, "Zoom")) },
+			targets: func() []target {
+				return contentsIfExists(j(P.roaming, `Zoom\logs`), j(P.roaming, `Zoom\data\WebviewCacheX64`), j(P.local, `Zoom\logs`))
+			}},
+		{id: "adobe", procs: []string{"adobe premiere pro.exe", "afterfx.exe", "adobe media encoder.exe", "photoshop.exe", "audition.exe"},
+			detect: func() bool { return dirExists(j(P.roaming, `Adobe\Common`)) },
+			targets: func() []target {
+				c := j(P.roaming, `Adobe\Common`)
+				return contentsIfExists(j(c, "Media Cache Files"), j(c, "Media Cache"), j(c, "Peak Files"))
 			}},
 		{id: "devcache", targets: func() []target {
 			return contentsIfExists(

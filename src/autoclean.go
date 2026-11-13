@@ -19,7 +19,7 @@ const autoTaskName = `xKi4o Cleaner\Automatic cleaning`
 var autoCleanIDs = []string{
 	"temp", "inetcache", "storeapps", "msstore", "dumps", "thumbs", "dns",
 	"chrome", "edge", "brave", "vivaldi", "opera", "firefox",
-	"discord", "vscode", "slack", "teams", "notion", "telegram", "steam", "epic", "ubisoft", "battlenet", "eaapp", "gog", "riot", "obs", "devcache",
+	"discord", "vscode", "slack", "teams", "notion", "telegram", "steam", "epic", "ubisoft", "battlenet", "eaapp", "gog", "riot", "obs", "spotify", "whatsapp", "zoom", "devcache", "arc",
 	"nvinstallers", "nvapp", "amdinstallers", "winlogs",
 }
 

@@ -149,6 +149,8 @@ var texts = map[string][2]string{ // [bg, en]
 	"log.ckHosts":       {"Проверка: почистване на hosts от блокираните сървъри за обновления", "Check: removing the blocked update servers from hosts"},
 	"log.ckHostsBackup": {"Старият hosts е запазен в %s", "The old hosts file is kept in %s"},
 	"log.ckLang":        {"Проверка: връщане на индикатора за езика (ctfmon)", "Check: bringing the language indicator back (ctfmon)"},
+	"log.atReboot":      {"Изтриване при рестарт: %d заети файла", "Delete at restart: %d files in use"},
+	"log.atRebootDone":  {"Windows ще изтрие %d файла при следващия рестарт", "Windows will delete %d files at the next restart"},
 	"log.ckSvc":         {"Проверка: услугата %s е върната", "Check: the %s service put back"},
 	"log.explorerFail":  {"Explorer не се стартира отново сам", "Explorer did not start again by itself"},
 	"log.su.enable":     {"Включване при стартиране", "Turning on at startup"},

@@ -168,3 +168,27 @@ func TestAnalyzeAllSmoke(t *testing.T) {
 		}
 	}
 }
+
+// A temporary file a program holds open: Windows takes it for deleting at
+// the next restart; a file outside the cleaned folders is refused.
+func TestCleanAtReboot(t *testing.T) {
+	changesThisPC(t)
+	initPaths()
+	buildCatalog()
+	was := app.admin
+	app.admin = isElevated()
+	defer func() { app.admin = was }()
+	if !app.admin {
+		t.Skip("needs administrator rights")
+	}
+	f, err := os.CreateTemp(P.temp, "xki4o-reboot-*.tmp")
+	if err != nil {
+		t.Skip(err)
+	}
+	path := f.Name()
+	defer func() { f.Close(); os.Remove(path) }()
+	r := cleanAtReboot([]string{path, filepath.Join(os.Getenv("SystemRoot"), `System32\drivers\etc\hosts`), `C:\`})
+	if r["count"] != 1 {
+		t.Fatalf("got %v", r)
+	}
+}

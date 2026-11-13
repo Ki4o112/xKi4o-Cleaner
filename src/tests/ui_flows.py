@@ -124,6 +124,12 @@ async def main():
         await pg.click("#lnkReport")
         ok = await wait_for(pg, "document.querySelectorAll('#shBody .rp-tab tbody tr').length > 0")
         check("report lists every category", ok)
+        if await pg.is_visible("#rpReboot"):
+            await pg.click("#rpReboot")
+            check("files still in use can be deleted at the next restart", await wait_for(pg, "(window.__atReboot || []).length > 0", 3000))
+        else:
+            check("files still in use can be deleted at the next restart", False, "no button")
+        check("the space freed so far is kept (saved with the settings)", await pg.evaluate("S.settings.lifetime && S.settings.lifetime.freed > 0"))
         await pg.keyboard.press("Escape")
         # 2b. with "close by force" off: the polite way, a forced close only after confirmation
         await pg.close()
@@ -816,7 +822,7 @@ async def main():
         check("title bar: the logo is the new image", await pg.evaluate("getComputedStyle(document.querySelector('#brand .logo')).backgroundImage.startsWith('url(\"data:image/svg+xml')"))
         await pg.click("#wbMin")
         await pg.click("#wbMax")
-        ok = await wait_for(pg, "document.body.classList.contains('win-max') && document.getElementById('wbMax').title === t('win.restore')", 2000)
+        ok = await wait_for(pg, "document.body.classList.contains('win-max') && (document.getElementById('wbMax').title || document.getElementById('wbMax')._tipT) === t('win.restore')", 2000)
         check("title bar: maximize, and the button turns into 'restore'", ok)
         await pg.click("#wbMax")
         ok = await wait_for(pg, "!document.body.classList.contains('win-max')", 2000)
