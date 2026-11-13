@@ -3,6 +3,62 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.24.0 — 2026-11-13
+
+### English
+#### Cleanup
+- New categories: Spotify (its built-in browser's cache — your downloaded songs stay), WhatsApp Desktop (both Store versions), Zoom (logs and its web cache), the Adobe media cache (Premiere, After Effects, Media Encoder — optional, rebuilt on the next open) and the Arc browser
+- Files still in use: the report now offers "Delete at the next restart" — Windows removes them before anything opens them (only files inside the cleaned folders, never folders, needs administrator)
+- Fixed: the total space freed so far was not saved — it started from zero on every start of the app
+- Spotify, WhatsApp, Zoom and Arc can be part of the automatic cleanup
+- The list comes in row by row after a scan; a cleaned category flashes green and its size pops; the size bars grow smoothly
+
+#### Windows Update
+- Fixed: an update could show as 90 GB. Windows reports for monthly updates the size of every variant of the package together; the app now shows what the PC really downloads (marked "~" when it is an estimate, or "size known while downloading" when Windows does not say)
+- Self-repair: when an update fails to download or install with an error Windows Update recovers from (network drop, a broken or half download, missing files, a damaged component store), the app repairs Windows Update by itself — stops its services, empties the download cache, resets catroot2, runs DISM when the component store is damaged, starts the services again — and tries those updates once more, without you doing anything. The progress says what it is doing
+- A failed download is now reported as failed straight away instead of trying to install a half download
+
+#### Menu
+- Every section of the menu is always shown — no more groups to open and close. When the window is too low the menu scrolls (a thin bar on hover) and keeps the open page in view
+- In the narrow (icons only) mode the buttons shrink less, so all of them stay clickable
+
+#### Animations
+- A new celebration after a cleanup and other wins: a ring and confetti that flies up, spins and falls
+- Changing the look (Carbon / Noir / Ocean) or the accent colour opens the new one as a circle from where you clicked
+- Menu icons nudge under the pointer; toast icons pop in; the update in progress glows
+- All of it follows Windows' "reduce motion" and the app's own setting
+
+#### Fixes
+- Tooltips keep a title the page changed while the pointer was on it (e.g. Maximize → Restore)
+- Fixed: the update tab's sums (selected, per group) also counted the bogus 90 GB sizes
+
+### Български
+#### Почистване
+- Нови категории: Spotify (кешът на вградения му браузър — свалените песни остават), WhatsApp Desktop (и двете версии от Store), Zoom (логове и уеб кеш), медийният кеш на Adobe (Premiere, After Effects, Media Encoder — по избор, прави се наново при следващо отваряне) и браузърът Arc
+- Файлове, които се ползват: отчетът вече предлага „Изтрий при следващия рестарт“ — Windows ги маха, преди нещо да ги отвори (само файлове в почистваните папки, никога папки, иска администратор)
+- Оправено: общото освободено място не се запазваше — започваше от нула при всяко пускане на програмата
+- Spotify, WhatsApp, Zoom и Arc могат да са част от автоматичното почистване
+- Списъкът се появява ред по ред след сканиране; почистена категория светва в зелено и размерът ѝ подскача; лентите с размера растат плавно
+
+#### Windows Update
+- Оправено: обновление можеше да се показва като 90 GB. За месечните обновления Windows дава размера на всички варианти на пакета заедно; сега програмата показва какво реално ще свали компютърът (с „~“, когато е приблизително, или „размерът — при изтегляне“, когато Windows не казва)
+- Самопоправка: когато обновление не се свали или не се инсталира с грешка, от която Windows Update се възстановява (прекъсната мрежа, счупено или недовършено изтегляне, липсващи файлове, повредено хранилище на компонентите), програмата сама поправя Windows Update — спира услугите му, изчиства кеша за изтегляне, нулира catroot2, пуска DISM при повредено хранилище, пуска услугите отново — и опитва пак тези обновления, без да правиш нищо. Прогресът показва какво прави
+- Неуспешно изтегляне вече се отчита веднага като неуспешно, вместо да се опитва да се инсталира недовършено изтегляне
+
+#### Меню
+- Всички раздели в менюто се виждат винаги — без групи за отваряне и затваряне. Когато прозорецът е нисък, менюто се превърта (тънка лента при посочване) и държи отворената страница видима
+- В тесния режим (само икони) бутоните се смаляват по-малко, така че всички остават удобни за натискане
+
+#### Анимации
+- Нов празничен ефект след почистване и други успехи: кръг и конфети, които излитат, въртят се и падат
+- Смяната на вида (Carbon / Noir / Ocean) или на цвета отваря новия като кръг от мястото на клика
+- Иконите в менюто помръдват под мишката; иконите в известията изскачат; обновлението в процес свети
+- Всичко следва „намалено движение“ на Windows и настройката на програмата
+
+#### Оправено
+- Подсказките запазват заглавие, което страницата е сменила, докато мишката е върху бутона (напр. Увеличи → Възстанови)
+- Оправено: сборовете в „Обновления“ (избрани, по група) също броеха грешните 90 GB
+
 ## 4.23.0 — 2026-11-10
 
 ### English
