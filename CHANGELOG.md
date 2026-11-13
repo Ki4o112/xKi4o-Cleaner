@@ -3,6 +3,46 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.25.0 — 2026-11-14
+
+### English
+#### A new look
+- The menu sits on the app's own background, with quiet group titles; cards have a soft fill instead of outlines; bigger, clearer page titles; one coloured action per place
+- Favourites: the ☆ next to a section pins it to the top of the menu (click it again to put it back)
+- An icons-only menu: the button at the bottom of the menu, next to Settings
+- A new start page: a big health ring with your score, what to do now in a word each (junk, updates, a pending restart, memory, Check), four big actions (Clean, Free RAM, Game mode, Updates), then the live cards
+- A light theme (Settings → Theme → Light)
+- Density: Comfortable or Compact for more rows on the screen (Settings)
+- A page's title row gets a soft edge once the page scrolls
+
+#### New
+- History of changes: everything the app changed on this PC, by day, newest first — tweaks, Debloat, startup, cleanups, updates and drivers, programs. The last tweak and every changed startup entry can be undone right there; each change opens its page or its full log
+- Quick actions in the tray menu: Quick cleanup, Free up RAM and Game mode on/off without opening the window, with a notification of the result
+
+#### Fixes
+- Updates: a size Windows does not tell never reads "0.0 MB" any more — it says "size known while downloading", in the totals and on the Install button too; when the package's parts tell a size, that is shown
+- One of a thing takes the singular everywhere: "1 update available", "1 file", "1 обновление", "1 файл"
+- The window can be moved by holding the top while the loading screen shows
+
+### Български
+#### Нов вид
+- Менюто е върху фона на самата програма, с тихи заглавия на групите; картите са с мек фон вместо рамки; по-големи и по-ясни заглавия на страниците; едно цветно действие на място
+- Любими: ☆ до раздел го закачва най-горе в менюто (още един клик го връща на мястото му)
+- Меню само с икони: бутонът долу в менюто, до Настройки
+- Нов начален екран: голям кръг със здравето и оценката, какво да направиш сега с по една дума (боклук, обновления, чакащ рестарт, памет, Проверка), четири големи действия (Почисти, Освободи RAM, Режим „Игри“, Обновления) и под тях картите на живо
+- Светла тема (Настройки → Тема → Светла)
+- Плътност: Удобно или Компактно за повече редове на екрана (Настройки)
+- Заглавният ред на страницата получава мека сянка, когато страницата се превърти
+
+#### Ново
+- История на промените: всичко, което програмата е променила на компютъра, по дни, най-новото отгоре — туийкове, Debloat, стартиране, почиствания, обновления и драйвери, програми. Последният туийк и всеки променен запис за стартиране се връщат направо оттам; всяка промяна отваря страницата си или пълния си лог
+- Бързи действия в менюто на трея: Бързо почистване, Освободи RAM и Режим „Игри“ вкл./изкл., без да отваряш прозореца, с известие за резултата
+
+#### Оправено
+- Обновления: размер, който Windows не казва, вече никога не се показва като „0.0 MB“ — пише „размерът — при изтегляне“, и в сборовете, и на бутона за инсталиране; когато частите на пакета дават размер, той се показва
+- Едно нещо е в единствено число навсякъде: „1 налично обновление“, „1 файл“, „1 update“, „1 file“
+- Прозорецът може да се мести, като го хванеш отгоре, докато се показва екранът за зареждане
+
 ## 4.24.1 — 2026-11-13
 
 ### English
