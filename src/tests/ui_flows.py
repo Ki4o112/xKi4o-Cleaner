@@ -90,6 +90,8 @@ async def main():
         for _ in range(8):
             seen.append(await pg.evaluate("SPL.shown")); await pg.wait_for_timeout(120)
         check("splash: never goes back", all(b_ >= a_ for a_, b_ in zip(seen, seen[1:])), seen)
+        await pg.mouse.move(500, 15); await pg.mouse.down(); await pg.mouse.move(540, 30, steps=4); await pg.mouse.up()
+        check("splash: the window can be moved while it loads (held at the top)", "drag" in await pg.evaluate("(window.__winCalls || []).join(',')"))
         await pg.wait_for_timeout(1000)
         check("splash: still on after 4 s (the longer show)", await pg.evaluate("!!document.getElementById('splash')"))
         gone = await wait_for(pg, "!document.getElementById('splash')", 5000)
@@ -803,6 +805,8 @@ async def main():
         await pg.click("#autoDiskToggle")
         check("auto disk scan: can be turned off in Settings", await wait_for(pg, "S.settings.autoDisk === false"))
         check("no page errors (auto disk scan)", not pg.errs, pg.errs)
+        # 4.25: one of a thing takes the singular
+        check("plurals: 1 update / 1 обновление / 1 file / 1 файл", await pg.evaluate("""(() => { const was = L; L = 'en'; const a = [t('wu.h.some', 1), t('row.files', '1'), t('wu.h.some', 3)]; L = 'bg'; a.push(t('wu.h.some', 1), t('row.files', 1), t('row.files', 5)); L = was; return a.join('|'); })()""") == "1 update available|1 file|3 updates available|1 налично обновление|1 файл|5 файла")
         # 30. the app's own title bar: buttons, dragging, the tray, the logo, Windows' title bar
         await pg.close()
         pg = await page(b, "?lang=en", start=None)
@@ -1017,6 +1021,8 @@ async def main():
         await wait_for(pg, "document.getElementById('veil').classList.contains('on')", 2000)
         check("updates: it asks first, lists them, offers a restore point", "Install 4 updates?" in await pg.text_content("#mTitle") and "Realtek" in await pg.text_content("#mList") and await pg.evaluate("!!document.getElementById('wuRP')"))
         check("updates: an update Windows reports as tens of GB shows its real size, as about", "~812" in await pg.text_content("#wuBody") and "~" in await pg.text_content("#wuInstall"))
+        body = await pg.text_content("#wuBody")
+        check("updates: a size Windows does not tell never reads 0", "0.0 MB" not in body and "0 B" not in body and "size known while downloading" in body and "0.0 MB" not in await pg.text_content("#wuInstall"), body[:400])
         await pg.evaluate("""window.__seen = new Set(); new MutationObserver(() => { const b = document.querySelector('#wuBody .wu-run b'); if (b) window.__seen.add(b.textContent); }).observe(document.getElementById('wuBody'), {childList: true, subtree: true, characterData: true})""")
         await pg.click("#mOk")
         ok = await wait_for(pg, "!!document.querySelector('#wuBody .wu-run') && !!document.querySelector('#wuBody .wu-st .spin')", 3000)

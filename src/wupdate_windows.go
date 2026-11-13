@@ -28,8 +28,9 @@ try {
     $dc = ''; $dv = ''
     if ($u.Type -eq 2) { try { $dc = [string]$u.DriverClass; $dv = [string]$u.DriverVerDate.ToString('yyyy-MM-dd') } catch {} }
     $rb = $false; try { $rb = ($u.InstallationBehavior.RebootBehavior -ne 0) } catch {}
+    $bs = 0; try { foreach ($b in $u.BundledUpdates) { $m = [double]$b.MinDownloadSize; if ($m -le 0) { $m = [double]$b.MaxDownloadSize }; $bs += $m } } catch {}
     [pscustomobject]@{ ID = [string]$u.Identity.UpdateID; Title = [string]$u.Title; KB = [string]$kb; Type = [int]$u.Type;
-      Size = [double]$u.MaxDownloadSize; SizeMin = [double]$u.MinDownloadSize; Downloaded = [bool]$u.IsDownloaded; BrowseOnly = [bool]$u.BrowseOnly; Reboot = $rb;
+      Size = [double]$u.MaxDownloadSize; SizeMin = [double]$u.MinDownloadSize; SizeB = $bs; Downloaded = [bool]$u.IsDownloaded; BrowseOnly = [bool]$u.BrowseOnly; Reboot = $rb;
       Severity = [string]$u.MsrcSeverity; Cats = (@($u.Categories | ForEach-Object { $_.Name }) -join '|'); Date = $d;
       Desc = [string]$u.Description; DrvClass = $dc; DrvVer = $dv }
   })

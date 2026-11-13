@@ -120,14 +120,14 @@ func wuParse(out string) (wuState, error) {
 		type rawUp struct {
 			ID, Title, KB, Severity, Cats, Date, Desc, DrvClass, DrvVer string
 			Type                                                        int
-			Size, SizeMin                                               float64
+			Size, SizeMin, SizeB                                        float64
 			Downloaded, BrowseOnly, Reboot                              bool
 		}
 		for _, u := range jsonList[rawUp](raw.Updates) {
 			if !reWuID.MatchString(u.ID) || strings.TrimSpace(u.Title) == "" {
 				continue
 			}
-			size, est := wuRealSize(int64(u.Size), int64(u.SizeMin))
+			size, est := wuRealSize(int64(u.Size), int64(u.SizeMin), int64(u.SizeB))
 			w := wuUpdate{ID: u.ID, Title: strings.TrimSpace(u.Title), KB: u.KB, Size: size, SizeEst: est, Downloaded: u.Downloaded, Optional: u.BrowseOnly,
 				Reboot: u.Reboot, Severity: u.Severity, Date: u.Date, Desc: strings.TrimSpace(u.Desc), DrvClass: u.DrvClass, DrvVer: u.DrvVer, Kind: "software", Cats: []string{}}
 			if u.Type == 2 {
@@ -209,15 +209,18 @@ func wuLine(l string) (wuLineInfo, bool) {
 // updates Windows reports as MaxDownloadSize the whole set of every
 // variant of the package (it can read 90 GB); the PC downloads only the
 // part it lacks. Past wuSizeSane the smallest size is taken as "about", or
-// none at all when Windows gives none (it is told while downloading).
-func wuRealSize(max, min int64) (int64, bool) {
+// else the sizes of the parts it is made of, or none at all when Windows
+// gives none (it is told while downloading).
+func wuRealSize(max, min, parts int64) (int64, bool) {
 	switch {
-	case max <= 0:
+	case max <= 0 && min <= wuSizeSane:
 		return min, false
-	case max <= wuSizeSane:
+	case max > 0 && max <= wuSizeSane:
 		return max, false
-	case min > 0 && min < max && min <= wuSizeSane:
+	case min > 0 && min <= wuSizeSane:
 		return min, true
+	case parts > 0 && parts <= wuSizeSane:
+		return parts, true
 	}
 	return 0, true
 }

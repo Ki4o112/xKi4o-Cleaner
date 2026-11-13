@@ -62,16 +62,18 @@ func TestWULines(t *testing.T) {
 func TestWuRealSize(t *testing.T) {
 	gb := int64(1 << 30)
 	for _, c := range []struct {
-		max, min, want int64
-		est            bool
+		max, min, parts, want int64
+		est                   bool
 	}{
-		{900 << 20, 0, 900 << 20, false},
-		{90 * gb, 700 << 20, 700 << 20, true},
-		{90 * gb, 0, 0, true},
-		{90 * gb, 20 * gb, 0, true},
-		{0, 300 << 20, 300 << 20, false},
+		{900 << 20, 0, 0, 900 << 20, false},
+		{90 * gb, 700 << 20, 0, 700 << 20, true},
+		{90 * gb, 0, 0, 0, true},
+		{90 * gb, 20 * gb, 0, 0, true},
+		{0, 300 << 20, 0, 300 << 20, false},
+		{90 * gb, 0, 650 << 20, 650 << 20, true}, // KB5132061: only its parts tell
+		{90 * gb, 0, 90 * gb, 0, true},
 	} {
-		got, est := wuRealSize(c.max, c.min)
+		got, est := wuRealSize(c.max, c.min, c.parts)
 		if got != c.want || est != c.est {
 			t.Errorf("%d/%d: got %d %v", c.max, c.min, got, est)
 		}
