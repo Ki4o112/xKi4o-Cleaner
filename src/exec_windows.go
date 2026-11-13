@@ -67,7 +67,12 @@ func decodeOutput(b []byte) string {
 
 // runQuiet runs a program hidden and returns its decoded output and exit code.
 func runQuiet(timeout time.Duration, name string, args ...string) (string, int, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	return runQuietCtx(context.Background(), timeout, name, args...)
+}
+
+// runQuietCtx is runQuiet that also stops when parent ends.
+func runQuietCtx(parent context.Context, timeout time.Duration, name string, args ...string) (string, int, error) {
+	ctx, cancel := context.WithTimeout(parent, timeout)
 	defer cancel()
 	cmd := hiddenCmd(ctx, name, args...)
 	var out bytes.Buffer

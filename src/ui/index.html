@@ -730,7 +730,11 @@ details.lic pre { white-space: pre-wrap; font: 11px/1.5 var(--mono); color: var(
 .toast { max-width: min(460px, calc(100vw - 44px)); }
 @keyframes toastIn { from { opacity: 0; transform: translateX(30px) scale(.9); } }
 @keyframes toastOut { to { opacity: 0; transform: translateX(30px); } }
-.burst { position: fixed; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; z-index: 40; animation: burst .9s var(--ease) forwards; }
+.burst { position: fixed; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; z-index: 40; transform: translate(-50%, -50%); }
+.burst.sq { border-radius: 2px; width: 7px; height: 7px; }
+.burst.streak { border-radius: 2px; width: 4px; height: 11px; }
+.burst-ring { position: fixed; width: 20px; height: 20px; border-radius: 50%; pointer-events: none; z-index: 39; border: 2px solid var(--c); transform: translate(-50%, -50%) scale(.2); animation: burstRing .75s cubic-bezier(.2, .7, .3, 1) forwards; }
+@keyframes burstRing { 60% { opacity: .8; } to { transform: translate(-50%, -50%) scale(9); opacity: 0; border-width: 1px; } }
 @keyframes burst { to { transform: translate(var(--dx), var(--dy)) scale(.2); opacity: 0; } }
 
 /* ================= Splash ================= */
@@ -2657,6 +2661,22 @@ input.switch:focus-visible { outline-offset: 3px; }
 .nav.scrolls:hover::-webkit-scrollbar-thumb { background: var(--line-hi); border-radius: 4px; }
 .nav-g[data-g] { cursor: default; }
 .nav-g .chev, .nav-g .g-dot { display: none !important; }
+
+/* ===== 4.24 motion ===== */
+#rows.rows-in .row[data-id], #rows.rows-in .tsec { animation: rowIn .5s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i, 0) * 24ms); }
+@keyframes rowIn { from { opacity: 0; transform: translateY(10px) scale(.985); } }
+#rows .row[data-id] .sbar i { transition: width .7s cubic-bezier(.2, .8, .2, 1); }
+#rows .row.just::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, transparent, rgba(54, 211, 153, .16), transparent); animation: rowSweep .9s ease-out forwards; }
+#rows .row.just .size.ok { animation: sizePop .5s var(--spring); }
+@keyframes rowSweep { from { transform: translateX(-100%); } to { transform: translateX(100%); opacity: 0; } }
+@keyframes sizePop { 40% { transform: scale(1.14); } }
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+.nav button:hover .ico svg { animation: icoNudge .45s var(--spring); }
+@keyframes icoNudge { 35% { transform: rotate(-9deg) scale(1.12); } 70% { transform: rotate(5deg); } }
+.wu-run .spin { box-shadow: 0 0 0 0 var(--blue-glow); animation: rot .8s linear infinite, wuGlow 1.6s ease-out infinite; }
+@keyframes wuGlow { 0% { box-shadow: 0 0 0 0 var(--blue-glow); } 100% { box-shadow: 0 0 0 10px transparent; } }
+.toast .ti svg { animation: pop .5s var(--spring) .08s both; }
+@media (prefers-reduced-motion: reduce) { #rows.rows-in .row[data-id], #rows .row.just::before, .nav button:hover .ico svg { animation: none !important; } }
 </style>
 </head>
 <body class="booting">
@@ -4578,7 +4598,7 @@ bg: {
   "wu.rebootPending": "Чака рестарт", "wu.took": "Търсено за {0} с",
   "wu.rebootD": "Windows чака рестарт, за да довърши инсталирани обновления. Следващите обновления може да не тръгнат, докато не рестартираш.",
   "wu.noadmin": "Инсталирането иска права на администратор. Пусни програмата като администратор (търсенето работи и без тях).", "wu.p.download": "Изтегляне {0} от {1}: {2}",
-  "wu.p.install": "Инсталиране {0} от {1}: {2}", "wu.p.start": "Подготовка…", "wu.p.note": "Не изключвай компютъра. Големите обновления може да отнемат дълго.",
+  "wu.p.install": "Инсталиране {0} от {1}: {2}", "wu.p.start": "Подготовка…", "wu.p.repair": "Поправям Windows Update (кеш за изтегляне, услуги, catroot2)…", "wu.p.dism": "Поправям хранилището на компонентите (DISM)…", "wu.p.repairNote": "Изтеглянето се провали — поправям и продължавам сам. Може да отнеме няколко минути.", "wu.p.retry": "нов опит", "wu.sizeLater": "размерът — при изтегляне", "wu.p.note": "Не изключвай компютъра. Големите обновления може да отнемат дълго.",
   "wu.k.all": "Всички · {0}", "wu.k.win": "Windows · {0}", "wu.k.drv": "Драйвери · {0}",
   "wu.install": "Инсталирай избраните ({0} · {1})", "wu.pick": "Избери обновления", "wu.sev.critical": "Критично", "wu.sev.important": "Важно", "wu.driver": "Драйвер",
   "wu.optional": "По избор", "wu.reboot": "Може да иска рестарт",
@@ -5854,7 +5874,7 @@ en: {
   "wu.rebootPending": "Restart pending", "wu.took": "Checked in {0} s",
   "wu.rebootD": "Windows is waiting for a restart to finish installed updates. New updates may not install until you restart.",
   "wu.noadmin": "Installing needs administrator rights. Run the app as administrator (checking works without).", "wu.p.download": "Downloading {0} of {1}: {2}",
-  "wu.p.install": "Installing {0} of {1}: {2}", "wu.p.start": "Getting ready…", "wu.p.note": "Don't turn the PC off. Big updates can take a while.", "wu.k.all": "All · {0}",
+  "wu.p.install": "Installing {0} of {1}: {2}", "wu.p.start": "Getting ready…", "wu.p.repair": "Repairing Windows Update (download cache, services, catroot2)…", "wu.p.dism": "Repairing the component store (DISM)…", "wu.p.repairNote": "A download failed — repairing it and carrying on by itself. This can take a few minutes.", "wu.p.retry": "second try", "wu.sizeLater": "size known while downloading", "wu.p.note": "Don't turn the PC off. Big updates can take a while.", "wu.k.all": "All · {0}",
   "wu.k.win": "Windows · {0}", "wu.k.drv": "Drivers · {0}", "wu.install": "Install selected ({0} · {1})",
   "wu.pick": "Pick updates", "wu.sev.critical": "Critical", "wu.sev.important": "Important", "wu.driver": "Driver", "wu.optional": "Optional", "wu.reboot": "May need a restart",
   "wu.gpuTip": "Graphics drivers from Windows Update are often older than the maker's own. See the Graphics card page.", "wu.s.download": "Downloading…",
@@ -6385,15 +6405,27 @@ function toast(text, icon = "check", kind = "", action) {
   while ($("#toasts").children.length > 4) $("#toasts").firstElementChild.remove();
   return box;
 }
+// 4.24: a celebration — a ring, then confetti that flies up, spins and falls
 function burst(el, color = "#5a8cff") {
   if (!motionOK() || !el) return;
   const r = el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-  for (let i = 0; i < 18; i++) {
-    const p = document.createElement("i"), a = (i / 18) * Math.PI * 2, d = 60 + Math.random() * 70;
-    p.className = "burst";
-    p.style.cssText = `left:${cx}px;top:${cy}px;background:${i % 3 ? color : "#36d399"};--dx:${Math.cos(a) * d}px;--dy:${Math.sin(a) * d}px`;
+  const ring = document.createElement("i");
+  ring.className = "burst-ring"; ring.style.cssText = `left:${cx}px;top:${cy}px;--c:${color}`;
+  document.body.appendChild(ring); setTimeout(() => ring.remove(), 800);
+  const cols = [color, "#36d399", "#ffd166", "#ff7aa8", "#7cc4ff"], n = 34;
+  for (let i = 0; i < n; i++) {
+    const p = document.createElement("i"), a = (i / n) * Math.PI * 2 + Math.random() * .3, d = 70 + Math.random() * 110;
+    const dx = Math.cos(a) * d, dy = Math.sin(a) * d * .8 - 40, spin = (Math.random() * 2 - 1) * 720;
+    p.className = "burst " + ["dot", "sq", "streak"][i % 3];
+    p.style.cssText = `left:${cx}px;top:${cy}px;background:${cols[i % cols.length]}`;
     document.body.appendChild(p);
-    setTimeout(() => p.remove(), 950);
+    const dur = 900 + Math.random() * 500;
+    if (p.animate) p.animate([
+      { transform: "translate(-50%,-50%) rotate(0) scale(1)", opacity: 1 },
+      { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${spin / 2}deg) scale(1)`, opacity: 1, offset: .45 },
+      { transform: `translate(calc(-50% + ${dx * 1.15}px), calc(-50% + ${dy + 120}px)) rotate(${spin}deg) scale(.5)`, opacity: 0 },
+    ], { duration: dur, easing: "cubic-bezier(.2,.7,.3,1)", fill: "forwards" });
+    setTimeout(() => p.remove(), dur + 50);
   }
 }
 
@@ -6951,6 +6983,12 @@ function renderRows() {
     : `<div class="empty"><b>${esc(t("table.allClean"))}</b>${esc(t("table.allCleanD"))}</div>`;
   if (hidden) html += `<div class="tfoot"><span>${esc(t("table.hidden", hidden))}</span><button class="linkbtn" id="showEmpty">${esc(t("table.show"))}</button></div>`;
   wrap.innerHTML = html;
+  if (motionOK() && S.analyzed && !S.rowsShown) { // the first list after a scan comes in row by row
+    S.rowsShown = true;
+    wrap.querySelectorAll(".row[data-id], .tsec").forEach((r, i) => r.style.setProperty("--i", Math.min(i, 24)));
+    wrap.classList.remove("rows-in"); void wrap.offsetWidth; wrap.classList.add("rows-in");
+    clearTimeout(wrap._ri); wrap._ri = setTimeout(() => wrap.classList.remove("rows-in"), 1400);
+  }
   const se = $("#showEmpty"); if (se) se.addEventListener("click", () => { S.settings.hideEmpty = false; storeSettings(); paintEmptyBtn(); renderRows(); });
   wrap.querySelectorAll("[data-pv]").forEach(b => b.addEventListener("click", () => openPreview(b.dataset.pv)));
   wrap.querySelectorAll("[data-cb]").forEach(cb => cb.addEventListener("change", () => {
@@ -7024,6 +7062,8 @@ function refresh() {
       : OPTIONAL.has(id) && selectable(id) ? `<span class="chip opt">${t("row.optional")}</span>` : "";
     const sz = row.querySelector("[data-size]"), cn = row.querySelector("[data-cnt]"), st = rowState(id);
     if (st) { sz.className = "size " + st.cls; sz.innerHTML = st.html; cn.textContent = st.cnt; }
+    if (st && st.cls === "ok" && row._st !== "ok" && motionOK()) { row.classList.remove("just"); void row.offsetWidth; row.classList.add("just"); setTimeout(() => row.classList.remove("just"), 1000); }
+    row._st = st ? st.cls : "";
     else if (NOSIZE.has(id) || (d.count > 0 && !(d.size > 0))) { sz.className = "size dim"; sz.textContent = id === "dism" ? "" : "—"; cn.textContent = ""; }
     else { const e = effSize(id); sz.className = "size" + (e > 0 ? "" : " dim"); sz.textContent = e > 0 ? fmt(e) : t("row.clean"); cn.textContent = e > 0 && effCount(id) ? t("row.files", nfi(effCount(id))) : ""; }
     sz.title = rs && rs.note && rs.state !== "running" ? rs.note : "";
@@ -7128,7 +7168,7 @@ function analyze() {
     run: job => new Promise(res => { job.done = res; analyzeRun(); }) });
 }
 function analyzeRun() {
-  S.analyzed = false; S.cleanedFreed = 0; S.rowState = {}; S.checked = {}; S.data = {}; S.scanning = true; S.dryRun = false; S.dryShown = false; S.lastReport = null;
+  S.analyzed = false; S.rowsShown = false; S.cleanedFreed = 0; S.rowState = {}; S.checked = {}; S.data = {}; S.scanning = true; S.dryRun = false; S.dryShown = false; S.lastReport = null;
   paintHeroLinks();
   setBusy(true);
   $("#cleanStatus").textContent = t("status.scanning");
@@ -10064,6 +10104,10 @@ function wuTags(u) {
   if (u.reboot) tags.push(`<span class="tag">${esc(t("wu.reboot"))}</span>`);
   return tags.join("");
 }
+// 4.24: Windows can report a monthly update as tens of GB (every variant of
+// the package); the backend then sends the smallest size as "about"
+const wuSize = u => u.size ? (u.sizeEst ? "~" : "") + fmt(u.size) : u.sizeEst ? t("wu.sizeLater") : "";
+const wuSum = l => { const n = l.reduce((a, u) => a + (u.size || 0), 0); return (l.some(u => u.sizeEst) ? "~" : "") + fmt(n); };
 function renderWu() {
   const body = $("#wuBody"); if (!body) return;
   const st = WU.st, ups = (st && st.updates) || [], run = WU.run;
@@ -10075,7 +10119,7 @@ function renderWu() {
   else if (!st || !st.searched) head = [ICONS.wupd, t("wu.h.never"), t("wu.h.neverD"), ""];
   else if (st.error) head = [ICONS.alert, t("wu.h.error"), st.error, "bad"];
   else if (!ups.length) head = [ICONS.check, t("wu.h.none"), t("wu.h.noneD", dateTimeS(st.searched)), "ok"];
-  else head = [ICONS.wupd, t("wu.h.some", ups.length), t("wu.h.someD", nw, nd, fmt(size), dateTimeS(st.searched)), "some"];
+  else head = [ICONS.wupd, t("wu.h.some", ups.length), t("wu.h.someD", nw, nd, wuSum(ups), dateTimeS(st.searched)), "some"];
   const reboot = st && st.reboot;
   let html = `<div class="si-hero wu-hero ${head[3]}"><div class="hi">${head[0]}</div><div class="ht"><h2>${esc(head[1])}</h2><div class="m">${esc(head[2])}</div></div>
     <div class="si-chips">${reboot ? `<span class="chip warn-chip">${esc(t("wu.rebootPending"))}</span>` : ""}${st && st.searched && !st.error ? `<span class="chip">${esc(t("wu.took", Math.max(1, Math.round((st.took || 0) / 1000))))}</span>` : ""}</div></div>`;
@@ -10083,21 +10127,21 @@ function renderWu() {
   if (st && st.admin === false) html += `<div class="notice info"><p>${esc(t("wu.noadmin"))}</p></div>`;
   if (run) {
     const pct = run.n ? Math.round(((run.i - 1) + (run.phase === "install" ? .5 : run.phase === "done" ? 1 : 0)) / run.n * 100) : 0;
-    html += `<div class="gp-busy wu-run"><span class="spin"></span><div class="t"><b>${esc(run.phase === "rp" ? t("gp.s.rp", run.secs || 0) : run.title ? t(run.phase === "download" ? "wu.p.download" : "wu.p.install", run.i, run.n, run.title) : t("wu.p.start"))}</b>
-      <span>${esc(t("wu.p.note"))}</span><div class="si-bar"><i style="width:${Math.max(3, pct)}%"></i></div></div></div>`;
+    html += `<div class="gp-busy wu-run"><span class="spin"></span><div class="t"><b>${esc(run.phase === "rp" ? t("gp.s.rp", run.secs || 0) : run.phase === "repair" || run.phase === "dism" ? t("wu.p." + run.phase) : run.title ? t(run.phase === "download" ? "wu.p.download" : "wu.p.install", run.i, run.n, run.title) + (run.retry ? " · " + t("wu.p.retry") : "") : t("wu.p.start"))}</b>
+      <span>${esc(t(run.phase === "repair" || run.phase === "dism" ? "wu.p.repairNote" : "wu.p.note"))}</span><div class="si-bar"><i style="width:${Math.max(3, pct)}%"></i></div></div></div>`;
   }
   if (ups.length) {
     const list = wuList(), selN = ups.filter(u => WU.sel.has(u.id)), selSize = selN.reduce((a, u) => a + (u.size || 0), 0);
     const every = l => l.length && l.every(u => WU.sel.has(u.id)), kk = { all: "all", windows: "win", drivers: "drv" }[WU.kind];
     html += `<div class="gp-tools wu-tools"><div class="seg blue" id="wuKind"></div>
       <button class="btn small wu-allbtn" id="wuAll" ${list.length && !run ? "" : "disabled"}>${every(list) ? ICONS.x : ICONS.check}<span>${esc(t((every(list) ? "wu.noneK." : "wu.allK.") + kk, list.length))}</span></button><span class="grow"></span>
-      <button class="btn primary" id="wuInstall" ${selN.length && !run && !(st && st.admin === false) ? "" : "disabled"}>${ICONS.download}<span>${esc(selN.length ? t("wu.install", selN.length, fmt(selSize)) : t("wu.pick"))}</span></button></div>`;
+      <button class="btn primary" id="wuInstall" ${selN.length && !run && !(st && st.admin === false) ? "" : "disabled"}>${ICONS.download}<span>${esc(selN.length ? t("wu.install", selN.length, wuSum(selN)) : t("wu.pick"))}</span></button></div>`;
     const row = u => {
         const r = run && run.state[u.id];
         const st2 = r ? (r.state === "busy" ? `<span class="wu-st"><span class="spin"></span>${esc(t(r.phase === "download" ? "wu.s.download" : "wu.s.install"))}</span>` : r.state === "ok" ? `<span class="wu-st ok">${ICONS.check}${esc(t("wu.s.ok"))}</span>` : r.state === "fail" ? `<span class="wu-st bad" title="${esc(r.error || "")}">${ICONS.alert}${esc(t("wu.s.fail"))}</span>` : `<span class="wu-st">${esc(t("wu.s.wait"))}</span>`) : "";
         return `<label class="gp-row wu-row ${WU.sel.has(u.id) ? "on" : ""}"><input type="checkbox" class="cb" data-wu="${esc(u.id)}" ${WU.sel.has(u.id) ? "checked" : ""} ${run ? "disabled" : ""}>
           <div class="wu-main"><div class="v"><b>${esc(u.title)}</b>${wuTags(u)}</div>
-          <div class="m">${esc([u.kb, u.size ? fmt(u.size) : "", u.date ? siDate(u.date) : "", (u.cats || []).slice(0, 2).join(", ")].filter(Boolean).join(" · "))}</div>
+          <div class="m">${esc([u.kb, wuSize(u), u.date ? siDate(u.date) : "", (u.cats || []).slice(0, 2).join(", ")].filter(Boolean).join(" · "))}</div>
           ${u.display ? `<div class="wu-tip">${ICONS.info}<span>${esc(t("wu.gpuTip"))}</span></div>` : ""}</div><div class="a">${st2}</div></label>`;
     };
     // one group per category, each with its own "select all"
@@ -10105,7 +10149,7 @@ function renderWu() {
     html += groups.map(([g, l]) => {
       const n = l.filter(u => WU.sel.has(u.id)).length, gs = l.reduce((a, u) => a + (u.size || 0), 0);
       return `<div class="gp-list wu-list" data-wugroup="${g}"><div class="wu-gh"><input type="checkbox" class="cb" data-wug="${g}" ${n === l.length ? "checked" : ""} ${run ? "disabled" : ""} aria-label="${esc(t("wu.allK." + (g === "drivers" ? "drv" : "win"), l.length))}">
-        <div class="wu-gt"><b>${esc(t(g === "drivers" ? "wu.g.drv" : "wu.g.win"))}</b><span>${esc(t("wu.g.sub", n, l.length, fmt(gs)))}</span></div>
+        <div class="wu-gt"><b>${esc(t(g === "drivers" ? "wu.g.drv" : "wu.g.win"))}</b><span>${esc(t("wu.g.sub", n, l.length, wuSum(l)))}</span></div>
         <button class="btn small" data-wugb="${g}" ${run ? "disabled" : ""}>${esc(t((n === l.length ? "wu.noneK." : "wu.allK.") + (g === "drivers" ? "drv" : "win"), l.length))}</button></div>
         ${l.map(row).join("")}</div>`;
     }).join("") || `<div class="gp-list wu-list"><div class="gp-empty">${esc(t("wu.emptyKind"))}</div></div>`;
@@ -10169,7 +10213,8 @@ on("wu-progress", d => {
   const r = WU.run; if (!r) return;
   if (d.phase === "rp") { r.phase = "rp"; r.secs = d.secs || 0; }
   else if (d.phase === "done") { const s = r.state[d.id]; if (s) { s.state = d.ok ? "ok" : "fail"; s.error = d.error; } r.phase = "done"; r.i = d.i; }
-  else { r.phase = d.phase; r.i = d.i || r.i; r.n = d.n || r.n; r.title = d.title || r.title; const s = r.state[d.id]; if (s) { s.state = "busy"; s.phase = d.phase; } }
+  else if (d.phase === "repair" || d.phase === "dism") { r.phase = d.phase; r.repaired = true; }
+  else { r.phase = d.phase; r.retry = !!d.retry; r.i = d.i || r.i; r.n = d.n || r.n; r.title = d.title || r.title; const s = r.state[d.id]; if (s) { s.state = "busy"; s.phase = d.phase; } }
   if (S.page === "wupd") renderWu();
 });
 $("#wuSearchBtn").addEventListener("click", wuDoSearch);
@@ -11304,18 +11349,29 @@ function applyAccent(id) {
 }
 // the look: Graphite (neutral black, the default from 3.1) or Ocean (the deep blue of 1.x–3.0)
 const themeOf = th => ["ocean", "noir"].includes(th) ? th : "carbon";
+// 4.24: a new look opens as a circle from where it was clicked
+let lookXY = null;
+document.addEventListener("pointerdown", e => { if (e.target.closest("#segTheme, #swatches")) lookXY = [e.clientX, e.clientY]; }, true);
+function lookSwap(fn) {
+  if (!document.startViewTransition || !motionOK() || !lookXY) { fn(); return; }
+  const [x, y] = lookXY; lookXY = null;
+  const rr = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+  const vt = document.startViewTransition(fn);
+  vt.ready.then(() => document.documentElement.animate({ clipPath: [`circle(0 at ${x}px ${y}px)`, `circle(${rr}px at ${x}px ${y}px)`] },
+    { duration: 520, easing: "cubic-bezier(.3,.7,.2,1)", pseudoElement: "::view-transition-new(root)" })).catch(() => {});
+}
 function applyTheme(th) {
   document.documentElement.setAttribute("data-theme", themeOf(th));
   const el = $("#segTheme"); if (el && el._set) el._set(themeOf(th));
 }
 function setupThemeSeg() {
   makeSeg($("#segTheme"), [{ v: "carbon", label: "Carbon" }, { v: "noir", label: t("set.th.noir") }, { v: "ocean", label: t("set.th.ocean") }], themeOf(S.settings.theme),
-    v => { S.settings.theme = v; applyTheme(v); storeSettings(); requestAnimationFrame(() => { if (S.page === "home") { paintLive(); } }); });
+    v => { S.settings.theme = v; lookSwap(() => applyTheme(v)); storeSettings(); requestAnimationFrame(() => { if (S.page === "home") { paintLive(); } }); });
 }
 function setupSwatches() {
   // green is close to the new emerald: shown only to whoever picked it before
   $("#swatches").innerHTML = Object.keys(ACCENTS).filter(k => k !== "green" || S.settings.accent === "green").map(k => `<button class="sw-btn" data-acc="${k}" style="--c:${ACCENTS[k][0]}" aria-label="${k}" title="${k}"></button>`).join("");
-  $$("#swatches .sw-btn").forEach(b => b.addEventListener("click", () => { S.settings.accent = b.dataset.acc; applyAccent(b.dataset.acc); storeSettings(); }));
+  $$("#swatches .sw-btn").forEach(b => b.addEventListener("click", () => { S.settings.accent = b.dataset.acc; lookSwap(() => applyAccent(b.dataset.acc)); storeSettings(); }));
 }
 
 /* Keyboard shortcuts */
@@ -15131,7 +15187,7 @@ const Mock = (() => {
       if (scen === "wuoff") { mockWu.error = "The Windows Update service is turned off."; mockWu.updates = []; }
       else if (scen === "wunone") mockWu.updates = [];
       else mockWu.updates = [
-        { id: "0b1c2d3e-1111-2222-3333-444455556666", title: "2026-10 Cumulative Update for Windows 11 Version 25H2 for x64-based Systems (KB5061111)", kb: "KB5061111", kind: "software", size: 812 * MB, downloaded: false, optional: false, reboot: true, severity: "Critical", cats: ["Security Updates", "Windows 11"], date: "2026-10-14" },
+        { id: "0b1c2d3e-1111-2222-3333-444455556666", title: "2026-10 Cumulative Update for Windows 11 Version 25H2 for x64-based Systems (KB5061111)", kb: "KB5061111", kind: "software", size: 812 * MB, sizeEst: true, downloaded: false, optional: false, reboot: true, severity: "Critical", cats: ["Security Updates", "Windows 11"], date: "2026-10-14" },
         { id: "1b1c2d3e-1111-2222-3333-444455556666", title: "2026-10 Cumulative Update for .NET Framework 3.5 and 4.8.1 (KB5062222)", kb: "KB5062222", kind: "software", size: 74 * MB, downloaded: false, optional: false, reboot: false, severity: "Important", cats: ["Security Updates"], date: "2026-10-14" },
         { id: "2b1c2d3e-1111-2222-3333-444455556666", title: "Security Intelligence Update for Microsoft Defender Antivirus - KB2267602 (Version 1.441.120.0)", kb: "KB2267602", kind: "software", size: 98 * MB, downloaded: false, optional: false, reboot: false, severity: "", cats: ["Definition Updates"], date: "2026-10-17" },
         { id: "3b1c2d3e-1111-2222-3333-444455556666", title: "NVIDIA - Display - 32.0.15.6094", kb: "", kind: "driver", size: 690 * MB, downloaded: false, optional: true, reboot: false, severity: "", cats: ["Drivers"], date: "2024-08-14", drvClass: "Display", display: true },
@@ -15147,6 +15203,10 @@ const Mock = (() => {
       for (let i = 0; i < o.ids.length; i++) {
         const u = mockWu.updates.find(x => x.id === o.ids[i]); if (!u) continue;
         window.__ev("wu-progress", { phase: "download", i: i + 1, n: o.ids.length, id: u.id, title: u.title }); await wait(500);
+        if (/\.NET/.test(u.title) && !window.__wuRepaired) { // a download that breaks once: repaired, then tried again
+          window.__wuRepaired = true; window.__ev("wu-progress", { phase: "repair", n: o.ids.length }); await wait(500);
+          window.__ev("wu-progress", { phase: "download", i: i + 1, n: o.ids.length, id: u.id, title: u.title, retry: true }); await wait(400);
+        }
         window.__ev("wu-progress", { phase: "install", i: i + 1, n: o.ids.length, id: u.id, title: u.title }); await wait(600);
         const good = !/Realtek/.test(u.title);
         window.__ev("wu-progress", { phase: "done", i: i + 1, n: o.ids.length, id: u.id, title: u.title, ok: good, error: good ? "" : "0x80070103" });

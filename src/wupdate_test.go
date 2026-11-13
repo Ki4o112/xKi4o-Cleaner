@@ -57,3 +57,35 @@ func TestWULines(t *testing.T) {
 		t.Error("wuHResult")
 	}
 }
+
+// The 90 GB a monthly update can show: the smallest size, as an estimate.
+func TestWuRealSize(t *testing.T) {
+	gb := int64(1 << 30)
+	for _, c := range []struct {
+		max, min, want int64
+		est            bool
+	}{
+		{900 << 20, 0, 900 << 20, false},
+		{90 * gb, 700 << 20, 700 << 20, true},
+		{90 * gb, 0, 0, true},
+		{90 * gb, 20 * gb, 0, true},
+		{0, 300 << 20, 300 << 20, false},
+	} {
+		got, est := wuRealSize(c.max, c.min)
+		if got != c.want || est != c.est {
+			t.Errorf("%d/%d: got %d %v", c.max, c.min, got, est)
+		}
+	}
+}
+
+func TestWuRepairable(t *testing.T) {
+	if ok, dism := wuRepairable("0x80244022"); !ok || dism {
+		t.Fatal("a download error")
+	}
+	if ok, dism := wuRepairable("0x80073712"); !ok || !dism {
+		t.Fatal("a damaged store wants DISM")
+	}
+	if ok, _ := wuRepairable("0x8024002E"); ok {
+		t.Fatal("blocked by a policy: not repaired by clearing the cache")
+	}
+}

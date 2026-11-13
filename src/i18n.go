@@ -533,6 +533,9 @@ var texts = map[string][2]string{ // [bg, en]
 	"log.wuInstalled":  {"Инсталирани: %d, неуспешни: %d", "Installed: %d, failed: %d"},
 	"log.wuOne":        {"Инсталирано", "Installed"},
 	"log.wuOneFail":    {"Не се инсталира: %s", "Not installed: %s"},
+	"log.wuRetry":      {"Неуспешно (%s) — Windows Update ще бъде поправен и ще опитам пак", "Failed (%s) — Windows Update will be repaired and it is tried again"},
+	"log.wuRepair":     {"Поправям Windows Update: спирам услугите, чистя кеша за изтегляне, нулирам catroot2", "Repairing Windows Update: stopping its services, clearing the download cache, resetting catroot2"},
+	"log.wuRepaired":   {"Windows Update е поправен, опитвам отново", "Windows Update repaired, trying again"},
 	// 4.3: installing programs, passwords, blue screens, the frame counter, recovering files
 	"wg.already":       {"Вече е инсталирана — няма по-нова версия.", "Already installed — there is no newer version."},
 	"wifi.none":        {"Няма запазени Wi-Fi мрежи (или няма Wi-Fi)", "No saved Wi-Fi networks (or no Wi-Fi)"},

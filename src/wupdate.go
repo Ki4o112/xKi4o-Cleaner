@@ -19,6 +19,7 @@ type wuUpdate struct {
 	KB         string   `json:"kb,omitempty"`
 	Kind       string   `json:"kind"` // software, driver
 	Size       int64    `json:"size"`
+	SizeEst    bool     `json:"sizeEst,omitempty"` // Windows gives only a range: about this much (0 = known while it downloads)
 	Downloaded bool     `json:"downloaded"`
 	Optional   bool     `json:"optional"` // Windows offers it, does not install it by itself
 	Reboot     bool     `json:"reboot"`   // may need a restart
@@ -119,14 +120,15 @@ func wuParse(out string) (wuState, error) {
 		type rawUp struct {
 			ID, Title, KB, Severity, Cats, Date, Desc, DrvClass, DrvVer string
 			Type                                                        int
-			Size                                                        float64
+			Size, SizeMin                                               float64
 			Downloaded, BrowseOnly, Reboot                              bool
 		}
 		for _, u := range jsonList[rawUp](raw.Updates) {
 			if !reWuID.MatchString(u.ID) || strings.TrimSpace(u.Title) == "" {
 				continue
 			}
-			w := wuUpdate{ID: u.ID, Title: strings.TrimSpace(u.Title), KB: u.KB, Size: int64(u.Size), Downloaded: u.Downloaded, Optional: u.BrowseOnly,
+			size, est := wuRealSize(int64(u.Size), int64(u.SizeMin))
+			w := wuUpdate{ID: u.ID, Title: strings.TrimSpace(u.Title), KB: u.KB, Size: size, SizeEst: est, Downloaded: u.Downloaded, Optional: u.BrowseOnly,
 				Reboot: u.Reboot, Severity: u.Severity, Date: u.Date, Desc: strings.TrimSpace(u.Desc), DrvClass: u.DrvClass, DrvVer: u.DrvVer, Kind: "software", Cats: []string{}}
 			if u.Type == 2 {
 				w.Kind = "driver"
@@ -201,4 +203,42 @@ func wuLine(l string) (wuLineInfo, bool) {
 		return wuLineInfo{Kind: "err", HR: p[1]}, true
 	}
 	return wuLineInfo{}, false
+}
+
+// wuRealSize: what an update will really download. For the monthly
+// updates Windows reports as MaxDownloadSize the whole set of every
+// variant of the package (it can read 90 GB); the PC downloads only the
+// part it lacks. Past wuSizeSane the smallest size is taken as "about", or
+// none at all when Windows gives none (it is told while downloading).
+func wuRealSize(max, min int64) (int64, bool) {
+	switch {
+	case max <= 0:
+		return min, false
+	case max <= wuSizeSane:
+		return max, false
+	case min > 0 && min < max && min <= wuSizeSane:
+		return min, true
+	}
+	return 0, true
+}
+
+// no single Windows update downloads more than this (a whole new version
+// of Windows is about 4-5 GB)
+const wuSizeSane = 8 << 30
+
+// wuRepairable: errors Windows Update itself recovers from after its
+// download cache is cleared and its services restarted (or after DISM for
+// a damaged component store): network drops, a broken or half download,
+// files it cannot find.
+func wuRepairable(hr string) (bool, bool) {
+	h := strings.ToUpper(strings.TrimPrefix(strings.TrimPrefix(hr, "0x"), "0X"))
+	switch h {
+	case "80073712", "800F081F", "800F0831", "800F0922", "80070490", "8007000D":
+		return true, true // the component store: DISM first
+	case "80244022", "8024402F", "80244017", "80244018", "80244019", "8024401B", "8024401C", "80240034", "80246007", "80246008",
+		"80246013", "80070002", "80070003", "80240022", "8024A105", "80248007", "800705B4", "80072EE2", "80072EFD", "80072EFE",
+		"80072F8F", "8024200D", "80242016", "80070020", "80240016", "80244010", "80246017", "8024002D", "80070643", "80240017":
+		return true, false
+	}
+	return false, false
 }

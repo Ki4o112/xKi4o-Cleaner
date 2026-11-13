@@ -356,7 +356,7 @@ func buildCatalog() {
 			detect:  func() bool { return anyDir(operaBases()...) },
 			targets: func() []target { return chromiumTargets(operaBases()...) }},
 		{id: "arc", procs: []string{"arc.exe"},
-			detect: func() bool { return len(arcBases()) > 0 },
+			detect:  func() bool { return len(arcBases()) > 0 },
 			targets: func() []target { return chromiumTargets(arcBases()...) }},
 		{id: "firefox", procs: []string{"firefox.exe"},
 			detect: func() bool {
@@ -492,7 +492,7 @@ func buildCatalog() {
 				return electronTargets(spotifyBrowsers()...)
 			}},
 		{id: "whatsapp", procs: []string{"whatsapp.exe", "whatsapp.root.exe"},
-			detect: func() bool { return len(whatsappBases()) > 0 },
+			detect:  func() bool { return len(whatsappBases()) > 0 },
 			targets: func() []target { return chromiumTargets(whatsappBases()...) }},
 		{id: "zoom", procs: []string{"zoom.exe"},
 			detect: func() bool { return dirExists(j(P.roaming, "Zoom")) },

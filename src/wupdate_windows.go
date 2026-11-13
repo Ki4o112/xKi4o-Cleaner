@@ -7,6 +7,8 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
@@ -27,7 +29,7 @@ try {
     if ($u.Type -eq 2) { try { $dc = [string]$u.DriverClass; $dv = [string]$u.DriverVerDate.ToString('yyyy-MM-dd') } catch {} }
     $rb = $false; try { $rb = ($u.InstallationBehavior.RebootBehavior -ne 0) } catch {}
     [pscustomobject]@{ ID = [string]$u.Identity.UpdateID; Title = [string]$u.Title; KB = [string]$kb; Type = [int]$u.Type;
-      Size = [double]$u.MaxDownloadSize; Downloaded = [bool]$u.IsDownloaded; BrowseOnly = [bool]$u.BrowseOnly; Reboot = $rb;
+      Size = [double]$u.MaxDownloadSize; SizeMin = [double]$u.MinDownloadSize; Downloaded = [bool]$u.IsDownloaded; BrowseOnly = [bool]$u.BrowseOnly; Reboot = $rb;
       Severity = [string]$u.MsrcSeverity; Cats = (@($u.Categories | ForEach-Object { $_.Name }) -join '|'); Date = $d;
       Desc = [string]$u.Description; DrvClass = $dc; DrvVer = $dv }
   })
@@ -149,75 +151,78 @@ func wuInstall(o wuOpts) (res wuResult) {
 			op.warnf("", T("log.rpFail"), nil)
 		}
 	}
-	quoted := make([]string, len(o.IDs))
-	for i, id := range o.IDs {
-		quoted[i] = "'" + strings.ToLower(id) + "'"
-	}
-	script := `
-try {
-  $ids = @(` + strings.Join(quoted, ",") + `)
-  $s = New-Object -ComObject Microsoft.Update.Session
-  $s.ClientApplicationID = 'xKi4o Cleaner'
-  $r = $s.CreateUpdateSearcher().Search("IsInstalled=0")
-  $list = @($r.Updates | Where-Object { $ids -contains ([string]$_.Identity.UpdateID).ToLower() })
-  "COUNT|$($list.Count)"
-  $i = 0
-  foreach ($u in $list) {
-    $i++
-    $id = [string]$u.Identity.UpdateID
-    try {
-      if (-not $u.EulaAccepted) { $u.AcceptEula() }
-      $c = New-Object -ComObject Microsoft.Update.UpdateColl
-      [void]$c.Add($u)
-      if (-not $u.IsDownloaded) {
-        "STEP|$i|download|$id"
-        $d = $s.CreateUpdateDownloader(); $d.Updates = $c; [void]$d.Download()
-      }
-      "STEP|$i|install|$id"
-      $in = $s.CreateUpdateInstaller(); $in.Updates = $c
-      $ir = $in.Install()
-      "DONE|$i|$id|$($ir.ResultCode)|0x{0:X8}|$([int]$ir.RebootRequired)" -f $ir.HResult
-    } catch {
-      "DONE|$i|$id|4|0x{0:X8}|0" -f $_.Exception.HResult
-    }
-  }
-} catch {
-  "ERR|0x{0:X8}|{1}" -f $_.Exception.HResult, ($_.Exception.Message -replace '[\r\n|]', ' ')
-}`
 	app.critical.Store(true)
 	defer app.critical.Store(false)
 	count := len(o.IDs)
 	got := 0
-	err := runPSLines(ctx, 3*time.Hour, script, func(line string) {
-		li, ok := wuLine(line)
-		if !ok {
-			return
-		}
-		switch li.Kind {
-		case "count":
-			count = li.Count
-		case "step":
-			emit("wu-progress", map[string]any{"phase": li.Phase, "i": li.I, "n": count, "id": li.ID, "title": titles[strings.ToLower(li.ID)]})
-		case "done":
-			got++
-			title := titles[strings.ToLower(li.ID)]
-			if title == "" {
-				title = li.ID
+	var err error
+	// a failed download is repaired (cache cleared, services restarted, DISM
+	// for a damaged store) and tried once more by itself
+	type failure struct{ title, hr string }
+	ids := o.IDs
+	for attempt := 0; attempt < 2 && len(ids) > 0; attempt++ {
+		retry := attempt == 0
+		failed := map[string]failure{}
+		err = runPSLines(ctx, 3*time.Hour, wuBatchScript(ids), func(line string) {
+			li, ok := wuLine(line)
+			if !ok {
+				return
 			}
-			okRes := li.Result == 2 || li.Result == 3
-			if okRes {
-				res.Installed++
-				op.info(title, T("log.wuOne"), map[string]any{"result": li.Result, "reboot": li.Reboot})
-			} else {
-				res.Failed = append(res.Failed, title)
-				op.fail(title, T("log.wuOneFail", wuHResult(li.HR)), map[string]any{"result": li.Result, "hresult": li.HR})
+			switch li.Kind {
+			case "count":
+				if attempt == 0 {
+					count = li.Count
+				}
+			case "step":
+				emit("wu-progress", map[string]any{"phase": li.Phase, "i": li.I, "n": count, "id": li.ID, "title": titles[strings.ToLower(li.ID)], "retry": attempt > 0})
+			case "done":
+				title := titles[strings.ToLower(li.ID)]
+				if title == "" {
+					title = li.ID
+				}
+				okRes := li.Result == 2 || li.Result == 3
+				if !okRes {
+					if can, _ := wuRepairable(li.HR); can && retry && ctx.Err() == nil {
+						failed[li.ID] = failure{title, li.HR}
+						op.warnf(title, T("log.wuRetry", wuHResult(li.HR)), map[string]any{"hresult": li.HR})
+						return
+					}
+				}
+				got++
+				if okRes {
+					res.Installed++
+					op.info(title, T("log.wuOne"), map[string]any{"result": li.Result, "reboot": li.Reboot, "retry": attempt > 0})
+				} else {
+					res.Failed = append(res.Failed, title)
+					op.fail(title, T("log.wuOneFail", wuHResult(li.HR)), map[string]any{"result": li.Result, "hresult": li.HR})
+				}
+				res.Reboot = res.Reboot || li.Reboot
+				emit("wu-progress", map[string]any{"phase": "done", "i": li.I, "n": count, "id": li.ID, "title": title, "ok": okRes, "error": map[bool]string{true: "", false: wuHResult(li.HR)}[okRes]})
+			case "err":
+				res.Error = strings.TrimSpace(wuHResult(li.HR) + " " + strings.TrimPrefix(line, "ERR|"+li.HR+"|"))
 			}
-			res.Reboot = res.Reboot || li.Reboot
-			emit("wu-progress", map[string]any{"phase": "done", "i": li.I, "n": count, "id": li.ID, "title": title, "ok": okRes, "error": map[bool]string{true: "", false: wuHResult(li.HR)}[okRes]})
-		case "err":
-			res.Error = strings.TrimSpace(wuHResult(li.HR) + " " + strings.TrimPrefix(line, "ERR|"+li.HR+"|"))
+		})
+		if len(failed) == 0 || ctx.Err() != nil {
+			break
 		}
-	})
+		// repair Windows Update, then the failed ones once more
+		dism := false
+		ids = ids[:0:0]
+		for id, f := range failed {
+			ids = append(ids, id)
+			if _, d := wuRepairable(f.hr); d {
+				dism = true
+			}
+		}
+		emit("wu-progress", map[string]any{"phase": "repair", "n": count})
+		wuRepair(ctx, op, dism, func(phase string) { emit("wu-progress", map[string]any{"phase": phase, "n": count}) })
+		if ctx.Err() != nil {
+			for _, f := range failed {
+				res.Failed = append(res.Failed, f.title)
+			}
+			break
+		}
+	}
 	if res.Error == "" && err != nil && got == 0 {
 		res.Error = T("wu.err.run", err.Error())
 	}
@@ -291,4 +296,77 @@ func runPSLines(parent context.Context, timeout time.Duration, script string, li
 		return err
 	}
 	return nil
+}
+
+// wuBatchScript downloads and installs the given updates one by one.
+func wuBatchScript(ids []string) string {
+	quoted := make([]string, len(ids))
+	for i, id := range ids {
+		quoted[i] = "'" + strings.ToLower(id) + "'"
+	}
+	return `
+try {
+  $ids = @(` + strings.Join(quoted, ",") + `)
+  $s = New-Object -ComObject Microsoft.Update.Session
+  $s.ClientApplicationID = 'xKi4o Cleaner'
+  $r = $s.CreateUpdateSearcher().Search("IsInstalled=0")
+  $list = @($r.Updates | Where-Object { $ids -contains ([string]$_.Identity.UpdateID).ToLower() })
+  "COUNT|$($list.Count)"
+  $i = 0
+  foreach ($u in $list) {
+    $i++
+    $id = [string]$u.Identity.UpdateID
+    try {
+      if (-not $u.EulaAccepted) { $u.AcceptEula() }
+      $c = New-Object -ComObject Microsoft.Update.UpdateColl
+      [void]$c.Add($u)
+      if (-not $u.IsDownloaded) {
+        "STEP|$i|download|$id"
+        $d = $s.CreateUpdateDownloader(); $d.Updates = $c
+        $dr = $d.Download()
+        if ($dr.ResultCode -ne 2 -and $dr.ResultCode -ne 3) { "DONE|$i|$id|4|0x{0:X8}|0" -f $dr.HResult; continue }
+      }
+      "STEP|$i|install|$id"
+      $in = $s.CreateUpdateInstaller(); $in.Updates = $c
+      $ir = $in.Install()
+      "DONE|$i|$id|$($ir.ResultCode)|0x{0:X8}|$([int]$ir.RebootRequired)" -f $ir.HResult
+    } catch {
+      "DONE|$i|$id|4|0x{0:X8}|0" -f $_.Exception.HResult
+    }
+  }
+} catch {
+  "ERR|0x{0:X8}|{1}" -f $_.Exception.HResult, ($_.Exception.Message -replace '[\r\n|]', ' ')
+}`
+}
+
+// wuRepair is the usual cure for downloads that fail: Windows Update's
+// services stopped, its download cache emptied and its catalog folder
+// renamed (Windows makes both again), the services started again; with a
+// damaged component store, DISM repairs it first.
+func wuRepair(ctx context.Context, op *opHandle, dism bool, phase func(string)) {
+	op.info("", T("log.wuRepair"), nil)
+	if dism {
+		phase("dism")
+		_, _, _ = runQuietCtx(ctx, 45*time.Minute, sys32("dism.exe"), "/Online", "/Cleanup-Image", "/RestoreHealth")
+	}
+	phase("repair")
+	svcs := []string{"wuauserv", "bits", "cryptsvc", "usosvc"}
+	for _, n := range svcs {
+		_, _, _ = runQuietCtx(ctx, time.Minute, sys32("net.exe"), "stop", n, "/y")
+	}
+	win := os.Getenv("SystemRoot")
+	dl := filepath.Join(win, "SoftwareDistribution", "Download")
+	if entries, err := os.ReadDir(dl); err == nil {
+		for _, e := range entries {
+			_ = os.RemoveAll(filepath.Join(dl, e.Name()))
+		}
+	}
+	cat := filepath.Join(win, "System32", "catroot2")
+	if fi, err := os.Stat(cat); err == nil && fi.IsDir() {
+		_ = os.Rename(cat, cat+".xki4o-"+time.Now().Format("20060102-150405"))
+	}
+	for i := len(svcs) - 1; i >= 0; i-- {
+		_, _, _ = runQuietCtx(ctx, time.Minute, sys32("net.exe"), "start", svcs[i])
+	}
+	op.info("", T("log.wuRepaired"), nil)
 }
