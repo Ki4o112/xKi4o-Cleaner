@@ -270,33 +270,24 @@ async def main():
         await pg.set_viewport_size({"width": 980, "height": 660})
         await pg.wait_for_timeout(300)
         vis = await pg.evaluate("Array.from(document.querySelectorAll('[data-page]')).every(b => { const r = b.getBoundingClientRect(); return r.width > 0 && r.bottom <= innerHeight - 8; })")
-        check("all 29 sections fit at the minimum window size", vis)
+        check("all the sections fit at the minimum window size", vis)
         await pg.set_viewport_size({"width": 1180, "height": 820})
         await pg.wait_for_timeout(300)
-        # each section is in reach: shown, or in a closed group whose title is shown;
-        # the shown buttons keep a readable height
-        vis = await pg.evaluate("""(() => { const ok = el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.bottom <= innerHeight - 8; };
-          return Array.from(document.querySelectorAll('[data-page]')).every(b => ok(b) || (b.classList.contains('g-off') && ok(document.querySelector(`#nav .nav-g[data-g="${b.dataset.g}"]`)))); })()""")
-        check("all sections are in reach at the default window size (with labels)", vis)
-        hs = await pg.evaluate("Array.from(document.querySelectorAll('#nav button[data-page]:not(.g-off)')).map(b => b.offsetHeight)")
-        check("the menu's buttons keep a readable height (28 px or more)", hs and min(hs) >= 28, hs)
-        # a closed group opens with a click and shows its sections
-        shut = await pg.evaluate("(document.querySelector('#nav .nav-g.shut') || {}).dataset?.g || ''")
-        if shut:
-            await pg.click(f'#nav .nav-g[data-g="{shut}"]')
-            await pg.wait_for_timeout(200)
-            opened = await pg.evaluate(f"""Array.from(document.querySelectorAll('#nav button[data-g="{shut}"]')).every(b => b.offsetHeight > 0)""")
-            check("a closed group opens with a click", opened)
-            await pg.click(f'#nav .nav-g[data-g="{shut}"]')
-            await pg.wait_for_timeout(200)
-            closed = await pg.evaluate(f"""Array.from(document.querySelectorAll('#nav button[data-g="{shut}"]')).every(b => b.offsetHeight === 0)""")
-            check("and closes again", closed)
-        # going to a section in a closed group opens it
+        # 4.24: every section is always shown (no groups to open), readable,
+        # and the menu scrolls to the open page when the window is low
+        shown = await pg.evaluate("Array.from(document.querySelectorAll('#nav button[data-page]')).every(b => b.offsetHeight > 0 && !b.classList.contains('g-off'))")
+        check("every section of the menu is always shown (nothing to open first)", shown)
+        hs = await pg.evaluate("Array.from(document.querySelectorAll('#nav button[data-page]')).map(b => b.offsetHeight)")
+        check("the menu's buttons keep a readable height (26 px or more)", hs and min(hs) >= 26, hs)
+        check("a group title is only a title (no click to hide)", await pg.evaluate("!document.querySelector('#nav .nav-g[role=button]')"))
+        await pg.set_viewport_size({"width": 1180, "height": 640})
+        await pg.wait_for_timeout(300)
         await pg.evaluate("go('bsod')")
-        await pg.wait_for_timeout(200)
-        check("going to a section opens its group", await pg.evaluate("document.querySelector('#nav [data-page=\"bsod\"]').offsetHeight > 0"))
+        await pg.wait_for_timeout(400)
+        inview = await pg.evaluate("""(() => { const n = document.querySelector('.nav').getBoundingClientRect(), b = document.querySelector('#nav [data-page="bsod"]').getBoundingClientRect(); return b.top >= n.top - 1 && b.bottom <= n.bottom + 1; })()""")
+        check("in a low window the menu scrolls to the open page", inview)
+        await pg.set_viewport_size({"width": 1180, "height": 820})
         await pg.evaluate("go('home')")
-        check("the side menu never scrolls — every section stays in view (it shrinks the items instead)", await pg.evaluate("(() => { const n = document.querySelector('.nav'); return n.scrollHeight <= n.clientHeight + 1; })()"))
         # 9. a clean asked for while a scan runs waits for the scan, then starts (never ignored)
         await pg.close()
         pg = await page(b, "?lang=en")

@@ -2649,6 +2649,14 @@ input.switch:focus-visible { outline-offset: 3px; }
 .hm-quick .ql { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .hm-quick small { display: block; color: var(--muted); font-weight: 500; font-size: 11.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 @media (max-width: 1180px) { .hm-quick { gap: 8px; } .hm-quick button { padding: 9px 10px; gap: 8px; font-size: 12px; } .hm-quick .qi { width: 26px; height: 26px; border-radius: 9px; } .hm-quick small { display: none; } }
+
+/* 4.24: the menu shows every section; when the window is too low it scrolls (a thin bar on hover) */
+.nav.scrolls { scrollbar-width: thin; scrollbar-color: transparent transparent; padding-right: 2px; -webkit-mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 26px), transparent 100%); mask-image: linear-gradient(180deg, #000 0, #000 calc(100% - 26px), transparent 100%); }
+.nav.scrolls:hover { scrollbar-color: var(--line-hi) transparent; }
+.nav.scrolls::-webkit-scrollbar { width: 5px; }
+.nav.scrolls:hover::-webkit-scrollbar-thumb { background: var(--line-hi); border-radius: 4px; }
+.nav-g[data-g] { cursor: default; }
+.nav-g .chev, .nav-g .g-dot { display: none !important; }
 </style>
 </head>
 <body class="booting">
@@ -6636,22 +6644,17 @@ function navGroupsInit() {
   $$("#nav > *").forEach(el => {
     if (el.classList.contains("nav-g")) {
       g = el.dataset.g;
-      const g0 = g;
-      if (!el.querySelector(".chev")) el.insertAdjacentHTML("beforeend", '<i class="g-dot" hidden></i><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>');
-      const flip = () => {
-        if (el.classList.contains("shut")) { NAVG.shut.delete(g0); NAVG.open.add(g0); } else { NAVG.open.delete(g0); NAVG.shut.add(g0); }
-        S.settings.navShut = [...NAVG.shut]; storeSettings(); fitNav();
-      };
-      el.addEventListener("click", flip);
-      el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); } });
+      // 4.24: every section always shows; a title only names its group
+      el.removeAttribute("role"); el.removeAttribute("tabindex");
     } else if (el.matches("button[data-page]") && g) el.dataset.g = g;
   });
 }
 function navApplyGroups() {
   const n = $("#nav"), rail = matchMedia("(max-width: 1080px)").matches || uiEasy();
   const cur = $(".nav button[aria-current='page']"), here = cur && cur.dataset.g;
-  const shut = g => !rail && g !== here && (NAVG.shut.has(g) || (NAVG.auto && !NAVG.open.has(g) && !NAVG.fill.has(g)));
-  n.classList.toggle("acc", !rail && (NAVG.auto || NAVG.shut.size > 0));
+  const shut = () => false; // nothing is ever hidden (4.24)
+  void rail; void here;
+  n.classList.remove("acc");
   $$("#nav .nav-g").forEach(h => {
     const off = shut(h.dataset.g);
     h.classList.toggle("shut", off); h.setAttribute("aria-expanded", String(!off));
@@ -6672,15 +6675,7 @@ function fitNavSizes() {
   const n = $(".nav"); if (!n) return;
   n.classList.remove("fit", "lines", "tight"); n.style.removeProperty("--navh");
   NAVG.auto = false; NAVG.fill.clear(); navApplyGroups();
-  if (n.scrollHeight > n.clientHeight + 1) {
-    NAVG.auto = true; navApplyGroups();
-    // then as many of the other groups as there is room for, top to bottom
-    $$("#nav .nav-g.shut").forEach(h => {
-      if (NAVG.shut.has(h.dataset.g)) return;
-      NAVG.fill.add(h.dataset.g); navApplyGroups();
-      if (n.scrollHeight > n.clientHeight + 1) { NAVG.fill.delete(h.dataset.g); navApplyGroups(); }
-    });
-  }
+  n.classList.remove("scrolls");
   const bs = n.querySelectorAll("button:not(.g-off)");
   if (!bs.length || n.scrollHeight <= n.clientHeight + 1) { moveNav(); return; }
   const h0 = bs[0].offsetHeight;
@@ -6689,8 +6684,11 @@ function fitNavSizes() {
     n.classList.toggle("tight", mode === "tight"); n.classList.toggle("lines", mode === "lines");
     const over = n.scrollHeight - n.clientHeight;
     const h = Math.floor(h0 - over / bs.length - .5);
-    if (h >= 24 || mode === "lines") { n.style.setProperty("--navh", Math.max(17, Math.min(h0, h)) + "px"); n.classList.add("fit"); break; }
+    // buttons stay big enough to read and click; what still does not fit scrolls
+    const least = matchMedia("(max-width: 1080px)").matches ? 17 : 26; // icons alone can be smaller than labelled rows
+    if (h >= least || mode === "lines") { n.style.setProperty("--navh", Math.max(least, Math.min(h0, h)) + "px"); n.classList.add("fit"); break; }
   }
+  n.classList.toggle("scrolls", n.scrollHeight > n.clientHeight + 1);
   moveNav();
 }
 window.addEventListener("resize", fitNav);
@@ -6817,8 +6815,8 @@ function go(page, opt) {
   if (pgEl && was !== page && motionOK()) { pgEl.classList.remove("enter"); void pgEl.offsetWidth; pgEl.classList.add("enter"); clearTimeout(pgEl._enterT); pgEl._enterT = setTimeout(() => pgEl.classList.remove("enter"), 1400); }
   S.page = page;
   paintNavHist();
-  if (NAVG.auto || NAVG.shut.size) fitNav(); else moveNav();
-  const cur = $(".nav button[aria-current='page']"); if (cur && cur.scrollIntoViewIfNeeded) cur.scrollIntoViewIfNeeded(false);
+  moveNav();
+  const cur = $(".nav button[aria-current='page']"); if (cur && cur.scrollIntoViewIfNeeded) cur.scrollIntoViewIfNeeded(true);
   if (page === "procs") { if (was !== "procs") PM.first = true; startProcs(); requestAnimationFrame(() => $("#pmFilter")._place && $("#pmFilter")._place()); }
   if (page === "dupes") loadFinder(page);
   if (page === "restore") { if (opt && opt.rcTab) RC.tab = opt.rcTab; loadRestore(true); }
