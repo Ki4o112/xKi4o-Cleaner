@@ -545,20 +545,39 @@ func trayRemove() {
 	_, _, _ = procShellNotifyIconW.Call(nimDelete, uintptr(unsafe.Pointer(d)))
 }
 
-// trayMenu: Open / Exit, at the mouse.
+// the tray menu's items
+const (
+	trayOpen  = 1
+	trayExit  = 2
+	trayClean = 10
+	trayRAM   = 11
+	trayGame  = 12
+)
+
+// trayMenu: Open, the quick actions (a safe cleanup, free memory, game
+// mode on/off — without opening the window), Exit, at the mouse.
 func trayMenu(hwnd uintptr) {
 	m, _, _ := procCreatePopupMenu.Call()
 	if m == 0 {
 		return
 	}
 	defer procDestroyMenu.Call(m) //nolint:errcheck // freeing the menu
-	add := func(id uintptr, text string) {
+	add := func(id uintptr, text string, flags uintptr) {
 		p, _ := windows.UTF16PtrFromString(text)
-		_, _, _ = procAppendMenuW.Call(m, 0, id, uintptr(unsafe.Pointer(p)))
+		_, _, _ = procAppendMenuW.Call(m, flags, id, uintptr(unsafe.Pointer(p)))
 	}
-	add(1, T("tray.open"))
+	busy := uintptr(0)
+	if app.busy.Load() || autoCleanBusy() {
+		busy = 0x1 // MF_GRAYED: a cleanup is already running
+	}
+	gameOn := gameState().Active
+	add(trayOpen, T("tray.open"), 0)
 	_, _, _ = procAppendMenuW.Call(m, 0x800, 0, 0) // MF_SEPARATOR
-	add(2, T("tray.exit"))
+	add(trayClean, T("tray.clean"), busy)
+	add(trayRAM, T("tray.ram"), 0)
+	add(trayGame, T("tray.game"), map[bool]uintptr{true: 0x8, false: 0}[gameOn]) // MF_CHECKED while on
+	_, _, _ = procAppendMenuW.Call(m, 0x800, 0, 0)
+	add(trayExit, T("tray.exit"), 0)
 	_, _, _ = procSetMenuDefaultItem.Call(m, 1, 0)
 	var pt point
 	_, _, _ = procGetCursorPos.Call(uintptr(unsafe.Pointer(&pt)))
@@ -568,9 +587,15 @@ func trayMenu(hwnd uintptr) {
 	cmd, _, _ := procTrackPopupMenu.Call(m, 0x0100|0x0002|0x0080, uintptr(pt.X), uintptr(pt.Y), 0, hwnd, 0)
 	_, _, _ = procPostMessageW.Call(hwnd, wmNull, 0, 0)
 	switch cmd {
-	case 1:
+	case trayClean:
+		go trayQuick("clean")
+	case trayRAM:
+		go trayQuick("ram")
+	case trayGame:
+		go trayQuick("game")
+	case trayOpen:
 		winShow()
-	case 2:
+	case trayExit:
 		winShow() // a question about running work needs the window
 		win.quitting.Store(true)
 		_, _, _ = procPostMessageW.Call(hwnd, wmClose, 0, 0)

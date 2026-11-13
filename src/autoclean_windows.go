@@ -263,7 +263,54 @@ func runAutoClean(source string) {
 			time.Sleep(gnShow + time.Second)
 		}
 	}
+	if source == "tray" && (getSettings()["autoMaint"] == false) {
+		trayTell(T("tray.cleanDone"), T("tray.cleanFreed", sizeText(sum.freed), sum.files))
+	}
 	emit("auto-clean", ev)
+}
+
+// trayQuick runs a quick action from the tray menu and tells how it went
+// with a notification (the window stays hidden).
+func trayQuick(what string) {
+	defer recoverLog("app")
+	switch what {
+	case "clean":
+		if app.busy.Load() || autoCleanBusy() {
+			trayTell(T("tray.clean"), T("auto.skipBusy"))
+			return
+		}
+		runAutoClean("tray")
+	case "ram":
+		f := gameRAM(T("log.trayRam"))
+		emit("mem-auto", map[string]any{"reason": "tray", "result": map[string]any{"freed": f, "stats": getMemory()}})
+		trayTell(T("tray.ramDone"), T("tray.ramFreed", sizeText(f)))
+	case "game":
+		var r gmResult
+		on := gameState().Active
+		if on {
+			r = gameStop()
+		} else {
+			_, ram, force, apps := gmAutoCfg()
+			r = gameStart(gmOpts{Apps: apps, Force: force, RAM: ram})
+		}
+		emit("gm-tray", map[string]any{"on": !on, "error": r.Error})
+		switch {
+		case r.Error != "":
+			trayTell(T("tray.game"), r.Error)
+		case on:
+			trayTell(T("tray.gameOffT"), T("tray.gameOffD"))
+		default:
+			trayTell(T("tray.gameOnT"), T("tray.gameOnD", len(r.State.Closed)))
+		}
+	}
+}
+
+// trayTell: a notification from the tray icon, on the window's thread.
+func trayTell(title, text string) {
+	if app.w == nil {
+		return
+	}
+	app.w.Dispatch(func() { trayNotify(title, text) })
 }
 
 // autoMaintenance: after the cleaning, the rest of the weekly look-over —
