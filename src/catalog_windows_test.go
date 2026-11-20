@@ -111,7 +111,7 @@ func TestCatalogCleansOnlyCaches(t *testing.T) {
 
 	initPaths()
 	buildCatalog()
-	ids := []string{"chrome", "discord", "teams", "battlenet", "eaapp", "gog", "riot", "obs", "nvapp", "msstore", "shaders", "steam", "epic"}
+	ids := []string{"chrome", "discord", "teams", "battlenet", "eaapp", "gog", "riot", "obs", "nvapp", "msstore", "shaders", "steam", "epic", "onedrive"}
 	if !amdExisted {
 		ids = append(ids, "amdinstallers")
 	}
