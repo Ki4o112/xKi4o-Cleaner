@@ -3,6 +3,58 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.26.0 — 2026-11-20
+
+### English
+#### Fixed
+- Settings that went back to their defaults after a restart are now kept: the light theme (it even came back as Graphite with a green accent), favourites, the icons-only menu, the density, "Start hidden in the tray", "Keep only the app's newest 3 restore points", the weekly look-over, the quiet background and the power profile (Balanced / Games / Saver). Settings the app does not know (written by another version) stay in the file
+- The internet speed box on Network was in English until the page was drawn again
+- A preview said "freed so far" while it deletes nothing — it now says "found so far"
+- Drive health on Optimize: the labels were cut ("Темпе…", "Износ…") — now whole, two by two
+- Drive cards with a warning or a problem lost their coloured edge in the new look — it is back (Check cards too)
+- The light theme: the logo in the title bar was invisible, the charts' bright lines were lost on white
+- The menu's foot cut "Administrator" short
+- Easy view: a favourite that Easy does not show left a lone "Favourites" title
+- The start page was drawn again every 4 seconds: the hero flickered under the pointer and its buttons lost the keyboard focus — now only when something in it changed
+- Restore Center: "Startup промени" in Bulgarian is now "Промени в стартирането"
+
+#### New
+- Theme Auto: follows Windows' light or dark apps setting, and changes with it
+- Updates — hide an update (like Microsoft's "Show or hide updates" tool): Windows does not offer or install it until you show it again. Handy for a driver that causes trouble. Hidden updates are listed with a Show button
+- Updates — remove an installed update that causes trouble, from the history: monthly cumulative updates through DISM (wusa cannot remove them since they come with the servicing stack), others through wusa; it asks first, offers a restore point, and says when a restart is needed
+- The tray menu: Check for Windows updates, with a notification of what was found
+- The start page: the health score over the last 30 days under the ring, with the change (+12 in 5 days)
+- History of changes: search, and Save as a file (for support, a forum or to keep); a History button in the Restore Center
+- The command palette (Ctrl+K): Light / Dark / Auto theme, compact density, the icons-only menu, pin or unpin the open page, History of changes
+- Shortcuts: Ctrl+B the icons-only menu, Ctrl+D pin the open page to the favourites (listed in Settings with Alt+← / → too)
+- Settings — Default settings: every setting back to how the app came (the language, the history, the tweaks and the space freed stay)
+- Cleanup: OneDrive's logs (they can grow to hundreds of MB) — the synced files and the settings are never touched; part of the automatic cleanup
+
+### Български
+#### Оправено
+- Настройки, които се връщаха по подразбиране след рестарт на програмата, вече се пазят: светлата тема (дори се връщаше като Графит със зелен цвят), любимите, менюто само с икони, плътността, „Тръгвай скрита в трея“, „Пази само последните 3 точки на програмата“, седмичната проверка, тихият фон и режимът (Баланс / Игри / Пестене). Настройки, които програмата не познава (записани от друга версия), остават във файла
+- Полето за скоростта на интернета в „Мрежа“ беше на английски, докато страницата не се начертае отново
+- Прегледът казваше „освободени до момента“, а не трие нищо — сега пише „намерени до момента“
+- Здравето на дисковете в „Оптимизация“: надписите бяха отрязани („Темпе…“, „Износ…“) — сега са цели, по два на ред
+- Картите на дискове с предупреждение или проблем губеха цветната си рамка в новия вид — върната е (и в Проверката)
+- Светлата тема: логото в заглавната лента не се виждаше, ярките линии на графиките се губеха на бялото
+- Долу в менюто „Администратор“ се режеше
+- Лесен изглед: любим раздел, който Лесният не показва, оставяше самотно заглавие „Любими“
+- Началният екран се начертаваше наново на всеки 4 секунди: горната част примигваше под мишката, а бутоните губеха фокуса от клавиатурата — сега само когато нещо в нея се е променило
+- Център за възстановяване: „Startup промени“ вече е „Промени в стартирането“
+
+#### Ново
+- Тема Авто: следва светлия или тъмния режим на Windows и се сменя заедно с него
+- Обновления — скрий обновление (като инструмента на Microsoft „Show or hide updates“): Windows не го предлага и не го инсталира, докато не го покажеш отново. Удобно за драйвер, който прави проблеми. Скритите се виждат в списък с бутон „Покажи“
+- Обновления — премахни инсталирано обновление, което прави проблеми, от историята: месечните кумулативни — през DISM (wusa не може да ги махне, защото идват със servicing stack), другите — през wusa; пита преди това, предлага точка за възстановяване и казва, когато трябва рестарт
+- Менюто в трея: Провери за обновления на Windows, с известие какво е намерено
+- Началният екран: оценката за последните 30 дни под кръга, с промяната (+12 за 5 дни)
+- История на промените: търсене и „Запази като файл“ (за поддръжка, форум или за спомен); бутон „История на промените“ в Центъра за възстановяване
+- Командите (Ctrl+K): Светла / Тъмна / Авто тема, компактна плътност, меню само с икони, закачи или махни отворената страница от любими, История на промените
+- Клавиши: Ctrl+B меню само с икони, Ctrl+D закачи отворената страница в любими (в Настройки, заедно с Alt+← / →)
+- Настройки — Начални настройки: всичко както при инсталиране (езикът, историята, туийковете и освободеното място остават)
+- Почистване: логовете на OneDrive (могат да стигнат стотици MB) — синхронизираните файлове и настройките не се пипат; влизат и в автоматичното почистване
+
 ## 4.25.0 — 2026-11-14
 
 ### English
