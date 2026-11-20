@@ -499,6 +499,13 @@ func buildCatalog() {
 			targets: func() []target {
 				return contentsIfExists(j(P.roaming, `Zoom\logs`), j(P.roaming, `Zoom\data\WebviewCacheX64`), j(P.local, `Zoom\logs`))
 			}},
+		// OneDrive's own logs (can grow to hundreds of MB); the synced files and
+		// its settings are never touched, logs in use are skipped
+		{id: "onedrive", procs: []string{"onedrive.exe"},
+			detect: func() bool { return dirExists(j(P.local, `Microsoft\OneDrive\logs`)) },
+			targets: func() []target {
+				return contentsIfExists(j(P.local, `Microsoft\OneDrive\logs`), j(P.local, `Microsoft\OneDrive\setup\logs`))
+			}},
 		{id: "adobe", procs: []string{"adobe premiere pro.exe", "afterfx.exe", "adobe media encoder.exe", "photoshop.exe", "audition.exe"},
 			detect: func() bool { return dirExists(j(P.roaming, `Adobe\Common`)) },
 			targets: func() []target {

@@ -266,6 +266,8 @@ func main() {
 		"wuSearch":             wuSearch,
 		"wuInstall":            wuInstall,
 		"wuCancel":             wuCancel,
+		"wuHide":               wuHide,
+		"wuUninstall":          wuUninstall,
 		"wuOpenSettings":       wuOpenSettings,
 		"nmState":              nmState,
 		"nmSet":                nmSet,

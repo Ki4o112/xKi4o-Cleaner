@@ -21,7 +21,7 @@ try {
   $s = New-Object -ComObject Microsoft.Update.Session
   $s.ClientApplicationID = 'xKi4o Cleaner'
   $sr = $s.CreateUpdateSearcher()
-  $r = $sr.Search("IsInstalled=0 and IsHidden=0")
+  $r = $sr.Search("IsInstalled=0")
   $ups = @(foreach ($u in $r.Updates) {
     $kb = ($u.KBArticleIDs | Select-Object -First 1)
     $d = ''; try { $d = $u.LastDeploymentChangeTime.ToString('yyyy-MM-dd') } catch {}
@@ -30,7 +30,7 @@ try {
     $rb = $false; try { $rb = ($u.InstallationBehavior.RebootBehavior -ne 0) } catch {}
     $bs = 0; try { foreach ($b in $u.BundledUpdates) { $m = [double]$b.MinDownloadSize; if ($m -le 0) { $m = [double]$b.MaxDownloadSize }; $bs += $m } } catch {}
     [pscustomobject]@{ ID = [string]$u.Identity.UpdateID; Title = [string]$u.Title; KB = [string]$kb; Type = [int]$u.Type;
-      Size = [double]$u.MaxDownloadSize; SizeMin = [double]$u.MinDownloadSize; SizeB = $bs; Downloaded = [bool]$u.IsDownloaded; BrowseOnly = [bool]$u.BrowseOnly; Reboot = $rb;
+      Size = [double]$u.MaxDownloadSize; SizeMin = [double]$u.MinDownloadSize; SizeB = $bs; Hidden = [bool]$u.IsHidden; Downloaded = [bool]$u.IsDownloaded; BrowseOnly = [bool]$u.BrowseOnly; Reboot = $rb;
       Severity = [string]$u.MsrcSeverity; Cats = (@($u.Categories | ForEach-Object { $_.Name }) -join '|'); Date = $d;
       Desc = [string]$u.Description; DrvClass = $dc; DrvVer = $dv }
   })
@@ -403,4 +403,148 @@ func wuRepair(ctx context.Context, op *opHandle, dism bool, phase func(string)) 
 		_, _, _ = runQuietCtx(ctx, time.Minute, sys32("net.exe"), "start", svcs[i])
 	}
 	op.info("", T("log.wuRepaired"), nil)
+}
+
+type wuHideOpts struct {
+	IDs  []string `json:"ids"`
+	Hide bool     `json:"hide"`
+}
+
+// wuHide hides updates from Windows Update (as Microsoft's "Show or hide
+// updates" tool does): Windows does not offer or install them until they are
+// shown again. A bad driver or an update that breaks something stays away.
+func wuHide(o wuHideOpts) wuState {
+	if !app.admin {
+		st := wuStatus()
+		st.Error = T("blocked.admin")
+		return st
+	}
+	if !wuIDsOK(o.IDs) {
+		st := wuStatus()
+		st.Error = T("wu.err.ids")
+		return st
+	}
+	wu.Lock()
+	if wu.busy {
+		wu.Unlock()
+		st := wuStatus()
+		st.Error = T("wu.err.busy")
+		return st
+	}
+	wu.busy = true
+	wu.Unlock()
+	defer func() { wu.Lock(); wu.busy = false; wu.Unlock() }()
+	quoted := make([]string, len(o.IDs))
+	for i, id := range o.IDs {
+		quoted[i] = "'" + strings.ToLower(id) + "'"
+	}
+	hide := map[bool]string{true: "$true", false: "$false"}[o.Hide]
+	script := `
+try {
+  $ids = @(` + strings.Join(quoted, ",") + `)
+  $s = New-Object -ComObject Microsoft.Update.Session
+  $s.ClientApplicationID = 'xKi4o Cleaner'
+  $r = $s.CreateUpdateSearcher().Search("IsInstalled=0")
+  $n = 0
+  foreach ($u in $r.Updates) { if ($ids -contains ([string]$u.Identity.UpdateID).ToLower()) { $u.IsHidden = ` + hide + `; $n++ } }
+  "OK|$n"
+} catch {
+  "ERR|0x{0:X8}|{1}" -f $_.Exception.HResult, ($_.Exception.Message -replace '[\r\n|]', ' ')
+}`
+	title := T(map[bool]string{true: "log.wuHide", false: "log.wuUnhide"}[o.Hide], len(o.IDs))
+	op := beginOp("wu", "", title, map[string]any{"ids": o.IDs})
+	out, _, err := runPS(3*time.Minute, script)
+	errText := ""
+	for _, l := range strings.Split(out, "\n") {
+		l = strings.TrimSpace(l)
+		if strings.HasPrefix(l, "ERR|") {
+			p := strings.SplitN(l, "|", 3)
+			errText = wuHResult(p[1])
+			if len(p) == 3 {
+				errText = strings.TrimSpace(errText + " " + p[2])
+			}
+		}
+	}
+	if errText == "" && err != nil && !strings.Contains(out, "OK|") {
+		errText = T("wu.err.run", err.Error())
+	}
+	if errText != "" {
+		op.fail("", errText, nil)
+		op.end("", nil)
+		st := wuStatus()
+		st.Error = errText
+		return st
+	}
+	// the list the page has follows at once (no new search needed)
+	wu.Lock()
+	if wu.last != nil {
+		wuMoveHidden(wu.last, o.IDs, o.Hide)
+	}
+	wu.Unlock()
+	op.end(title, nil)
+	return wuStatus()
+}
+
+type wuUninstOpts struct {
+	KB    string `json:"kb"`
+	Title string `json:"title"`
+}
+
+// wuUninstall removes an installed update. A monthly cumulative update comes
+// with the servicing stack, which wusa cannot take apart: its package
+// (Package_for_RollupFix…, the build in the update's title) is removed with
+// DISM; any other update with wusa. Windows finishes it with a restart. The
+// answer comes as "wu-uninst".
+func wuUninstall(o wuUninstOpts) bool {
+	kb := strings.TrimPrefix(strings.ToUpper(strings.TrimSpace(o.KB)), "KB")
+	if !app.admin || !reKBNum.MatchString(kb) {
+		return false
+	}
+	wu.Lock()
+	if wu.busy {
+		wu.Unlock()
+		return false
+	}
+	wu.busy = true
+	wu.Unlock()
+	go func() {
+		defer func() { wu.Lock(); wu.busy = false; wu.Unlock() }()
+		defer recoverLog("wu")
+		app.working.Store(true)
+		defer app.working.Store(false)
+		op := beginOp("wu", "KB"+kb, T("log.wuUninst", "KB"+kb), map[string]any{"title": o.Title})
+		out, _, err := runPS(40*time.Minute, wuUninstScript(kb, wuBuildOf(o.Title)))
+		ok, reboot, msg := wuUninstResult(out)
+		if !ok && msg == "" && err != nil {
+			msg = T("wu.err.run", err.Error())
+		}
+		if ok {
+			op.info("KB"+kb, T("log.wuUninstDone"), map[string]any{"reboot": reboot})
+		} else {
+			op.fail("KB"+kb, msg, nil)
+		}
+		op.end("", nil)
+		emit("wu-uninst", map[string]any{"kb": "KB" + kb, "ok": ok, "reboot": reboot, "error": msg})
+	}()
+	return true
+}
+
+func wuUninstScript(kb, build string) string {
+	return `
+try {
+  $kb = '` + kb + `'; $build = '` + build + `'
+  $pkg = $null
+  if ($build) {
+    $pkg = Get-WindowsPackage -Online -ErrorAction SilentlyContinue | Where-Object { $_.PackageName -like 'Package_for_RollupFix*' -and $_.PackageName -match ('~~\d+\.' + $build + '\.') -and [string]$_.PackageState -eq 'Installed' } | Select-Object -First 1
+  }
+  if ($pkg) {
+    $r = Remove-WindowsPackage -Online -PackageName $pkg.PackageName -NoRestart -ErrorAction Stop
+    "OK|dism|$([int][bool]$r.RestartNeeded)"
+  } else {
+    $p = Start-Process -FilePath "$env:SystemRoot\System32\wusa.exe" -ArgumentList '/uninstall', "/kb:$kb", '/quiet', '/norestart' -Wait -PassThru -WindowStyle Hidden
+    "OK|wusa|$($p.ExitCode)"
+  }
+} catch {
+  "ERR|0x{0:X8}|{1}" -f $_.Exception.HResult, ($_.Exception.Message -replace '[\r\n|]', ' ')
+}`
 }

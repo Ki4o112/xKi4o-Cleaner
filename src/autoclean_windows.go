@@ -284,6 +284,18 @@ func trayQuick(what string) {
 		f := gameRAM(T("log.trayRam"))
 		emit("mem-auto", map[string]any{"reason": "tray", "result": map[string]any{"freed": f, "stats": getMemory()}})
 		trayTell(T("tray.ramDone"), T("tray.ramFreed", sizeText(f)))
+	case "wu":
+		trayTell(T("tray.wu"), T("tray.wuLooking"))
+		st := wuSearch()
+		emit("wu-state", st)
+		switch {
+		case st.Error != "":
+			trayTell(T("tray.wu"), st.Error)
+		case len(st.Updates) == 0:
+			trayTell(T("tray.wuNoneT"), T("tray.wuNoneD"))
+		default:
+			trayTell(T("tray.wuSomeT", len(st.Updates)), T("tray.wuSomeD"))
+		}
 	case "game":
 		var r gmResult
 		on := gameState().Active

@@ -72,8 +72,11 @@ func TestCatalogCleansOnlyCaches(t *testing.T) {
 		filepath.Join(steam, `logs\x.txt`),
 		filepath.Join(L, `EpicGamesLauncher\Saved\Logs\x.log`),
 		filepath.Join(amd, `xKi4oTest_Installer\setup.exe`),
+		filepath.Join(L, `Microsoft\OneDrive\logs\Personal\SyncDiagnostics.log`),
 	}
 	keep := []string{
+		filepath.Join(L, `Microsoft\OneDrive\settings\Personal\global.ini`),
+		filepath.Join(root, `OneDrive\Documents\notes.txt`),
 		filepath.Join(L, `Google\Chrome\User Data\Default\History`),
 		filepath.Join(L, `Google\Chrome\User Data\Default\Login Data`),
 		filepath.Join(L, `Google\Chrome\User Data\Default\Local Storage\leveldb\x.log`),

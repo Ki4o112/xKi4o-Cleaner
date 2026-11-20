@@ -91,3 +91,36 @@ func TestWuRepairable(t *testing.T) {
 		t.Fatal("blocked by a policy: not repaired by clearing the cache")
 	}
 }
+
+func TestWuHiddenAndUninstall(t *testing.T) {
+	st := &wuState{Updates: []wuUpdate{{ID: "a"}, {ID: "b"}}}
+	wuMoveHidden(st, []string{"A"}, true)
+	if len(st.Updates) != 1 || len(st.Hidden) != 1 || st.Hidden[0].ID != "a" {
+		t.Fatalf("hide: %+v", st)
+	}
+	wuMoveHidden(st, []string{"a"}, false)
+	if len(st.Updates) != 2 || len(st.Hidden) != 0 {
+		t.Fatalf("show again: %+v", st)
+	}
+	if b := wuBuildOf("2026-11 Security Update (KB5132061) (26200.9974)"); b != "9974" {
+		t.Fatalf("build %q", b)
+	}
+	if b := wuBuildOf("Security Intelligence Update - KB2267602 (Version 1.441.120.0)"); b != "" {
+		t.Fatalf("no build %q", b)
+	}
+	for _, c := range []struct {
+		out        string
+		ok, reboot bool
+	}{
+		{"OK|dism|1", true, true}, {"OK|wusa|0", true, false}, {"OK|wusa|3010", true, true},
+		{"OK|wusa|2359303", false, false}, {"ERR|0x800F0905|The operation failed", false, false},
+	} {
+		ok, rb, msg := wuUninstResult(c.out)
+		if ok != c.ok || rb != c.reboot || (!ok && msg == "") {
+			t.Errorf("%s: %v %v %q", c.out, ok, rb, msg)
+		}
+	}
+	if !reKBNum.MatchString("5132061") || reKBNum.MatchString("51x") {
+		t.Fatal("kb check")
+	}
+}

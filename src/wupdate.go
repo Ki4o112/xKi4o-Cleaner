@@ -8,6 +8,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -41,6 +42,7 @@ type wuHist struct {
 
 type wuState struct {
 	Updates  []wuUpdate `json:"updates"`
+	Hidden   []wuUpdate `json:"hidden"` // hidden from Windows Update (not offered until shown again)
 	History  []wuHist   `json:"history"`
 	Reboot   bool       `json:"reboot"` // Windows waits for a restart
 	Searched int64      `json:"searched"`
@@ -121,7 +123,7 @@ func wuParse(out string) (wuState, error) {
 			ID, Title, KB, Severity, Cats, Date, Desc, DrvClass, DrvVer string
 			Type                                                        int
 			Size, SizeMin, SizeB                                        float64
-			Downloaded, BrowseOnly, Reboot                              bool
+			Downloaded, BrowseOnly, Reboot, Hidden                      bool
 		}
 		for _, u := range jsonList[rawUp](raw.Updates) {
 			if !reWuID.MatchString(u.ID) || strings.TrimSpace(u.Title) == "" {
@@ -142,7 +144,11 @@ func wuParse(out string) (wuState, error) {
 			if w.KB != "" && !strings.HasPrefix(w.KB, "KB") {
 				w.KB = "KB" + w.KB
 			}
-			st.Updates = append(st.Updates, w)
+			if u.Hidden {
+				st.Hidden = append(st.Hidden, w)
+			} else {
+				st.Updates = append(st.Updates, w)
+			}
 		}
 		st.History = append(st.History, jsonList[wuHist](raw.History)...)
 		st.Reboot = raw.Reboot
@@ -244,4 +250,72 @@ func wuRepairable(hr string) (bool, bool) {
 		return true, false
 	}
 	return false, false
+}
+
+// wuMoveHidden moves updates between the offered and the hidden list.
+func wuMoveHidden(st *wuState, ids []string, hide bool) {
+	want := map[string]bool{}
+	for _, id := range ids {
+		want[strings.ToLower(id)] = true
+	}
+	from, to := &st.Updates, &st.Hidden
+	if !hide {
+		from, to = &st.Hidden, &st.Updates
+	}
+	keep := (*from)[:0:0]
+	for _, u := range *from {
+		if want[strings.ToLower(u.ID)] {
+			*to = append(*to, u)
+		} else {
+			keep = append(keep, u)
+		}
+	}
+	*from = keep
+}
+
+var (
+	reKBNum   = regexp.MustCompile(`^\d{6,8}$`)
+	reWuBuild = regexp.MustCompile(`\((?:\d{5})\.(\d{3,5})\)`)
+)
+
+// wuBuildOf: the build an update's title names ("… (KB5062553) (26100.4652)"
+// → "4652"): a monthly cumulative update; "" for any other.
+func wuBuildOf(title string) string {
+	if m := reWuBuild.FindStringSubmatch(title); m != nil {
+		return m[1]
+	}
+	return ""
+}
+
+// wuUninstResult reads the uninstall script's answer: ok, whether Windows
+// needs a restart, and else what went wrong.
+func wuUninstResult(out string) (bool, bool, string) {
+	for _, l := range strings.Split(out, "\n") {
+		l = strings.TrimSpace(l)
+		p := strings.Split(l, "|")
+		switch {
+		case len(p) == 3 && p[0] == "OK" && p[1] == "dism":
+			return true, p[2] == "1", ""
+		case len(p) == 3 && p[0] == "OK" && p[1] == "wusa":
+			switch p[2] {
+			case "0":
+				return true, false, ""
+			case "3010", "1641":
+				return true, true, ""
+			case "2359303":
+				return false, false, T("wu.un.notInstalled")
+			case "1223":
+				return false, false, T("wu.un.cancelled")
+			}
+			code, _ := strconv.ParseInt(p[2], 10, 64)
+			return false, false, wuHResult(fmt.Sprintf("0x%08X", uint32(code)))
+		case len(p) >= 2 && p[0] == "ERR":
+			msg := wuHResult(p[1])
+			if len(p) >= 3 {
+				msg = strings.TrimSpace(msg + " " + strings.Join(p[2:], " "))
+			}
+			return false, false, msg
+		}
+	}
+	return false, false, ""
 }

@@ -552,6 +552,7 @@ const (
 	trayClean = 10
 	trayRAM   = 11
 	trayGame  = 12
+	trayWU    = 13
 )
 
 // trayMenu: Open, the quick actions (a safe cleanup, free memory, game
@@ -576,6 +577,7 @@ func trayMenu(hwnd uintptr) {
 	add(trayClean, T("tray.clean"), busy)
 	add(trayRAM, T("tray.ram"), 0)
 	add(trayGame, T("tray.game"), map[bool]uintptr{true: 0x8, false: 0}[gameOn]) // MF_CHECKED while on
+	add(trayWU, T("tray.wu"), 0)
 	_, _, _ = procAppendMenuW.Call(m, 0x800, 0, 0)
 	add(trayExit, T("tray.exit"), 0)
 	_, _, _ = procSetMenuDefaultItem.Call(m, 1, 0)
@@ -593,6 +595,8 @@ func trayMenu(hwnd uintptr) {
 		go trayQuick("ram")
 	case trayGame:
 		go trayQuick("game")
+	case trayWU:
+		go trayQuick("wu")
 	case trayOpen:
 		winShow()
 	case trayExit:
