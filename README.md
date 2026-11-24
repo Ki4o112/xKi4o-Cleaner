@@ -25,7 +25,7 @@ Clean junk safely, apply 100 reversible tweaks, check that nothing broke, boost 
 2. Run it and allow the administrator prompt.
 3. If Windows SmartScreen says *"Windows protected your PC"* (the exe is not code-signed), click **More info → Run anyway**.
 
-On the first start you choose the **Easy** view (only the six main sections, big buttons) or the **Full** one; a switch next to search changes it any time.
+At every start the app asks what you will use it for — **All**, **Cleanup**, **Tweaks & speed**, **PC health**, **Gaming** or **Easy** (the six main sections with big buttons) — and the menu, the start page and the quick actions follow. The **Focus** button at the top left of the menu changes it any time, and Settings can stop the question (the app then starts with the last choice). **F1** shows the keys.
 
 Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 already has. New versions are offered by the app itself.
 
@@ -60,6 +60,8 @@ Needs Windows 10 or 11 (64-bit) and the WebView2 Runtime, which Windows 11 alrea
 | **System** | Startup apps, Windows repair (DISM, SFC, disk check) and quick fixes (Explorer, icons, Store, Winsock, the shader cache for games that stutter) |
 | **Automatic cleaning** | Daily, weekly or monthly, with no window; open apps and sensitive categories are left out |
 | **Restore Center** | Puts back what the app changed; every operation has a step-by-step log |
+| **History of changes** | Everything the app changed, by day — undo the last tweak or a startup change right there, search it, save it as a file |
+| **Focus and the look** | Asked at every start: All, Cleanup, Tweaks & speed, PC health, Gaming or Easy — the menu follows. Dark, light or as Windows; favourite sections, an icons-only menu, a compact density; Ctrl+K searches everything, F1 shows the keys |
 
 <p align="center">
 <img src="docs/screenshots/cleanup.png" width="430" alt="Cleanup">

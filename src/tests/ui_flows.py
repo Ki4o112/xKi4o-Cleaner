@@ -189,6 +189,14 @@ async def main():
         await pg.click("#twUndo"); await pg.click("#mOk")
         ok = await wait_for(pg, "(TW.state['bing-off']||{}).state === 'off' && !TW.busy")
         check("undo restores the previous state", ok)
+        # 4.27: Undo right in the message
+        await pg.evaluate("document.querySelectorAll('.toast').forEach(x => x.remove())")
+        await pg.click('#twList [data-tw="bing-off"] .switch')
+        await wait_for(pg, "(TW.state['bing-off']||{}).state === 'on' && !TW.busy")
+        await wait_for(pg, "[...document.querySelectorAll('.toast .ta')].length > 0", 2000)
+        await pg.click(".toast .ta")
+        ok = await wait_for(pg, "(TW.state['bing-off']||{}).state === 'off' && !TW.busy", 4000)
+        check("a tweak's message has Undo right in it", ok)
         await pg.click('#twList [data-tw="clock-seconds"] .switch')
         await wait_for(pg, "(TW.state['clock-seconds']||{}).state === 'on' && !TW.busy")
         # turning off a tweak that was not set by the app asks first
@@ -1378,6 +1386,12 @@ async def main():
         await pg.evaluate("go('settings')")
         await pg.select_option("#ppSel", "health")
         check("focus: in Settings too", await wait_for(pg, "S.settings.purpose === 'health' && S.settings.uiMode === 'full'", 2000))
+        tips = await pg.evaluate("Object.keys(S.settings.ppTips || {}).sort().join()")
+        check("focus: a first tip for each focus, once", "clean" in tips and "game" in tips, tips)
+        await pg.keyboard.press("F1")
+        ok = await wait_for(pg, "document.getElementById('sveil').classList.contains('on') && document.getElementById('shTitle').textContent === 'Help'", 2000)
+        check("F1: help with the keys and how the app is laid out", ok and "Ctrl + K" in await pg.text_content("#shBody"))
+        await pg.click("#helpOk")
         check("no page errors (focus)", not pg.errs, pg.errs)
         await pg.close()
         # 4.5: ping to game servers, virus scan, what to delete, program folders

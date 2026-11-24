@@ -2901,6 +2901,11 @@ body.nav-mini .pp-btn .pp-l, body.nav-mini .pp-btn .pp-ch { display: none; }
 .pp-foot .extra { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
 .pp-keys { color: var(--faint); }
 @media (max-width: 1080px), (max-height: 720px) { .pp-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; } .pp-card { padding: 14px; } .pp-card ul { display: none; } .pp-box h2 { font-size: 24px; } }
+.help-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; }
+.help-grid h4 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--faint); }
+.help-grid .keys { display: grid; gap: 6px; }
+.help-ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+@media (max-width: 1080px) { .help-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body class="booting">
@@ -3876,14 +3881,14 @@ bg: {
   "btn.cleanAll": "Почисти всичко", "btn.cleanSel": "Почисти избраното", "btn.cleanSelN": "Само избраното ({0})", "btn.stop": "Спри", "btn.scan": "Сканирай отново",
   "status.scanDone": "Сканирането завърши за {0}", "status.scanning": "Сканиране…", "status.starting": "Започва…", "status.cleaning": "Почиства се: {0}",
   "status.stopping": "Спира след текущата стъпка…", "status.done": "Готово.", "status.doneRestart": "Готово. Рестартирай компютъра, за да приключат системните промени.",
-  "status.rp": "Създава се точка за възстановяване…", "status.rpFail": "Точката за възстановяване не се създаде, затова системните стъпки се пропускат. Можеш да изключиш изискването в „Настройки“.",
+  "status.rpFail": "Точката за възстановяване не се създаде, затова системните стъпки се пропускат. Можеш да изключиш изискването в „Настройки“.",
   "status.busy": "Друга операция още работи. Опитай отново след малко.",
-  "filter.all": "Всичко", "g.system": "Система", "g.browsers": "Браузъри", "g.apps": "Програми", "g.gpu": "Видеокарта", "g.windows": "Windows Update", "g.privacy": "Поверителност",
+  "filter.all": "Всичко", "g.system": "Система", "g.browsers": "Браузъри", "g.apps": "Програми", "g.gpu": "Видеокарта", "g.privacy": "Поверителност",
   "g.empty": "Нищо за почистване", "table.cat": "Категория", "table.size": "Размер",
   "row.clean": "Чисто", "row.done": "Готово", "row.skipped": "Пропуснато", "row.failed": "Грешка", "row.queued": "На опашка", "row.open": "Отворен", "row.optional": "по избор",
-  "row.openDesc": "Затвори програмата, за да се почисти кешът ѝ",
-  "notice.open1": "{0} е отворен. Кешът му се почиства само когато е затворен — понякога програмата остава в трея до часовника.",
-  "notice.openN": "{0} са отворени. Кешът им се почиства само когато са затворени — понякога остават в трея до часовника.",
+  
+  
+  
   "notice.recheck": "Провери отново", "and": "и",
   "notice.pending": "Windows инсталира ъпдейти или чака рестарт. Докато това не приключи, ъпдейтите не се пипат. Рестартирай и сканирай отново.",
   "notice.noadmin": "Програмата не е пусната като администратор, затова системните категории са изключени. Пусни я с десен бутон → „Изпълни като администратор“.",
@@ -3916,9 +3921,9 @@ bg: {
   "dism.std": "Стандартно", "dism.rb": "С ResetBase", "dism.noteStd": "Безопасно. Деинсталирането на ъпдейти остава възможно.", "dism.noteRb": "Най-много място. Инсталираните ъпдейти вече не могат да се деинсталират.",
   "modal.allTitle": "Почисти всичко", "modal.allText": "Всичко, което може да се почисти, ще бъде почистено. Избери и допълнителните неща:",
   "modal.selTitle": "Почисти {0}?", "modal.selection": "избраното", "modal.before": "Преди да започне:",
-  "ex.recycle": "Изпразни Кошчето", "ex.shaders": "Shader кеш", "ex.dism": "Почистване на компонентите (DISM)", "ex.dismW": "5–15 минути",
+  "ex.shaders": "Shader кеш", "ex.dism": "Почистване на компонентите (DISM)", "ex.dismW": "5–15 минути",
   "ex.windowsold": "Windows.old", "ex.windowsoldW": "След това няма връщане към предишната версия на Windows",
-  "ex.privacy": "Скорошни файлове и клипборд", "ex.ram": "Освободи RAM накрая", "ex.trim": "TRIM на SSD дисковете накрая",
+  "ex.ram": "Освободи RAM накрая", "ex.trim": "TRIM на SSD дисковете накрая",
   "w.rp": "Първо ще се създаде точка за възстановяване.", "w.recycle": "Кошчето се изпразва окончателно.", "w.old": "Windows.old се изтрива — няма връщане към предишната версия на Windows.",
   "w.rb": "С ResetBase вече инсталираните ъпдейти не могат да се деинсталират.", "w.dism": "DISM отнема 5–15 минути. Не затваряй програмата, докато работи.", "w.clip": "Копираното в клипборда ще се изчисти.",
   "modal.ok": "Почисти", "modal.cancel": "Отказ", "toast.cleaned": "Освободени {0}", "toast.ram": "Освободени {0} RAM",
@@ -3964,9 +3969,9 @@ bg: {
   "table.search": "Търси категория…", "sort.group": "Групи", "sort.size": "Най-големи", "table.hideEmpty": "Скрий празните", "table.showEmpty": "Покажи празните",
   "table.hidden": "{0} празни категории са скрити.", "table.show": "Покажи ги", "table.noMatch": "Нищо не съвпада с „{0}“.", "table.noMatchD": "Опитай с друга дума или избери „Всичко“.",
   "table.allClean": "Тук всичко е чисто.", "table.allCleanD": "Няма какво да се почисти в тази група.",
-  "sum.done": "почистени: {0}", "sum.skipped": "пропуснати: {0}", "sum.failed": "с грешка: {0}", "st.top": "Нагоре",
+  "sum.done": "почистени: {0}", "st.top": "Нагоре",
   "set.accent": "Цвят на акцента", "set.accentD": "Цветът на бутоните, графиките и избраните елементи", "set.keys": "Клавишни комбинации",
-  "keys": [["F5", "Сканирай отново"], ["Ctrl + F", "Търсене в категориите"], ["Ctrl + K", "Търсене и команди"], ["Ctrl + 1 … 9", "Смяна на раздела"], ["Ctrl + B", "Меню само с икони"], ["Ctrl + D", "Закачи страницата в любими"], ["Alt + ← / →", "Назад / напред"], ["Esc", "Затваря диалога или изчиства търсенето"]],
+  "keys": [["F5", "Сканирай отново"], ["Ctrl + F", "Търсене в категориите"], ["Ctrl + K", "Търсене и команди"], ["Ctrl + 1 … 9", "Смяна на раздела"], ["Ctrl + B", "Меню само с икони"], ["Ctrl + D", "Закачи страницата в любими"], ["Alt + ← / →", "Назад / напред"], ["F1", "Помощ и клавиши"], ["Esc", "Затваря диалога или изчиства търсенето"]],
   "nav.tweaks": "Tweaker", "tw.title": "Tweaker", "tw.sub": "Настройки на Windows, които включваш и изключваш",
   "tw.on": "{0} от {1} туийка са включени", "tw.checking": "Проверяват се текущите настройки…", "tw.hint": "Нищо не се променя, докато не включиш туийк. При изключване се връща това, което е било преди.",
   "tw.rpOn": "Преди първата системна промяна се създава точка за възстановяване.", "tw.rpOff": "Точките за възстановяване преди промени са изключени в „Настройки“.", "tw.rpRun": "Създава се точка за възстановяване…",
@@ -3985,14 +3990,14 @@ bg: {
   "tw.oneWayNote": "Това не може да се върне от програмата.", "tw.rpFirst": "Първо ще се създаде точка за възстановяване.", "tw.choose": "Избери…",
   "tw.applied": "Готово", "tw.left": "Остават {0}", "tw.debTitle": "Премахни вградени приложения",
   "tw.debText": "Отметнатите приложения се премахват за всички потребители. Могат да се инсталират отново от Microsoft Store.", "tw.debNone": "Нито едно приложение от списъка не е инсталирано.", "tw.debLoading": "Търсят се инсталираните приложения…",
-  "tw.debSel": "Премахни {0}", "tw.debDone": "Премахнати приложения: {0}", "notice.close1": "Затвори го",
-  "notice.closeN": "Затвори ги", "close.title": "Да затворя ли {0}?", "close.text": "Всяка програма получава заявка да се затвори. Тези, които остават в трея, се спират след няколко секунди.",
+  "tw.debSel": "Премахни {0}", "tw.debDone": "Премахнати приложения: {0}", 
+  "close.title": "Да затворя ли {0}?", "close.text": "Всяка програма получава заявка да се затвори. Тези, които остават в трея, се спират след няколко секунди.",
   "close.warn": "Първо запази работата си в тях — незапазени промени може да се загубят.", "close.ok": "Затвори", "close.working": "Затварят се програмите…",
   "close.done": "Затворени. Вече може да се почистят.", "close.still": "Още отворени: {0}", "it.msstore.n": "Кеш на Microsoft Store",
   "it.msstore.d": "Картинки и страници, свалени от Store", "it.teams.d": "Само кеш — чатовете и входът остават", "it.battlenet.d": "Кеш и логове на лаунчера — игрите не се пипат",
   "it.eaapp.d": "Кеш и логове на лаунчера — игрите не се пипат", "it.gog.d": "Кеш и логове на лаунчера — игрите не се пипат", "it.riot.d": "Логове и отчети за сривове",
   "it.obs.d": "Логове и отчети за сривове — сцените и настройките остават", "it.nvapp.n": "Кеш и логове на NVIDIA App", "it.nvapp.d": "Уеб кеш и лог файлове на NVIDIA App",
-  "it.amdinstallers.n": "Инсталатори на AMD", "it.amdinstallers.d": "Разархивирани инсталатори на драйвери в C:\\AMD", "oss.winutil": "Стойности в регистъра за част от туийковете",
+  "it.amdinstallers.n": "Инсталатори на AMD", "oss.winutil": "Стойности в регистъра за част от туийковете",
   "oss.nvapi": "Интерфейсът към драйвера за туийка за NVIDIA", "tw.svc-manual.n": "Рядко ползваните услуги — при нужда", "tw.svc-manual.d": "Услугите за карти, хранилище, съвместимост и помощниците за ъпдейти стартират само когато потрябват. По-малко процеси във фона.",
   "tw.svc-manual.w": "Офлайн файловете и няколко стари услуги се изключват.", "tw.win32-priority.n": "Приоритет за активния прозорец", "tw.win32-priority.d": "Програмата, която ползваш, получава повече процесорно време (Win32PrioritySeparation = 36).",
   "tw.menu-delay.n": "Моментални менюта", "tw.menu-delay.d": "Маха чакането от 400 ms преди отваряне на менютата.", "tw.bg-apps-off.n": "Store приложенията — не във фона",
@@ -4445,6 +4450,17 @@ bg: {
   "wu.unFail": "Не се премахна: {0}", "wu.err.busyOrAdmin": "иска администратор, или Windows Update е зает", "pal.a.themeLight": "Светла тема", "pal.a.themeDark": "Тъмна тема (Carbon)", "pal.a.themeAuto": "Тема като Windows (Авто)", "pal.a.compact": "Компактно / удобно (плътност)",
   "pal.a.mini": "Меню само с икони / с имена", "pal.a.pin": "Закачи тази страница в любими", "pal.a.unpin": "Махни тази страница от любими", "pal.a.hist": "История на промените", "set.reset": "Начални настройки", "set.resetD": "Всички настройки както при инсталиране. Езикът, историята, туийковете и освободеното място остават.", "set.resetBtn": "Върни началните",
   "set.resetT": "Да върна ли началните настройки?", "set.resetAsk": "Темата, цветът, менюто, автоматичното почистване, режимът „Игри“ и останалите настройки се връщат както при инсталиране. Промените в Windows (туийкове, Debloat) не се пипат.", "set.resetDone": "Настройките са върнати",
+  "hq.tweaksN": "{0} от {1} включени", "hq.startupN": "{0} тръгват с Windows", "hm.now.tweaks": "Туийкове {0}/{1}", "hm.now.startup": "{0} при стартиране", "hm.now.gameOn": "Режим „Игри“ е включен", "hm.now.gameOff": "Режим „Игри“ е изключен",
+  "help.title": "Помощ", "help.sub": "Клавиши и как е подредена програмата", "help.keys": "Клавиши", "help.f1": "Тази помощ", "help.how": "Как е подредена",
+  "help.h1": "Фокусът (горе вляво) решава кои раздели са в менюто — „Всичко“ показва всичките.", "help.h2": "Ctrl+K търси навсякъде: раздели, туийкове, програми, действия.",
+  "help.h3": "Всяка промяна в Windows е в „История на промените“ и се връща от там (или от бутона „Върни“ в съобщението).", "help.h4": "Преди големи промени програмата прави точка за възстановяване.",
+  "help.h5": "☆ до раздел го закачва най-горе в менюто; Ctrl+B свива менюто до иконите.", "pal.a.help": "Помощ и клавиши (F1)",
+  "pp.tipOk": "Разбрах", "pp.tip.all": "Всички раздели са в менюто. Ctrl+K намира всеки раздел, туийк или програма.",
+  "pp.tip.clean": "Натисни „Почисти всичко“ — трият се само кеш и временни файлове. „Преглед“ показва какво ще се изтрие.",
+  "pp.tip.speed": "Започни с пресета „Основен“ — безопасен е. Всяка промяна се връща от „История“.",
+  "pp.tip.health": "Кръгът е оценката на компютъра. „Направи всичко“ оправя препоръчаното, а „Проверка“ търси проблеми след промени.",
+  "pp.tip.game": "Включи „Включвай сам при пускане на игра“ — режимът се пуска и спира сам с всяка игра.",
+  "pp.tip.easy": "Големите бутони правят всичко безопасно. Останалите раздели са в търсенето (Ctrl+K).",
   "pp.k": "Фокус", "pp.btnT": "За какво ползваш програмата — смени", "pp.title": "За какво ще ползваш програмата сега?", "pp.sub": "Менюто, началният екран и бързите действия се нагласят според избора. Смени по всяко време от бутона „Фокус“ горе вляво.",
   "pp.askBox": "Питай ме при всяко пускане", "pp.keys": "1–6 избор · Esc — както последния път", "pp.last": "Последно", "pp.now": "Фокус: {0}", "pp.palTo": "Фокус: {0}",
   "pp.set": "Фокус", "pp.setD": "За какво ползваш програмата: менюто, началният екран и бързите действия следват избора", "pp.ask": "Питай за фокуса при всяко пускане", "pp.askD": "При старт програмата пита за какво ще я ползваш. Изключено — тръгва с последния избор.",
@@ -4943,7 +4959,7 @@ bg: {
   "nm.h.needD": "net-merge обединява всичките ти връзки (Wi-Fi, кабел, телефон), за да се събира скоростта им. Отделна безплатна програма с отворен код — инсталира се веднъж.",
   "nm.what.good": "Полезно за: Steam и игри, браузъри, облак, торенти, менажери за сваляне — всичко с много връзки наведнъж.",
   "nm.what.no": "Не ускорява едно единствено сваляне от един сървър — то винаги минава през една връзка.",
-  "nm.what.safe": "Ако net-merge спре, интернетът ти продължава да работи нормално.", "nm.install": "Изтегли net-merge", "nm.h.off": "Готово за включване",
+  "nm.what.safe": "Ако net-merge спре, интернетът ти продължава да работи нормално.", "nm.h.off": "Готово за включване",
   "nm.h.offD": "net-merge е инсталиран. Натисни, за да обединиш връзките си.", "nm.h.offRun": "net-merge работи, но обединяването е спряно. Натисни, за да го включиш.",
   "nm.installed": "Инсталиран", "nm.turnOn": "Включи обединяването",
   "nm.note": "При включване Windows може да поиска администраторски права веднъж (от самия net-merge). Нищо друго не се пипа.", "nm.h.on": "Обединени — {0} връзки",
@@ -5207,14 +5223,14 @@ en: {
   "btn.cleanAll": "Clean everything", "btn.cleanSel": "Clean selected", "btn.cleanSelN": "Only the selected ({0})", "btn.stop": "Stop", "btn.scan": "Scan again",
   "status.scanDone": "Scan finished in {0}", "status.scanning": "Scanning…", "status.starting": "Starting…", "status.cleaning": "Cleaning: {0}",
   "status.stopping": "Stopping after the current step…", "status.done": "Done.", "status.doneRestart": "Done. Restart the computer to finish the system changes.",
-  "status.rp": "Creating a restore point…", "status.rpFail": "The restore point could not be created, so the system steps are skipped. You can turn this requirement off in Settings.",
+  "status.rpFail": "The restore point could not be created, so the system steps are skipped. You can turn this requirement off in Settings.",
   "status.busy": "Another job is still running. Try again in a moment.",
-  "filter.all": "All", "g.system": "System", "g.browsers": "Browsers", "g.apps": "Apps", "g.gpu": "Graphics", "g.windows": "Windows Update", "g.privacy": "Privacy",
+  "filter.all": "All", "g.system": "System", "g.browsers": "Browsers", "g.apps": "Apps", "g.gpu": "Graphics", "g.privacy": "Privacy",
   "g.empty": "Nothing to clean", "table.cat": "Category", "table.size": "Size",
   "row.clean": "Clean", "row.done": "Done", "row.skipped": "Skipped", "row.failed": "Error", "row.queued": "Queued", "row.open": "Open", "row.optional": "optional",
-  "row.openDesc": "Close the app to clean its cache",
-  "notice.open1": "{0} is open. Its cache is cleaned only while it is closed — apps often stay in the tray next to the clock.",
-  "notice.openN": "{0} are open. Their cache is cleaned only while they are closed — apps often stay in the tray next to the clock.",
+  
+  
+  
   "notice.recheck": "Check again", "and": "and",
   "notice.pending": "Windows is installing updates or waiting for a restart. Until that finishes, updates are left alone. Restart and scan again.",
   "notice.noadmin": "The app is not running as administrator, so the system categories are off. Right-click it and choose “Run as administrator”.",
@@ -5247,9 +5263,9 @@ en: {
   "dism.std": "Standard", "dism.rb": "With ResetBase", "dism.noteStd": "Safe. Updates can still be uninstalled.", "dism.noteRb": "Most space. Installed updates can no longer be uninstalled.",
   "modal.allTitle": "Clean everything", "modal.allText": "Everything that can be cleaned will be cleaned. Choose the extras too:",
   "modal.selTitle": "Clean {0}?", "modal.selection": "the selection", "modal.before": "Before it starts:",
-  "ex.recycle": "Empty the Recycle Bin", "ex.shaders": "Shader cache", "ex.dism": "Component cleanup (DISM)", "ex.dismW": "5–15 minutes",
+  "ex.shaders": "Shader cache", "ex.dism": "Component cleanup (DISM)", "ex.dismW": "5–15 minutes",
   "ex.windowsold": "Windows.old", "ex.windowsoldW": "No going back to the previous Windows version afterwards",
-  "ex.privacy": "Recent files and clipboard", "ex.ram": "Free RAM at the end", "ex.trim": "TRIM the SSDs at the end",
+  "ex.ram": "Free RAM at the end", "ex.trim": "TRIM the SSDs at the end",
   "w.rp": "A restore point is created first.", "w.recycle": "The Recycle Bin is emptied permanently.", "w.old": "Windows.old is removed — no going back to the previous Windows version.",
   "w.rb": "With ResetBase, installed updates can no longer be uninstalled.", "w.dism": "DISM takes 5–15 minutes. Keep the app open while it runs.", "w.clip": "Whatever is copied to the clipboard will be cleared.",
   "modal.ok": "Clean", "modal.cancel": "Cancel", "toast.cleaned": "{0} freed", "toast.ram": "{0} of RAM freed",
@@ -5295,9 +5311,9 @@ en: {
   "table.search": "Search categories…", "sort.group": "Groups", "sort.size": "Largest", "table.hideEmpty": "Hide empty", "table.showEmpty": "Show empty",
   "table.hidden": "{0} empty categories hidden.", "table.show": "Show them", "table.noMatch": "Nothing matches “{0}”.", "table.noMatchD": "Try another word or pick “All”.",
   "table.allClean": "Everything here is clean.", "table.allCleanD": "There is nothing to clean in this group.",
-  "sum.done": "{0} cleaned", "sum.skipped": "{0} skipped", "sum.failed": "{0} failed", "st.top": "Back to top",
+  "sum.done": "{0} cleaned", "st.top": "Back to top",
   "set.accent": "Accent colour", "set.accentD": "The colour of buttons, charts and selections", "set.keys": "Keyboard shortcuts",
-  "keys": [["F5", "Scan again"], ["Ctrl + F", "Search categories"], ["Ctrl + K", "Search and commands"], ["Ctrl + 1 … 9", "Switch section"], ["Ctrl + B", "Icons-only menu"], ["Ctrl + D", "Pin the page to favourites"], ["Alt + ← / →", "Back / forward"], ["Esc", "Close a dialog or clear the search"]],
+  "keys": [["F5", "Scan again"], ["Ctrl + F", "Search categories"], ["Ctrl + K", "Search and commands"], ["Ctrl + 1 … 9", "Switch section"], ["Ctrl + B", "Icons-only menu"], ["Ctrl + D", "Pin the page to favourites"], ["Alt + ← / →", "Back / forward"], ["F1", "Help and keys"], ["Esc", "Close a dialog or clear the search"]],
   "nav.tweaks": "Tweaker", "tw.title": "Tweaker", "tw.sub": "Windows tweaks you can switch on and off",
   "tw.on": "{0} of {1} tweaks are on", "tw.checking": "Checking the current settings…", "tw.hint": "Nothing changes until you switch a tweak on. Turning it off brings back what you had before.",
   "tw.rpOn": "A restore point is made before the first system change.", "tw.rpOff": "Restore points before changes are off in Settings.", "tw.rpRun": "Creating a restore point…",
@@ -5316,14 +5332,14 @@ en: {
   "tw.oneWayNote": "This cannot be undone from the app.", "tw.rpFirst": "A restore point is created first.", "tw.choose": "Choose…",
   "tw.applied": "Done", "tw.left": "{0} left", "tw.debTitle": "Remove built-in apps",
   "tw.debText": "Ticked apps are removed for every user. They can be installed again from the Microsoft Store.", "tw.debNone": "None of the apps on the list are installed.", "tw.debLoading": "Looking for installed apps…",
-  "tw.debSel": "Remove {0}", "tw.debDone": "Removed {0} apps", "notice.close1": "Close it",
-  "notice.closeN": "Close them", "close.title": "Close {0}?", "close.text": "Each app is asked to close. Apps that stay in the tray are ended after a few seconds.",
+  "tw.debSel": "Remove {0}", "tw.debDone": "Removed {0} apps", 
+  "close.title": "Close {0}?", "close.text": "Each app is asked to close. Apps that stay in the tray are ended after a few seconds.",
   "close.warn": "Save your work in them first — unsaved changes can be lost.", "close.ok": "Close", "close.working": "Closing the apps…",
   "close.done": "Closed. You can clean them now.", "close.still": "Still open: {0}", "it.msstore.n": "Microsoft Store cache",
   "it.msstore.d": "Pictures and pages the Store downloaded", "it.teams.d": "Cache only — chats and sign-in stay", "it.battlenet.d": "Launcher cache and logs — games are not touched",
   "it.eaapp.d": "Launcher cache and logs — games are not touched", "it.gog.d": "Launcher cache and logs — games are not touched", "it.riot.d": "Logs and crash reports",
   "it.obs.d": "Logs and crash reports — scenes and settings stay", "it.nvapp.n": "NVIDIA App cache and logs", "it.nvapp.d": "Web cache and log files of the NVIDIA App",
-  "it.amdinstallers.n": "AMD installers", "it.amdinstallers.d": "Unpacked driver installers in C:\\AMD", "oss.winutil": "Registry values used by several tweaks",
+  "it.amdinstallers.n": "AMD installers", "oss.winutil": "Registry values used by several tweaks",
   "oss.nvapi": "Driver settings interface used by the NVIDIA tweak", "tw.svc-manual.n": "Rarely used services on demand", "tw.svc-manual.d": "Map, storage, compatibility and update helper services start only when something needs them. Fewer processes in the background.",
   "tw.svc-manual.w": "Offline Files and a few legacy services are turned off.", "tw.win32-priority.n": "Priority for the active window", "tw.win32-priority.d": "The app you are using gets more CPU time (Win32PrioritySeparation = 36).",
   "tw.menu-delay.n": "Instant menus", "tw.menu-delay.d": "Removes the 400 ms wait before menus open.", "tw.bg-apps-off.n": "No Store apps in the background",
@@ -5769,6 +5785,17 @@ en: {
   "wu.unFail": "Not removed: {0}", "wu.err.busyOrAdmin": "needs administrator, or Windows Update is busy", "pal.a.themeLight": "Light theme", "pal.a.themeDark": "Dark theme (Carbon)", "pal.a.themeAuto": "Theme as Windows (Auto)", "pal.a.compact": "Compact / comfortable (density)",
   "pal.a.mini": "Icons-only menu / with names", "pal.a.pin": "Pin this page to favourites", "pal.a.unpin": "Unpin this page from favourites", "pal.a.hist": "History of changes", "set.reset": "Default settings", "set.resetD": "Every setting as after installing. The language, the history, the tweaks and the space freed stay.", "set.resetBtn": "Restore defaults",
   "set.resetT": "Restore the default settings?", "set.resetAsk": "The theme, the colour, the menu, the automatic cleaning, game mode and the other settings go back to how they were after installing. Changes to Windows (tweaks, Debloat) are not touched.", "set.resetDone": "The settings are back to the defaults",
+  "hq.tweaksN": "{0} of {1} on", "hq.startupN": "{0} start with Windows", "hm.now.tweaks": "Tweaks {0}/{1}", "hm.now.startup": "{0} at startup", "hm.now.gameOn": "Game mode is on", "hm.now.gameOff": "Game mode is off",
+  "help.title": "Help", "help.sub": "Keys and how the app is laid out", "help.keys": "Keys", "help.f1": "This help", "help.how": "How it is laid out",
+  "help.h1": "The focus (top left) decides which sections are in the menu — All shows every one.", "help.h2": "Ctrl+K searches everything: sections, tweaks, programs, actions.",
+  "help.h3": "Every change to Windows is in History of changes and can be undone there (or with Undo in the message).", "help.h4": "Before big changes the app makes a restore point.",
+  "help.h5": "The ☆ next to a section pins it to the top of the menu; Ctrl+B folds the menu to icons.", "pal.a.help": "Help and keys (F1)",
+  "pp.tipOk": "Got it", "pp.tip.all": "Every section is in the menu. Ctrl+K finds any section, tweak or program.",
+  "pp.tip.clean": "Press Clean everything — only caches and temporary files go. Preview shows what will be deleted.",
+  "pp.tip.speed": "Start with the Essential preset — it is safe. Every change can be undone from History.",
+  "pp.tip.health": "The ring is the PC's score. Do it all fixes what is recommended, and Check looks for trouble after changes.",
+  "pp.tip.game": "Turn on Switch on by itself when a game starts — game mode then starts and stops with every game.",
+  "pp.tip.easy": "The big buttons do everything safely. The other sections are in the search (Ctrl+K).",
   "pp.k": "Focus", "pp.btnT": "What you use the app for — change", "pp.title": "What will you use the app for now?", "pp.sub": "The menu, the start page and the quick actions follow your choice. Change it any time from the Focus button at the top left.",
   "pp.askBox": "Ask me at every start", "pp.keys": "1–6 to choose · Esc — as last time", "pp.last": "Last time", "pp.now": "Focus: {0}", "pp.palTo": "Focus: {0}",
   "pp.set": "Focus", "pp.setD": "What you use the app for: the menu, the start page and the quick actions follow it", "pp.ask": "Ask for the focus at every start", "pp.askD": "At start the app asks what you will use it for. Off — it starts with the last choice.",
@@ -6250,7 +6277,7 @@ en: {
   "nm.h.needD": "net-merge uses all your connections together (Wi-Fi, Ethernet, phone) so their speed adds up. A separate free, open-source tool — installed once.",
   "nm.what.good": "Good for: Steam and games, browsers, cloud, torrents, download managers — anything with many connections at once.",
   "nm.what.no": "It does not speed up a single download from one server — that always uses one connection.",
-  "nm.what.safe": "If net-merge stops, your internet keeps working normally.", "nm.install": "Download net-merge", "nm.h.off": "Ready to turn on",
+  "nm.what.safe": "If net-merge stops, your internet keeps working normally.", "nm.h.off": "Ready to turn on",
   "nm.h.offD": "net-merge is installed. Press to merge your connections.", "nm.h.offRun": "net-merge is running, but merging is paused. Press to turn it on.",
   "nm.installed": "Installed", "nm.turnOn": "Turn merging on",
   "nm.note": "When turning on, Windows may ask for administrator rights once (from net-merge itself). Nothing else is touched.", "nm.h.on": "Merged — {0} connections",
@@ -8458,7 +8485,8 @@ async function runTweak(id, want, opts, quiet) {
     if (r.reboot) TW.reboot = true;
     if (!quiet) {
       if (id === "debloat") toast(t("tw.debDone", (opts.apps || []).length));
-      else toast(t(want ? "tw.toastOn" : "tw.toastOff", twName(id)) + (r.reboot ? " " + t("tw.toastReboot") : ""), want ? "check" : "undo");
+      // 4.27: Undo right in the message (the same change the other way)
+      else toast(t(want ? "tw.toastOn" : "tw.toastOff", twName(id)) + (r.reboot ? " " + t("tw.toastReboot") : ""), want ? "check" : "undo", "", opts.source === "undo" ? undefined : { label: t("hi.undo"), run: () => runTweak(id, !want, { source: "undo" }) });
       if (r.note) setTimeout(() => toast(r.note, "cloud"), 400);
     }
     const row = document.querySelector(`#twList [data-tw="${id}"]`);
@@ -9137,10 +9165,10 @@ function renderQuick() {
     ram: { icon: "memory", label: t("hq.ram"), sub: S.mem && S.mem.total ? Math.round(S.mem.load) + "%" : "" },
     game: { icon: "gamepad", label: t(gm ? "hq.gameOff" : "hq.gameOn"), sub: t(gm ? "hq.on" : "hq.off"), dis: !adminOK },
     upd: { icon: "wupd", label: t("hq.upd"), sub: (WU.st && (WU.st.updates || []).length) ? t("hq.updN", WU.st.updates.length) : t("hq.updSub") },
-    check: { icon: "shieldok", label: t("hq.check"), sub: typeof CK !== "undefined" && CK.rep ? t("hq.checkSub") : t("ck.never") },
+    check: { icon: "shieldok", label: t("hq.check"), sub: typeof CK !== "undefined" && CK.rep ? (() => { const n = ckProblems().filter(f => f.sev === "bad" || f.sev === "warn").length; return n ? t("hq.checkN", n) : t("hq.checkOk"); })() : t("ck.never") },
     dupes: { icon: "copy", label: t("hq.dupes"), sub: t("hq.dupesD") }, disk: { icon: "pie", label: t("hq.disk"), sub: t("hq.diskD") },
-    tweaks: { icon: "tweaks", label: t("hq.tweaks"), sub: t("hq.tweaksD") }, debloat: { icon: "broom", label: t("hq.debloat"), sub: t("hq.debloatD") },
-    startup: { icon: "rocket", label: t("hq.startup"), sub: t("hq.startupD") }, optimize: { icon: "optimize", label: t("hq.optimize"), sub: t("hq.optimizeD") },
+    tweaks: { icon: "tweaks", label: t("hq.tweaks"), sub: TW.loaded && TW.meta.length ? t("hq.tweaksN", TW.meta.filter(m => (TW.state[m.id] || {}).state === "on").length, TW.meta.length) : t("hq.tweaksD") }, debloat: { icon: "broom", label: t("hq.debloat"), sub: t("hq.debloatD") },
+    startup: { icon: "rocket", label: t("hq.startup"), sub: SU.loaded ? t("hq.startupN", SU.items.filter(e => e.enabled).length) : t("hq.startupD") }, optimize: { icon: "optimize", label: t("hq.optimize"), sub: t("hq.optimizeD") },
     av: { icon: "shieldq", label: t("hq.av"), sub: t("hq.avD") }, gpu: { icon: "gpu", label: t("hq.gpu"), sub: t("hq.gpuD") },
     ping: { icon: "network", label: t("hq.ping"), sub: t("hq.pingD") }, bsod: { icon: "alert", label: t("hq.bsod"), sub: t("hq.bsodD") },
   };
@@ -9327,7 +9355,8 @@ async function runStartup(e, enable) {
   SU.busy = null;
   if (r && r.ok) {
     e.enabled = enable; if (r.entry) { e.changed = r.entry.changed; }
-    toast(t(enable ? "su.toastOn" : "su.toastOff", e.name), enable ? "check" : "undo");
+    if (e.undoing) { e.undoing = false; toast(t(enable ? "su.toastOn" : "su.toastOff", e.name), enable ? "check" : "undo"); }
+    else toast(t(enable ? "su.toastOn" : "su.toastOff", e.name), enable ? "check" : "undo", "", { label: t("hi.undo"), run: () => { e.undoing = true; runStartup(e, !enable); } });
   } else { SU.err[e.key] = (r && r.error) || t("tw.failed"); toast(e.name + " — " + t("tw.failed"), "alert", "warn"); }
   renderStartup();
 }
@@ -11950,6 +11979,7 @@ document.addEventListener("keydown", e => {
   // 4.26: Ctrl+B the narrow menu, Ctrl+D pin the open page
   if (e.ctrlKey && !e.shiftKey && (e.key === "b" || e.key === "B")) { e.preventDefault(); S.settings.navMini = !S.settings.navMini; storeSettings(); navMiniApply(); return; }
   if (e.ctrlKey && !e.shiftKey && (e.key === "d" || e.key === "D") && document.querySelector(`#nav button[data-page="${S.page}"]`)) { e.preventDefault(); navFavToggle(S.page); return; }
+  if (e.key === "F1") { e.preventDefault(); helpSheet(); return; }
   if (e.key === "F5") { e.preventDefault(); if (!S.busy) { go("clean"); analyze(); } return; }
   if (e.ctrlKey && (e.key === "f" || e.key === "F")) {
     e.preventDefault();
@@ -13372,6 +13402,7 @@ function palSources() {
   if (document.querySelector(`#nav button[data-page="${here}"]`)) act("star", (S.settings.navFav || []).includes(here) ? "pal.a.unpin" : "pal.a.pin", () => navFavToggle(here), "favourite pin любими закачи " + here);
   act("undo", "pal.a.hist", () => go("history"), "history changes undo история промени върни");
   act("sparkle", "pal.a.purpose", () => setTimeout(askPurpose, 50), "focus purpose mode фокус режим за какво");
+  act("info", "pal.a.help", () => setTimeout(helpSheet, 50), "help keys shortcuts f1 помощ клавиши");
   PURPOSES.forEach(x => items.push({ g: "pal.g.actions", icon: x.icon, title: t("pp.palTo", t("pp." + x.id)), sub: t("pp." + x.id + "D"), kw: "focus " + x.id + " фокус", run: () => setPurpose(x.id, { go: true }) }));
   if (TW.meta.length) TW.meta.forEach(m => items.push({ g: "pal.g.tweaks", icon: TW_ICON[m.group] || "tweaks", title: twName(m.id), sub: t("tw.g." + m.group), hint: (TW.state[m.id] || {}).state === "on" ? t("tw.st.on") : "", kw: m.id, run: () => palTweak(m.id) }));
   GROUPS.forEach(g => g.items.forEach(id => { if (visible(id)) items.push({ g: "pal.g.clean", icon: ITEM_ICON[id] || ITEM_GROUP[id] || "clean", title: itemName(id), sub: S.data[id] && S.data[id].size > 0 ? fmt(S.data[id].size) : "", kw: id, run: () => palCategory(id) }); }));
@@ -13810,7 +13841,10 @@ function scoreSpark() {
 }
 // 4.25: what to do now, in a word each: junk, updates, a restart, memory, Check
 function homeNow() {
-  const out = [], ups = (WU.st && WU.st.updates) || [];
+  const out = [], ups = (WU.st && WU.st.updates) || [], fid = purposeOf().id;
+  if (fid === "speed" && TW.loaded && TW.meta.length) out.push({ go: "tweaks", sev: "info", label: t("hm.now.tweaks", TW.meta.filter(m => (TW.state[m.id] || {}).state === "on").length, TW.meta.length) });
+  if ((fid === "speed" || fid === "game") && SU.loaded) { const n = SU.items.filter(e => e.enabled).length; if (n) out.push({ go: "startup", sev: n > 12 ? "warn" : "info", label: t("hm.now.startup", n) }); }
+  if (fid === "game") { const on = typeof GM !== "undefined" && GM.st && GM.st.active; out.push({ go: "game", sev: on ? "ok" : "info", label: t(on ? "hm.now.gameOn" : "hm.now.gameOff") }); }
   if (S.analyzed && (S.total || 0) >= 100 * MB27) out.push({ go: "clean", sev: S.total >= 2 * 1024 * MB27 ? "warn" : "info", label: t("hm.now.junk", fmt(S.total)) });
   if (ups.length) out.push({ go: "wupd", sev: "info", label: t("hm.now.upd", ups.length) });
   if (WU.st && WU.st.reboot) out.push({ go: "wupd", sev: "warn", label: t("hm.now.reboot") });
@@ -14448,6 +14482,19 @@ function setPurpose(id, opt = {}) {
   if (typeof renderQuick === "function") { const q = $("#hmQuick"); if (q) q._sig = ""; renderQuick(); }
   if (opt.go) go(p.start);
   if (!opt.quiet && was !== p.id) toast(t("pp.now", t("pp." + p.id)), p.icon);
+  // the first time a focus is chosen: where to begin (once)
+  const tips = S.settings.ppTips || (S.settings.ppTips = {});
+  if (opt.go && !tips[p.id]) { tips[p.id] = 1; storeSettings(); setTimeout(() => toast(t("pp.tip." + p.id), p.icon, "info", { label: t("pp.tipOk"), run: () => {} }), 700); }
+}
+// 4.27: F1 — the keys, the focus and where things are
+function helpSheet() {
+  const keys = t("keys").map(k => `<div class="key-row"><kbd>${esc(k[0])}</kbd><span>${esc(k[1])}</span></div>`).join("");
+  openSheet({ title: t("help.title"), sub: t("help.sub"),
+    body: `<div class="help-grid"><div><h4>${esc(t("help.keys"))}</h4><div class="keys">${keys}<div class="key-row"><kbd>F1</kbd><span>${esc(t("help.f1"))}</span></div></div></div>
+      <div><h4>${esc(t("help.how"))}</h4><ul class="help-ul">${[1, 2, 3, 4, 5].map(i => `<li>${esc(t("help.h" + i))}</li>`).join("")}</ul></div></div>`,
+    foot: `<button class="btn" id="helpFocus">${ICONS.sparkle}<span>${esc(t("pal.a.purpose"))}</span></button><button class="btn primary" id="helpOk">${esc(t("pp.tipOk"))}</button>` });
+  $("#helpOk").addEventListener("click", () => closeSheet(false));
+  $("#helpFocus").addEventListener("click", () => { closeSheet(false); setTimeout(askPurpose, 120); });
 }
 function askPurpose() {
   const v = $("#ppVeil"), cur = purposeOf().id;
@@ -15019,6 +15066,7 @@ async function init() {
     s.purpose = ["all", "clean", "speed", "health", "game", "easy"].includes(st.purpose) ? st.purpose : st.uiMode === "easy" ? "easy" : "all";
     s.uiMode = s.purpose === "easy" ? "easy" : st.uiMode === "easy" ? "full" : (st.uiMode || s.uiMode);
     if (typeof st.askPurpose === "boolean") s.askPurpose = st.askPurpose;
+    if (st.ppTips && typeof st.ppTips === "object") s.ppTips = st.ppTips;
     if (st.lifetime && typeof st.lifetime === "object" && st.lifetime.freed >= 0) s.lifetime = { since: +st.lifetime.since || Date.now() / 1000, freed: +st.lifetime.freed || 0, cleans: +st.lifetime.cleans || 0 };
     if (Array.isArray(st.navShut)) { s.navShut = st.navShut.filter(x => typeof x === "string"); NAVG.shut = new Set(s.navShut); }
     if (st.remind && typeof st.remind === "object") s.remind = st.remind;
