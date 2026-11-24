@@ -3,6 +3,66 @@
 Every version has an English and a Bulgarian list. The app shows the list of
 a new version before it updates, and once after updating.
 
+## 4.27.0 — 2026-11-24
+
+### English
+#### Focus — the app asks what you will use it for
+- At every start: **All**, **Cleanup**, **Tweaks & speed**, **PC health**, **Gaming** or **Easy**. The menu shows only that focus's sections (with their group titles), the app opens on its start page (Cleanup → Cleanup, Tweaks & speed → Tweaker, Gaming → Game mode, the others → PC health)
+- The start page's four big actions follow the focus: Cleanup — Clean, Free RAM, Duplicates, What takes space; Tweaks & speed — Tweaks, Debloat, Startup, Drives; PC health — Check, Updates, Viruses, Blue screens; Gaming — Game mode, Free RAM, Graphics card, Ping. They say where things stand (tweaks on, programs at startup, things to look at)
+- "Now:" on the start page also tells what matters for the focus (tweaks on, programs at startup, game mode on or off)
+- The question: big cards, keys 1–6, Esc keeps the last choice (it is marked), "Ask me at every start" right there
+- The Focus button at the top of the menu (it replaces the Easy/Full switch) changes it any time; also in Settings and in the search (Ctrl+K: "Focus: Gaming")
+- A section outside the focus opened from the search or a link shows in the menu while it is open
+- Favourite sections always stay in the menu; Easy is the Easy view of before, All is Full
+- The first time a focus is chosen, a short tip says where to begin
+- Settings → "Ask for the focus at every start": off — the app starts with the last choice
+
+#### Easier to use
+- Undo right in the message after a tweak or a startup change — one click takes it back
+- F1: help — every key, and how the app is laid out (also in the search)
+- The keys list in Settings has F1, Ctrl+B, Ctrl+D and Alt+← / →
+- A file made with "Move to another PC" carries the focus, the density and the favourites too
+
+#### Fixed
+- A double click on a virus scan said "Failed" while the scan ran; a double click on the speed test started and at once stopped it
+- 13 old texts that a newer one replaced were removed (no more two texts for one place)
+- The menu's fitting counted sections that are not shown, so the buttons became smaller than needed in a low window
+- In a narrow window (or the icons-only menu) the group titles showed as cut words ("CL…", "SY…") instead of thin lines
+
+#### Checked
+- Every page, in both languages, dark and light, at three window sizes: nothing cut or spilling out, every icon button has a name
+- Every page under 30 test situations (no administrator, no internet, no graphics card, an AMD card, a pending restart, Windows Update off, a hot or failing drive and more), in both languages: no errors, no "undefined" or "NaN" anywhere
+- The whole page code and the Go code through linters: no undefined names, no unsafe code
+
+### Български
+#### Фокус — програмата пита за какво ще я ползваш
+- При всяко пускане: **Всичко**, **Почистване**, **Туийкове и скорост**, **Здраве на компютъра**, **Игри** или **Лесно**. Менюто показва само разделите на фокуса (със заглавията на групите им), а програмата се отваря на началната му страница (Почистване → Почистване, Туийкове и скорост → Tweaker, Игри → Режим „Игри“, другите → Здраве на компютъра)
+- Четирите големи действия на началния екран следват фокуса: Почистване — Почисти, Освободи RAM, Дубликати, Какво заема място; Туийкове и скорост — Туийкове, Debloat, Стартиране, Дискове; Здраве — Проверка, Обновления, Вируси, Сини екрани; Игри — Режим „Игри“, Освободи RAM, Видеокарта, Пинг. И казват докъде са нещата (включени туийкове, програми при стартиране, неща за преглед)
+- „Сега:“ на началния екран казва и какво е важно за фокуса (включени туийкове, програми при стартиране, Режим „Игри“ вкл./изкл.)
+- Въпросът: големи карти, клавиши 1–6, Esc оставя последния избор (той е отбелязан), „Питай ме при всяко пускане“ е точно там
+- Бутонът „Фокус“ горе в менюто (на мястото на превключвателя Лесен/Пълен) сменя избора по всяко време; също в Настройки и в търсенето (Ctrl+K: „Фокус: Игри“)
+- Раздел извън фокуса, отворен от търсенето или от връзка, се вижда в менюто, докато е отворен
+- Любимите раздели винаги остават в менюто; Лесно е досегашният Лесен изглед, Всичко — Пълният
+- Първия път, когато избереш даден фокус, кратък съвет казва откъде да започнеш
+- Настройки → „Питай за фокуса при всяко пускане“: изключено — програмата тръгва с последния избор
+
+#### По-лесно
+- „Върни“ направо в съобщението след туийк или промяна в стартирането — един клик и е както беше
+- F1: помощ — всички клавиши и как е подредена програмата (и в търсенето)
+- Списъкът с клавиши в Настройки има F1, Ctrl+B, Ctrl+D и Alt+← / →
+- Файлът от „Пренеси на друг компютър“ носи и фокуса, плътността и любимите
+
+#### Оправено
+- Двоен клик на сканиране за вируси казваше „Неуспешно“, докато сканирането върви; двоен клик на теста за скорост го пускаше и веднага спираше
+- Махнати са 13 стари текста, които по-нов беше заменил (вече няма по два текста за едно място)
+- Нагласянето на менюто броеше и разделите, които не се виждат, затова в нисък прозорец бутоните ставаха по-малки от нужното
+- В тесен прозорец (или в менюто само с икони) заглавията на групите се виждаха като отрязани думи („ПО…“, „СИ…“) вместо като тънки линии
+
+#### Проверено
+- Всяка страница, на двата езика, в тъмна и светла тема, в три размера на прозореца: нищо отрязано или излизащо, всеки бутон с икона има име
+- Всяка страница при 30 тестови ситуации (без администратор, без интернет, без видеокарта, AMD карта, чакащ рестарт, изключен Windows Update, горещ или повреден диск и др.), на двата езика: без грешки, без „undefined“ или „NaN“ никъде
+- Целият код на интерфейса и Go кодът — през линтери: без недефинирани имена, без опасен код
+
 ## 4.26.0 — 2026-11-20
 
 ### English
