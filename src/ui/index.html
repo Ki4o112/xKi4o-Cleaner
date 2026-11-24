@@ -2874,6 +2874,34 @@ body.nav-mini .side-top { flex-direction: column; } body.nav-mini .side-top .cmd
 .wu-h .btn.small { height: 28px; padding: 0 10px; font-size: 12px; }
 .wu-h { grid-template-columns: 10px minmax(0, 1fr) auto auto; }
 .wu-hidden .wu-h { grid-template-columns: 10px minmax(0, 1fr) auto; }
+
+/* ===== 4.27 the focus ===== */
+.nav button.p-off:not(.p-temp) { display: none !important; }
+.pp-btn { display: flex; align-items: center; gap: 10px; width: calc(100% - 4px); height: 46px; margin: 0 2px 8px; padding: 0 10px 0 8px; border-radius: 14px; border: 0; background: rgba(var(--blue-rgb), .10); color: var(--text); font: inherit; cursor: pointer; text-align: left; flex: none; transition: background .2s, transform .2s var(--spring); }
+.pp-btn:hover { background: rgba(var(--blue-rgb), .18); }
+.pp-btn:active { transform: scale(.97); }
+.pp-btn .pp-ic { width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; flex: none; background: var(--blue); color: var(--on-accent, #fff); box-shadow: 0 6px 16px -8px var(--blue-glow); }
+.pp-btn .pp-ic svg { width: 15px; height: 15px; }
+.pp-btn .pp-l { display: flex; flex-direction: column; min-width: 0; line-height: 1.15; }
+.pp-btn .pp-l small { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
+.pp-btn .pp-l b { font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pp-btn .pp-ch { margin-left: auto; color: var(--faint); display: grid; } .pp-btn .pp-ch svg { width: 13px; height: 13px; transform: rotate(90deg); }
+body.nav-mini .pp-btn { width: 44px; height: 44px; padding: 0; justify-content: center; margin-left: auto; margin-right: auto; }
+body.nav-mini .pp-btn .pp-l, body.nav-mini .pp-btn .pp-ch { display: none; }
+@media (max-width: 1080px) { .pp-btn { width: 44px; height: 44px; padding: 0; justify-content: center; margin-left: auto; margin-right: auto; } .pp-btn .pp-l, .pp-btn .pp-ch { display: none; } }
+.pp-box { width: min(1060px, 100%); }
+.pp-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 4px; }
+.pp-card { padding: 18px 18px 16px; gap: 4px; animation-delay: calc(var(--i, 0) * 45ms) !important; }
+.pp-card .pp-ci { width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center; margin-bottom: 6px; background: rgba(var(--blue-rgb), .14); color: var(--blue-light); }
+.pp-card .pp-ci svg { width: 19px; height: 19px; }
+.pp-card b { font-size: 17px !important; }
+.pp-card ul { margin-top: 6px !important; }
+.pp-card.cur { border-color: rgba(var(--blue-rgb), .55) !important; box-shadow: 0 0 0 1px rgba(var(--blue-rgb), .35) inset; }
+.pp-card kbd { position: absolute; right: 14px; bottom: 12px; width: auto !important; min-width: 22px; height: 22px; padding: 0 6px !important; display: grid; place-items: center; font-size: 11px; font-weight: 700; border-radius: 7px; opacity: .6; }
+.pp-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 16px; flex-wrap: wrap; color: var(--muted); font-size: 12.5px; }
+.pp-foot .extra { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.pp-keys { color: var(--faint); }
+@media (max-width: 1080px), (max-height: 720px) { .pp-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; } .pp-card { padding: 14px; } .pp-card ul { display: none; } .pp-box h2 { font-size: 24px; } }
 </style>
 </head>
 <body class="booting">
@@ -2927,11 +2955,8 @@ body.nav-mini .side-top { flex-direction: column; } body.nav-mini .side-top .cmd
   <aside class="side">
     <div class="side-top">
     <button class="cmd-btn" id="cmdBtn" data-i-title="pal.btnT"><span data-icon="search"></span><span class="lbl" data-i="pal.btn"></span><kbd>Ctrl K</kbd></button>
-    <div class="mode-sw" id="modeSw" role="group" data-i-title="um.swT">
-      <button data-mode="easy" data-i-title="um.easy"><span data-icon="sparkle"></span></button>
-      <button data-mode="full" data-i-title="um.full"><span data-icon="list"></span></button>
     </div>
-    </div>
+    <button class="pp-btn" id="ppBtn" aria-haspopup="dialog"><span class="pp-ic"></span><span class="pp-l"><small data-i="pp.k"></small><b></b></span><span class="pp-ch" data-icon="chev"></span></button>
     <nav class="nav" id="nav" aria-label="Sections">
       <div class="nav-g first fav-g" data-g="fav" hidden><span data-i="nav.g.fav"></span></div>
       <div class="nav-ind" id="navInd"></div>
@@ -3546,8 +3571,9 @@ body.nav-mini .side-top { flex-direction: column; } body.nav-mini .side-top .cmd
             <div class="mv-btns"><button class="btn small" id="mvExport"><span data-icon="download"></span><span data-i="mv.export"></span></button><button class="btn small" id="mvImport"><span data-icon="upload"></span><span data-i="mv.import"></span></button></div></div>
           <div class="item"><div class="i-ico" data-icon="power"></div><div><div class="t" data-i="boot.t"></div><div class="d" data-i="boot.d"></div><div class="su-e" id="bootErr" hidden></div></div><input type="checkbox" class="switch" id="bootToggle" aria-label="Start with Windows"></div>
           <div class="item"><div class="i-ico" data-icon="window"></div><div><div class="t" data-i="set.startTray"></div><div class="d" data-i="set.startTrayD"></div></div><input type="checkbox" class="switch" id="startTrayToggle"></div>
-          <div class="item"><div class="i-ico" data-icon="sparkle"></div><div><div class="t" data-i="um.set"></div><div class="d" data-i="um.setD"></div></div>
-            <div class="seg blue" id="segUi"></div></div>
+          <div class="item"><div class="i-ico" data-icon="sparkle"></div><div><div class="t" data-i="pp.set"></div><div class="d" data-i="pp.setD"></div></div>
+            <select class="sel" id="ppSel" aria-label="Focus"></select></div>
+          <div class="item"><div class="i-ico" data-icon="list"></div><div><div class="t" data-i="pp.ask"></div><div class="d" data-i="pp.askD"></div></div><input type="checkbox" class="switch" id="ppAskToggle"></div>
           <div class="item"><div class="i-ico" data-icon="monitor"></div><div><div class="t" data-i="set.theme"></div><div class="d" data-i="set.themeD"></div></div>
             <div class="seg blue" id="segTheme"></div></div>
           <div class="item"><div class="i-ico" data-icon="list"></div><div><div class="t" data-i="set.density"></div><div class="d" data-i="set.densityD"></div></div><div class="seg blue" id="segDensity"></div></div>
@@ -3807,6 +3833,14 @@ body.nav-mini .side-top { flex-direction: column; } body.nav-mini .side-top .cmd
 </div>
 <div class="tm-tip" id="tmTip" hidden></div>
 
+  <div class="um-veil pp-veil" id="ppVeil" hidden>
+    <div class="um-box pp-box" role="dialog" aria-modal="true" aria-labelledby="ppTitle">
+      <h2 id="ppTitle" data-i="pp.title"></h2>
+      <p class="um-sub" data-i="pp.sub"></p>
+      <div class="pp-cards" id="ppCards"></div>
+      <div class="pp-foot"><label class="extra"><input type="checkbox" class="cb" id="ppAsk"><span data-i="pp.askBox"></span></label><span class="pp-keys" data-i="pp.keys"></span></div>
+    </div>
+  </div>
   <div class="um-veil" id="umVeil" hidden>
     <div class="um-box" role="dialog" aria-modal="true" aria-labelledby="umTitle">
       <h2 id="umTitle" data-i="um.title"></h2>
@@ -4412,6 +4446,19 @@ bg: {
   "wu.unFail": "Не се премахна: {0}", "wu.err.busyOrAdmin": "иска администратор, или Windows Update е зает", "pal.a.themeLight": "Светла тема", "pal.a.themeDark": "Тъмна тема (Carbon)", "pal.a.themeAuto": "Тема като Windows (Авто)", "pal.a.compact": "Компактно / удобно (плътност)",
   "pal.a.mini": "Меню само с икони / с имена", "pal.a.pin": "Закачи тази страница в любими", "pal.a.unpin": "Махни тази страница от любими", "pal.a.hist": "История на промените", "set.reset": "Начални настройки", "set.resetD": "Всички настройки както при инсталиране. Езикът, историята, туийковете и освободеното място остават.", "set.resetBtn": "Върни началните",
   "set.resetT": "Да върна ли началните настройки?", "set.resetAsk": "Темата, цветът, менюто, автоматичното почистване, режимът „Игри“ и останалите настройки се връщат както при инсталиране. Промените в Windows (туийкове, Debloat) не се пипат.", "set.resetDone": "Настройките са върнати",
+  "pp.k": "Фокус", "pp.btnT": "За какво ползваш програмата — смени", "pp.title": "За какво ще ползваш програмата сега?", "pp.sub": "Менюто, началният екран и бързите действия се нагласят според избора. Смени по всяко време от бутона „Фокус“ горе вляво.",
+  "pp.askBox": "Питай ме при всяко пускане", "pp.keys": "1–6 избор · Esc — както последния път", "pp.last": "Последно", "pp.now": "Фокус: {0}", "pp.palTo": "Фокус: {0}",
+  "pp.set": "Фокус", "pp.setD": "За какво ползваш програмата: менюто, началният екран и бързите действия следват избора", "pp.ask": "Питай за фокуса при всяко пускане", "pp.askD": "При старт програмата пита за какво ще я ползваш. Изключено — тръгва с последния избор.",
+  "pp.all": "Всичко", "pp.allD": "Всички раздели — пълният контрол.", "pp.all1": "Почистване, туийкове и проверки", "pp.all2": "Игри, мрежа и драйвери", "pp.all3": "Всичко в менюто, както досега",
+  "pp.clean": "Почистване", "pp.cleanD": "Освободи място и памет.", "pp.clean1": "Боклук, кеш и временни файлове", "pp.clean2": "Какво заема място, дубликати", "pp.clean3": "Деинсталиране с остатъците",
+  "pp.speed": "Туийкове и скорост", "pp.speedD": "По-бърз и по-тих Windows.", "pp.speed1": "Туийкове и Debloat", "pp.speed2": "Стартиране и процеси", "pp.speed3": "Оптимизация на дисковете",
+  "pp.health": "Здраве на компютъра", "pp.healthD": "Провери дали всичко е наред.", "pp.health1": "Проверка, обновления и вируси", "pp.health2": "Сини екрани и драйвери", "pp.health3": "Информация и бенчмарк",
+  "pp.game": "Игри", "pp.gameD": "Повече FPS, по-малко забавяне.", "pp.game1": "Режим „Игри“ и памет", "pp.game2": "Видеокарта и бенчмарк", "pp.game3": "Пинг до сървърите",
+  "pp.easy": "Лесно", "pp.easyD": "Само най-важното, с големи бутони.", "pp.easy1": "6 раздела", "pp.easy2": "Почистване с един бутон", "pp.easy3": "Останалото е в търсенето (Ctrl+K)",
+  "pal.a.purpose": "Смени фокуса (за какво ползваш програмата)",
+  "hq.checkSub": "Виж резултата", "hq.dupes": "Дубликати", "hq.dupesD": "Еднакви файлове", "hq.disk": "Какво заема място", "hq.diskD": "Анализ на диска", "hq.tweaks": "Туийкове", "hq.tweaksD": "Пресети с един клик",
+  "hq.debloat": "Debloat", "hq.debloatD": "Реклами, следене, AI", "hq.startup": "Стартиране", "hq.startupD": "Какво тръгва с Windows", "hq.optimize": "Дискове", "hq.optimizeD": "TRIM и здраве",
+  "hq.av": "Вируси", "hq.avD": "Бързо сканиране", "hq.gpu": "Видеокарта", "hq.gpuD": "Драйвер и сензори", "hq.ping": "Пинг", "hq.pingD": "До сървърите на игрите", "hq.bsod": "Сини екрани", "hq.bsodD": "Защо се срина",
   "nav.g.fav": "Любими", "nav.favOn": "„{0}“ е в любими — най-горе в менюто", "nav.favOff": "„{0}“ вече не е в любими", "nav.mini": "Само икони в менюто", "nav.miniOff": "Менюто с имената",
   "set.th.light": "Светла", "set.density": "Плътност", "set.densityD": "Удобно — повече въздух; Компактно — повече редове на екрана", "set.dn.comfy": "Удобно", "set.dn.compact": "Компактно",
   "hm.nowT": "Сега:", "hm.now.junk": "{0} боклук", "hm.now.upd": "{0} обновления", "hm.now.reboot": "Чака рестарт", "hm.now.ram": "RAM {0}%", "hm.now.check": "{0} неща за проверка", "hm.now.ok": "Всичко е наред",
@@ -5723,6 +5770,19 @@ en: {
   "wu.unFail": "Not removed: {0}", "wu.err.busyOrAdmin": "needs administrator, or Windows Update is busy", "pal.a.themeLight": "Light theme", "pal.a.themeDark": "Dark theme (Carbon)", "pal.a.themeAuto": "Theme as Windows (Auto)", "pal.a.compact": "Compact / comfortable (density)",
   "pal.a.mini": "Icons-only menu / with names", "pal.a.pin": "Pin this page to favourites", "pal.a.unpin": "Unpin this page from favourites", "pal.a.hist": "History of changes", "set.reset": "Default settings", "set.resetD": "Every setting as after installing. The language, the history, the tweaks and the space freed stay.", "set.resetBtn": "Restore defaults",
   "set.resetT": "Restore the default settings?", "set.resetAsk": "The theme, the colour, the menu, the automatic cleaning, game mode and the other settings go back to how they were after installing. Changes to Windows (tweaks, Debloat) are not touched.", "set.resetDone": "The settings are back to the defaults",
+  "pp.k": "Focus", "pp.btnT": "What you use the app for — change", "pp.title": "What will you use the app for now?", "pp.sub": "The menu, the start page and the quick actions follow your choice. Change it any time from the Focus button at the top left.",
+  "pp.askBox": "Ask me at every start", "pp.keys": "1–6 to choose · Esc — as last time", "pp.last": "Last time", "pp.now": "Focus: {0}", "pp.palTo": "Focus: {0}",
+  "pp.set": "Focus", "pp.setD": "What you use the app for: the menu, the start page and the quick actions follow it", "pp.ask": "Ask for the focus at every start", "pp.askD": "At start the app asks what you will use it for. Off — it starts with the last choice.",
+  "pp.all": "All", "pp.allD": "Every section — full control.", "pp.all1": "Cleanup, tweaks and checks", "pp.all2": "Games, network and drivers", "pp.all3": "Everything in the menu, as before",
+  "pp.clean": "Cleanup", "pp.cleanD": "Free up space and memory.", "pp.clean1": "Junk, caches and temporary files", "pp.clean2": "What takes space, duplicates", "pp.clean3": "Uninstall with the leftovers",
+  "pp.speed": "Tweaks & speed", "pp.speedD": "A faster, quieter Windows.", "pp.speed1": "Tweaks and Debloat", "pp.speed2": "Startup and processes", "pp.speed3": "Drive optimization",
+  "pp.health": "PC health", "pp.healthD": "Check that all is well.", "pp.health1": "Check, updates and viruses", "pp.health2": "Blue screens and drivers", "pp.health3": "System info and benchmark",
+  "pp.game": "Gaming", "pp.gameD": "More FPS, less lag.", "pp.game1": "Game mode and memory", "pp.game2": "Graphics card and benchmark", "pp.game3": "Ping to the game servers",
+  "pp.easy": "Easy", "pp.easyD": "Only what matters, with big buttons.", "pp.easy1": "6 sections", "pp.easy2": "Cleanup with one button", "pp.easy3": "The rest is in search (Ctrl+K)",
+  "pal.a.purpose": "Change the focus (what you use the app for)",
+  "hq.checkSub": "See the result", "hq.dupes": "Duplicates", "hq.dupesD": "The same files", "hq.disk": "What takes space", "hq.diskD": "Disk Analyzer", "hq.tweaks": "Tweaks", "hq.tweaksD": "Presets in one click",
+  "hq.debloat": "Debloat", "hq.debloatD": "Ads, tracking, AI", "hq.startup": "Startup", "hq.startupD": "What starts with Windows", "hq.optimize": "Drives", "hq.optimizeD": "TRIM and health",
+  "hq.av": "Viruses", "hq.avD": "Quick scan", "hq.gpu": "Graphics card", "hq.gpuD": "Driver and sensors", "hq.ping": "Ping", "hq.pingD": "To the game servers", "hq.bsod": "Blue screens", "hq.bsodD": "Why it crashed",
   "nav.g.fav": "Favourites", "nav.favOn": "“{0}” is a favourite — at the top of the menu", "nav.favOff": "“{0}” is no longer a favourite", "nav.mini": "Icons only in the menu", "nav.miniOff": "The menu with names",
   "set.th.light": "Light", "set.density": "Density", "set.densityD": "Comfortable — more air; Compact — more rows on the screen", "set.dn.comfy": "Comfortable", "set.dn.compact": "Compact",
   "hm.nowT": "Now:", "hm.now.junk": "{0} of junk", "hm.now.upd": "{0} updates", "hm.now.reboot": "Restart pending", "hm.now.ram": "RAM {0}%", "hm.now.check": "{0} things to check", "hm.now.ok": "All good",
@@ -6980,7 +7040,7 @@ function fitNavSizes() {
   n.classList.remove("fit", "lines", "tight"); n.style.removeProperty("--navh");
   NAVG.auto = false; NAVG.fill.clear(); navApplyGroups();
   n.classList.remove("scrolls");
-  const bs = n.querySelectorAll("button:not(.g-off)");
+  const bs = [...n.querySelectorAll("button[data-page]:not(.g-off)")].filter(b => b.offsetParent !== null);
   if (!bs.length || n.scrollHeight <= n.clientHeight + 1) { moveNav(); return; }
   const h0 = bs[0].offsetHeight;
   // first smaller buttons, then smaller group titles, then lines instead of titles
@@ -7035,7 +7095,7 @@ function navFavApply() {
   n.querySelectorAll(".nav-g").forEach(g => {
     if (g === head) return;
     let x = g.nextElementSibling, any = false;
-    while (x && !x.classList.contains("nav-g")) { if (x.matches("button[data-page]")) { any = true; break; } x = x.nextElementSibling; }
+    while (x && !x.classList.contains("nav-g")) { if (x.matches("button[data-page]") && (!x.classList.contains("p-off") || x.classList.contains("p-temp"))) { any = true; break; } x = x.nextElementSibling; }
     g.hidden = !any;
   });
   if (typeof fitNav === "function") requestAnimationFrame(fitNav);
@@ -7163,6 +7223,7 @@ function go(page, opt) {
   if (!document.getElementById("page-" + page)) return;
   if ($("#palVeil").classList.contains("on")) palClose();
   $$("[data-page]").forEach(x => { if (x.dataset.page === page) x.setAttribute("aria-current", "page"); else x.removeAttribute("aria-current"); });
+  $$("#nav button[data-page].p-off").forEach(b => b.classList.toggle("p-temp", b.dataset.page === page));
   $$(".page").forEach(p => p.classList.toggle("on", p.id === "page-" + page));
   const was = S.page;
   if (!(opt && opt.hist) && was && was !== page) { NAVH.back.push(was); if (NAVH.back.length > 50) NAVH.back.shift(); NAVH.fwd.length = 0; }
@@ -8605,7 +8666,7 @@ $("#twHist").addEventListener("click", async () => {
 async function setupExtras() {
   if (!PR.apps) { try { PR.apps = ((await api.appsList()) || {}).apps || []; } catch (e) { PR.apps = []; } }
   const install = []; IN_CAT.forEach(([, items]) => items.forEach(([id, name, m]) => { if (inHave(m || name)) install.push(id); }));
-  const st = {}; ["game", "remind", "uiMode", "cleanMode", "lang", "theme", "accent", "mem"].forEach(k => { if (S.settings[k] !== undefined) st[k] = S.settings[k]; });
+  const st = {}; ["game", "remind", "uiMode", "purpose", "cleanMode", "lang", "theme", "accent", "mem", "density", "navFav"].forEach(k => { if (S.settings[k] !== undefined) st[k] = S.settings[k]; });
   return [install, st];
 }
 async function exportSetup() {
@@ -8636,7 +8697,7 @@ $("#twImport").addEventListener("click", async () => {
   if (!any) return;
   $("#imOk").addEventListener("click", async () => {
     closeSheet(false);
-    if (sets) { Object.assign(S.settings, sets); if (sets.lang === "en" || sets.lang === "bg") L = sets.lang; storeSettings(); applyLang(); applyUiMode(); }
+    if (sets) { Object.assign(S.settings, sets); if (sets.uiMode && !sets.purpose) S.settings.purpose = sets.uiMode === "easy" ? "easy" : "all"; if (sets.lang === "en" || sets.lang === "bg") L = sets.lang; storeSettings(); applyLang(); applyUiMode(); }
     if (inst.length) inQueue(inst);
     let ok = 0, bad = 0;
     for (const s of steps) {
@@ -9072,22 +9133,27 @@ setTimeout(async () => { try { if (!CK.rep) { CK.rep = await api.checkLast(); pa
 function renderQuick() {
   const el = $("#hmQuick"); if (!el) return;
   const adminOK = !S.info || S.info.admin, gm = typeof GM !== "undefined" && GM.st && GM.st.active;
-  const list = [
-    { id: "clean", icon: "clean", label: t("hq.clean"), sub: S.analyzed ? fmt(S.total || 0) : t("hq.counting") },
-    { id: "ram", icon: "memory", label: t("hq.ram"), sub: S.mem && S.mem.total ? Math.round(S.mem.load) + "%" : "" },
-    { id: "game", icon: "gamepad", label: t(gm ? "hq.gameOff" : "hq.gameOn"), sub: t(gm ? "hq.on" : "hq.off"), dis: !adminOK },
-    { id: "upd", icon: "wupd", label: t("hq.upd"), sub: (WU.st && (WU.st.updates || []).length) ? t("hq.updN", WU.st.updates.length) : t("hq.updSub") },
-  ];
+  const QA = {
+    clean: { icon: "clean", label: t("hq.clean"), sub: S.analyzed ? fmt(S.total || 0) : t("hq.counting") },
+    ram: { icon: "memory", label: t("hq.ram"), sub: S.mem && S.mem.total ? Math.round(S.mem.load) + "%" : "" },
+    game: { icon: "gamepad", label: t(gm ? "hq.gameOff" : "hq.gameOn"), sub: t(gm ? "hq.on" : "hq.off"), dis: !adminOK },
+    upd: { icon: "wupd", label: t("hq.upd"), sub: (WU.st && (WU.st.updates || []).length) ? t("hq.updN", WU.st.updates.length) : t("hq.updSub") },
+    check: { icon: "shieldok", label: t("hq.check"), sub: typeof CK !== "undefined" && CK.rep ? t("hq.checkSub") : t("ck.never") },
+    dupes: { icon: "copy", label: t("hq.dupes"), sub: t("hq.dupesD") }, disk: { icon: "pie", label: t("hq.disk"), sub: t("hq.diskD") },
+    tweaks: { icon: "tweaks", label: t("hq.tweaks"), sub: t("hq.tweaksD") }, debloat: { icon: "broom", label: t("hq.debloat"), sub: t("hq.debloatD") },
+    startup: { icon: "rocket", label: t("hq.startup"), sub: t("hq.startupD") }, optimize: { icon: "optimize", label: t("hq.optimize"), sub: t("hq.optimizeD") },
+    av: { icon: "shieldq", label: t("hq.av"), sub: t("hq.avD") }, gpu: { icon: "gpu", label: t("hq.gpu"), sub: t("hq.gpuD") },
+    ping: { icon: "network", label: t("hq.ping"), sub: t("hq.pingD") }, bsod: { icon: "alert", label: t("hq.bsod"), sub: t("hq.bsodD") },
+  };
+  const BY = { clean: ["clean", "ram", "dupes", "disk"], speed: ["tweaks", "debloat", "startup", "optimize"], health: ["check", "upd", "av", "bsod"], game: ["game", "ram", "gpu", "ping"] };
+  const list = (BY[purposeOf().id] || ["clean", "ram", "game", "upd"]).map(id => Object.assign({ id }, QA[id]));
   const sig = JSON.stringify(list);
   if (el._sig === sig) return; el._sig = sig;
   el.innerHTML = list.map(q => `<button data-hq="${q.id}" ${q.dis ? "disabled" : ""}><span class="qi">${ICONS[q.icon] || ""}</span><span class="ql">${esc(q.label)}<small>${esc(q.sub || "")}</small></span><span class="qgo">${ICONS.chev || ""}</span></button>`).join("");
   el.querySelectorAll("[data-hq]").forEach(b => b.addEventListener("click", () => {
     const id = b.dataset.hq;
-    if (id === "clean") go("clean");
-    else if (id === "ram") freeMemory();
-    else if (id === "game") go("game");
-    else if (id === "check") go("check");
-    else if (id === "upd") go("wupd");
+    if (id === "ram") freeMemory();
+    else go({ upd: "wupd", ping: "network" }[id] || id);
   }));
 }
 setInterval(() => { if (S.page === "home" && !document.hidden) renderQuick(); }, 2000);
@@ -10848,9 +10914,12 @@ function avBindSus(box) {
   }));
 }
 async function avStart(kind) {
+  if (AV.run || AV.starting) return; // a double click starts one scan (the second said "failed")
+  AV.starting = true;
   let path = "";
-  if (kind === "folder") { try { path = await api.diskPickFolder(); } catch (e) {} if (!path) return; }
+  if (kind === "folder") { try { path = await api.diskPickFolder(); } catch (e) {} if (!path) { AV.starting = false; return; } }
   let ok = false; try { ok = await api.avScan(kind, path); } catch (e) {}
+  AV.starting = false;
   if (!ok) { toast(t("tw.failed"), "alert", "warn"); return; }
   AV.run = true; AV.secs = 0; AV.files = 0; AV.upd = false; AV.last = null; renderAv();
 }
@@ -11647,7 +11716,8 @@ function renderSp() {
       <div class="d">${esc(t("isp.loaded", nf(0).format(r.pingDown || 0), nf(0).format(r.pingUp || 0), nf(0).format(r.ping || 0)))} ${esc(t("isp.bloatD." + r.grade))}</div></div></div>` : ""}`;
 }
 async function spRun() {
-  if (SP.run) { try { await api.speedStop(); } catch (e) {} return; }
+  if (SP.run) { if (Date.now() - (SP.t0 || 0) < 900) return; try { await api.speedStop(); } catch (e) {} return; } // a double click is not a stop
+  SP.t0 = Date.now();
   SP.run = true; SP.phase = "ping"; SP.mbps = 0; SP.pct = 0; renderSp();
   let r = null; try { r = await api.speedRun(); } catch (e) { r = { error: String((e && e.message) || e) }; }
   SP.run = false;
@@ -11875,7 +11945,7 @@ $("#hiRestore").addEventListener("click", () => go("restore"));
 /* Keyboard shortcuts */
 const PAGES = ["home", "clean", "memory", "game", "disk", "dupes", "tidy", "programs", "procs", "startup", "tweaks", "debloat", "check", "sysinfo", "gpu", "wupd", "bench", "optimize", "network", "nmerge", "repair", "history", "restore", "ext", "pass", "av", "bsod", "recover", "logs", "settings", "credits"];
 document.addEventListener("keydown", e => {
-  if ($("#veil").classList.contains("on") || $("#sveil").classList.contains("on")) return;
+  if ($("#veil").classList.contains("on") || $("#sveil").classList.contains("on") || !$("#ppVeil").hidden) return;
   if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K" || e.key === "p" || e.key === "P")) { e.preventDefault(); if ($("#palVeil").classList.contains("on")) palClose(); else palOpen(); return; }
   if ($("#palVeil").classList.contains("on")) return;
   // 4.26: Ctrl+B the narrow menu, Ctrl+D pin the open page
@@ -13302,6 +13372,8 @@ function palSources() {
   const here = PAL.from || S.page;
   if (document.querySelector(`#nav button[data-page="${here}"]`)) act("star", (S.settings.navFav || []).includes(here) ? "pal.a.unpin" : "pal.a.pin", () => navFavToggle(here), "favourite pin любими закачи " + here);
   act("undo", "pal.a.hist", () => go("history"), "history changes undo история промени върни");
+  act("sparkle", "pal.a.purpose", () => setTimeout(askPurpose, 50), "focus purpose mode фокус режим за какво");
+  PURPOSES.forEach(x => items.push({ g: "pal.g.actions", icon: x.icon, title: t("pp.palTo", t("pp." + x.id)), sub: t("pp." + x.id + "D"), kw: "focus " + x.id + " фокус", run: () => setPurpose(x.id, { go: true }) }));
   if (TW.meta.length) TW.meta.forEach(m => items.push({ g: "pal.g.tweaks", icon: TW_ICON[m.group] || "tweaks", title: twName(m.id), sub: t("tw.g." + m.group), hint: (TW.state[m.id] || {}).state === "on" ? t("tw.st.on") : "", kw: m.id, run: () => palTweak(m.id) }));
   GROUPS.forEach(g => g.items.forEach(id => { if (visible(id)) items.push({ g: "pal.g.clean", icon: ITEM_ICON[id] || ITEM_GROUP[id] || "clean", title: itemName(id), sub: S.data[id] && S.data[id].size > 0 ? fmt(S.data[id].size) : "", kw: id, run: () => palCategory(id) }); }));
   if (PM.v) {
@@ -14345,27 +14417,77 @@ function gameReport(i) {
   $("#grOk").addEventListener("click", () => closeSheet(false));
 }
 
-/* ---- 4.6: Easy / Full view ---- */
+/* ---- 4.27: the focus — what the app is used for, asked at every start. The
+   menu, the start page and the quick actions follow it; "All" is every
+   section, "Easy" the six big ones (the Easy view of 4.6) ---- */
+const PURPOSES = [
+  { id: "all", icon: "list", start: "home", pages: null },
+  { id: "clean", icon: "clean", start: "clean", pages: ["home", "clean", "memory", "disk", "dupes", "tidy", "recover", "programs", "history", "restore", "logs"] },
+  { id: "speed", icon: "tweaks", start: "tweaks", pages: ["home", "tweaks", "debloat", "startup", "procs", "optimize", "memory", "game", "check", "history", "restore", "logs"] },
+  { id: "health", icon: "heart", start: "home", pages: ["home", "check", "sysinfo", "gpu", "wupd", "bsod", "av", "ext", "optimize", "bench", "repair", "network", "history", "restore", "logs"] },
+  { id: "game", icon: "gamepad", start: "game", pages: ["home", "game", "gpu", "bench", "network", "memory", "procs", "startup", "tweaks", "optimize", "history"] },
+  { id: "easy", icon: "sparkle", start: "home", pages: "easy" },
+];
+const purposeOf = () => PURPOSES.find(p => p.id === S.settings.purpose) || PURPOSES[0];
+function purposePages(p) { return !p.pages ? null : p.pages === "easy" ? $$("#nav button[data-easy]").map(b => b.dataset.page) : p.pages; }
+// the sections of the focus show in the menu (a favourite always shows, except in Easy)
+function applyPurpose() {
+  const p = purposeOf(), set = purposePages(p), fav = new Set(S.settings.navFav || []);
+  $$("#nav button[data-page]").forEach(b => b.classList.toggle("p-off", !!set && !set.includes(b.dataset.page) && !(p.id !== "easy" && fav.has(b.dataset.page))));
+  $$("#nav button.p-temp").forEach(b => { if (b.dataset.page !== S.page) b.classList.remove("p-temp"); });
+  const btn = $("#ppBtn");
+  if (btn) { btn.querySelector(".pp-ic").innerHTML = ICONS[p.icon] || ""; btn.querySelector("b").textContent = t("pp." + p.id); btn.title = t("pp.btnT"); btn.setAttribute("aria-label", t("pp.btnT") + ": " + t("pp." + p.id)); }
+  document.body.dataset.purpose = p.id;
+  const sel = $("#ppSel"); if (sel) { sel.innerHTML = PURPOSES.map(x => `<option value="${x.id}" ${x.id === p.id ? "selected" : ""}>${esc(t("pp." + x.id))}</option>`).join(""); }
+  const ask = $("#ppAskToggle"); if (ask) ask.checked = S.settings.askPurpose !== false;
+}
+function setPurpose(id, opt = {}) {
+  const p = PURPOSES.find(x => x.id === id) || PURPOSES[0], was = S.settings.purpose;
+  S.settings.purpose = p.id; S.settings.uiMode = p.id === "easy" ? "easy" : "full";
+  if (p.id === "easy" && S.settings.cleanMode !== "detailed") { S.settings.cleanMode = "simple"; setupCleanMode(); } // the one-button cleanup
+  storeSettings(); applyUiMode(was !== p.id);
+  if (typeof renderQuick === "function") { const q = $("#hmQuick"); if (q) q._sig = ""; renderQuick(); }
+  if (opt.go) go(p.start);
+  if (!opt.quiet && was !== p.id) toast(t("pp.now", t("pp." + p.id)), p.icon);
+}
+function askPurpose() {
+  const v = $("#ppVeil"), cur = purposeOf().id;
+  $("#ppCards").innerHTML = PURPOSES.map((x, i) => `<button class="um-card pp-card ${x.id === cur ? "cur" : ""}" data-pp="${x.id}" style="--i:${i}">
+      <span class="pp-ci">${ICONS[x.icon] || ""}</span><b>${esc(t("pp." + x.id))}</b><span>${esc(t("pp." + x.id + "D"))}</span>
+      <ul>${[1, 2, 3].map(k => `<li>${esc(t("pp." + x.id + k))}</li>`).join("")}</ul>${x.id === cur ? `<em>${esc(t("pp.last"))}</em>` : ""}<kbd>${i + 1}</kbd></button>`).join("");
+  $("#ppAsk").checked = S.settings.askPurpose !== false;
+  v.hidden = false;
+  setTimeout(() => { const c = v.querySelector(".pp-card.cur") || v.querySelector(".pp-card"); if (c) c.focus(); }, 60);
+  const done = id => {
+    document.removeEventListener("keydown", keys, true);
+    S.settings.askPurpose = $("#ppAsk").checked;
+    setPurpose(id, { go: true, quiet: true });
+    if (motionOK()) v.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 240 }).finished.then(() => { v.hidden = true; });
+    else v.hidden = true;
+  };
+  const keys = e => {
+    if (v.hidden) return;
+    if (/^[1-6]$/.test(e.key)) { e.preventDefault(); e.stopPropagation(); done(PURPOSES[+e.key - 1].id); }
+    else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); done(cur); }
+  };
+  document.addEventListener("keydown", keys, true);
+  v.querySelectorAll("[data-pp]").forEach(b => b.onclick = () => done(b.dataset.pp));
+}
+$("#ppBtn").addEventListener("click", askPurpose);
+$("#ppSel").addEventListener("change", e => setPurpose(e.target.value, { go: false }));
+$("#ppAskToggle").addEventListener("change", e => { S.settings.askPurpose = e.target.checked; storeSettings(); });
 function uiEasy() { return S.settings.uiMode === "easy"; }
 function applyUiMode(animate) {
   document.body.classList.toggle("ui-easy", uiEasy());
-  const sw = $("#modeSw"); sw.classList.toggle("full", !uiEasy());
-  sw.querySelectorAll("[data-mode]").forEach(b => b.setAttribute("aria-pressed", String((b.dataset.mode === "easy") === uiEasy())));
-  const seg = $("#segUi"); if (seg) makeSeg(seg, [{ v: "easy", label: t("um.easy") }, { v: "full", label: t("um.full") }], uiEasy() ? "easy" : "full", setUiMode);
+  applyPurpose();
   if (uiEasy() && !document.querySelector(`.nav [data-page="${S.page}"][data-easy]`) && !["settings", "credits"].includes(S.page)) go("home");
   if (NAVFAV.home) navFavApply();
   fitNav();
   if (animate && motionOK()) { const n = $("#nav"); n.animate([{ opacity: .3, transform: "translateX(-6px)" }, { opacity: 1, transform: "none" }], { duration: 380, easing: "cubic-bezier(.2,.8,.2,1)" }); }
 }
-function setUiMode(v, quiet) {
-  if (S.settings.uiMode === v) return;
-  S.settings.uiMode = v;
-  if (v === "easy" && S.settings.cleanMode !== "detailed") { S.settings.cleanMode = "simple"; setupCleanMode(); } // the one-button cleanup
-  storeSettings(); applyUiMode(true);
-  if (!quiet) toast(t(v === "easy" ? "um.toEasy" : "um.toFull"), "sparkle");
-}
+// the Easy / Full view of 4.6 (a file from another PC can bring it): Easy is the Easy focus, Full is All
+function setUiMode(v, quiet) { setPurpose(v === "easy" ? "easy" : "all", { quiet }); }
 $("#twCheck").addEventListener("click", () => go("check"));
-$$("#modeSw [data-mode]").forEach(b => b.addEventListener("click", () => setUiMode(b.dataset.mode)));
 // settings: the search shows the rows (and their sections) whose words match
 $("#setSearch").addEventListener("input", e => {
   const q = e.target.value.trim().toLowerCase(), page = $("#page-settings");
@@ -14894,6 +15016,10 @@ async function init() {
     if (typeof st.hideEmpty === "boolean") s.hideEmpty = st.hideEmpty;
     if (st.cleanMode === "simple" || st.cleanMode === "detailed") s.cleanMode = st.cleanMode;
     if (st.uiMode === "easy" || st.uiMode === "full") s.uiMode = st.uiMode;
+    // 4.27: the focus (from the Easy / Full view before it) and whether to ask at every start
+    s.purpose = ["all", "clean", "speed", "health", "game", "easy"].includes(st.purpose) ? st.purpose : st.uiMode === "easy" ? "easy" : "all";
+    s.uiMode = s.purpose === "easy" ? "easy" : st.uiMode === "easy" ? "full" : (st.uiMode || s.uiMode);
+    if (typeof st.askPurpose === "boolean") s.askPurpose = st.askPurpose;
     if (st.lifetime && typeof st.lifetime === "object" && st.lifetime.freed >= 0) s.lifetime = { since: +st.lifetime.since || Date.now() / 1000, freed: +st.lifetime.freed || 0, cleans: +st.lifetime.cleans || 0 };
     if (Array.isArray(st.navShut)) { s.navShut = st.navShut.filter(x => typeof x === "string"); NAVG.shut = new Set(s.navShut); }
     if (st.remind && typeof st.remind === "object") s.remind = st.remind;
@@ -15004,7 +15130,7 @@ setInterval(() => { if (performance.now() - BOOT < 90000) pageDiag("tick"); }, 5
 const wait = ms => new Promise(r => setTimeout(r, ms));
 function bootDone(sp) {
   document.body.classList.remove("booting", "boot-in");
-  if (!S.settings.uiMode) setTimeout(askUiMode, 250);
+  if (S.settings.askPurpose !== false) setTimeout(askPurpose, 250);
   ["#winbar", ".shell"].forEach(q => { const e = $(q); if (e) { e.style.clipPath = ""; e.style.willChange = ""; } });
   if (sp) sp.remove();
 }
@@ -15191,7 +15317,8 @@ const Mock = (() => {
   };
   let mem = { total: 16 * GB, used: 10.4 * GB, standby: 3.1 * GB, modified: 180 * MB, lastAt: 0, lastFreed: 0, cleans: 0 };
   let settings = q.get("settings") ? Object.assign(JSON.parse(q.get("settings")), q.get("lang") ? { lang: q.get("lang") } : {}) : q.get("lang") ? { lang: q.get("lang") } : {};
-  if (q.get("ui") !== "ask") settings.uiMode = q.get("ui") || "full";
+  if (q.get("ui") !== "ask") { settings.uiMode = q.get("ui") || "full"; settings.askPurpose = false; }
+  if (q.get("purpose")) settings.purpose = q.get("purpose");
   if (q.get("remind") !== "on") settings.remind = { on: false, gb: 5 }; // the tests are not reminded unless asked
   if (q.get("last")) settings.lastVersion = q.get("last"); // as if updated from that version
   if (q.get("accent")) settings.accent = q.get("accent");
